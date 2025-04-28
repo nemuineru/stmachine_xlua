@@ -10,10 +10,10 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Tt]ools/
-/[Aa]ssets/
+/[Aa]ssets/*
 /[Uu]ser[Ss]ettings/
 /[Ww]ebGLPlugins/
-!/[Aa]ssets/MyAsset/*
+!/[Aa]ssets/MyAsset/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
