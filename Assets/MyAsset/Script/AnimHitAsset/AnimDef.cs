@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -21,7 +22,7 @@ public class AnimDef_Game : MonoBehaviour
         PlayableAnimGraph = PlayableGraph.Create("reference");
 
         PlayList = 
-        AnimationClipPlayable.Create(PlayableAnimGraph, AnimList.animDef[0].animationClip);
+        AnimationClipPlayable.Create(PlayableAnimGraph, AnimList.animDef[0].animClip[0].Clip);
         
     }
 }
@@ -33,12 +34,26 @@ public class AnimDef_Game : MonoBehaviour
 [System.Serializable]
 public class AnimDef
 {
+    [System.Serializable]
+
+    //ミキシングするアニメのウェイトなど.
+    public struct Anims
+    {        
+        public AnimationClip Clip;
+        float speed, startFrame, loopsFromFrame;
+
+        string MixParamName;
+        float MixWeight;
+    }
+
+    public AnimatorControllerLayer playLayer;
     public int ID;
     public string Name;
-    public AnimationClip animationClip;
-    
-    float speed, startFrame, loopsFromFrame;
+
+    public Anims[] animClip;   
     float blendInTime, blendOutTime;
+
+    float DefWeight = 1f;
 
     clssDef[] clssDefs = new clssDef[0];
 
