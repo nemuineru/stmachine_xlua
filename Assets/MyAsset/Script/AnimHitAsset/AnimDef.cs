@@ -8,22 +8,44 @@ using UnityEngine.Playables;
 
 public class AnimDef_Game : MonoBehaviour
 {
+    public Animator animator;
     GameObject refObj;
 
     public AnimlistObject AnimList;
 
     PlayableGraph PlayableAnimGraph;
+    PlayableOutput PlayableOut;
+    AnimationMixerPlayable MainPlayAnim;
     AnimationClipPlayable PlayList;
 
     //番号0のアニメーションを最初に割り振る.
     //その後、Entityの指定アニメIDに読み出されたAnimList中のanimDef設定に基づきグラフを錬成する.
     private void Start()
     {
+        animator = GetComponent<Animator>();
+
         PlayableAnimGraph = PlayableGraph.Create("reference");
+
+        PlayableOut = AnimationPlayableOutput.Create(PlayableAnimGraph, "Output", animator);
+
+        MainPlayAnim = AnimationMixerPlayable.Create(PlayableAnimGraph,1);     
 
         PlayList = 
         AnimationClipPlayable.Create(PlayableAnimGraph, AnimList.animDef[0].animClip[0].Clip);
+
+        PlayableAnimGraph.Connect(MainPlayAnim,0,MainPlayAnim,0);
+
+        //PlayableAnimGraph.
+
+
+
         
+    }
+
+    private void AnimWeight()
+    {
+        float f = 0f;
+        //AnimationMixerPlayable mix_1 = 
     }
 }
 
