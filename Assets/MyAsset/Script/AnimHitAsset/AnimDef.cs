@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
@@ -8,44 +9,84 @@ using UnityEngine.Playables;
 
 public class AnimDef_Game : MonoBehaviour
 {
+    //再生元
+    public class MixAnimNode
+    {
+        //AnimDefに決定された配列と同様のPlayableを作成する.
+        public AnimDef def;
+        public AnimationMixerPlayable Mixer;
+        public AnimationClipPlayable[] PlayList;
+
+        //繋げたAnimの時間設定など. このイベントに応じ、LuaConditionで得られる値も変化する.
+        float currentAnimTime = 0;
+
+    
+    }
+
     public Animator animator;
     GameObject refObj;
 
     public AnimlistObject AnimList;
+    
+    public int ID;
 
-    PlayableGraph PlayableAnimGraph;
+    public string weightName;
+    public float weightNum;
+
+    //原初のグラフ.
+    PlayableGraph PrimalGraph;
+
+    //Animatorに対するアウトプット設定.
     PlayableOutput PlayableOut;
     AnimationMixerPlayable MainPlayAnim;
     AnimationClipPlayable PlayList;
 
+    //一先ず8つ登録.
+    MixAnimNode[] newAnimNode = new MixAnimNode[8];
+
+    
+    
     //番号0のアニメーションを最初に割り振る.
     //その後、Entityの指定アニメIDに読み出されたAnimList中のanimDef設定に基づきグラフを錬成する.
+    
     private void Start()
     {
         animator = GetComponent<Animator>();
 
-        PlayableAnimGraph = PlayableGraph.Create("reference");
+        newAnimNode[0] = new MixAnimNode();
+        newAnimNode[0].def = AnimList.animDef[0];
 
-        PlayableOut = AnimationPlayableOutput.Create(PlayableAnimGraph, "Output", animator);
+        //元のグラフを作成.
+        PrimalGraph = PlayableGraph.Create("reference");
 
-        MainPlayAnim = AnimationMixerPlayable.Create(PlayableAnimGraph,1);     
+        //OutPutにanimatorを指定.
 
+        PlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
+
+        //初期は1ノードのみ.
+        MainPlayAnim = AnimationMixerPlayable.Create(PrimalGraph,1);     
+
+        //１番目のアニメを最初に割り当て
         PlayList = 
-        AnimationClipPlayable.Create(PlayableAnimGraph, AnimList.animDef[0].animClip[0].Clip);
+        AnimationClipPlayable.Create(PrimalGraph, AnimList.animDef[0].animClip[0].Clip);
 
-        PlayableAnimGraph.Connect(MainPlayAnim,0,MainPlayAnim,0);
+        //MainPlayAnimとPlayListを組み合わせ、出力.
+        PrimalGraph.Connect(PlayList,0,MainPlayAnim,0);
 
-        //PlayableAnimGraph.
-
-
+        PlayableOut.SetSourcePlayable(MainPlayAnim);
 
         
     }
 
-    private void AnimWeight()
+    //Animのウェイトを設定値より決定する.
+    private void AnimWeight(float weight)
     {
-        float f = 0f;
-        //AnimationMixerPlayable mix_1 = 
+        AnimDef SelectedDef = Array.Find(AnimList.animDef, 
+        item => { return item.ID == ID;}); 
+        if(SelectedDef != null)
+        {
+
+        }
     }
 }
 
