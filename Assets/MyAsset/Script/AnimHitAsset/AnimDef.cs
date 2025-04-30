@@ -15,10 +15,48 @@ public class AnimDef_Game : MonoBehaviour
         //AnimDefに決定された配列と同様のPlayableを作成する.
         public AnimDef def;
         public AnimationMixerPlayable Mixer;
-        public AnimationClipPlayable[] PlayList;
+        public AnimationClipPlayable[] PlayList = new AnimationClipPlayable[0];
+        public string[] ParamName;
 
+        //初期化.
+        public void CreatePlayerNodes(ref PlayableGraph addGraphTo)
+        {
+            Mixer = AnimationMixerPlayable.Create(addGraphTo, def.animClip.Length);
+            int i = 0;
+            //ノードは定義するだけして、再生のときに色々細かく制御する.
+            //PlayListを追加..
+            foreach (AnimDef.Anims anims in def.animClip)
+            {
+                i++;
+                Array.Resize(ref PlayList, PlayList.Length + 1);
+                var players = PlayList[PlayList.Length - 1];
+
+                players =
+                AnimationClipPlayable.Create(addGraphTo, anims.Clip);
+                //Output先は固定のため0.
+                Mixer.ConnectInput(i, players, 0);
+                //最初に設定されたinputWeightに合わせる.
+                Mixer.SetInputWeight(i, anims.MixWeightSet);
+            }
+        }
+
+        public void ChangeAnimTime(ref PlayableGraph addGraphTo, params double[] time)
+        {
+            //時間設定.
+            for(int i = 0; i < PlayList.Length; i++)
+            {
+                var player = PlayList[i];
+                if(time.Length < i)
+                {
+                    player.SetTime(time[i]);
+                }
+            }
+
+        }
         //繋げたAnimの時間設定など. このイベントに応じ、LuaConditionで得られる値も変化する.
         float currentAnimTime = 0;
+
+        float MixWeight = 1f;
 
     
     }
@@ -100,13 +138,27 @@ public class AnimDef
     [System.Serializable]
 
     //ミキシングするアニメのウェイトなど.
-    public struct Anims
-    {        
+    public class Anims
+    {
+        public Anims(){}
+        public Anims(AnimationClip clip) => Clip = clip;
         public AnimationClip Clip;
-        float speed, startFrame, loopsFromFrame;
+        float speed = 1f, startFrame, loopsFromFrame;
 
         string MixParamName;
-        float MixWeight;
+
+        public float MixWeightSet
+        {
+            get
+            {
+                return _MixWeight;
+            }
+            set
+            {
+                _MixWeight = value;
+            }
+        }
+        float _MixWeight;
     }
 
     public AnimatorControllerLayer playLayer;
@@ -121,6 +173,9 @@ public class AnimDef
     clssDef[] clssDefs = new clssDef[0];
 
 }
+
+
+
 
 [System.Serializable]
 class clssDef
