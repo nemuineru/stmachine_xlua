@@ -13,15 +13,30 @@ public class AnimDef_Game : MonoBehaviour
     public class MixAnimNode
     {
         //AnimDefに決定された配列と同様のPlayableを作成する.
+        //また、Mixer同士でMixを作成することも考える.
+        //読み出しDefの名前を保持.
         public AnimDef def;
-        public AnimationMixerPlayable Mixer;
+        public AnimationLayerMixerPlayable Mixer;
         public AnimationClipPlayable[] PlayList = new AnimationClipPlayable[0];
         public string[] ParamName;
+
+
+        //繋げたAnimの時間設定など. このイベントに応じ、LuaConditionで得られる値も変化する.
+        //基本的に、currentAnimTimeをアニメーションの時間の主軸として変更.
+        float currentAnimTime = 0;
+
+        float MixWeight = 1f;
+
+
+
+        [SerializeField]
+        private AvatarMask _mask;
 
         //初期化.
         public void CreatePlayerNodes(ref PlayableGraph addGraphTo)
         {
-            Mixer = AnimationMixerPlayable.Create(addGraphTo, def.animClip.Length);
+            Mixer = AnimationLayerMixerPlayable.Create(addGraphTo, def.animClip.Length);
+            //Mixer.SetLayerAdditive(1, true);
             int i = 0;
             //ノードは定義するだけして、再生のときに色々細かく制御する.
             //PlayListを追加..
@@ -39,27 +54,68 @@ public class AnimDef_Game : MonoBehaviour
                 Mixer.SetInputWeight(i, anims.MixWeightSet);
             }
         }
+        
+        //アニメのウェイトを設定する.
+        public void ChangeWeight(ref PlayableGraph addGraphTo, params double[] weight)
+        {
+            //時間設定.
+            for (int i = 0; i < PlayList.Length; i++)
+            {
+                var player = PlayList[i];
+                if (weight.Length < i)
+                {
+                    Mixer.SetInputWeight(i, (float)weight[i]);
+                }
+            }
+        }
+
+        public void Animations()
+        {
+
+            for (int i = 0; i < PlayList.Length; i++)
+            {
+                var player = PlayList[i];
+                var playClip = def.animClip[i];
+                player.SetTime((playClip.startFrame + currentAnimTime) % playClip.Clip.length);
+            }
+        }
 
         public void ChangeAnimTime(ref PlayableGraph addGraphTo, params double[] time)
         {
             //時間設定.
-            for(int i = 0; i < PlayList.Length; i++)
+            for (int i = 0; i < PlayList.Length; i++)
             {
                 var player = PlayList[i];
-                if(time.Length < i)
+                if (time.Length < i)
                 {
                     player.SetTime(time[i]);
                 }
             }
-
         }
-        //繋げたAnimの時間設定など. このイベントに応じ、LuaConditionで得られる値も変化する.
-        float currentAnimTime = 0;
-
-        float MixWeight = 1f;
-
-    
+        
+        //マスクの設定.
+        public void ChangeAnimMask(params AvatarMask[] mask)
+        {
+            //時間設定.
+            for (int i = 0; i < PlayList.Length; i++)
+            {
+                //レイヤーにマスクを掛ける.
+                if (mask.Length < i && mask[i] != null)
+                {
+                    Mixer.SetLayerMaskFromAvatarMask((uint)i, mask[i]);
+                }
+            }
+        }
     }
+
+    public class MainNodeConfigurator
+    {
+        public MixAnimNode[] Mixers;
+    }
+
+
+
+
 
     public Animator animator;
     GameObject refObj;
@@ -79,8 +135,8 @@ public class AnimDef_Game : MonoBehaviour
     AnimationMixerPlayable MainPlayAnim;
     AnimationClipPlayable PlayList;
 
-    //一先ず8つ登録.
-    MixAnimNode[] newAnimNode = new MixAnimNode[8];
+    //一先ず32個登録.
+    MixAnimNode[] newAnimNode = new MixAnimNode[32];
 
     
     
@@ -143,8 +199,7 @@ public class AnimDef
         public Anims(){}
         public Anims(AnimationClip clip) => Clip = clip;
         public AnimationClip Clip;
-        float speed = 1f, startFrame, loopsFromFrame;
-
+        public float speed = 1f, startFrame, cycleOffset;
         string MixParamName;
 
         public float MixWeightSet
