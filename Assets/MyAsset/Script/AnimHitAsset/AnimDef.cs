@@ -6,10 +6,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 
-
-public class AnimDef_Game : MonoBehaviour
-{
-    //再生元
+    //再生ノード組み立て.
     public class MixAnimNode
     {
         //AnimDefに決定された配列と同様のPlayableを作成する.
@@ -110,33 +107,48 @@ public class AnimDef_Game : MonoBehaviour
 
     public class MainNodeConfigurator
     {
+        //PlayableAPIの元グラフ.
+        PlayableGraph PrimalGraph;
+        //ミックス先のミキサー。メインノードにつなぐため設定する。
+        public AnimationLayerMixerPlayable MainMixer = new AnimationLayerMixerPlayable();
         public MixAnimNode[] Mixers;
+
+        public void MakeGraph(ref Animator animator, ref PlayableOutput PrimalPlayableOut)
+        {
+            //元のグラフを作成.
+            PrimalGraph = PlayableGraph.Create("reference");
+            //OutPutにanimatorを指定.
+
+            PrimalPlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
+            //初期は4ノードのみ.
+            MainMixer = AnimationLayerMixerPlayable.Create(PrimalGraph,4);
+        }
+
+        public void MakeMix()
+        {
+            foreach (var m in Mixers)
+            {
+                m.CreatePlayerNodes(ref PrimalGraph);
+            }
+            //MainMixer.AddInput();
+        }
     }
 
-
-
-
+public class AnimDef_Game : MonoBehaviour
+{
 
     public Animator animator;
-    GameObject refObj;
 
     public AnimlistObject AnimList;
     
     public int ID;
-
     public string weightName;
     public float weightNum;
 
-    //原初のグラフ.
-    PlayableGraph PrimalGraph;
 
     //Animatorに対するアウトプット設定.
-    PlayableOutput PlayableOut;
-    AnimationMixerPlayable MainPlayAnim;
-    AnimationClipPlayable PlayList;
-
-    //一先ず32個登録.
-    MixAnimNode[] newAnimNode = new MixAnimNode[32];
+    PlayableOutput PrimalPlayableOut;
+    MainNodeConfigurator MainAnimMixer;
 
     
     
@@ -147,29 +159,26 @@ public class AnimDef_Game : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        newAnimNode[0] = new MixAnimNode();
-        newAnimNode[0].def = AnimList.animDef[0];
+        MainAnimMixer.MakeGraph(ref animator, ref PrimalPlayableOut);
 
-        //元のグラフを作成.
-        PrimalGraph = PlayableGraph.Create("reference");
+        MainAnimMixer.Mixers[0] = new MixAnimNode();
 
-        //OutPutにanimatorを指定.
-
-        PlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
+        MainAnimMixer.Mixers[0].def = AnimList.animDef[0];
 
         //初期は1ノードのみ.
-        MainPlayAnim = AnimationMixerPlayable.Create(PrimalGraph,1);     
+        /*
+        MainAnimMixer = AnimationMixerPlayable.Create(PrimalGraph,1);     
 
         //１番目のアニメを最初に割り当て
         PlayList = 
         AnimationClipPlayable.Create(PrimalGraph, AnimList.animDef[0].animClip[0].Clip);
 
         //MainPlayAnimとPlayListを組み合わせ、出力.
-        PrimalGraph.Connect(PlayList,0,MainPlayAnim,0);
+        PrimalGraph.Connect(PlayList,0,MainAnimMixer,0);
 
-        PlayableOut.SetSourcePlayable(MainPlayAnim);
+        PlayableOut.SetSourcePlayable(MainAnimMixer);
 
-        
+        */
     }
 
     //Animのウェイトを設定値より決定する.
