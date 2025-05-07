@@ -128,7 +128,7 @@ public class MainNodeConfigurator
     PlayableGraph PrimalGraph;
     //ミックス先のミキサー。メインノードにつなぐため設定する。
     public AnimationLayerMixerPlayable MainMixer = new AnimationLayerMixerPlayable();
-    public MixAnimNode[] Mixers;
+    public MixAnimNode[] Mixers = new MixAnimNode[4];
 
     public void MakeGraph(ref Animator animator, ref PlayableOutput PrimalPlayableOut)
     {

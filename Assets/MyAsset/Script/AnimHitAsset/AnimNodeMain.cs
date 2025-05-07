@@ -17,7 +17,7 @@ public class AnimNodeMain : MonoBehaviour
 
     //Animatorに対するアウトプット設定.
     PlayableOutput PrimalPlayableOut;
-    MainNodeConfigurator MainAnimMixer;
+    MainNodeConfigurator MainAnimMixer = new MainNodeConfigurator();
 
     
     
@@ -27,6 +27,8 @@ public class AnimNodeMain : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+
+        PrimalPlayableOut = new PlayableOutput();
 
         MainAnimMixer.MakeGraph(ref animator, ref PrimalPlayableOut);
 
