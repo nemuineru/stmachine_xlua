@@ -20,7 +20,7 @@ using UnityEngine.Playables;
 
         //繋げたAnimの時間設定など. このイベントに応じ、LuaConditionで得られる値も変化する.
         //基本的に、currentAnimTimeをアニメーションの時間の主軸として変更.
-        float currentAnimTime = 0;
+        float startAnimTime = 0f, currentAnimTime = 0f, endAnimTime = Mathf.Infinity;
 
         float MixWeight = 1f;
 
@@ -29,28 +29,45 @@ using UnityEngine.Playables;
         [SerializeField]
         private AvatarMask _mask;
 
-        //初期化.
-        public void CreatePlayerNodes(ref PlayableGraph addGraphTo)
-        {
-            Mixer = AnimationLayerMixerPlayable.Create(addGraphTo, def.animClip.Length);
-            //Mixer.SetLayerAdditive(1, true);
-            int i = 0;
-            //ノードは定義するだけして、再生のときに色々細かく制御する.
-            //PlayListを追加..
-            foreach (AnimDef.Anims anims in def.animClip)
-            {
-                i++;
-                Array.Resize(ref PlayList, PlayList.Length + 1);
-                var players = PlayList[PlayList.Length - 1];
+    //開始時刻を設定.
+    public void SetStartTime(float setTime)
+    {
+        startAnimTime = setTime;
+        currentAnimTime = setTime;
+    }
 
-                players =
-                AnimationClipPlayable.Create(addGraphTo, anims.Clip);
-                //Output先は固定のため0.
-                Mixer.ConnectInput(i, players, 0);
-                //最初に設定されたinputWeightに合わせる.
-                Mixer.SetInputWeight(i, anims.MixWeightSet);
-            }
+    //停止時刻を設定.
+    public void SetCurrentTime(float setTime)
+    {
+        currentAnimTime = setTime;
+        if (endAnimTime < currentAnimTime)
+        {
+
         }
+    }
+
+        //初期化.
+    public void CreatePlayerNodes(ref PlayableGraph addGraphTo)
+    {
+        Mixer = AnimationLayerMixerPlayable.Create(addGraphTo, def.animClip.Length);
+        //Mixer.SetLayerAdditive(1, true);
+        int i = 0;
+        //ノードは定義するだけして、再生のときに色々細かく制御する.
+        //PlayListを追加..
+        foreach (AnimDef.Anims anims in def.animClip)
+        {
+            i++;
+            Array.Resize(ref PlayList, PlayList.Length + 1);
+            var players = PlayList[PlayList.Length - 1];
+
+            players =
+            AnimationClipPlayable.Create(addGraphTo, anims.Clip);
+            //Output先は固定のため0.
+            Mixer.ConnectInput(i, players, 0);
+            //最初に設定されたinputWeightに合わせる.
+            Mixer.SetInputWeight(i, anims.MixWeightSet);
+        }
+    }
         
         //アニメのウェイトを設定する.
         public void ChangeWeight(ref PlayableGraph addGraphTo, params double[] weight)
@@ -105,92 +122,49 @@ using UnityEngine.Playables;
         }
     }
 
-    public class MainNodeConfigurator
+public class MainNodeConfigurator
+{
+    //PlayableAPIの元グラフ.
+    PlayableGraph PrimalGraph;
+    //ミックス先のミキサー。メインノードにつなぐため設定する。
+    public AnimationLayerMixerPlayable MainMixer = new AnimationLayerMixerPlayable();
+    public MixAnimNode[] Mixers;
+
+    public void MakeGraph(ref Animator animator, ref PlayableOutput PrimalPlayableOut)
     {
-        //PlayableAPIの元グラフ.
-        PlayableGraph PrimalGraph;
-        //ミックス先のミキサー。メインノードにつなぐため設定する。
-        public AnimationLayerMixerPlayable MainMixer = new AnimationLayerMixerPlayable();
-        public MixAnimNode[] Mixers;
+        //元のグラフを作成.
+        PrimalGraph = PlayableGraph.Create("reference");
+        //OutPutにanimatorを指定.
 
-        public void MakeGraph(ref Animator animator, ref PlayableOutput PrimalPlayableOut)
+        PrimalPlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
+        //初期は4ノードのみ.
+        MainMixer = AnimationLayerMixerPlayable.Create(PrimalGraph, 4);
+    }
+
+    public void MakeMix()
+    {
+        int i = 0;
+        foreach (var m in Mixers)
         {
-            //元のグラフを作成.
-            PrimalGraph = PlayableGraph.Create("reference");
-            //OutPutにanimatorを指定.
-
-            PrimalPlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
-            //初期は4ノードのみ.
-            MainMixer = AnimationLayerMixerPlayable.Create(PrimalGraph,4);
-        }
-
-        public void MakeMix()
-        {
-            foreach (var m in Mixers)
+            if (m != null)
             {
                 m.CreatePlayerNodes(ref PrimalGraph);
+                PrimalGraph.Connect(MainMixer, i, m.Mixer, 0);
+                i++;
             }
-            //MainMixer.AddInput();
+        }
+        //MainMixer.AddInput();
+    }
+
+        public void SetTime()
+        { 
+            
         }
     }
 
 public class AnimDef_Game : MonoBehaviour
 {
 
-    public Animator animator;
-
-    public AnimlistObject AnimList;
-    
-    public int ID;
-    public string weightName;
-    public float weightNum;
-
-
-    //Animatorに対するアウトプット設定.
-    PlayableOutput PrimalPlayableOut;
-    MainNodeConfigurator MainAnimMixer;
-
-    
-    
-    //番号0のアニメーションを最初に割り振る.
-    //その後、Entityの指定アニメIDに読み出されたAnimList中のanimDef設定に基づきグラフを錬成する.
-    
-    private void Start()
-    {
-        animator = GetComponent<Animator>();
-
-        MainAnimMixer.MakeGraph(ref animator, ref PrimalPlayableOut);
-
-        MainAnimMixer.Mixers[0] = new MixAnimNode();
-
-        MainAnimMixer.Mixers[0].def = AnimList.animDef[0];
-
-        //初期は1ノードのみ.
-        /*
-        MainAnimMixer = AnimationMixerPlayable.Create(PrimalGraph,1);     
-
-        //１番目のアニメを最初に割り当て
-        PlayList = 
-        AnimationClipPlayable.Create(PrimalGraph, AnimList.animDef[0].animClip[0].Clip);
-
-        //MainPlayAnimとPlayListを組み合わせ、出力.
-        PrimalGraph.Connect(PlayList,0,MainAnimMixer,0);
-
-        PlayableOut.SetSourcePlayable(MainAnimMixer);
-
-        */
-    }
-
-    //Animのウェイトを設定値より決定する.
-    private void AnimWeight(float weight)
-    {
-        AnimDef SelectedDef = Array.Find(AnimList.animDef, 
-        item => { return item.ID == ID;}); 
-        if(SelectedDef != null)
-        {
-
-        }
-    }
 }
 
 //animDefには以下を登録 - 
