@@ -12,4 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3bd391a9e706014f88c1ba738a67323, type: 3}
   m_Name: TestList
   m_EditorClassIdentifier: 
-  animDef: []
+  animDef:
+  - ID: 0
+    Name: 
+    animClip:
+    - Clip: {fileID: 0}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+    - Clip: {fileID: 0}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
