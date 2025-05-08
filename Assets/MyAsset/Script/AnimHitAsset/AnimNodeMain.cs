@@ -30,13 +30,17 @@ public class AnimNodeMain : MonoBehaviour
 
         PrimalPlayableOut = new PlayableOutput();
 
-        MainAnimMixer.MakeGraph(ref animator, ref PrimalPlayableOut);
+        MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
 
         MainAnimMixer.Mixers[0] = new MixAnimNode();
 
         MainAnimMixer.Mixers[0].def = AnimList.animDef[0];
 
         PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.MainMixer);
+
+        MainAnimMixer.MakeMix();
+
+        GraphVisualizerClient.Show(MainAnimMixer.PrimalGraph);
 
         //初期は1ノードのみ.
         /*
@@ -51,6 +55,12 @@ public class AnimNodeMain : MonoBehaviour
 
 
         */
+    }
+
+    void Update()
+    {
+        MainAnimMixer.SetAnim();
+        MainAnimMixer.PrimalGraph.Play();
     }
 
     //Animのウェイトを設定値より決定する.

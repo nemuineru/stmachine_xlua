@@ -16,11 +16,19 @@ MonoBehaviour:
   - ID: 0
     Name: 
     animClip:
-    - Clip: {fileID: 0}
+    - Clip: {fileID: 7400000, guid: 2ab024ca71c2e444589dc4e094bd4029, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
-    - Clip: {fileID: 0}
+    - Clip: {fileID: 7400000, guid: 83ec618451ca6de4487d5784d247a2e7, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+    - Clip: {fileID: 7400000, guid: f55222405eb971247ae12ff2036268b4, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+    - Clip: {fileID: 7400000, guid: 9a191339cd1901b4ab0bcf9b725ec44e, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0

@@ -13,7 +13,7 @@ using UnityEngine.Playables;
         //また、Mixer同士でMixを作成することも考える.
         //読み出しDefの名前を保持.
         public AnimDef def;
-        public AnimationLayerMixerPlayable Mixer;
+        public AnimationMixerPlayable Mixer;
         public AnimationClipPlayable[] PlayList = new AnimationClipPlayable[0];
         public string[] ParamName;
 
@@ -42,30 +42,33 @@ using UnityEngine.Playables;
         currentAnimTime = setTime;
         if (endAnimTime < currentAnimTime)
         {
-
+            currentAnimTime = endAnimTime;
         }
     }
 
         //初期化.
     public void CreatePlayerNodes(ref PlayableGraph addGraphTo)
     {
-        Mixer = AnimationLayerMixerPlayable.Create(addGraphTo, def.animClip.Length);
-        //Mixer.SetLayerAdditive(1, true);
+        Mixer = AnimationMixerPlayable.Create(addGraphTo, def.animClip.Length);
         int i = 0;
         //ノードは定義するだけして、再生のときに色々細かく制御する.
         //PlayListを追加..
         foreach (AnimDef.Anims anims in def.animClip)
         {
-            i++;
             Array.Resize(ref PlayList, PlayList.Length + 1);
-            var players = PlayList[PlayList.Length - 1];
+            //Mixer.SetLayerAdditive((uint)i, true);
 
-            players =
+            PlayList[PlayList.Length - 1] =
             AnimationClipPlayable.Create(addGraphTo, anims.Clip);
+            
+            
             //Output先は固定のため0.
-            Mixer.ConnectInput(i, players, 0);
+            Mixer.ConnectInput(i, PlayList[PlayList.Length - 1], 0);
             //最初に設定されたinputWeightに合わせる.
-            Mixer.SetInputWeight(i, anims.MixWeightSet);
+            Mixer.SetInputWeight(i, 1f / 4f);//anims.MixWeightSet);
+
+            SetStartTime(Time.time);
+            i++;
         }
     }
         
@@ -85,12 +88,11 @@ using UnityEngine.Playables;
 
         public void Animations()
         {
-
+            SetCurrentTime(Time.time);
             for (int i = 0; i < PlayList.Length; i++)
             {
-                var player = PlayList[i];
-                var playClip = def.animClip[i];
-                player.SetTime((playClip.startFrame + currentAnimTime) % playClip.Clip.length);
+                //var playClip = def.animClip[i];
+                PlayList[i].SetTime(currentAnimTime);
             }
         }
 
@@ -116,7 +118,7 @@ using UnityEngine.Playables;
                 //レイヤーにマスクを掛ける.
                 if (mask.Length < i && mask[i] != null)
                 {
-                    Mixer.SetLayerMaskFromAvatarMask((uint)i, mask[i]);
+                    //Mixer.SetLayerMaskFromAvatarMask((uint)i, mask[i]);
                 }
             }
         }
@@ -125,12 +127,12 @@ using UnityEngine.Playables;
 public class MainNodeConfigurator
 {
     //PlayableAPIの元グラフ.
-    PlayableGraph PrimalGraph;
+    public PlayableGraph PrimalGraph;
     //ミックス先のミキサー。メインノードにつなぐため設定する。
     public AnimationLayerMixerPlayable MainMixer = new AnimationLayerMixerPlayable();
     public MixAnimNode[] Mixers = new MixAnimNode[4];
 
-    public void MakeGraph(ref Animator animator, ref PlayableOutput PrimalPlayableOut)
+    public void SetupGraph(ref Animator animator, ref PlayableOutput PrimalPlayableOut)
     {
         //元のグラフを作成.
         PrimalGraph = PlayableGraph.Create("reference");
@@ -139,6 +141,7 @@ public class MainNodeConfigurator
         PrimalPlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
         //初期は4ノードのみ.
         MainMixer = AnimationLayerMixerPlayable.Create(PrimalGraph, 4);
+        
     }
 
     public void MakeMix()
@@ -149,18 +152,26 @@ public class MainNodeConfigurator
             if (m != null)
             {
                 m.CreatePlayerNodes(ref PrimalGraph);
-                PrimalGraph.Connect(MainMixer, i, m.Mixer, 0);
+                PrimalGraph.Connect(m.Mixer, 0 , MainMixer, i);
+                MainMixer.SetInputWeight(i,1);
                 i++;
             }
         }
         //MainMixer.AddInput();
     }
 
-        public void SetTime()
-        { 
-            
+    public void SetAnim()
+    { 
+        int i = 0;
+        foreach (var m in Mixers)
+        {
+            if (m != null)
+            {
+                m.Animations();
+            }
         }
-    }
+    }   
+}
 
 public class AnimDef_Game : MonoBehaviour
 {
@@ -196,7 +207,7 @@ public class AnimDef
                 _MixWeight = value;
             }
         }
-        float _MixWeight;
+        float _MixWeight = 1f;
     }
 
     public AnimatorControllerLayer playLayer;
