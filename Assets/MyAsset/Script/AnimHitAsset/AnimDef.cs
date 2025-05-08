@@ -86,6 +86,7 @@ using UnityEngine.Playables;
             }
         }
 
+        //現アニメーションの時間を現在時刻に設定。
         public void Animations()
         {
             SetCurrentTime(Time.time);
