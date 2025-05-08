@@ -194,7 +194,7 @@ public class AnimDef
         public Anims(AnimationClip clip) => Clip = clip;
         public AnimationClip Clip;
         public float speed = 1f, startFrame, cycleOffset;
-        string MixParamName;
+        public string MixParamName;
 
         public float MixWeightSet
         {
