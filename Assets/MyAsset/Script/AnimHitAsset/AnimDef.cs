@@ -5,6 +5,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
+using System.Linq;
 
     //再生ノード組み立て.
     public class MixAnimNode
@@ -65,7 +66,7 @@ using UnityEngine.Playables;
             //Output先は固定のため0.
             Mixer.ConnectInput(i, PlayList[PlayList.Length - 1], 0);
             //最初に設定されたinputWeightに合わせる.
-            Mixer.SetInputWeight(i, 1f / 4f);//anims.MixWeightSet);
+            Mixer.SetInputWeight(i, 1f / def.animClip.Length);//anims.MixWeightSet);
 
             SetStartTime(Time.time);
             i++;
@@ -174,11 +175,6 @@ public class MainNodeConfigurator
     }   
 }
 
-public class AnimDef_Game : MonoBehaviour
-{
-
-}
-
 //animDefには以下を登録 - 
 // アニメーションID, アニメーション名, アニメーションの速度, 
 // アニメーションの基本ブレンド（イン・アウト）タイムなど
@@ -195,7 +191,9 @@ public class AnimDef
         public Anims(AnimationClip clip) => Clip = clip;
         public AnimationClip Clip;
         public float speed = 1f, startFrame, cycleOffset;
-        public string MixParamName;
+        public Vector2 mixPosition = Vector2.zero;
+
+        public AnimationClipPlayable clipPlayable;
 
         public float MixWeightSet
         {
@@ -210,6 +208,122 @@ public class AnimDef
         }
         float _MixWeight = 1f;
     }
+
+    struct Clips
+    {
+        internal Clips(int id, Vector2 p)
+        {
+            index = id; 
+            pos = p;
+        }
+        internal int index;
+        internal Vector2 pos;   
+    }
+
+    public void ChangeWeight(float BaseWeight)
+    {
+        //AnimClipが1以下ならWeightは1のまま.
+        if (animClip.Length <= 1)
+        {
+            animClip[0].MixWeightSet = BaseWeight;
+            return;
+        }
+
+        //インデックス値などを登録.
+        //この時、全ウェイトを0に設定.
+        Clips[] animPos = new Clips[animClip.Length];
+        for (int i = 0; i < animClip.Length; i++)
+        {
+            animClip[i].MixWeightSet = 0;
+            animPos[i].index = i;
+            animPos[i].pos = animClip[i].mixPosition;
+        }
+
+        switch (mixType)
+        {
+            //Dir1Dならxのみを参照し、その範囲内での距離補正など計算.最大最小はClampで.
+            case MixType.Liner:
+                {
+                    animPos = animPos.OrderBy(v => Mathf.Abs(v.pos.x - CurrentParamPos.x)).ToArray<Clips>();
+                    float x_0 = (animPos[0].pos - CurrentParamPos).x;
+                    float x_1 = (animPos[1].pos - CurrentParamPos).x;
+
+                    float x_distAll = (Mathf.Abs(x_0) + Mathf.Abs(x_1));
+
+                    //ソート時のanimpos上位ふたつの値が++ or --で無いならその2つの距離に応じた値で,
+                    //そうでない場合はindex[0]の値を考慮. 合計値 = 0なら最上位で対応可能.
+                    if (x_0 * x_1 >= 0)
+                    {
+                        animClip[animPos[0].index].MixWeightSet = BaseWeight;
+                    }
+                    //もし違うなら、それぞれの距離に対しての値を考慮.
+                    else
+                    {
+                        animClip[animPos[0].index].MixWeightSet = BaseWeight * Mathf.Abs((x_1) / x_distAll);
+                        animClip[animPos[1].index].MixWeightSet = BaseWeight * Mathf.Abs((x_0) / x_distAll);
+                    }
+                    break;
+                }
+                
+                case MixType.Simple2D :
+                {
+                    //至近距離の合計 + project.
+                    animPos = animPos.OrderBy(v => (v.pos - CurrentParamPos).magnitude).ToArray<Clips>();
+                    float x_distAll = 0;
+                    float WeightRest = 1;
+
+                    foreach (Clips cl in animPos)
+                    {
+                        x_distAll += (cl.pos - CurrentParamPos).magnitude;
+                    }                    
+                    for (int i = 0; i < animClip.Length; i++)
+                    {
+                        float distSelect = (animPos[i].pos - CurrentParamPos).magnitude;
+                        animClip[animPos[i].index].MixWeightSet = BaseWeight * (1 - distSelect/x_distAll);
+                        break;
+                    }                    
+                    break;
+                }
+                
+            case MixType.FreeForm2D : 
+            {
+            //角度が0に近い程最上位. 座標0,0が含まれるものは(最下位)とする
+                animPos = animPos.OrderBy(v => Vector3.Angle(v.pos , CurrentParamPos)).ToArray<Clips>();
+
+                float x_distAll = 0;
+                float WeightRest = 1;
+
+                //角度 & 距離に応じた値を考える.
+                //基準が0,0に有るものと考え,オプションに座標0,0にアニメーションが含まれることを許可. 
+                //角度90度までの値を考える.
+                //このため、距離が離れると全体の値を考慮することになる.           
+                foreach (Clips cl in animPos)
+                {
+                    x_distAll += (cl.pos - CurrentParamPos).magnitude;
+                }
+                //距離が最も近い4つを対象に.
+                
+                for (int i = 0; i < animClip.Length; i++)
+                {
+                    float distSelect = (animPos[i].pos - CurrentParamPos).magnitude;
+                    animClip[animPos[i].index].MixWeightSet = BaseWeight * (WeightRest);
+                }
+                break;
+            }
+        }
+    }
+
+    public enum MixType
+    { 
+        Liner,
+        Simple2D,
+        FreeForm2D,
+        Cartesian2D
+    }
+
+    public MixType mixType = MixType.Liner;
+    public string MixParamName;
+    public Vector2 CurrentParamPos;
 
     public AnimatorControllerLayer playLayer;
     public int ID;
