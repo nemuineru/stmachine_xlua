@@ -6,9 +6,11 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine.Assertions.Must;
 
-    //再生ノード組み立て.
-    public class MixAnimNode
+//再生ノード組み立て.
+public class MixAnimNode
     {
         //AnimDefに決定された配列と同様のPlayableを作成する.
         //また、Mixer同士でMixを作成することも考える.
@@ -45,6 +47,11 @@ using System.Linq;
         {
             currentAnimTime = endAnimTime;
         }
+    }
+
+    public bool isEndTime()
+    {
+        return endAnimTime <= currentAnimTime;
     }
 
     public void SetEnd()
@@ -94,15 +101,18 @@ using System.Linq;
 
         public void ChangeWeight()
         {
-            //全体のミキシングの時間を設定する.
-            MixWeight = Mathf.Clamp01((currentAnimTime  - startAnimTime) / Mathf.Epsilon + def.blendInTime) * 
-            Mathf.Clamp01((endAnimTime - currentAnimTime) / Mathf.Epsilon + def.blendOutTime);
-            def.ChangeWeight(1f);
-            //時間設定.
-            for (int i = 0; i < PlayList.Length; i++)
+            if(def != null)
             {
-                var player = PlayList[i];
-                Mixer.SetInputWeight(i, def.animClip[i].MixWeightSet);
+                //全体のミキシングの時間を設定する.
+                MixWeight = Mathf.Clamp01((currentAnimTime  - startAnimTime) / Mathf.Epsilon + def.blendInTime) * 
+                Mathf.Clamp01((endAnimTime - currentAnimTime) / Mathf.Epsilon + def.blendOutTime);
+                def.ChangeWeight(1f);
+                //時間設定.
+                for (int i = 0; i < PlayList.Length; i++)
+                {
+                    var player = PlayList[i];
+                    Mixer.SetInputWeight(i, def.animClip[i].MixWeightSet);
+                }
             }
         }
 
@@ -152,7 +162,7 @@ public class MainNodeConfigurator
     public PlayableGraph PrimalGraph;
     //ミックス先のミキサー。メインノードにつなぐため設定する。
     public AnimationLayerMixerPlayable MainMixer = new AnimationLayerMixerPlayable();
-    public MixAnimNode[] Mixers = new MixAnimNode[4];
+    public MixAnimNode[] Mixers = new MixAnimNode[8];
 
     public void SetupGraph(ref Animator animator, ref PlayableOutput PrimalPlayableOut)
     {
@@ -161,29 +171,60 @@ public class MainNodeConfigurator
         //OutPutにanimatorを指定.
 
         PrimalPlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
-        //初期は4ノードのみ.
-        MainMixer = AnimationLayerMixerPlayable.Create(PrimalGraph, 4);
+        //初期はMixerの数分のノードのみ.
+        MainMixer = AnimationLayerMixerPlayable.Create(PrimalGraph, Mixers.Length);
         
     }
 
-    public void ChangeAnim(int ID)
+    //アニメ変更時の挙動.
+    //defを代入し、リセットする
+    public void ChangeAnim(AnimDef def)
     {
+        //接続先で、最も小さい値でソケットが空いているものを選択
+        int indexOfEmpty = -1;
+        MixAnimNode node;
+        //定義されていないものがあるならそれを設定する.
+        for(int i = 0;i < Mixers.Length ; i++)
+        {
+            if(Mixers[i] == null)
+            {
+                indexOfEmpty = i;
+                break;
+            }
+        }
+        if (indexOfEmpty >= 0)
+        {
+            foreach (var m in Mixers)
+            {
+                if(m != null)
+                m.SetEnd();
+            }
+            Mixers[indexOfEmpty] = new MixAnimNode();
+            node = Mixers[indexOfEmpty];
+            node.def = def;
 
+            //接続.
+            PrimalGraph.Connect(node.Mixer, indexOfEmpty, MainMixer,0);
+        }
     }
 
-    public void MakeMix()
+    public void SetupMixer()
     {
         int i = 0;
+        
+        Mixers[0].CreatePlayerNodes(ref PrimalGraph);
+        Debug.Log(Mixers[0].def.animClip[0].Clip.name);
+        PrimalGraph.Connect(Mixers[0].Mixer, 0 , MainMixer, 0);
+        MainMixer.SetInputWeight(0,1);
+        /*
         foreach (var m in Mixers)
         {
             if (m != null)
             {
-                m.CreatePlayerNodes(ref PrimalGraph);
-                PrimalGraph.Connect(m.Mixer, 0 , MainMixer, i);
-                MainMixer.SetInputWeight(i,1);
                 i++;
             }
         }
+        */
         //MainMixer.AddInput();
     }
 
@@ -195,7 +236,14 @@ public class MainNodeConfigurator
             if (m != null)
             {
                 m.Animations();
+                if(m.isEndTime())
+                {
+                    PrimalGraph.Disconnect(MainMixer,i);
+                    Mixers[i] = null;
+                    Debug.Log("Mixer Erased");
+                }
             }
+            i++;
         }
     }   
 }
@@ -341,6 +389,7 @@ public class AnimDef
                         break;
                     }
                     //(0,0)が存在するなら最短3角の位置を考慮..
+                    //UPDATE : 原点を指定した時、[0] (1 , 0), [1](-1, 0)の時バグる. 多分直線だから..
                     else if(hasCenter)
                     {
 
@@ -350,6 +399,7 @@ public class AnimDef
                         Vector2 retPoint_1 = animPos[0].pos + Vector2.Dot(CurrentParamPos - animPos[0].pos,line) * line;
                         Vector2 retPoint_2 = animPos[0].pos + Vector2.Dot(Vector2.zero - animPos[0].pos,line) * line;
                         float pWeight = (retPoint_1 - CurrentParamPos).magnitude / (retPoint_2).magnitude;
+                        Debug.Log("Weight - " + pWeight + animPos[0].pos + animPos[1].pos);
                         //Debug.Log( animClip[animPos[0].index].Clip.name + " : " + angle_0);
                         //Debug.Log( animClip[animPos[1].index].Clip.name + " : " + angle_1);
                         animClip[center.index].MixWeightSet = BaseWeight * pWeight;

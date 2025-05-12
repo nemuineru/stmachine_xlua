@@ -44,6 +44,8 @@ MonoBehaviour:
       startFrame: 0
       cycleOffset: 0
       mixPosition: {x: 1, y: 0}
+    blendInTime: 0.5
+    blendOutTime: 0.1
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
@@ -54,9 +56,11 @@ MonoBehaviour:
       speed: 0
       startFrame: 0
       cycleOffset: 0
-      mixPosition: {x: 0, y: 1}
+      mixPosition: {x: 1, y: 0}
     - Clip: {fileID: 7400000, guid: 45d6fcc59bb89fc4d823f6d03e34809f, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
-      mixPosition: {x: 0, y: -1}
+      mixPosition: {x: -1, y: 0}
+    blendInTime: 0
+    blendOutTime: 0

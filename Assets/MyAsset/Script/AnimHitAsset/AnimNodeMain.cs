@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.Playables;
+using System.Linq;
 
 public class AnimNodeMain : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class AnimNodeMain : MonoBehaviour
 
         PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.MainMixer);
 
-        MainAnimMixer.MakeMix();
+        MainAnimMixer.SetupMixer();
 
         GraphVisualizerClient.Show(MainAnimMixer.PrimalGraph);
 
@@ -57,8 +58,20 @@ public class AnimNodeMain : MonoBehaviour
         */
     }
 
+
+    int currentID = 0;
+
     void Update()
     {
+        if(currentID != ID)
+        {
+            currentID = ID;
+            AnimDef animFindByID = AnimList.animDef.ToList().Find(x => x.ID == currentID);
+            if(animFindByID != null)
+            {
+                MainAnimMixer.ChangeAnim(animFindByID);
+            }
+        }
         MainAnimMixer.SetAnim();
         MainAnimMixer.PrimalGraph.Play();
     }
