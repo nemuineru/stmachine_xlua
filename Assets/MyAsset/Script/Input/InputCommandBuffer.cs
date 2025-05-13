@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 
 public class InputCommandBuffer : MonoBehaviour
 {    
+    public static InputCommandBuffer self;
     public struct commandRecord
     {
         /*
@@ -42,6 +43,20 @@ public class InputCommandBuffer : MonoBehaviour
     float rectime = 0f;
 
 
+    
+    void Awake()
+    {
+        if (self != null)
+        {
+            Destroy(self);
+        }
+        else
+        {
+            self = this;
+        }
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,7 +78,7 @@ public class InputCommandBuffer : MonoBehaviour
                 //string.Format("{0} : {1}",0,commandBuffer[recentCMD].inputs);
                 AnalysisInput(commandBuffer[recentCMD].inputs);
             }
-            Debug.Log(DrawDebug);
+            //Debug.Log(DrawDebug);
         }
     }
 
@@ -91,12 +106,14 @@ public class InputCommandBuffer : MonoBehaviour
             myLogQueue.Dequeue();
     }
 
+/*
     void OnGUI() {
         GUI.color = Color.magenta;
         GUILayout.BeginArea(new Rect(Screen.width - 400, 0, 400, Screen.height));
         GUILayout.Label("\n" + string.Join("\n", myLogQueue.ToArray()));
         GUILayout.EndArea();
     }
+*/
 
     void RecordInput()
     {

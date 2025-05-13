@@ -63,17 +63,32 @@ public class AnimNodeMain : MonoBehaviour
 
     void Update()
     {
-        if(currentID != ID)
-        {
-            currentID = ID;
-            AnimDef animFindByID = AnimList.animDef.ToList().Find(x => x.ID == currentID);
-            if(animFindByID != null)
-            {
-                MainAnimMixer.ChangeAnim(animFindByID);
-            }
-        }
         MainAnimMixer.SetAnim();
         MainAnimMixer.PrimalGraph.Play();
+        //インプットが入力された時..
+        /*
+        int stickval = (InputCommandBuffer.self.commandBuffer[0].inputs % 10);
+        int buttonval = (InputCommandBuffer.self.commandBuffer[0].inputs - stickval) % 10000;
+        Debug.Log(buttonval);
+        if((0B_00000001  & buttonval/ 10) != 0)
+        {
+            ChangeAnim();
+        }
+        */
+        if(InputInstance.self.inputValues.MainButton_Read == 10000)
+        {
+            ChangeAnim();
+        }
+    }
+
+    public void ChangeAnim()
+    {
+        currentID = ID;
+        AnimDef animFindByID = AnimList.animDef.ToList().Find(x => x.ID == currentID);
+        if(animFindByID != null)
+        {
+            MainAnimMixer.ChangeAnim(animFindByID);
+        }
     }
 
     //Animのウェイトを設定値より決定する.

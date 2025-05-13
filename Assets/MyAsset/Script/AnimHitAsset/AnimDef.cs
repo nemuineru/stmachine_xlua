@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using UnityEngine.Playables;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.Assertions.Must;
+using UnityEngine.UI;
 
 //再生ノード組み立て.
 public class MixAnimNode
@@ -20,12 +22,11 @@ public class MixAnimNode
         public AnimationClipPlayable[] PlayList = new AnimationClipPlayable[0];
         public string[] ParamName;
 
-
         //繋げたAnimの時間設定など. このイベントに応じ、LuaConditionで得られる値も変化する.
         //基本的に、currentAnimTimeをアニメーションの時間の主軸として変更.
         float startAnimTime = 0f, currentAnimTime = 0f, endAnimTime = Mathf.Infinity;
 
-        float MixWeight = 1f;
+        public float MixWeight = 1f;
 
 
 
@@ -37,6 +38,7 @@ public class MixAnimNode
     {
         startAnimTime = setTime;
         currentAnimTime = setTime;
+        Mixer.SetTime(0);
     }
 
     //停止時刻を設定.
@@ -52,6 +54,11 @@ public class MixAnimNode
     public bool isEndTime()
     {
         return endAnimTime <= currentAnimTime;
+    }
+
+    public bool isEndTimeSet()
+    {
+        return endAnimTime != Mathf.Infinity;        
     }
 
     public void SetEnd()
@@ -77,15 +84,14 @@ public class MixAnimNode
             
             //Output先は固定のため0.
             Mixer.ConnectInput(i, PlayList[PlayList.Length - 1], 0);
-            //最初に設定されたinputWeightに合わせる.
-            Mixer.SetInputWeight(i, 1f / def.animClip.Length);//anims.MixWeightSet);
-
             SetStartTime(Time.time);
+            //最初に設定されたinputWeightに合わせる.
+            //Mixer.SetInputWeight(i, 1f / def.animClip.Length);//anims.MixWeightSet);
+
             i++;
         }
     }
-        
-        //アニメのウェイトを設定する.
+        /*
         public void ChangeWeight(ref PlayableGraph addGraphTo, params double[] weight)
         {
             //時間設定.
@@ -98,14 +104,17 @@ public class MixAnimNode
                 }
             }
         }
+        */
 
-        public void ChangeWeight()
+        //アニメのウェイトを自動的に設定する.
+        public void changeMixerWeight()
         {
             if(def != null)
             {
                 //全体のミキシングの時間を設定する.
-                MixWeight = Mathf.Clamp01((currentAnimTime  - startAnimTime) / Mathf.Epsilon + def.blendInTime) * 
-                Mathf.Clamp01((endAnimTime - currentAnimTime) / Mathf.Epsilon + def.blendOutTime);
+                MixWeight = Mathf.Clamp01((currentAnimTime  - startAnimTime) / (Mathf.Epsilon + def.blendInTime)) * 
+                Mathf.Clamp01((endAnimTime - currentAnimTime) / (Mathf.Epsilon + def.blendOutTime));
+                //Debug.Log(this.def.ID + " MixWeight - " + MixWeight);
                 def.ChangeWeight(1f);
                 //時間設定.
                 for (int i = 0; i < PlayList.Length; i++)
@@ -120,11 +129,11 @@ public class MixAnimNode
         public void Animations()
         {
             SetCurrentTime(Time.time);
-            ChangeWeight();
+            changeMixerWeight();
             for (int i = 0; i < PlayList.Length; i++)
             {
                 //var playClip = def.animClip[i];
-                PlayList[i].SetTime(currentAnimTime);
+                PlayList[i].SetTime(currentAnimTime - startAnimTime);
             }
         }
 
@@ -189,6 +198,7 @@ public class MainNodeConfigurator
             if(Mixers[i] == null)
             {
                 indexOfEmpty = i;
+                Debug.Log("Mixer Changing to " + def.ID + " as input of " + indexOfEmpty);
                 break;
             }
         }
@@ -196,15 +206,18 @@ public class MainNodeConfigurator
         {
             foreach (var m in Mixers)
             {
-                if(m != null)
+                if(m != null && !m.isEndTimeSet())
                 m.SetEnd();
             }
             Mixers[indexOfEmpty] = new MixAnimNode();
             node = Mixers[indexOfEmpty];
             node.def = def;
+            node.CreatePlayerNodes(ref PrimalGraph);
 
             //接続.
-            PrimalGraph.Connect(node.Mixer, indexOfEmpty, MainMixer,0);
+            PrimalGraph.Connect(node.Mixer, 0, MainMixer, indexOfEmpty);
+            Debug.Log("Mixer Connected to " + indexOfEmpty);
+            MainMixer.SetInputWeight(indexOfEmpty,0f);
         }
     }
 
@@ -228,19 +241,30 @@ public class MainNodeConfigurator
         //MainMixer.AddInput();
     }
 
+    //アニメーションの設定・ミキサーのウェイト設定..
     public void SetAnim()
-    { 
+    {
         int i = 0;
+        float All = 0;
+        for (int ids = 0; ids < Mixers.Length; ids++)
+        {
+            if(Mixers[ids] != null)            
+            All += Mixers[ids].MixWeight;
+        }
         foreach (var m in Mixers)
         {
             if (m != null)
             {
                 m.Animations();
-                if(m.isEndTime())
+                //In-Outの設定を反映させる.
+                //Debug.Log(Mixers[i].def.ID + " MixerWeight " + Mixers[i].MixWeight / All);
+                MainMixer.SetInputWeight(i, Mixers[i].MixWeight / All);
+                if (m.isEndTime())
                 {
-                    PrimalGraph.Disconnect(MainMixer,i);
+                    string MixOf = m.def.ID.ToString();
+                    PrimalGraph.Disconnect(MainMixer, i);
                     Mixers[i] = null;
-                    Debug.Log("Mixer Erased");
+                    //Debug.Log("Mixer Erased : " + MixOf);
                 }
             }
             i++;
@@ -286,10 +310,12 @@ public class AnimDef
     {
         internal clipPosStatement(int id, Vector2 p)
         {
-            index = id; 
+            index = id;
             pos = p;
+            WeightSet = 1f;
         }
         internal int index;
+        internal float WeightSet;
         internal Vector2 pos;   
     }
 
@@ -311,7 +337,7 @@ public class AnimDef
             animPos[i].index = i;
             animPos[i].pos = animClip[i].mixPosition;
         }
-        animPos = animPos.OrderBy(v => v.pos.magnitude).ToArray();
+        animPos = animPos.OrderBy(v => v.pos.SqrMagnitude()).ToArray();
         //原点位置に有るモーションを取得.            
         clipPosStatement center = animPos[0];
         bool hasCenter = center.pos.magnitude < Mathf.Epsilon;
@@ -342,10 +368,11 @@ public class AnimDef
                     }
                     break;
                 }
+                //シンプルじゃない..
                 case MixType.Simple2D : 
                 {
                 //角度が0に近い程最上位. 座標0,0が含まれるものは別とする.               
-                animPos = animPos.ToList().FindAll(v => v.pos.magnitude > Mathf.Epsilon)
+                animPos = animPos.ToList().FindAll(v => v.pos.sqrMagnitude > Mathf.Epsilon)
                 .OrderBy(v => Vector2.Angle(v.pos , CurrentParamPos)).ToArray();
 
                     float x_distAll = 0;
@@ -399,7 +426,7 @@ public class AnimDef
                         Vector2 retPoint_1 = animPos[0].pos + Vector2.Dot(CurrentParamPos - animPos[0].pos,line) * line;
                         Vector2 retPoint_2 = animPos[0].pos + Vector2.Dot(Vector2.zero - animPos[0].pos,line) * line;
                         float pWeight = (retPoint_1 - CurrentParamPos).magnitude / (retPoint_2).magnitude;
-                        Debug.Log("Weight - " + pWeight + animPos[0].pos + animPos[1].pos);
+                        //Debug.Log("Weight - " + pWeight + animPos[0].pos + animPos[1].pos);
                         //Debug.Log( animClip[animPos[0].index].Clip.name + " : " + angle_0);
                         //Debug.Log( animClip[animPos[1].index].Clip.name + " : " + angle_1);
                         animClip[center.index].MixWeightSet = BaseWeight * pWeight;
@@ -419,31 +446,65 @@ public class AnimDef
                     }
                     break;
                 }
-                
-                case MixType.FreeForm2D :
-                {
-                    //至近距離の合計 + project.
-                    animPos = animPos.OrderBy(v => (v.pos - CurrentParamPos).magnitude).ToArray<clipPosStatement>();
-                    float x_distAll = 0;
-                    float WeightRest = 1;
-
+            //極座標での相対値.
+            //via Gradient Band Interpolation shader..;                
+                case MixType.FreeForm2D:
+                {                             
+                    float weightAll = 0;
+                    int i = 0;
                     foreach (clipPosStatement cl in animPos)
                     {
-                        x_distAll += (cl.pos - CurrentParamPos).magnitude;
-                    }                    
-                    for (int i = 0; i < animClip.Length; i++)
-                    {
-                        float distSelect = (animPos[i].pos - CurrentParamPos).magnitude;
-                        animClip[animPos[i].index].MixWeightSet = BaseWeight * (1 - distSelect/x_distAll);
-                        break;
-                    }                    
+                        float weight = 1.0f;
+                        for (int j = 0; j < animPos.Length; j++)
+                        {
+                            if(i == j)
+                            {
+                                continue;
+                            }
+                        //float point_mag_j = animPos[j].magnitude;
+                        }                        
+                        i++;
+                    }
                     break;
                 }
-                //指定以外のもの
-                default :
+
+            //直交座標系.
+            //via runevision's animation thesis.
+                case MixType.Cartesian2D : 
+            {
+                float weightAll = 0;
+                int i = 0;
+                foreach (clipPosStatement cl in animPos)
                 {
-                    break;
+                    var Dir1 = cl.pos - CurrentParamPos;
+                    float Weight = 1f;
+                    for (int j = 0; j < animPos.Length; j++)
+                    {
+                        if (j == i)
+                        {
+                            continue;
+                        }
+                        var Dir2 = cl.pos - animPos[j].pos;
+                        var newWeight = Mathf.Clamp01(1f - (Vector2.Dot(Dir1, Dir2) / Dir2.sqrMagnitude));
+                        Weight = Mathf.Min(Weight, newWeight);
+                    }                    
+                    animPos[i].WeightSet  = Weight;
+                    weightAll += animPos[i].WeightSet;
+                    Debug.Log(animPos[i].WeightSet);
+                    i++;
                 }
+                    for (int xl = 0; xl < animPos.Length; xl++)
+                    {
+                        animClip[animPos[xl].index].MixWeightSet =
+                        BaseWeight * (animPos[xl].WeightSet / weightAll);
+                    }                    
+                    break;
+            }
+            //指定以外のもの
+            default:
+            {
+                break;
+            }
                 
         }
     }

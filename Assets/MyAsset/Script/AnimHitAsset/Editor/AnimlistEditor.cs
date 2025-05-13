@@ -17,3 +17,19 @@ public class AnimlistEditor : Editor
         base.OnPreviewGUI(r, background);
     }
 }
+
+
+[CustomEditor(typeof(AnimNodeMain))]
+public class AnimNodeMainEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        //元のInspector部分を表示
+        base.OnInspectorGUI ();
+
+        //ボタンを表示
+        if (GUILayout.Button("Change ID")){
+            (target as AnimNodeMain).ChangeAnim();
+        }  
+    }
+}
