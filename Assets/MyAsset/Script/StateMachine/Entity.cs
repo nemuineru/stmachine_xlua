@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Playables;
+using System.Linq;
+
 
 public class Entity : MonoBehaviour
 {
@@ -16,11 +19,22 @@ public class Entity : MonoBehaviour
 
     public float stateTime;
 
+    //移動用の設定など.
     public Transform targetTo;
     
     public CinemachineVirtualCamera vCam;
 
+    //ステートID.
     public int CurrentStateID = 0;
+    
+
+    //アニメーション管理用.
+    public int animID = 0;
+    public AnimlistObject listObject;
+    Animator animator;
+
+    PlayableOutput PrimalPlayableOut;
+    MainNodeConfigurator MainAnimMixer = new MainNodeConfigurator();
 
     public Color CurColor;
 
@@ -38,9 +52,13 @@ public class Entity : MonoBehaviour
     void Awake()
     {
         mat = mesh.material;
+        animator = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         DefList = (StateDefListObject)StateDefListObject.CreateInstance(typeof(StateDefListObject));
         DefSet();
+        PrimalPlayableOut = new PlayableOutput();
+        MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
+        ChangeAnim();
     }
 
     string verd_1;
@@ -49,14 +67,21 @@ public class Entity : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        MainAnimMixer.SetAnim();
+        MainAnimMixer.PrimalGraph.Play();
+
+
         Vector2 wish = (InputInstance.self.inputValues.MovingAxisRead);
         wishingVect = vCam.transform.forward * wish.y + vCam.transform.right * wish.x;
         stateTime += Time.deltaTime;
         mat.SetColor("_Color",CurColor);
+
+        //地面判定.
         Ray ray = new Ray(transform.position + raycenter + Vector3.up * Physics.defaultContactOffset, Vector3.down);
 
         RaycastHit hitInfo;
         Physics.Raycast(ray,out hitInfo,0.05f ,LayerMask.GetMask("Terrain"));
+        
         isOnGround = (hitInfo.collider != null);
 
         StateDef currentState =
@@ -67,6 +92,16 @@ public class Entity : MonoBehaviour
             currentState.Execute();
         }
     }
+    
+    public void ChangeAnim()
+    {
+        AnimDef animFindByID = listObject.animDef.ToList().Find(x => x.ID == animID);
+        if(animFindByID != null)
+        {
+            MainAnimMixer.ChangeAnim(animFindByID);
+        }
+    }
+
 
     //前プロジェクトのように、スクリプト内でステートをとりあえず記述.
     //今回は最初のstatedefのLua内で読み出すステートを指定.

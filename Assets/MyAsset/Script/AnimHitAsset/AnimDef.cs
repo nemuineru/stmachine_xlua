@@ -217,7 +217,7 @@ public class MainNodeConfigurator
             //接続.
             PrimalGraph.Connect(node.Mixer, 0, MainMixer, indexOfEmpty);
             Debug.Log("Mixer Connected to " + indexOfEmpty);
-            MainMixer.SetInputWeight(indexOfEmpty,0f);
+            SetAnim();
         }
     }
 

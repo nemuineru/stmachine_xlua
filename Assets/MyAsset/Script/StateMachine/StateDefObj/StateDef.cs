@@ -109,6 +109,18 @@ public class scMove : StateController
 
 [System.Serializable]
 [SerializeField]
+public class scAnimSet : StateController
+{
+    public int ID = 0;
+    
+    internal override void OnExecute()
+    {
+        entity.animID = ID;
+    }
+}
+
+[System.Serializable]
+[SerializeField]
 public class scJump : StateController
 {        
     internal override void OnExecute()
