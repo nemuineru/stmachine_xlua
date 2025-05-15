@@ -291,7 +291,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 972734d11e398d74eab001e00d5edecd, type: 3}
   m_PrefabInstance: {fileID: 2076750267}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &628819597
+--- !u!114 &628819600
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -300,14 +300,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 628819596}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f2ff257ee913504c8da23d385af0245, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e57138f686d9a74f8ad5d22366a6c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  AnimList: {fileID: 11400000, guid: fa3e95b17fea8fc4e9b0432af0719e70, type: 2}
-  ID: 0
-  weightName: 
-  weightNum: 0
+  rigid: {fileID: 0}
+  stateTime: 0
+  targetTo: {fileID: 0}
+  vCam: {fileID: 0}
+  CurrentStateID: 0
+  animID: 0
+  listObject: {fileID: 11400000, guid: fa3e95b17fea8fc4e9b0432af0719e70, type: 2}
+  CurColor: {r: 0, g: 0, b: 0, a: 0}
+  isOnGround: 0
+  mesh: {fileID: 0}
+  DefList: {fileID: 0}
+  wishingVect: {x: 0, y: 0, z: 0}
 --- !u!1 &1534826196
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,7 +571,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 972734d11e398d74eab001e00d5edecd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 628819597}
+      addedObject: {fileID: 628819600}
   m_SourcePrefab: {fileID: 100100000, guid: 972734d11e398d74eab001e00d5edecd, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -32,14 +32,10 @@ public class AnimNodeMain : MonoBehaviour
         PrimalPlayableOut = new PlayableOutput();
 
         MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
-
-        MainAnimMixer.Mixers[0] = new MixAnimNode();
-
-        MainAnimMixer.Mixers[0].def = AnimList.animDef[0];
-
+        
         PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.MainMixer);
-
-        MainAnimMixer.SetupMixer();
+        
+        ChangeAnim();
 
         GraphVisualizerClient.Show(MainAnimMixer.PrimalGraph);
 

@@ -116,6 +116,11 @@ public class scAnimSet : StateController
     internal override void OnExecute()
     {
         entity.animID = ID;
+        AnimDef animFindByID = entity.animListObject.animDef.ToList().Find(x => x.ID == ID);
+        if(animFindByID != null)
+        {
+            entity.MainAnimMixer.ChangeAnim(animFindByID);
+        }
     }
 }
 

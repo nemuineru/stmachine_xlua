@@ -30,11 +30,11 @@ public class Entity : MonoBehaviour
 
     //アニメーション管理用.
     public int animID = 0;
-    public AnimlistObject listObject;
+    public AnimlistObject animListObject;
     Animator animator;
 
     PlayableOutput PrimalPlayableOut;
-    MainNodeConfigurator MainAnimMixer = new MainNodeConfigurator();
+    public MainNodeConfigurator MainAnimMixer = new MainNodeConfigurator();
 
     public Color CurColor;
 
@@ -56,8 +56,11 @@ public class Entity : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         DefList = (StateDefListObject)StateDefListObject.CreateInstance(typeof(StateDefListObject));
         DefSet();
+
+        //アニメ設定.
         PrimalPlayableOut = new PlayableOutput();
         MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
+        PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.MainMixer);
         ChangeAnim();
     }
 
@@ -95,7 +98,7 @@ public class Entity : MonoBehaviour
     
     public void ChangeAnim()
     {
-        AnimDef animFindByID = listObject.animDef.ToList().Find(x => x.ID == animID);
+        AnimDef animFindByID = animListObject.animDef.ToList().Find(x => x.ID == animID);
         if(animFindByID != null)
         {
             MainAnimMixer.ChangeAnim(animFindByID);

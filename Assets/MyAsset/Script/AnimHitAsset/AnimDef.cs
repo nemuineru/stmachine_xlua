@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -219,26 +218,6 @@ public class MainNodeConfigurator
             Debug.Log("Mixer Connected to " + indexOfEmpty);
             SetAnim();
         }
-    }
-
-    public void SetupMixer()
-    {
-        int i = 0;
-        
-        Mixers[0].CreatePlayerNodes(ref PrimalGraph);
-        Debug.Log(Mixers[0].def.animClip[0].Clip.name);
-        PrimalGraph.Connect(Mixers[0].Mixer, 0 , MainMixer, 0);
-        MainMixer.SetInputWeight(0,1);
-        /*
-        foreach (var m in Mixers)
-        {
-            if (m != null)
-            {
-                i++;
-            }
-        }
-        */
-        //MainMixer.AddInput();
     }
 
     //アニメーションの設定・ミキサーのウェイト設定..
