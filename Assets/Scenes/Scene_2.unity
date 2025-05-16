@@ -309,7 +309,7 @@ MonoBehaviour:
   vCam: {fileID: 0}
   CurrentStateID: 0
   animID: 0
-  listObject: {fileID: 11400000, guid: fa3e95b17fea8fc4e9b0432af0719e70, type: 2}
+  animListObject: {fileID: 0}
   CurColor: {r: 0, g: 0, b: 0, a: 0}
   isOnGround: 0
   mesh: {fileID: 0}

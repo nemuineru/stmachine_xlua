@@ -6,6 +6,11 @@ using UnityEngine;
 using XLua;
 
 
+public class stateDefParams
+{ 
+
+}
+
 [System.Serializable]
 public class StateDef
 {
