@@ -43,15 +43,15 @@ Preset:
   - target: {fileID: 0}
     propertyPath: stateDefs.Array.data[0].PriorCondition.LuaScript
     value: "\r\n            local Entity = CS.Entity;\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
-      function QueuedStateID(in_entity)\r\n\r\n                    selfOnGrd = Condition:isEntityOnGround(in_entity)\r\n                   
-      selfJump = Condition:CheckButtonPressed()\r\n                    selfStTime
-      = Condition:CheckStateTime(in_entity) \r\n\r\n                    verd = {}\r\n                   
-      if (selfOnGrd == true and selfJump == true) then \r\n                       
-      table.insert( verd, 1 )\r\n                    end\r\n\r\n                   
-      if(selfOnGrd == true) then\r\n                        table.insert( verd, 2
-      )\r\n                    end\r\n\r\n                    if( Condition:CheckStateTime(in_entity)
-      > 0 ) then\r\n                        table.insert( verd, 0 ) \r\n                   
-      end\r\n                return verd\r\n            end\r\n        "
+      function QueuedStateID(in_entity)\r\n\r\n                    selfOnGrd = LC:isEntityOnGround(in_entity)\r\n                   
+      selfJump = LC:CheckButtonPressed()\r\n                    selfStTime = LC:CheckStateTime(in_entity)
+      \r\n\r\n                    verd = {}\r\n                    if (selfOnGrd
+      == true and selfJump == true) then \r\n                        table.insert(
+      verd, 1 )\r\n                    end\r\n\r\n                    if(selfOnGrd
+      == true) then\r\n                        table.insert( verd, 2 )\r\n                   
+      end\r\n\r\n                    if( LC:CheckStateTime(in_entity) > 0 ) then\r\n                       
+      table.insert( verd, 0 ) \r\n                    end\r\n                return
+      verd\r\n            end\r\n        "
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: stateDefs.Array.data[0].PriorCondition.entity
@@ -63,19 +63,19 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: stateDefs.Array.data[0].StateList.Array.data[0]
-    value: 8835840469877653516
+    value: 3002629213760520198
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: stateDefs.Array.data[0].StateList.Array.data[1]
-    value: 8835840469877653517
+    value: 3002629213760520199
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: stateDefs.Array.data[0].StateList.Array.data[2]
-    value: 8835840469877653518
+    value: 3002629213760520200
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: stateDefs.Array.data[0].StateList.Array.data[3]
-    value: 8835840469877653519
+    value: 3002629213760520201
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: stateDefs.Array.data[1].StateDefName
@@ -93,9 +93,9 @@ Preset:
     propertyPath: stateDefs.Array.data[1].PriorCondition.LuaScript
     value: "\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
       function QueuedStateID(in_entity)\r\n\r\n                    verd = {}\r\n                   
-      if ( Condition:isEntityOnGround(in_entity) == true ) then \r\n                       
+      if ( LC:isEntityOnGround(in_entity) == true ) then \r\n                       
       table.insert( verd, 1 )\r\n                    end\r\n                    if(
-      Condition:CheckStateTime(in_entity) > 0 ) then\r\n                        table.insert(
+      LC:CheckStateTime(in_entity) > 0 ) then\r\n                        table.insert(
       verd, 0 ) \r\n                    end\r\n                return verd\r\n           
       end\r\n        "
     objectReference: {fileID: 0}
@@ -109,98 +109,122 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: stateDefs.Array.data[1].StateList.Array.data[0]
-    value: 8835840469877653520
+    value: 3002629213760520202
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: stateDefs.Array.data[1].StateList.Array.data[1]
-    value: 8835840469877653521
+    value: 3002629213760520203
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653516]
+    propertyPath: managedReferences[3002629213760520198]
     value: Assembly-CSharp scJump
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653516].stateID
+    propertyPath: managedReferences[3002629213760520198].stateID
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653517]
+    propertyPath: managedReferences[3002629213760520198].stateControllerSubName
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: managedReferences[3002629213760520199]
     value: Assembly-CSharp scColorChange
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653517].stateID
+    propertyPath: managedReferences[3002629213760520199].stateID
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653517].color.r
+    propertyPath: managedReferences[3002629213760520199].stateControllerSubName
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: managedReferences[3002629213760520199].color.r
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653517].color.g
+    propertyPath: managedReferences[3002629213760520199].color.g
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653517].color.b
+    propertyPath: managedReferences[3002629213760520199].color.b
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653517].color.a
+    propertyPath: managedReferences[3002629213760520199].color.a
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653518]
+    propertyPath: managedReferences[3002629213760520200]
     value: Assembly-CSharp scChangeState
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653518].stateID
+    propertyPath: managedReferences[3002629213760520200].stateID
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653518].changeTo
+    propertyPath: managedReferences[3002629213760520200].stateControllerSubName
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: managedReferences[3002629213760520200].changeTo
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653519]
+    propertyPath: managedReferences[3002629213760520201]
     value: Assembly-CSharp scMove
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653519].stateID
+    propertyPath: managedReferences[3002629213760520201].stateID
     value: 2
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653520]
+    propertyPath: managedReferences[3002629213760520201].stateControllerSubName
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: managedReferences[3002629213760520202]
     value: Assembly-CSharp scColorChange
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653520].stateID
+    propertyPath: managedReferences[3002629213760520202].stateID
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653520].color.r
+    propertyPath: managedReferences[3002629213760520202].stateControllerSubName
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: managedReferences[3002629213760520202].color.r
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653520].color.g
-    value: 0.57719994
+    propertyPath: managedReferences[3002629213760520202].color.g
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653520].color.b
-    value: 0.042452812
+    propertyPath: managedReferences[3002629213760520202].color.b
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653520].color.a
+    propertyPath: managedReferences[3002629213760520202].color.a
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653521]
+    propertyPath: managedReferences[3002629213760520203]
     value: Assembly-CSharp scChangeState
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653521].stateID
+    propertyPath: managedReferences[3002629213760520203].stateID
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: managedReferences[8835840469877653521].changeTo
+    propertyPath: managedReferences[3002629213760520203].stateControllerSubName
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: managedReferences[3002629213760520203].changeTo
     value: 0
     objectReference: {fileID: 0}
   m_ExcludedProperties: []

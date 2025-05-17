@@ -7,7 +7,9 @@ using XLua;
 
 
 public class stateDefParams
-{ 
+{
+    public float stateParams_float;
+    public Vector3 stateParams_Vector3;    
 
 }
 
@@ -54,15 +56,16 @@ public class StateDef
             if(ExecuteStateIDs.Count() > 0)
             {
                 foreach (StateController state in StateList)
+                {
+                    Debug.Log(state.stateID);
+                    // Debug.Log("Finding stateID " + state.stateID + "," + state.ToString());
+                    if (ExecuteStateIDs.Any(i => i == state.stateID))
                     {
-                        // Debug.Log("Finding stateID " + state.stateID + "," + state.ToString());
-                        if(ExecuteStateIDs.Any(i => i == state.stateID))
-                        {
-                            state.entity = entity;
-                            // Debug.Log("Executed " + state.ToString());
-                            state.OnExecute();
-                        }
+                        state.entity = entity;
+                        // Debug.Log("Executed " + state.ToString());
+                        state.OnExecute();
                     }
+                }
             }
         }
         else

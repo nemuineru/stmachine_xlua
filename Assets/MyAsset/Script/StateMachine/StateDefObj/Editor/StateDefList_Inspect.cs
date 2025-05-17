@@ -10,7 +10,7 @@ using UnityEditor.UIElements;
 using UnityEditorInternal;
 using Unity.Properties;
 
-[CustomEditor(typeof(StateDefListObject))]
+//[CustomEditor(typeof(StateDefListObject))]
 public class StateDefList_Inspect : Editor
 {
     int isSelected = -1;

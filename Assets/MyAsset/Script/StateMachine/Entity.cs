@@ -42,7 +42,7 @@ public class Entity : MonoBehaviour
     
 
     Material mat;
-    public MeshRenderer mesh;
+    public SkinnedMeshRenderer mesh;
 
     public StateDefListObject DefList;
 

@@ -309,12 +309,17 @@ MonoBehaviour:
   vCam: {fileID: 0}
   CurrentStateID: 0
   animID: 0
-  animListObject: {fileID: 0}
+  animListObject: {fileID: 11400000, guid: fa3e95b17fea8fc4e9b0432af0719e70, type: 2}
   CurColor: {r: 0, g: 0, b: 0, a: 0}
   isOnGround: 0
-  mesh: {fileID: 0}
+  mesh: {fileID: 1048282691}
   DefList: {fileID: 0}
   wishingVect: {x: 0, y: 0, z: 0}
+--- !u!137 &1048282691 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1630794972795428178, guid: 972734d11e398d74eab001e00d5edecd, type: 3}
+  m_PrefabInstance: {fileID: 2076750267}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1534826196
 GameObject:
   m_ObjectHideFlags: 0
