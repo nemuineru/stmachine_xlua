@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 //再生ノード組み立て.
 public class MixAnimNode
@@ -184,6 +185,17 @@ public class MainNodeConfigurator
         
     }
 
+    public void ChangeAnimParams(int AnimID, Vector2 paramSet)
+    {
+        for (int i = 0; i < Mixers.Length; i++)
+        {
+            if (Mixers[i].def.ID == AnimID)
+            {
+                Mixers[i].def.CurrentParamPos = paramSet;
+            }            
+        }
+    }
+
     //アニメ変更時の挙動.
     //defを代入し、リセットする
     public void ChangeAnim(AnimDef def)
@@ -192,9 +204,9 @@ public class MainNodeConfigurator
         int indexOfEmpty = -1;
         MixAnimNode node;
         //定義されていないものがあるならそれを設定する.
-        for(int i = 0;i < Mixers.Length ; i++)
+        for (int i = 0; i < Mixers.Length; i++)
         {
-            if(Mixers[i] == null)
+            if (Mixers[i] == null)
             {
                 indexOfEmpty = i;
                 Debug.Log("Mixer Changing to " + def.ID + " as input of " + indexOfEmpty);
@@ -205,8 +217,8 @@ public class MainNodeConfigurator
         {
             foreach (var m in Mixers)
             {
-                if(m != null && !m.isEndTimeSet())
-                m.SetEnd();
+                if (m != null && !m.isEndTimeSet())
+                    m.SetEnd();
             }
             Mixers[indexOfEmpty] = new MixAnimNode();
             node = Mixers[indexOfEmpty];

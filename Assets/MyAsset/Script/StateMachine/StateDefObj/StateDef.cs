@@ -127,6 +127,31 @@ public class StateController
     }
 }
 
+
+//アニメーションの変更.
+//ジェネリックメソッドの導入実験も兼ねて、やってみる.
+[System.Serializable]
+[SerializeField]
+public class scAnimSet : StateController
+{
+    [SerializeField]
+    stParams<int> changeAnimID;
+    [SerializeField]
+    stParams<Vector2> animParameter; 
+    internal override void OnExecute()
+    {
+        entity.animID = changeAnimID.valueGet;
+        AnimDef animFindByID = entity.animListObject.animDef.ToList().Find(x => x.ID == changeAnimID.valueGet);
+        //設定されたIDが見つかれば、そのParameterと同様に設定..
+        if (animFindByID != null)
+        {
+            entity.MainAnimMixer.ChangeAnim(animFindByID);
+            entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet);
+        }
+    }
+}
+
+
 [System.Serializable]
 [SerializeField]
 public class scMove : StateController
@@ -142,23 +167,9 @@ public class scMove : StateController
     }
 }
 
-[System.Serializable]
-[SerializeField]
-public class scAnimSet : StateController
-{
-    public int ID = 0;
-    
-    internal override void OnExecute()
-    {
-        entity.animID = ID;
-        AnimDef animFindByID = entity.animListObject.animDef.ToList().Find(x => x.ID == ID);
-        if(animFindByID != null)
-        {
-            entity.MainAnimMixer.ChangeAnim(animFindByID);
-        }
-    }
-}
 
+//後で消します.
+//y方向へのimpulse型加速。
 [System.Serializable]
 [SerializeField]
 public class scJump : StateController
@@ -210,7 +221,7 @@ public class scRotateTowards : StateController
         Vector3 vect = Vector3.ProjectOnPlane(entity.rigid.velocity, Vector3.up);
         if (vect.sqrMagnitude > Mathf.Epsilon)
         {
-            Quaternion RotateTowards = Quaternion.LookRotation(vect,Vector3.up);
+            Quaternion RotateTowards = Quaternion.LookRotation(vect, Vector3.up);
             entity.transform.rotation = Quaternion.Lerp(entity.transform.rotation, RotateTowards, RotateWeight);
         }
     }

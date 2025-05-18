@@ -35,6 +35,7 @@ MonoBehaviour:
     - rid: 3002629213760520200
     - rid: 3002629213760520201
     - rid: 3002629237104443403
+    - rid: 3002629237104443414
   - StateDefName: Jumping
     entity: {fileID: 0}
     StateDefID: 1
@@ -73,7 +74,7 @@ MonoBehaviour:
     - rid: 3002629213760520201
       type: {class: scMove, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 1
+        stateID: 2
         stateControllerSubName: Move
     - rid: 3002629213760520202
       type: {class: scColorChange, ns: , asm: Assembly-CSharp}
@@ -90,6 +91,11 @@ MonoBehaviour:
     - rid: 3002629237104443403
       type: {class: scRotateTowards, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 1
+        stateID: 2
         stateControllerSubName: Rotate
-        RotateWeight: 0.01
+        RotateWeight: 0.5
+    - rid: 3002629237104443414
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        stateID: 0
+        stateControllerSubName: 
