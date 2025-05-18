@@ -53,18 +53,26 @@ public class Entity : MonoBehaviour
     {
         mat = mesh.material;
         animator = GetComponent<Animator>();
+
         rigid = GetComponent<Rigidbody>();
-        DefList = (StateDefListObject)StateDefListObject.CreateInstance(typeof(StateDefListObject));
-        DefSet();
+        //DefList = (StateDefListObject)StateDefListObject.CreateInstance(typeof(StateDefListObject));
+        //DefSet();
+        //設定されたDefListに対しこのエンティティを指定する.
+        DefList.stateDefs.ForEach(def => def.entity = this);
+        //DefList.stateDefs.ForEach(def => def.PriorCondition = def.PriorCondition);
 
         //アニメ設定.
         PrimalPlayableOut = new PlayableOutput();
-        MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
-        PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.MainMixer);
-        ChangeAnim();
+        if (animListObject != null && animator != null)
+        {
+            MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
+            PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.MainMixer);
+            ChangeAnim();
+        }
     }
 
     string verd_1;
+    [SerializeField]
     Vector3 raycenter =  Vector3.down * 0.5f;
 
     // Update is called once per frame
@@ -75,7 +83,8 @@ public class Entity : MonoBehaviour
 
 
         Vector2 wish = (InputInstance.self.inputValues.MovingAxisRead);
-        wishingVect = vCam.transform.forward * wish.y + vCam.transform.right * wish.x;
+        wishingVect = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up) * wish.y
+         + Vector3.ProjectOnPlane(vCam.transform.right, Vector3.up) * wish.x;
         stateTime += Time.deltaTime;
         mat.SetColor("_Color",CurColor);
 

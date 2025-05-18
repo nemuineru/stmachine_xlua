@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85bef611c4806534aab65ba4d51677e3, type: 3}
+  m_Name: stateDefTest
+  m_EditorClassIdentifier: 
+  stateDefs:
+  - StateDefName: OnInitLoad
+    entity: {fileID: 0}
+    StateDefID: 0
+    PriorCondition:
+      LuaScript: "\r            local Entity = CS.Entity;\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
+        function QueuedStateID(in_entity)\r\n\r\n                    selfOnGrd =
+        LC:isEntityOnGround(in_entity)\r\n                    selfJump = LC:CheckButtonPressed()\r\n                   
+        selfStTime = LC:CheckStateTime(in_entity) \r\n\r\n                    verd
+        = {}\r\n                    if (selfOnGrd == true and selfJump == true) then
+        \r\n                        table.insert( verd, 1 )\r\n                   
+        end\r\n\r\n                    if(selfOnGrd == true) then\r\n                       
+        table.insert( verd, 2 )\r\n                    end\r\n\r\n                   
+        if( LC:CheckStateTime(in_entity) > 0 ) then\r\n                        table.insert(
+        verd, 0 ) \r\n                    end\r\n                return verd\r\n           
+        end\r\n        "
+      entity: {fileID: 0}
+    StateList:
+    - rid: 3002629213760520198
+    - rid: 3002629213760520199
+    - rid: 3002629213760520200
+    - rid: 3002629213760520201
+    - rid: 3002629237104443403
+  - StateDefName: Jumping
+    entity: {fileID: 0}
+    StateDefID: 1
+    PriorCondition:
+      LuaScript: "\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
+        function QueuedStateID(in_entity)\r\n\r\n                    verd = {}\r\n                   
+        if ( LC:isEntityOnGround(in_entity) == true ) then \r\n                       
+        table.insert( verd, 1 )\r\n                    end\r\n                   
+        if( LC:CheckStateTime(in_entity) > 0 ) then\r\n                        table.insert(
+        verd, 0 ) \r\n                    end\r\n                return verd\r\n           
+        end\r\n        "
+      entity: {fileID: 0}
+    StateList:
+    - rid: 3002629213760520202
+    - rid: 3002629213760520203
+  references:
+    version: 2
+    RefIds:
+    - rid: 3002629213760520198
+      type: {class: scJump, ns: , asm: Assembly-CSharp}
+      data:
+        stateID: 1
+        stateControllerSubName: Jump
+    - rid: 3002629213760520199
+      type: {class: scColorChange, ns: , asm: Assembly-CSharp}
+      data:
+        stateID: 0
+        stateControllerSubName: ColorChange
+        color: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 1}
+    - rid: 3002629213760520200
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        stateID: 1
+        stateControllerSubName: ChangeState
+        changeTo: 1
+    - rid: 3002629213760520201
+      type: {class: scMove, ns: , asm: Assembly-CSharp}
+      data:
+        stateID: 1
+        stateControllerSubName: Move
+    - rid: 3002629213760520202
+      type: {class: scColorChange, ns: , asm: Assembly-CSharp}
+      data:
+        stateID: 0
+        stateControllerSubName: 
+        color: {r: 1, g: 0, b: 0, a: 1}
+    - rid: 3002629213760520203
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        stateID: 1
+        stateControllerSubName: 
+        changeTo: 0
+    - rid: 3002629237104443403
+      type: {class: scRotateTowards, ns: , asm: Assembly-CSharp}
+      data:
+        stateID: 1
+        stateControllerSubName: Rotate
+        RotateWeight: 0.01

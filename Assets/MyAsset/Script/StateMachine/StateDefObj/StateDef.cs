@@ -5,12 +5,40 @@ using Unity.Collections;
 using UnityEngine;
 using XLua;
 
-
-public class stateDefParams
+//StateControllerに入力されるジェネリックの属性値に合わせ、計算.
+//Vector3とかstringとか入れられるようにしたい.
+public class stParams<Type>
 {
-    public float stateParams_float;
-    public Vector3 stateParams_Vector3;    
+    //valueに入力された値を考慮して、ConditionElem等に代入
+    Type stParamValue;
 
+    //LuaConditionで読み出すパラメーターID
+    int useID = -1;
+    //実行されたLuaCondition中の変数を読み出すかを考慮.
+    bool useLuaCondition;
+
+    //登録値を読み出す.
+    public Type valueSet(Type val)
+    {
+        return val;
+    }
+
+    public Type valueGet
+    {
+        get { return stParamValue; }
+    }
+
+    //LuaEnvで実行されたLuaEnvの登録値を読み出して、それをvalueSetに実行.
+    /*
+        public Type getLuaElem()
+        {
+            Type type = new ;
+            if (useLuaCondition && useID > -1)
+            {
+
+            }
+        }
+    */
 }
 
 [System.Serializable]
@@ -57,12 +85,11 @@ public class StateDef
             {
                 foreach (StateController state in StateList)
                 {
-                    Debug.Log(state.stateID);
                     // Debug.Log("Finding stateID " + state.stateID + "," + state.ToString());
                     if (ExecuteStateIDs.Any(i => i == state.stateID))
                     {
                         state.entity = entity;
-                        // Debug.Log("Executed " + state.ToString());
+                        Debug.Log("Executed " + state.ToString());
                         state.OnExecute();
                     }
                 }
@@ -169,5 +196,22 @@ public class scChangeState : StateController
         // Debug.Log("stateID changes to " + changeTo);
         entity.CurrentStateID = changeTo;
         // Debug.Log("stchanged END");
+    }
+}
+
+//移動方向に回転を加える.
+[System.Serializable]
+[SerializeField]
+public class scRotateTowards : StateController
+{
+    public float RotateWeight = 0;
+    internal override void OnExecute()
+    {
+        Vector3 vect = Vector3.ProjectOnPlane(entity.rigid.velocity, Vector3.up);
+        if (vect.sqrMagnitude > Mathf.Epsilon)
+        {
+            Quaternion RotateTowards = Quaternion.LookRotation(vect,Vector3.up);
+            entity.transform.rotation = Quaternion.Lerp(entity.transform.rotation, RotateTowards, RotateWeight);
+        }
     }
 }
