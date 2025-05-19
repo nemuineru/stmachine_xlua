@@ -7,6 +7,7 @@ using XLua;
 
 //StateControllerに入力されるジェネリックの属性値に合わせ、計算.
 //Vector3とかstringとか入れられるようにしたい.
+[System.Serializable]
 public class stParams<Type>
 {
     //valueに入力された値を考慮して、ConditionElem等に代入
