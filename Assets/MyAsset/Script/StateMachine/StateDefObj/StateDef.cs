@@ -10,13 +10,18 @@ using XLua;
 [System.Serializable]
 public class stParams<Type>
 {
+    [SerializeField]
     //valueに入力された値を考慮して、ConditionElem等に代入
     Type stParamValue;
 
     //LuaConditionで読み出すパラメーターID
+    [SerializeField]
     int useID = -1;
     //実行されたLuaCondition中の変数を読み出すかを考慮.
+    [SerializeField]
     bool useLuaCondition;
+    [SerializeField]
+    LC LuaCondition = new LC();
 
     //登録値を読み出す.
     public Type valueSet(Type val)
@@ -137,8 +142,11 @@ public class scAnimSet : StateController
 {
     [SerializeField]
     stParams<int> changeAnimID;
+    
     [SerializeField]
     stParams<Vector2> animParameter; 
+    [SerializeField]
+    stParams<Vector2> animParameter_2; 
     internal override void OnExecute()
     {
         entity.animID = changeAnimID.valueGet;
