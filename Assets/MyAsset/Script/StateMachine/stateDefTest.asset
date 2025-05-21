@@ -97,7 +97,7 @@ MonoBehaviour:
     - rid: 3002629237104443414
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 0
+        stateID: 2
         stateControllerSubName: 
         changeAnimID:
           stParamValue: 0
@@ -105,9 +105,5 @@ MonoBehaviour:
           useLuaCondition: 0
         animParameter:
           stParamValue: {x: 0, y: 0}
-          useID: -1
-          useLuaCondition: 0
-        animParameter_2:
-          stParamValue: {x: 0, y: 0}
-          useID: -1
+          useID: 1
           useLuaCondition: 0

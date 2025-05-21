@@ -126,8 +126,8 @@ public class StateDefList_Inspect : Editor
                 sr = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateList)).GetArrayElementAtIndex(index);
                 if (isSelected == index)
                 {
-                    return 320f;              
-                    //return EditorGUI.GetPropertyHeight(sr,true) + EditorGUIUtility.singleLineHeight * 2.0f;
+                    //return 320f;              
+                    return EditorGUI.GetPropertyHeight(sr,true) + EditorGUIUtility.singleLineHeight * 1.2f;
                 }
                 else
                 {

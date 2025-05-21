@@ -90,6 +90,6 @@ public class sParams_Drawer : PropertyDrawer
     }
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        return 64f;
+        return EditorGUIUtility.singleLineHeight * (1 + property.CountInProperty()) * 1.05f;
     }
 }
