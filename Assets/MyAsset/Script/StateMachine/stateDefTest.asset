@@ -99,3 +99,15 @@ MonoBehaviour:
       data:
         stateID: 0
         stateControllerSubName: 
+        changeAnimID:
+          stParamValue: 0
+          useID: -1
+          useLuaCondition: 0
+        animParameter:
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          useLuaCondition: 0
+        animParameter_2:
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          useLuaCondition: 0

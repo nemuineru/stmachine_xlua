@@ -124,10 +124,10 @@ public class StateDefList_Inspect : Editor
             _stateList.elementHeightCallback = (index) => 
             {               
                 sr = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateList)).GetArrayElementAtIndex(index);
-                if(isSelected == index)
-                {                    
-                    Debug.Log("selected "+ index);
-                    return EditorGUI.GetPropertyHeight(sr,true) + EditorGUIUtility.singleLineHeight * 2.0f;
+                if (isSelected == index)
+                {
+                    return 320f;              
+                    //return EditorGUI.GetPropertyHeight(sr,true) + EditorGUIUtility.singleLineHeight * 2.0f;
                 }
                 else
                 {
@@ -174,7 +174,7 @@ public class StateDefList_Inspect : Editor
                     sr = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateList)).GetArrayElementAtIndex(index);
                     sr.isExpanded = true;
                     var label = new GUIContent(sr.type);
-                    EditorGUI.PropertyField(tRect, sr, label);
+                    EditorGUI.PropertyField(tRect, sr, label,true);
                 }                
             };
 

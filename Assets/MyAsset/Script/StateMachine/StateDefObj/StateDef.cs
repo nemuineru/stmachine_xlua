@@ -145,8 +145,7 @@ public class scAnimSet : StateController
     
     [SerializeField]
     stParams<Vector2> animParameter; 
-    [SerializeField]
-    stParams<Vector2> animParameter_2; 
+
     internal override void OnExecute()
     {
         entity.animID = changeAnimID.valueGet;
@@ -155,7 +154,7 @@ public class scAnimSet : StateController
         if (animFindByID != null)
         {
             entity.MainAnimMixer.ChangeAnim(animFindByID);
-            entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet);
+            //entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet);
         }
     }
 }
