@@ -90,6 +90,6 @@ public class sParams_Drawer : PropertyDrawer
     }
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        return PropertyDrawerUtility.GetDefaultPropertyHeight(property, label);
+        return 64f;
     }
 }

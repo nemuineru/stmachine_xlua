@@ -158,8 +158,8 @@ public class StateDefList_Inspect : Editor
 
                 //EditorGUI.LabelField(rect, new GUIContent(StateIDPref + " - " + subname));
                 //インデックスで同じ配列中の要素からheight, y値を表記.
-                
-                
+
+
                 //2025-05-18 HF : すべて同じステートが適応されていたため、ここで選択されたindexに応じ代入することで解決. 一応.
                 if (isSelected == index)
                 {
@@ -174,7 +174,8 @@ public class StateDefList_Inspect : Editor
                     sr = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateList)).GetArrayElementAtIndex(index);
                     sr.isExpanded = true;
                     var label = new GUIContent(sr.type);
-                    EditorGUI.PropertyField(tRect, sr, label,true);
+                    EditorGUI.PropertyField(tRect, sr, label, true);
+                    
                 }                
             };
 
@@ -247,7 +248,7 @@ public class StateDefList_Inspect : Editor
         {
             menu.AddItem(new GUIContent (executeState.FullName), on : false, func : () => {
                 StateController Instance = Activator.CreateInstance(executeState) as StateController;
-                selectedStDef.StateList.Add(Instance);
+                selectedStDef.StateList.Add(Instance);                
             });
         }
 
