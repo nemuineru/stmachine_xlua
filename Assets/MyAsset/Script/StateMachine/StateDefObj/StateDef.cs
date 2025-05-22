@@ -4,12 +4,17 @@ using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 using XLua;
+using XLua.LuaDLL;
 
 //StateControllerに入力されるジェネリックの属性値に合わせ、計算.
 //Vector3とかstringとか入れられるようにしたい.
 [System.Serializable]
 public class stParams<Type>
 {
+    //実行されたLuaCondition中の変数を読み出すかを後述するEnumに合わせて考慮.
+    [SerializeField]
+    loadType loadTypes;
+
     [SerializeField]
     //valueに入力された値を考慮して、ConditionElem等に代入
     Type stParamValue;
@@ -17,11 +22,20 @@ public class stParams<Type>
     //LuaConditionで読み出すパラメーターID
     [SerializeField]
     int useID = -1;
-    //実行されたLuaCondition中の変数を読み出すかを考慮.
-    [SerializeField]
-    bool useLuaCondition;
     [SerializeField]
     LC LuaCondition = new LC();
+
+    //Luaで読み出すメソッド名
+    [SerializeField]
+    string stLuaLoads = "";
+
+    //どの形式で値を読み出すかをenumで管理する.
+    public enum loadType
+    {
+        Constant,
+        Condition,
+        Calclation
+    }
 
     //登録値を読み出す.
     public Type valueSet(Type val)
@@ -31,7 +45,25 @@ public class stParams<Type>
 
     public Type valueGet
     {
-        get { return stParamValue; }
+        get
+        {
+            Type retValue = stParamValue;
+            switch (loadTypes)
+            {
+                //Conditionなら読み出されたLuaConditionに登録されたvalue配列から..
+                case loadType.Condition:
+                    break;
+                //Calclationなら読み出すLuaCondition中に書かれたfunctionを実行しその値を読み出す.
+                case loadType.Calclation:
+                    break;
+                //コンスタント値または未定義ならstParamvalueをそのまま使用.
+                case loadType.Constant:
+                default:
+                    break;
+
+            }
+            return retValue;
+        }
     }
 
     //LuaEnvで実行されたLuaEnvの登録値を読み出して、それをvalueSetに実行.
@@ -57,37 +89,48 @@ public class StateDef
     //executing state is decided from this.
     public lua_Read PriorCondition;
 
+    public TextAsset LuaAsset;
+
     [SerializeReference, SerializeField]
     public List<StateController> StateList = new List<StateController>();
+
+    //LuaCondition内でstateDefParamsで定義された値を受け取るためのクラス.
+    //...Objectで良いのか？
+    List<object> luaOutputParams = new List<object>();
 
 
     public void Execute()
     {
-        if(PriorCondition != null)
+        if (PriorCondition != null)
         {
             //ステートIDを読み出すテーブルをLuaにて作成.
             LuaEnv env = Lua_OnLoad.main.LEnv;
 
             env.Global.Set("LC", new LC());
 
-            env.DoString(PriorCondition.LuaScript);     
+            env.DoString(PriorCondition.LuaScript);
 
             lua_Read.CalcValues.QueuedStateID stateVerd =
             env.Global.Get<lua_Read.CalcValues.QueuedStateID>("QueuedStateID");
-            
-            lua_Read.CalcValues.StateDefParams stateValues =
-            env.Global.Get<lua_Read.CalcValues.StateDefParams>("stateValues");
-            
+
+            lua_Read.CalcValues.luaOutParams stateDefParams =
+            env.Global.Get<lua_Read.CalcValues.luaOutParams>("LuaOutput");
+
             int[] ExecuteStateIDs = stateVerd.Invoke(entity);
+            if (stateDefParams != null)
+            {
+                luaOutputParams = stateDefParams.Invoke(entity).ToList();
+            }
+
             string executingStr = "";
-            for(int i = 0;i < ExecuteStateIDs.Count(); i++)
+            for (int i = 0; i < ExecuteStateIDs.Count(); i++)
             {
                 executingStr += ExecuteStateIDs[i] + " , ";
             }
-               // Debug.Log(executingStr);
+            // Debug.Log(executingStr);
 
             //stateID内にLuaの設定値をセットアップ.
-            if(ExecuteStateIDs.Count() > 0)
+            if (ExecuteStateIDs.Count() > 0)
             {
                 foreach (StateController state in StateList)
                 {

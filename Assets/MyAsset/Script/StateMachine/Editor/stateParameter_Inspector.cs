@@ -17,6 +17,8 @@ public class sParams_Drawer : PropertyDrawer
     //get Types of stateControllers
     Type T;
     public string[] options = new string[] { "Constant Value", "via Condition", "via Calclation" };
+
+    //呼び出し方法の記述. 後にDrawerに直にenum形式として記述したい.
     int index = 0;
     // ステートコントローラーのValue値をそのまま使用 or Luaにより事前計算された値を用いるか 
     // or Luaに計算させるか のどれかで実際のステート動作時のパラメータを決定する.
@@ -24,6 +26,7 @@ public class sParams_Drawer : PropertyDrawer
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         SerializedProperty constantModel = property.FindPropertyRelative("stParamValue");
+        SerializedProperty loadTypes = property.FindPropertyRelative("loadTypes");
         SerializedProperty toggleLoadLua = property.FindPropertyRelative("useID");
         SerializedProperty luaLoadString = property.FindPropertyRelative("stLuaLoads");
         //個人的にはこのようにしたい - 
@@ -44,15 +47,18 @@ public class sParams_Drawer : PropertyDrawer
         Rect popUpPos = position;
         GUIStyle labStyle = GUIStyle.none;
 
+        //PopUp調整
+
         popUpPos.x += labStyle.CalcSize(label).x + 12f;
         popUpPos.width -= labStyle.CalcSize(label).x + 12f;
 
-        index = EditorGUI.Popup(popUpPos, index, options);
+        loadTypes.enumValueIndex = EditorGUI.Popup(popUpPos, loadTypes.enumValueIndex, options);
+
+        //選択後のドロワーの高さなどを表記.
 
         Rect DrawerPos = position;
         DrawerPos.y = popUpPos.y + EditorGUIUtility.singleLineHeight + 2f;
-        DrawerPos.height = EditorGUIUtility.singleLineHeight;
-        switch (index)
+        switch (loadTypes.enumValueIndex)
         {
             // ConstantValueの使用時.
             case 0:
@@ -67,15 +73,18 @@ public class sParams_Drawer : PropertyDrawer
             // Conditionの使用時.
             case 1:
                 {
+                    GUIContent lab1 = new GUIContent("Lua Output ID");
                     //statedef中のLuaから呼び出すfunction名を登録する. 
-                    toggleLoadLua.intValue = EditorGUI.IntField(DrawerPos, toggleLoadLua.intValue);
+                    toggleLoadLua.intValue = EditorGUI.IntField(DrawerPos ,lab1, toggleLoadLua.intValue);
                 }
                 break;
             // Calclationの使用時.
             case 2:
                 {
-                    //statedef中のLuaから呼び出すfunction名を登録する.                    
-                    luaLoadString.stringValue = EditorGUI.TextField(DrawerPos, luaLoadString.stringValue);
+                    GUIContent lab1 = new GUIContent("Lua function Name");
+                    //statedef中のLuaから呼び出すfunction名を登録する.          
+                    //現状だとエラーが発生するため　改善必須.          
+                    luaLoadString.stringValue = EditorGUI.TextField(DrawerPos, lab1, luaLoadString.stringValue);
                 }
                 break;
             default:

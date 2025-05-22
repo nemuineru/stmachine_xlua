@@ -27,7 +27,7 @@ public class lua_Read
         public delegate int[] QueuedStateID(Entity entity);
         
         [CSharpCallLua]
-        public delegate Parameter[] StateDefParams();
+        public delegate object[] luaOutParams(Entity entity);
 
         public class Parameter
         {
@@ -36,6 +36,7 @@ public class lua_Read
             public bool BoolParam;
             public string StringParam;
             public Vector3 Vector3Param;
+            public Vector2 Vector2Param;
         }
         
     }

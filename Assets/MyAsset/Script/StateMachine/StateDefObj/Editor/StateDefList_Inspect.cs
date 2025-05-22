@@ -87,12 +87,19 @@ public class StateDefList_Inspect : Editor
             //LuaScript, ベースIDなどを記述.
             SerializedProperty stDefNameProperty = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateDefName));
             SerializedProperty stDefIDProperty = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateDefID));
-            SerializedProperty LuScript = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.PriorCondition));
+            //LuaConditionの文章習得.
+            SerializedProperty LuScript = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.LuaAsset));
 
-            EditorGUILayout.PropertyField(stDefNameProperty,label : new GUIContent("State Name"));
-            EditorGUILayout.PropertyField(stDefIDProperty,label : new GUIContent("State ID"));
+            EditorGUILayout.PropertyField(stDefNameProperty,label : new GUIContent("StateDef Name"));
+            EditorGUILayout.PropertyField(stDefIDProperty,label : new GUIContent("StateDef ID"));
 
-            EditorGUILayout.PropertyField(LuScript.FindPropertyRelative("LuaScript"), GUILayout.MinHeight(200f),GUILayout.ExpandHeight(true));
+
+            EditorGUILayout.PropertyField(LuScript,label : new GUIContent("Lua Calcration Info"));
+
+            //SerializedProperty LSC = LuScript.FindPropertyRelative("text");
+            //EditorGUILayout.PropertyField(LuScript,label : new GUIContent("Lua Calcration Info"));
+
+            // LSC.stringValue = EditorGUILayout.TextField(LSC.stringValue, GUILayout.MinHeight(200f),GUILayout.ExpandHeight(true));
 
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
 
