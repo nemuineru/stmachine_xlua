@@ -22,12 +22,15 @@ public class stParams<Type>
     //LuaConditionで読み出すパラメーターID
     [SerializeField]
     int useID = -1;
+
     [SerializeField]
     LC LuaCondition = new LC();
 
     //Luaで読み出すメソッド名
     [SerializeField]
     string stLuaLoads = "";
+
+    delegate object luaCalcParam(Entity entity);
 
     //どの形式で値を読み出すかをenumで管理する.
     public enum loadType
@@ -43,27 +46,37 @@ public class stParams<Type>
         return val;
     }
 
-    public Type valueGet
-    {
-        get
-        {
-            Type retValue = stParamValue;
-            switch (loadTypes)
-            {
-                //Conditionなら読み出されたLuaConditionに登録されたvalue配列から..
-                case loadType.Condition:
-                    break;
-                //Calclationなら読み出すLuaCondition中に書かれたfunctionを実行しその値を読み出す.
-                case loadType.Calclation:
-                    break;
-                //コンスタント値または未定義ならstParamvalueをそのまま使用.
-                case loadType.Constant:
-                default:
-                    break;
+    //実際に想定された値を読み出す.
+    //Condition/Calclationではluaの内容を読み出したいが..
 
-            }
-            return retValue;
+    public Type valueGet(List<object> loadParams, Entity entity)
+    {
+        LuaEnv env = Lua_OnLoad.main.LEnv;
+        Type retValue = stParamValue;
+        switch (loadTypes)
+        {
+            //Conditionなら読み出されたLuaConditionに登録されたvalue配列から..
+            //としたい. 
+            case loadType.Condition:
+                {
+                    retValue = (Type)loadParams[useID];
+                    break;
+                }
+            //Calclationなら読み出すLuaCondition中に書かれたfunctionを実行しその値を読み出す.
+            case loadType.Calclation:
+                {
+                    luaCalcParam calcParam =
+                    env.Global.Get<luaCalcParam>(stLuaLoads);
+                    retValue = (Type)calcParam.Invoke(entity);
+                    break;
+                }
+            //コンスタント値または未定義ならstParamvalueをそのまま使用.
+            case loadType.Constant:
+            default:
+                break;
+
         }
+        return retValue;
     }
 
     //LuaEnvで実行されたLuaEnvの登録値を読み出して、それをvalueSetに実行.
@@ -78,6 +91,54 @@ public class stParams<Type>
         }
     */
 }
+
+//
+[System.Serializable]
+public class stIDs
+{
+
+    //読み出すステートID
+    [SerializeField]
+    internal int stateID = 0;
+
+    //読み出すステートID
+    [SerializeField]
+    string stLuaLoads = "";
+    delegate bool luaBooltoLoad(Entity entity);
+
+    loadType loadTypes;
+
+    //どの形式でIDを考えるかをenumで管理する.
+    public enum loadType
+    {
+        Constant,
+        Calclation
+    }
+
+    public bool valueGet(int loadedID, Entity entity)
+    {
+        bool retValue = stateID == loadedID;
+        LuaEnv env = Lua_OnLoad.main.LEnv;
+        switch (loadTypes)
+        {
+            //Calclationなら読み出すLuaCondition中に書かれたfunctionを実行しその値を読み出す.
+            case loadType.Calclation:
+                {
+                    luaBooltoLoad calcParam =
+                    env.Global.Get<luaBooltoLoad>(stLuaLoads);
+                    retValue = calcParam.Invoke(entity);
+                    break;
+                }
+            //コンスタント値または未定義ならstParamvalueをそのまま使用.
+            case loadType.Constant:
+            default:
+                break;
+
+        }
+        return retValue;
+    }
+}
+
 
 [System.Serializable]
 public class StateDef
@@ -108,8 +169,10 @@ public class StateDef
 
             env.Global.Set("LC", new LC());
 
+            //メインのLUA仮想マシンに読み出すテキストを以下に記述.
             env.DoString(PriorCondition.LuaScript);
 
+            //読み出しのQueueStateIDを記述. ここで
             lua_Read.CalcValues.QueuedStateID stateVerd =
             env.Global.Get<lua_Read.CalcValues.QueuedStateID>("QueuedStateID");
 
@@ -138,6 +201,7 @@ public class StateDef
                     if (ExecuteStateIDs.Any(i => i == state.stateID))
                     {
                         state.entity = entity;
+                        state.loadParams = luaOutputParams;
                         Debug.Log("Executed " + state.ToString());
                         state.OnExecute();
                     }
@@ -154,16 +218,33 @@ public class StateDef
 
 //ステートベースクラス. ここから派生する. なお、実行判別式はLuaを用いることとする.
 //Lua内にはここで用意された関数を流用する.
+
+//2025-05-23
+//ステコンのloadParamsにはLuaで"計算済み"の値を考える.
 [System.Serializable]
 [SerializeField]
 public class StateController
 {   
     [ReadOnly]
     internal Entity entity;
-    public int stateID;
+    //事前計算済みのパラメータの格納.
+    internal List<object> loadParams;
+
+    //stateIDはLuaに送られた,事前計算での情報を元に判別する.
+    //これもLua事後計算のパラメータとして組み込んで考えるべきだろうか？
+    public stIDs getIDs;
+
+    public int getIDs
+    {
+        get
+        {
+            return getIDs.valueGet();
+        }
+    }
 
     public string stateControllerSubName = "";
     internal static string stControllerName = null;
+    
 
     internal virtual void OnExecute()
     {
@@ -191,8 +272,33 @@ public class scAnimSet : StateController
 
     internal override void OnExecute()
     {
-        entity.animID = changeAnimID.valueGet;
-        AnimDef animFindByID = entity.animListObject.animDef.ToList().Find(x => x.ID == changeAnimID.valueGet);
+        entity.animID = changeAnimID.valueGet(loadParams);
+        AnimDef animFindByID = entity.animListObject.animDef.ToList().Find(x => x.ID == changeAnimID.valueGet(loadParams));
+        //設定されたIDが見つかれば、そのParameterと同様に設定..
+        if (animFindByID != null)
+        {
+            entity.MainAnimMixer.ChangeAnim(animFindByID);
+            entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet);
+        }
+    }
+}
+
+
+//アニメーションパラメータの変更.
+[System.Serializable]
+[SerializeField]
+public class scAnimParamChange : StateController
+{
+    [SerializeField]
+    stParams<int> changeAnimID;
+    
+    [SerializeField]
+    stParams<Vector2> animParameter; 
+
+    internal override void OnExecute()
+    {
+        entity.animID = changeAnimID.valueGet(loadParams);
+        AnimDef animFindByID = entity.MainAnimMixer.
         //設定されたIDが見つかれば、そのParameterと同様に設定..
         if (animFindByID != null)
         {
