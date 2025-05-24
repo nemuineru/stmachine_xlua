@@ -59,47 +59,63 @@ MonoBehaviour:
     - rid: 3002629213760520198
       type: {class: scJump, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 1
+        ID:
+          stateID: 1
+          stLuaLoads: 
         stateControllerSubName: Jump
     - rid: 3002629213760520199
       type: {class: scColorChange, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 0
+        ID:
+          stateID: 0
+          stLuaLoads: 
         stateControllerSubName: ColorChange
         color: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 1}
     - rid: 3002629213760520200
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 1
+        ID:
+          stateID: 1
+          stLuaLoads: 
         stateControllerSubName: ChangeState
         changeTo: 1
     - rid: 3002629213760520201
       type: {class: scMove, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 2
+        ID:
+          stateID: 2
+          stLuaLoads: 
         stateControllerSubName: Move
     - rid: 3002629213760520202
       type: {class: scColorChange, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 0
+        ID:
+          stateID: 0
+          stLuaLoads: 
         stateControllerSubName: 
         color: {r: 1, g: 0, b: 0, a: 1}
     - rid: 3002629213760520203
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 1
+        ID:
+          stateID: 0
+          stLuaLoads: 
         stateControllerSubName: 
         changeTo: 0
     - rid: 3002629237104443403
       type: {class: scRotateTowards, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 2
+        ID:
+          stateID: 2
+          stLuaLoads: 
         stateControllerSubName: Rotate
         RotateWeight: 0.5
     - rid: 3002629237104443414
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:
-        stateID: 2
+        ID:
+          stateID: 2
+          stLuaLoads: 
         stateControllerSubName: AnimSet
         changeAnimID:
           loadTypes: 0

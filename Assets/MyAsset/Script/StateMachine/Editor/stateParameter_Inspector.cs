@@ -14,8 +14,6 @@ using System.Reflection.Emit;
 [CustomPropertyDrawer(typeof(stParams<>), true)]
 public class sParams_Drawer : PropertyDrawer
 {
-    //get Types of stateControllers
-    Type T;
     public string[] options = new string[] { "Constant Value", "via Condition", "via Calclation" };
 
     //呼び出し方法の記述. 後にDrawerに直にenum形式として記述したい.

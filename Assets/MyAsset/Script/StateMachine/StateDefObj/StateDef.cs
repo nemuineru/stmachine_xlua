@@ -198,7 +198,7 @@ public class StateDef
                 foreach (StateController state in StateList)
                 {
                     // Debug.Log("Finding stateID " + state.stateID + "," + state.ToString());
-                    if (ExecuteStateIDs.Any(i => i == state.stateID))
+                    if (ExecuteStateIDs.Any(i => state.isIDFind(i)))
                     {
                         state.entity = entity;
                         state.loadParams = luaOutputParams;
@@ -232,14 +232,11 @@ public class StateController
 
     //stateIDはLuaに送られた,事前計算での情報を元に判別する.
     //これもLua事後計算のパラメータとして組み込んで考えるべきだろうか？
-    public stIDs getIDs;
+    public stIDs ID;
 
-    public int getIDs
+    public bool isIDFind(int ID)
     {
-        get
-        {
-            return getIDs.valueGet();
-        }
+        return this.ID.valueGet(ID, entity);
     }
 
     public string stateControllerSubName = "";
@@ -272,13 +269,13 @@ public class scAnimSet : StateController
 
     internal override void OnExecute()
     {
-        entity.animID = changeAnimID.valueGet(loadParams);
-        AnimDef animFindByID = entity.animListObject.animDef.ToList().Find(x => x.ID == changeAnimID.valueGet(loadParams));
+        entity.animID = changeAnimID.valueGet(loadParams,entity);
+        AnimDef animFindByID = entity.animListObject.animDef.ToList().Find(x => x.ID == changeAnimID.valueGet(loadParams,entity));
         //設定されたIDが見つかれば、そのParameterと同様に設定..
         if (animFindByID != null)
         {
             entity.MainAnimMixer.ChangeAnim(animFindByID);
-            entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet);
+            entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet(loadParams,entity));
         }
     }
 }
@@ -297,13 +294,12 @@ public class scAnimParamChange : StateController
 
     internal override void OnExecute()
     {
-        entity.animID = changeAnimID.valueGet(loadParams);
-        AnimDef animFindByID = entity.MainAnimMixer.
+        AnimDef animFindByID =
+        entity.MainAnimMixer.Mixers.First(x => x.def.ID ==  changeAnimID.valueGet(loadParams,entity)).def;
         //設定されたIDが見つかれば、そのParameterと同様に設定..
         if (animFindByID != null)
         {
-            entity.MainAnimMixer.ChangeAnim(animFindByID);
-            //entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet);
+            entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet(loadParams,entity));
         }
     }
 }

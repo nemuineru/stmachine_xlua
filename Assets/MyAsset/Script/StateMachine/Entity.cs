@@ -118,6 +118,7 @@ public class Entity : MonoBehaviour
     //前プロジェクトのように、スクリプト内でステートをとりあえず記述.
     //今回は最初のstatedefのLua内で読み出すステートを指定.
 
+/*
     void DefSet()
     {
         
@@ -218,4 +219,5 @@ public class Entity : MonoBehaviour
 
         DefList.stateDefs = new List<StateDef>{ def_1, def_2 };
     }
+*/
 }
