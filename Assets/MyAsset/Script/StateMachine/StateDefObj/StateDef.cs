@@ -94,12 +94,14 @@ public class stParams<Type>
 
 //
 [System.Serializable]
-public class stIDs
+public class stateID
 {
+    [SerializeField]
+    bool useLua = false;
 
     //読み出すステートID
     [SerializeField]
-    internal int stateID = 0;
+    internal int value = 0;
 
     //読み出すステートID
     [SerializeField]
@@ -115,9 +117,9 @@ public class stIDs
         Calclation
     }
 
-    public bool valueGet(int loadedID, Entity entity)
+    public bool valueGet(int loadID, Entity entity)
     {
-        bool retValue = stateID == loadedID;
+        bool retValue = value == loadID;
         LuaEnv env = Lua_OnLoad.main.LEnv;
         switch (loadTypes)
         {
@@ -198,7 +200,7 @@ public class StateDef
                 foreach (StateController state in StateList)
                 {
                     // Debug.Log("Finding stateID " + state.stateID + "," + state.ToString());
-                    if (ExecuteStateIDs.Any(i => state.isIDFind(i)))
+                    if (ExecuteStateIDs.Any(i => state.isIDValid(i)))
                     {
                         state.entity = entity;
                         state.loadParams = luaOutputParams;
@@ -232,9 +234,9 @@ public class StateController
 
     //stateIDはLuaに送られた,事前計算での情報を元に判別する.
     //これもLua事後計算のパラメータとして組み込んで考えるべきだろうか？
-    public stIDs ID;
+    public stateID ID;
 
-    public bool isIDFind(int ID)
+    public bool isIDValid(int ID)
     {
         return this.ID.valueGet(ID, entity);
     }

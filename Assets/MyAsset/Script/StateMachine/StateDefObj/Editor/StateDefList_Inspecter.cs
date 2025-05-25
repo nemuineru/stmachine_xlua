@@ -11,7 +11,7 @@ using UnityEditorInternal;
 using Unity.Properties;
 
 [CustomEditor(typeof(StateDefListObject))]
-public class StateDefList_Inspect : Editor
+public class StateDefList_Inspecter : Editor
 {
     int isSelected = -1;
     Type[] executableStateControllerType;
@@ -157,7 +157,7 @@ public class StateDefList_Inspect : Editor
                 var subnameProperty =  elementProperty.FindPropertyRelative("stateControllerSubName");
                 //subnameのプロパティを表示.
                 string subname = subnameProperty.stringValue;
-                string StateIDPref = elementProperty.FindPropertyRelative("ID.stateID").intValue.ToString();
+                //string StateIDPref = elementProperty.FindPropertyRelative("ID.stateID").intValue.ToString();
 
                 //ステート名称を表記.
                 //基本的に無いなら空欄のまま..

@@ -49,7 +49,7 @@ MonoBehaviour:
         verd, 0 ) \r\n                    end\r\n                return verd\r\n           
         end\r\n        "
       entity: {fileID: 0}
-    LuaAsset: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: cd00f5aa3ee1af945b2501f30c22bbeb, type: 3}
     StateList:
     - rid: 3002629213760520202
     - rid: 3002629213760520203
@@ -60,14 +60,16 @@ MonoBehaviour:
       type: {class: scJump, ns: , asm: Assembly-CSharp}
       data:
         ID:
-          stateID: 1
+          useLua: 0
+          value: 0
           stLuaLoads: 
         stateControllerSubName: Jump
     - rid: 3002629213760520199
       type: {class: scColorChange, ns: , asm: Assembly-CSharp}
       data:
         ID:
-          stateID: 0
+          useLua: 0
+          value: 0
           stLuaLoads: 
         stateControllerSubName: ColorChange
         color: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 1}
@@ -75,7 +77,8 @@ MonoBehaviour:
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
         ID:
-          stateID: 1
+          useLua: 0
+          value: 0
           stLuaLoads: 
         stateControllerSubName: ChangeState
         changeTo: 1
@@ -83,14 +86,16 @@ MonoBehaviour:
       type: {class: scMove, ns: , asm: Assembly-CSharp}
       data:
         ID:
-          stateID: 2
+          useLua: 0
+          value: 0
           stLuaLoads: 
         stateControllerSubName: Move
     - rid: 3002629213760520202
       type: {class: scColorChange, ns: , asm: Assembly-CSharp}
       data:
         ID:
-          stateID: 0
+          useLua: 0
+          value: 0
           stLuaLoads: 
         stateControllerSubName: 
         color: {r: 1, g: 0, b: 0, a: 1}
@@ -98,15 +103,17 @@ MonoBehaviour:
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
         ID:
-          stateID: 0
+          useLua: 0
+          value: 0
           stLuaLoads: 
-        stateControllerSubName: 
+        stateControllerSubName: 1
         changeTo: 0
     - rid: 3002629237104443403
       type: {class: scRotateTowards, ns: , asm: Assembly-CSharp}
       data:
         ID:
-          stateID: 2
+          useLua: 0
+          value: 0
           stLuaLoads: 
         stateControllerSubName: Rotate
         RotateWeight: 0.5
@@ -114,7 +121,8 @@ MonoBehaviour:
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:
         ID:
-          stateID: 2
+          useLua: 0
+          value: 0
           stLuaLoads: 
         stateControllerSubName: AnimSet
         changeAnimID:
