@@ -10,4 +10,4 @@
             table.insert( verd, 0 ) 
         end
     return verd
-end
+end 

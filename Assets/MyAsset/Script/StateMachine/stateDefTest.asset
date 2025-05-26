@@ -31,12 +31,12 @@ MonoBehaviour:
       entity: {fileID: 0}
     LuaAsset: {fileID: -8122155829129254986, guid: 13b365a8419da704db1d5867ceb26d49, type: 3}
     StateList:
-    - rid: 3002629213760520198
-    - rid: 3002629213760520199
-    - rid: 3002629213760520201
-    - rid: 3002629237104443403
-    - rid: 3002629237104443414
     - rid: 3002629213760520200
+    - rid: 3002629213760520198
+    - rid: 3002629213760520201
+    - rid: 3002629213760520199
+    - rid: 3002629237104443403
+    - rid: 3002629395774963758
   - StateDefName: Jumping
     entity: {fileID: 0}
     StateDefID: 1
@@ -51,8 +51,8 @@ MonoBehaviour:
       entity: {fileID: 0}
     LuaAsset: {fileID: -8122155829129254986, guid: cd00f5aa3ee1af945b2501f30c22bbeb, type: 3}
     StateList:
-    - rid: 3002629213760520202
     - rid: 3002629213760520203
+    - rid: 3002629213760520202
   references:
     version: 2
     RefIds:
@@ -61,7 +61,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 1
           stLuaLoads: 
         stateControllerSubName: Jump
     - rid: 3002629213760520199
@@ -78,7 +78,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 1
           stLuaLoads: 
         stateControllerSubName: ChangeState
         changeTo: 1
@@ -87,7 +87,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 2
           stLuaLoads: 
         stateControllerSubName: Move
     - rid: 3002629213760520202
@@ -104,7 +104,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 1
           stLuaLoads: 
         stateControllerSubName: 1
         changeTo: 0
@@ -117,21 +117,21 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: Rotate
         RotateWeight: 0.5
-    - rid: 3002629237104443414
-      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+    - rid: 3002629395774963758
+      type: {class: scAnimParamChange, ns: , asm: Assembly-CSharp}
       data:
         ID:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: AnimSet
+        stateControllerSubName: WalkParamChange
         changeAnimID:
           loadTypes: 0
-          stParamValue: 0
+          stParamValue: 1
           useID: -1
-          stLuaLoads: Check
+          stLuaLoads: 
         animParameter:
           loadTypes: 1
           stParamValue: {x: 1, y: 0}
-          useID: 4
+          useID: 0
           stLuaLoads: 

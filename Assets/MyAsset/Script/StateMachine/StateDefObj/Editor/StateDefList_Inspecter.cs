@@ -17,6 +17,7 @@ public class StateDefList_Inspecter : Editor
     Type[] executableStateControllerType;
 
     ReorderableList _stateList;
+    ReorderableList _stateDefList;
     Vector2 StateScrollPos;
     Vector2 ParamScrollPos;
     StateDefListObject CurObj;
@@ -24,7 +25,7 @@ public class StateDefList_Inspecter : Editor
 
     SerializedProperty SelectedDefProperty;
     StateController CurStateController;
-    
+
     public override void OnInspectorGUI()
     {
         executableStateControllerType = System.Reflection.Assembly.GetAssembly(typeof(StateDef))
@@ -37,12 +38,22 @@ public class StateDefList_Inspecter : Editor
         using (new GUILayout.HorizontalScope())
         {
             StateDefSelect();
-            if(SelectedDefProperty != null)
+            if (SelectedDefProperty != null)
             {
                 StateDefInspect();
             }
         }
         serializedObject.ApplyModifiedProperties();
+    }
+
+
+    // 引数は表示名, メソッド名
+    [SerializeField, ContextMenuItem("Show Log", "Sample")]
+    private int _sample;
+
+    private void Sample()
+    {
+        Debug.Log(_sample);
     }
 
 
@@ -53,48 +64,74 @@ public class StateDefList_Inspecter : Editor
     {
         string propertNameGet = nameof(CurObj.stateDefs);
 
-        var stateDefsProperty = serializedObject.FindProperty(propertNameGet);        
+        var stateDefsProperty = serializedObject.FindProperty(propertNameGet);
+        //stateDefListを取得..
+        //SerializedProperty stDef = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef));
         //Debug.Log(propertNameGet);
 
-        //Button Drawers.
-        using(GUILayout.ScrollViewScope StateDefScr = 
-        new GUILayout.ScrollViewScope(StateScrollPos,EditorStyles.helpBox,GUILayout.MinWidth(180),GUILayout.MaxWidth(160)))
+        //StateDef Makings
+        if (stateDefsProperty != null)
+        {
+            _stateDefList = new ReorderableList(serializedObject, stateDefsProperty);
+        }
+
+        //アセット追加メニューを記述.
+        //_stateDefList.onAddDropdownCallback = defenitionDropDown;
+        //_stateDefList.DoLayoutList();
+
+
+
+        using (GUILayout.ScrollViewScope StateDefScr =
+        new GUILayout.ScrollViewScope(StateScrollPos, EditorStyles.helpBox, GUILayout.MinWidth(180), GUILayout.MaxWidth(160)))
         {
             GUILayout.Label("StateDef Data");
             StateScrollPos = StateDefScr.scrollPosition;
-            for(int i = 0; i < CurObj.stateDefs.Count ; i++)
+            for (int i = 0; i < CurObj.stateDefs.Count; i++)
             {
                 var t = CurObj.stateDefs[i];
                 var element = stateDefsProperty.GetArrayElementAtIndex(i);
-                if(GUILayout.Button("StateDef " + t.StateDefID.ToString() + " - " + t.StateDefName))
+                if (GUILayout.Button("StateDef " + t.StateDefID.ToString() + " - " + t.StateDefName))
                 {
                     _stateList = null;
                     selectedStDef = t;
-                    string prop = string.Format("{0}.Array.data[{1}]",CurObj.stateDefs[i].ToString(),i.ToString());
-                    
+                    string prop = string.Format("{0}.Array.data[{1}]", CurObj.stateDefs[i].ToString(), i.ToString());
+
                     SelectedDefProperty = element;
                 }
             }
+            
+            //Button Drawers.
+            if (GUILayout.Button("+"))
+            {
+                stateDefsProperty.InsertArrayElementAtIndex(0);
+            }
+
+
+            if (GUILayout.Button("-"))
+            { 
+                
+            }
         }
+
     }
 
-    
+
     void StateDefInspect()
     {
-        using(GUILayout.ScrollViewScope StateDefScr = 
-        new GUILayout.ScrollViewScope(ParamScrollPos,EditorStyles.helpBox,GUILayout.MinWidth(120),GUILayout.MaxWidth(900)))
-        {            
+        using (GUILayout.ScrollViewScope StateDefScr =
+        new GUILayout.ScrollViewScope(ParamScrollPos, EditorStyles.helpBox, GUILayout.MinWidth(120), GUILayout.MaxWidth(900)))
+        {
             //LuaScript, ベースIDなどを記述.
             SerializedProperty stDefNameProperty = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateDefName));
             SerializedProperty stDefIDProperty = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateDefID));
             //LuaConditionの文章習得.
             SerializedProperty LuScript = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.LuaAsset));
 
-            EditorGUILayout.PropertyField(stDefNameProperty,label : new GUIContent("StateDef Name"));
-            EditorGUILayout.PropertyField(stDefIDProperty,label : new GUIContent("StateDef ID"));
+            EditorGUILayout.PropertyField(stDefNameProperty, label: new GUIContent("StateDef Name"));
+            EditorGUILayout.PropertyField(stDefIDProperty, label: new GUIContent("StateDef ID"));
 
 
-            EditorGUILayout.PropertyField(LuScript,label : new GUIContent("Lua Calcration Info"));
+            EditorGUILayout.PropertyField(LuScript, label: new GUIContent("Lua Calcration Info"));
 
             //SerializedProperty LSC = LuScript.FindPropertyRelative("text");
             //EditorGUILayout.PropertyField(LuScript,label : new GUIContent("Lua Calcration Info"));
@@ -104,8 +141,8 @@ public class StateDefList_Inspecter : Editor
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
 
 
-            
-            
+
+
             //stateDef中のstateListを登録.
             SerializedProperty states = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateList));
 
@@ -118,7 +155,7 @@ public class StateDefList_Inspecter : Editor
             _stateList.onSelectCallback = (list) =>
             {
                 isSelected = list.index;
-                Debug.Log(isSelected);     
+                Debug.Log(isSelected);
             };
             //_stateList.elementHeightCallback += index => isSelected == index ? 200f : EditorGUIUtility.singleLineHeight;
 
@@ -128,24 +165,24 @@ public class StateDefList_Inspecter : Editor
 
             //エレメントの高さ表示用.
             //この時点でisSelected == indexが全体で適応されているのが気がかり.
-            _stateList.elementHeightCallback = (index) => 
-            {               
+            _stateList.elementHeightCallback = (index) =>
+            {
                 sr = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateList)).GetArrayElementAtIndex(index);
                 if (isSelected == index)
                 {
                     //return 320f;              
-                    return EditorGUI.GetPropertyHeight(sr,true) + EditorGUIUtility.singleLineHeight * 1.2f;
+                    return EditorGUI.GetPropertyHeight(sr, true) + EditorGUIUtility.singleLineHeight * 1.2f;
                 }
                 else
                 {
                     return EditorGUIUtility.singleLineHeight;
-                }                
+                }
             };
 
             //ステート内容のメイン部分.
             //StateList[index]中の読み込まれたステート内容を読み出す..んだけどなんかおかしい.
             //最初の項目を選択後、すべての項目に見かけ上適応されている.
-            _stateList.drawElementCallback = (rect, index, isActive, isFocused) => 
+            _stateList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
                 //rectの位置を設定.
                 var stateIDRect = new Rect(rect);
@@ -154,7 +191,7 @@ public class StateDefList_Inspecter : Editor
                 stateNameRect.height = stateIDRect.height;
 
                 var elementProperty = states.GetArrayElementAtIndex(index);
-                var subnameProperty =  elementProperty.FindPropertyRelative("stateControllerSubName");
+                var subnameProperty = elementProperty.FindPropertyRelative("stateControllerSubName");
                 //subnameのプロパティを表示.
                 string subname = subnameProperty.stringValue;
                 //string StateIDPref = elementProperty.FindPropertyRelative("ID.stateID").intValue.ToString();
@@ -182,15 +219,15 @@ public class StateDefList_Inspecter : Editor
                     sr.isExpanded = true;
                     var label = new GUIContent(sr.type);
                     EditorGUI.PropertyField(tRect, sr, label, true);
-                    
-                }                
+
+                }
             };
 
-    
+
             //アセット追加メニューを記述.
             _stateList.onAddDropdownCallback = PropertyDropDown;
             _stateList.DoLayoutList();
-            
+
             /*
 
             for (int i = 0; i < states.arraySize; i++)
@@ -239,26 +276,35 @@ public class StateDefList_Inspecter : Editor
         }
     }
 
-    public static string NameOf<T>(Expression<Func<T,object>> selector)
+    public static string NameOf<T>(Expression<Func<T, object>> selector)
     {
         const string joinWith = ".";
         return nameof(T) + joinWith + string.Join(joinWith, selector.ToString().Split('.').Skip(1));
     }
-    
+
 
     //アセットの追加ボタンメニュー. StateControllerを継承したサブクラスをメニューとして出す.
     private void PropertyDropDown(Rect buttonRect, ReorderableList list)
     {
         GenericMenu menu = new GenericMenu();
 
-        foreach(Type executeState in executableStateControllerType)
+        foreach (Type executeState in executableStateControllerType)
         {
-            menu.AddItem(new GUIContent (executeState.FullName), on : false, func : () => {
+            menu.AddItem(new GUIContent(executeState.FullName), on: false, func: () =>
+            {
                 StateController Instance = Activator.CreateInstance(executeState) as StateController;
-                selectedStDef.StateList.Add(Instance);                
+                selectedStDef.StateList.Add(Instance);
             });
         }
 
+        menu.DropDown(buttonRect);
+    }
+    
+    
+    //ステート基本情報のリストアップなど.
+    private void defenitionDropDown(Rect buttonRect, ReorderableList list)
+    {
+        GenericMenu menu = new GenericMenu();
         menu.DropDown(buttonRect);
     }
 }

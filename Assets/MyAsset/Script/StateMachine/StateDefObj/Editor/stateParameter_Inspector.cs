@@ -172,6 +172,6 @@ public class stIDs_Drawer : PropertyDrawer
     }
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        return EditorGUIUtility.singleLineHeight * (property.CountInProperty() - 1f) * 1.02f;
+        return EditorGUIUtility.singleLineHeight * (property.CountInProperty() + 1f) * 1.02f;
     }
 }
