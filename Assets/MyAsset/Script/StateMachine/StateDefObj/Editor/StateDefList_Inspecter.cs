@@ -80,7 +80,7 @@ public class StateDefList_Inspecter : Editor
         //_stateDefList.DoLayoutList();
 
 
-
+        int index = 0;
         using (GUILayout.ScrollViewScope StateDefScr =
         new GUILayout.ScrollViewScope(StateScrollPos, EditorStyles.helpBox, GUILayout.MinWidth(180), GUILayout.MaxWidth(160)))
         {
@@ -94,6 +94,7 @@ public class StateDefList_Inspecter : Editor
                 {
                     _stateList = null;
                     selectedStDef = t;
+                    index = i;
                     string prop = string.Format("{0}.Array.data[{1}]", CurObj.stateDefs[i].ToString(), i.ToString());
 
                     SelectedDefProperty = element;
@@ -108,8 +109,8 @@ public class StateDefList_Inspecter : Editor
 
 
             if (GUILayout.Button("-"))
-            { 
-                
+            {
+                stateDefsProperty.DeleteArrayElementAtIndex(index);
             }
         }
 
