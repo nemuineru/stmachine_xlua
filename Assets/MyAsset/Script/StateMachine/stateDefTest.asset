@@ -34,9 +34,9 @@ MonoBehaviour:
     - rid: 3002629213760520200
     - rid: 3002629213760520198
     - rid: 3002629213760520201
-    - rid: 3002629213760520199
     - rid: 3002629237104443403
     - rid: 3002629395774963758
+    - rid: 3002629213760520199
   - StateDefName: Jumping
     entity: {fileID: 0}
     StateDefID: 2
@@ -72,7 +72,7 @@ MonoBehaviour:
           value: 0
           stLuaLoads: 
         stateControllerSubName: ColorChange
-        color: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 1}
+        color: {r: 1, g: 1, b: 1, a: 1}
     - rid: 3002629213760520200
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
@@ -131,7 +131,7 @@ MonoBehaviour:
           useID: -1
           stLuaLoads: 
         animParameter:
-          loadTypes: 1
-          stParamValue: {x: 1, y: 0}
+          loadTypes: 0
+          stParamValue: {x: 2, y: 2}
           useID: 0
           stLuaLoads: 

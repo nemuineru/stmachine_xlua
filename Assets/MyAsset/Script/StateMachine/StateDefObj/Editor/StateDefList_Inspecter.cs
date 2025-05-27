@@ -13,11 +13,17 @@ using Unity.Properties;
 [CustomEditor(typeof(StateDefListObject))]
 public class StateDefList_Inspecter : Editor
 {
-    int isSelected = -1;
+    int sDefSelectedIndex = -1;
+    int scSelectedIndex = -1;
     Type[] executableStateControllerType;
 
-    ReorderableList _stateList;
+
+    //StateDefのList表示用管理クラス
     ReorderableList _stateDefList;
+
+    //選択されたStateDef内のステコンのList表示用管理クラス
+    ReorderableList _stateList;
+
     Vector2 StateScrollPos;
     Vector2 ParamScrollPos;
     StateDefListObject CurObj;
@@ -38,6 +44,7 @@ public class StateDefList_Inspecter : Editor
         using (new GUILayout.HorizontalScope())
         {
             StateDefSelect();
+            //StateDefSelect_VertScope();
             if (SelectedDefProperty != null)
             {
                 StateDefInspect();
@@ -58,7 +65,71 @@ public class StateDefList_Inspecter : Editor
 
 
 
+    void StateDefSelect_VertScope()
+    {
+        using (GUILayout.VerticalScope verticalScope =
+        new GUILayout.VerticalScope(EditorStyles.helpBox, GUILayout.MinWidth(20), GUILayout.MaxWidth(600)))
+        {
+            GUILayout.Label("StateDef Datas");
 
+            string propertNameGet = nameof(CurObj.stateDefs);
+
+            var stateDefsProperty = serializedObject.FindProperty(propertNameGet);
+            //stateDefListを取得..
+            //SerializedProperty stDef = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef));
+            //Debug.Log(propertNameGet);
+
+            //StateDef Makings
+            if (stateDefsProperty != null)
+            {
+                //stateDefsのエレメント、タイプに応じたプロパティの取得など
+                _stateDefList = new ReorderableList(
+                    serializedObject, stateDefsProperty,
+                    draggable: true, displayHeader: false, displayAddButton: true, displayRemoveButton: true
+                    );
+            }
+
+            //アセット選択メニューを表記..
+            _stateDefList.onSelectCallback = (list) =>
+            {
+                sDefSelectedIndex = list.index;
+            };
+
+            //アセット追加メニュー(+)のコールバック.
+            _stateDefList.onAddCallback = (list) =>
+            {
+                stateDefsProperty.InsertArrayElementAtIndex(list.index);
+                //追加項目の位置を右側位置
+                sDefSelectedIndex = list.index;
+            };
+
+            //stateDefの描写.
+            _stateDefList.drawElementCallback = (rect, index, isActive, isFocused) =>
+            {
+                var t = CurObj.stateDefs[index];
+                string subname = "StateDef " + t.StateDefID.ToString() + " - " + t.StateDefName;
+                EditorGUI.LabelField(rect, subname);
+            };
+
+
+
+
+            //選択されたオブジェが正当なら..
+            if (sDefSelectedIndex < CurObj.stateDefs.Count && sDefSelectedIndex > -1)
+            {
+                int i = sDefSelectedIndex;
+
+                var t = CurObj.stateDefs[i];
+                var element = stateDefsProperty.GetArrayElementAtIndex(i);
+
+                selectedStDef = t;
+                SelectedDefProperty = element;
+            }
+
+            _stateDefList.DoLayoutList();
+        }
+        
+    }
 
     void StateDefSelect()
     {
@@ -68,13 +139,6 @@ public class StateDefList_Inspecter : Editor
         //stateDefListを取得..
         //SerializedProperty stDef = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef));
         //Debug.Log(propertNameGet);
-
-        //StateDef Makings
-        if (stateDefsProperty != null)
-        {
-            _stateDefList = new ReorderableList(serializedObject, stateDefsProperty);
-        }
-
         //アセット追加メニューを記述.
         //_stateDefList.onAddDropdownCallback = defenitionDropDown;
         //_stateDefList.DoLayoutList();
@@ -155,8 +219,8 @@ public class StateDefList_Inspecter : Editor
             }
             _stateList.onSelectCallback = (list) =>
             {
-                isSelected = list.index;
-                Debug.Log(isSelected);
+                scSelectedIndex = list.index;
+                Debug.Log(scSelectedIndex);
             };
             //_stateList.elementHeightCallback += index => isSelected == index ? 200f : EditorGUIUtility.singleLineHeight;
 
@@ -169,7 +233,7 @@ public class StateDefList_Inspecter : Editor
             _stateList.elementHeightCallback = (index) =>
             {
                 sr = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateList)).GetArrayElementAtIndex(index);
-                if (isSelected == index)
+                if (scSelectedIndex == index)
                 {
                     //return 320f;              
                     return EditorGUI.GetPropertyHeight(sr, true) + EditorGUIUtility.singleLineHeight * 1.2f;
@@ -206,7 +270,7 @@ public class StateDefList_Inspecter : Editor
 
 
                 //2025-05-18 HF : すべて同じステートが適応されていたため、ここで選択されたindexに応じ代入することで解決. 一応.
-                if (isSelected == index)
+                if (scSelectedIndex == index)
                 {
                     Debug.Log("showing Index of.. " + index);
 

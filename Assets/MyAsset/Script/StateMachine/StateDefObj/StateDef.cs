@@ -11,6 +11,45 @@ using XLua.LuaDLL;
 [System.Serializable]
 public class stParams<Type>
 {
+    //MUGENのHITDEFをそのまま移植するとInspectorが大変なことになるので、
+    //必須値以外は隠せるようにしたい.
+
+    //デフォルト値の設定.
+    //stParamsを設定する際は必ず初期化を行うとする.
+    internal Type defaultValue;
+
+    //必須等設定されている場合
+    public stParams(Type defValue, bool setEssential)
+    {
+        defaultValue = defValue;
+        _setEssential = setEssential;
+        _setHidden = false;
+    }
+
+    //デフォルト値が設定されている場合なら初期は隠す.
+    public stParams(Type defValue)
+    {
+        defaultValue = defValue;
+        _setEssential = false;
+        _setHidden = true;
+    }
+
+    //何も設定されていない際...
+    //はTypeの新規インスタンス作成時になんか不具合起こしそう..でもない？
+    public stParams()
+    {
+        _setEssential = false;
+        _setHidden = true;
+    }
+    
+    //この値が設定されているなら, "必ず"隠されない.
+    [SerializeField]
+    bool _setEssential = false;
+
+    //この値が設定されているなら, 値が隠され、デフォルト値が読み出される.
+    [SerializeField]
+    bool _setHidden = true;
+
     //実行されたLuaCondition中の変数を読み出すかを後述するEnumに合わせて考慮.
     [SerializeField]
     loadType loadTypes;
@@ -23,6 +62,7 @@ public class stParams<Type>
     [SerializeField]
     int useID = -1;
 
+    //
     [SerializeField]
     LC LuaCondition = new LC();
 
@@ -103,39 +143,26 @@ public class stateID
     [SerializeField]
     internal int value = 0;
 
-    //読み出すステートID
+    //読み出すLuaのパラメータ名
     [SerializeField]
     string stLuaLoads = "";
     delegate bool luaBooltoLoad(Entity entity);
 
-    loadType loadTypes;
-
-    //どの形式でIDを考えるかをenumで管理する.
-    public enum loadType
+    //Luaの状態・もしくは入力されたIDがこのidと同様の時にtrueを返す。
+    public bool valueGet(int[] loadID, Entity entity)
     {
-        Constant,
-        Calclation
-    }
-
-    public bool valueGet(int loadID, Entity entity)
-    {
-        bool retValue = value == loadID;
+        bool retValue = false;
         LuaEnv env = Lua_OnLoad.main.LEnv;
-        switch (loadTypes)
+        //Luaを使用するなら
+        if (useLua && stLuaLoads != "")
         {
-            //Calclationなら読み出すLuaCondition中に書かれたfunctionを実行しその値を読み出す.
-            case loadType.Calclation:
-                {
-                    luaBooltoLoad calcParam =
-                    env.Global.Get<luaBooltoLoad>(stLuaLoads);
-                    retValue = calcParam.Invoke(entity);
-                    break;
-                }
-            //コンスタント値または未定義ならstParamvalueをそのまま使用.
-            case loadType.Constant:
-            default:
-                break;
-
+            luaBooltoLoad calcParam =
+            env.Global.Get<luaBooltoLoad>(stLuaLoads);
+            retValue = calcParam.Invoke(entity);
+        }
+        else
+        {
+            retValue = (loadID.Count() > 0 && loadID.Any(i => i == value));
         }
         return retValue;
     }
@@ -174,13 +201,15 @@ public class StateDef
             //メインのLUA仮想マシンに読み出すテキストを以下に記述.
             env.DoString(PriorCondition.LuaScript);
 
-            //読み出しのQueueStateIDを記述. ここで
+            //読み出しのQueueStateIDを記述するためのメソッドを作成
             lua_Read.CalcValues.QueuedStateID stateVerd =
             env.Global.Get<lua_Read.CalcValues.QueuedStateID>("QueuedStateID");
 
+            //ステート宣言パラメータのメソッド作成
             lua_Read.CalcValues.luaOutParams stateDefParams =
             env.Global.Get<lua_Read.CalcValues.luaOutParams>("LuaOutput");
 
+            //executeStateIDsにはQueuedStateIDの値を入力
             int[] ExecuteStateIDs = stateVerd.Invoke(entity);
             if (stateDefParams != null)
             {
@@ -194,21 +223,46 @@ public class StateDef
             }
             // Debug.Log(executingStr);
 
+
+
+            //def中にあるstateを全部リストアップ
+            foreach (StateController state in StateList)
+            {
+                state.entity = entity;
+                //idがステート読み出しリスト内・もしくはステート自体が読み出し処理を行う場合
+                if (state.isIDValid(ExecuteStateIDs))
+                {
+                    //stateにluaOutputParamsを予め登録.
+                    state.loadParams = luaOutputParams;
+                    Debug.Log("Executed " + state.ToString());
+
+                    //実際に実行.
+                    state.OnExecute();
+                }
+            }
+
+
             //stateID内にLuaの設定値をセットアップ.
+            
+            /*
             if (ExecuteStateIDs.Count() > 0)
             {
+                //def中にあるstateを全部リストアップ
                 foreach (StateController state in StateList)
                 {
+                    state.entity = entity;
                     // Debug.Log("Finding stateID " + state.stateID + "," + state.ToString());
+
+                    //Lua設定値の中から..という
                     if (ExecuteStateIDs.Any(i => state.isIDValid(i)))
                     {
-                        state.entity = entity;
                         state.loadParams = luaOutputParams;
                         Debug.Log("Executed " + state.ToString());
                         state.OnExecute();
                     }
                 }
             }
+            */
         }
         else
         {
@@ -232,11 +286,11 @@ public class StateController
     //事前計算済みのパラメータの格納.
     internal List<object> loadParams;
 
-    //stateIDはLuaに送られた,事前計算での情報を元に判別する.
+    //stateIDはLuaに送られた,事前計算での情報とLua読み出しのスクリプトで判別する.
     //これもLua事後計算のパラメータとして組み込んで考えるべきだろうか？
     public stateID ID;
 
-    public bool isIDValid(int ID)
+    public bool isIDValid(int[] ID)
     {
         return this.ID.valueGet(ID, entity);
     }
@@ -322,6 +376,23 @@ public class scMove : StateController
     }
 }
 
+
+[System.Serializable]
+[SerializeField]
+public class scHitDef : StateController
+{
+    [SerializeField]
+    stParams<int> changeAnimID;
+    
+    [SerializeField]
+    stParams<Vector2> animParameter; 
+
+    internal override void OnExecute()
+    {
+        
+    }
+
+}
 
 //後で消します.
 //y方向へのimpulse型加速。
