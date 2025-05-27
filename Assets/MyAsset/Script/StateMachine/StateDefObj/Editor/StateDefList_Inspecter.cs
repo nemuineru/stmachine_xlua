@@ -43,8 +43,8 @@ public class StateDefList_Inspecter : Editor
         CurObj = (StateDefListObject)target;
         using (new GUILayout.HorizontalScope())
         {
-            StateDefSelect();
-            //StateDefSelect_VertScope();
+            //StateDefSelect();
+            StateDefSelect_VertScope();
             if (SelectedDefProperty != null)
             {
                 StateDefInspect();
@@ -68,12 +68,14 @@ public class StateDefList_Inspecter : Editor
     void StateDefSelect_VertScope()
     {
         using (GUILayout.VerticalScope verticalScope =
-        new GUILayout.VerticalScope(EditorStyles.helpBox, GUILayout.MinWidth(20), GUILayout.MaxWidth(600)))
+        new GUILayout.VerticalScope(EditorStyles.helpBox, GUILayout.MinWidth(120), GUILayout.MaxWidth(600)))
         {
             GUILayout.Label("StateDef Datas");
 
             string propertNameGet = nameof(CurObj.stateDefs);
+            Debug.Log(propertNameGet);
 
+            //List<stateDef> StateDefsの名称を取得
             var stateDefsProperty = serializedObject.FindProperty(propertNameGet);
             //stateDefListを取得..
             //SerializedProperty stDef = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef));
@@ -93,6 +95,10 @@ public class StateDefList_Inspecter : Editor
             _stateDefList.onSelectCallback = (list) =>
             {
                 sDefSelectedIndex = list.index;
+                SelectedDefProperty = list.serializedProperty.GetArrayElementAtIndex(sDefSelectedIndex);
+
+                Debug.Log(SelectedDefProperty.GetType().ToString());
+
             };
 
             //アセット追加メニュー(+)のコールバック.
@@ -101,6 +107,14 @@ public class StateDefList_Inspecter : Editor
                 stateDefsProperty.InsertArrayElementAtIndex(list.index);
                 //追加項目の位置を右側位置
                 sDefSelectedIndex = list.index;
+                SelectedDefProperty =  list.serializedProperty.GetArrayElementAtIndex(sDefSelectedIndex + 1);
+            };
+
+            //アセット消去メニュー(-)のコールバック.
+            _stateDefList.onRemoveCallback = (list) =>
+            {
+                stateDefsProperty.DeleteArrayElementAtIndex(list.index);
+                sDefSelectedIndex = 0;
             };
 
             //stateDefの描写.
@@ -113,20 +127,24 @@ public class StateDefList_Inspecter : Editor
 
 
 
-
+            /*
             //選択されたオブジェが正当なら..
             if (sDefSelectedIndex < CurObj.stateDefs.Count && sDefSelectedIndex > -1)
             {
                 int i = sDefSelectedIndex;
 
+                //Index内stateDefsの要素を選択,右のメニューに表示
                 var t = CurObj.stateDefs[i];
-                var element = stateDefsProperty.GetArrayElementAtIndex(i);
+                var defElem = stateDefsProperty.GetArrayElementAtIndex(i);
 
                 selectedStDef = t;
-                SelectedDefProperty = element;
+                SelectedDefProperty = defElem;
             }
+            */
 
             _stateDefList.DoLayoutList();
+            var t = CurObj.stateDefs[sDefSelectedIndex];
+            selectedStDef = t;
         }
         
     }
@@ -256,6 +274,12 @@ public class StateDefList_Inspecter : Editor
                 stateNameRect.height = stateIDRect.height;
 
                 var elementProperty = states.GetArrayElementAtIndex(index);
+
+
+                //2025-05-27 index値Maxの値が更新されないのはﾅﾝﾃﾞ...
+                Debug.Log(states.arraySize);
+
+
                 var subnameProperty = elementProperty.FindPropertyRelative("stateControllerSubName");
                 //subnameのプロパティを表示.
                 string subname = subnameProperty.stringValue;
