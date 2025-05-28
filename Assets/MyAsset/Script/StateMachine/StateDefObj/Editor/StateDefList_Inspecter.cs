@@ -43,8 +43,8 @@ public class StateDefList_Inspecter : Editor
         CurObj = (StateDefListObject)target;
         using (new GUILayout.HorizontalScope())
         {
-            //StateDefSelect();
-            StateDefSelect_VertScope();
+            StateDefSelect();
+            //StateDefSelect_VertScope();
             if (SelectedDefProperty != null)
             {
                 StateDefInspect();
@@ -86,18 +86,22 @@ public class StateDefList_Inspecter : Editor
             {
                 //stateDefsのエレメント、タイプに応じたプロパティの取得など
                 _stateDefList = new ReorderableList(
-                    serializedObject, stateDefsProperty,
+                    CurObj.stateDefs, typeof(StateDef),
                     draggable: true, displayHeader: false, displayAddButton: true, displayRemoveButton: true
                     );
             }
 
             //アセット選択メニューを表記..
+            //ここでの値を次のStateDefInspect
             _stateDefList.onSelectCallback = (list) =>
             {
+                if (sDefSelectedIndex == list.index)
+                {
+                    _stateDefList.Deselect(sDefSelectedIndex);
+                }
                 sDefSelectedIndex = list.index;
-                SelectedDefProperty = list.serializedProperty.GetArrayElementAtIndex(sDefSelectedIndex);
 
-                Debug.Log(SelectedDefProperty.GetType().ToString());
+                Debug.Log(list.index);
 
             };
 
@@ -141,8 +145,9 @@ public class StateDefList_Inspecter : Editor
                 SelectedDefProperty = defElem;
             }
             */
-
+            SelectedDefProperty = stateDefsProperty.GetArrayElementAtIndex(sDefSelectedIndex);
             _stateDefList.DoLayoutList();
+
             var t = CurObj.stateDefs[sDefSelectedIndex];
             selectedStDef = t;
         }
@@ -233,6 +238,7 @@ public class StateDefList_Inspecter : Editor
             //nullなら新規作成.
             if (_stateList == null)
             {
+                //_stateList = new ReorderableList(CurObj.stateDefs[sDefSelectedIndex].StateList, typeof(StateController));
                 _stateList = new ReorderableList(SelectedDefProperty.serializedObject, states);
             }
             _stateList.onSelectCallback = (list) =>
@@ -273,11 +279,13 @@ public class StateDefList_Inspecter : Editor
                 stateIDRect.height = EditorGUIUtility.singleLineHeight;
                 stateNameRect.height = stateIDRect.height;
 
+                //Debug.Log("Loaded state Index : " + index);
+
                 var elementProperty = states.GetArrayElementAtIndex(index);
 
 
                 //2025-05-27 index値Maxの値が更新されないのはﾅﾝﾃﾞ...
-                Debug.Log(states.arraySize);
+                //Debug.Log(states.arraySize);
 
 
                 var subnameProperty = elementProperty.FindPropertyRelative("stateControllerSubName");
