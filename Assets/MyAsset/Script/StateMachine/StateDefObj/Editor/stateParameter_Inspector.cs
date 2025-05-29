@@ -10,6 +10,61 @@ using UnityEditor.UIElements;
 using UnityEditorInternal;
 using Unity.Properties;
 using System.Reflection.Emit;
+
+//ステート基本情報の表示クラス
+//[CustomEditor(typeof(StateDef))]
+public class stateDefShow : Editor
+{
+    //選択されたStateDef内のステコンのList表示用管理クラス
+    ReorderableList _stateList;
+    //選択したStateDefをSerializedPropertyとして考える
+    SerializedProperty SelectedDefProperty;
+
+    //stateDefの詳細表示時のスクロールポジション.
+    Vector2 ParamScrollPos;
+    public override void OnInspectorGUI()
+    { 
+        selectedDef_stateList_OnGUI();
+    }
+    
+    void OnEnable()
+    {
+        selectedDef_statelist_OnEnable();
+    }
+
+    void selectedDef_statelist_OnEnable()
+    {
+        _stateList = new ReorderableList(serializedObject, SelectedDefProperty.FindPropertyRelative("StateList"),
+        draggable: true, displayHeader: false,
+        displayAddButton: true , displayRemoveButton : true);
+        Debug.Log("initializing");
+    }
+
+    void selectedDef_stateList_OnGUI()
+    {
+        using (GUILayout.ScrollViewScope StateDefScr =
+        new GUILayout.ScrollViewScope(ParamScrollPos, EditorStyles.helpBox, GUILayout.MinWidth(120), GUILayout.MaxWidth(900)))
+        {
+            //LuaScript, ベースIDなどを記述.
+            SerializedProperty stDefNameProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.StateDefName));
+            SerializedProperty stDefIDProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.StateDefID));
+            //LuaConditionの文章習得.
+            SerializedProperty LuScript = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.LuaAsset));
+
+            //基本情報の表示
+            EditorGUILayout.PropertyField(stDefNameProperty);
+            EditorGUILayout.PropertyField(stDefIDProperty);
+            EditorGUILayout.PropertyField(LuScript);
+            
+            //stateControllerListを描写
+            _stateList.DoLayoutList();
+        }
+    }
+
+}
+
+
+
 //ステートコントローラ内のパラメータ表記用クラス.
 [CustomPropertyDrawer(typeof(stParams<>), true)]
 public class sParams_Drawer : PropertyDrawer

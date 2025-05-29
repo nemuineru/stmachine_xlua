@@ -29,60 +29,12 @@ MonoBehaviour:
         verd, 0 ) \r\n                    end\r\n                return verd\r\n           
         end\r\n        "
       entity: {fileID: 0}
-    LuaAsset: {fileID: -8122155829129254986, guid: 13b365a8419da704db1d5867ceb26d49, type: 3}
+    LuaAsset: {fileID: 0}
     StateList:
     - rid: 3002629213760520198
     - rid: 3002629213760520199
     - rid: 3002629213760520200
     - rid: 3002629213760520201
-  - StateDefName: OnInitLoad
-    entity: {fileID: 0}
-    StateDefID: 2
-    PriorCondition:
-      LuaScript: "\r\n            local Entity = CS.Entity;\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
-        function QueuedStateID(in_entity)\r\n\r\n                    selfOnGrd =
-        LC:isEntityOnGround(in_entity)\r\n                    selfJump = LC:CheckButtonPressed()\r\n                   
-        selfStTime = LC:CheckStateTime(in_entity) \r\n\r\n                    verd
-        = {}\r\n                    if (selfOnGrd == true and selfJump == true) then
-        \r\n                        table.insert( verd, 1 )\r\n                   
-        end\r\n\r\n                    if(selfOnGrd == true) then\r\n                       
-        table.insert( verd, 2 )\r\n                    end\r\n\r\n                   
-        if( LC:CheckStateTime(in_entity) > 0 ) then\r\n                        table.insert(
-        verd, 0 ) \r\n                    end\r\n                return verd\r\n           
-        end\r\n        "
-      entity: {fileID: 0}
-    LuaAsset: {fileID: -8122155829129254986, guid: 13b365a8419da704db1d5867ceb26d49, type: 3}
-    StateList:
-    - rid: 3002629213760520198
-    - rid: 3002629213760520199
-    - rid: 3002629213760520200
-    - rid: 3002629213760520201
-    - rid: 3002629449445277736
-    - rid: 3002629449445277737
-  - StateDefName: OnInitLoad
-    entity: {fileID: 0}
-    StateDefID: 3
-    PriorCondition:
-      LuaScript: "\r\n            local Entity = CS.Entity;\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
-        function QueuedStateID(in_entity)\r\n\r\n                    selfOnGrd =
-        LC:isEntityOnGround(in_entity)\r\n                    selfJump = LC:CheckButtonPressed()\r\n                   
-        selfStTime = LC:CheckStateTime(in_entity) \r\n\r\n                    verd
-        = {}\r\n                    if (selfOnGrd == true and selfJump == true) then
-        \r\n                        table.insert( verd, 1 )\r\n                   
-        end\r\n\r\n                    if(selfOnGrd == true) then\r\n                       
-        table.insert( verd, 2 )\r\n                    end\r\n\r\n                   
-        if( LC:CheckStateTime(in_entity) > 0 ) then\r\n                        table.insert(
-        verd, 0 ) \r\n                    end\r\n                return verd\r\n           
-        end\r\n        "
-      entity: {fileID: 0}
-    LuaAsset: {fileID: -8122155829129254986, guid: 13b365a8419da704db1d5867ceb26d49, type: 3}
-    StateList:
-    - rid: 3002629213760520198
-    - rid: 3002629213760520199
-    - rid: 3002629213760520200
-    - rid: 3002629213760520201
-    - rid: 3002629449445277734
-    - rid: 3002629449445277735
   - StateDefName: Jumping
     entity: {fileID: 0}
     StateDefID: 1
@@ -95,7 +47,7 @@ MonoBehaviour:
         verd, 0 ) \r\n                    end\r\n                return verd\r\n           
         end\r\n        "
       entity: {fileID: 0}
-    LuaAsset: {fileID: -8122155829129254986, guid: cd00f5aa3ee1af945b2501f30c22bbeb, type: 3}
+    LuaAsset: {fileID: 0}
     StateList:
     - rid: 3002629213760520202
     - rid: 3002629213760520203
@@ -109,7 +61,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: JUMP
+        stateControllerSubName: 
     - rid: 3002629213760520199
       type: {class: scColorChange, ns: , asm: Assembly-CSharp}
       data:
@@ -117,7 +69,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: COLORCHANGE
+        stateControllerSubName: 
         color: {r: 1, g: 1, b: 1, a: 1}
     - rid: 3002629213760520200
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
@@ -126,7 +78,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: ChangeState
+        stateControllerSubName: 
         changeTo: 1
     - rid: 3002629213760520201
       type: {class: scMove, ns: , asm: Assembly-CSharp}
@@ -135,7 +87,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: Move
+        stateControllerSubName: 
     - rid: 3002629213760520202
       type: {class: scColorChange, ns: , asm: Assembly-CSharp}
       data:
@@ -143,7 +95,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: ColChange red
+        stateControllerSubName: 
         color: {r: 1, g: 0, b: 0, a: 1}
     - rid: 3002629213760520203
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
@@ -152,66 +104,5 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: CState 0
+        stateControllerSubName: 
         changeTo: 0
-    - rid: 3002629449445277734
-      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 0
-          stLuaLoads: 
-        stateControllerSubName: 
-        changeAnimID:
-          _setEssential: 0
-          _setHidden: 1
-          loadTypes: 0
-          stParamValue: 0
-          useID: -1
-          stLuaLoads: 
-        animParameter:
-          _setEssential: 0
-          _setHidden: 1
-          loadTypes: 0
-          stParamValue: {x: 0, y: 0}
-          useID: -1
-          stLuaLoads: 
-    - rid: 3002629449445277735
-      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 0
-          stLuaLoads: 
-        stateControllerSubName: 
-        changeAnimID:
-          _setEssential: 0
-          _setHidden: 1
-          loadTypes: 0
-          stParamValue: 0
-          useID: -1
-          stLuaLoads: 
-        animParameter:
-          _setEssential: 0
-          _setHidden: 1
-          loadTypes: 0
-          stParamValue: {x: 0, y: 0}
-          useID: -1
-          stLuaLoads: 
-    - rid: 3002629449445277736
-      type: {class: scRotateTowards, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 0
-          stLuaLoads: 
-        stateControllerSubName: Ra
-        RotateWeight: 0
-    - rid: 3002629449445277737
-      type: {class: scJump, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 0
-          stLuaLoads: 
-        stateControllerSubName: J
