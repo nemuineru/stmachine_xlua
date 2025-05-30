@@ -144,15 +144,25 @@ public class StateDefList_Inspector : Editor
         if (_stateList.ContainsKey(ID)) return;
 
         SerializedProperty selectedDefElem = DefListProperty.GetArrayElementAtIndex(ID);
+        //選択したstateListをselectedDefsとして登録..
         SerializedProperty selectedDefs = selectedDefElem.FindPropertyRelative("StateList");
+
         var _stateListDraw = new ReorderableList(serializedObject, selectedDefs, draggable: true, displayHeader: false,
         displayAddButton: true, displayRemoveButton: true);
 
-        _stateListDraw.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Inner Items");
+        //_stateListDraw.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "te");
         _stateListDraw.drawElementCallback = (rect, index, active, focused) =>
         {
-            SerializedProperty x = selectedDefs.GetArrayElementAtIndex(index);
-            EditorGUI.LabelField(rect,x.FindPropertyRelative("stateControllerSubName").ToString());
+            var indexProperty = selectedDefs.GetArrayElementAtIndex(index);
+            if (indexProperty != null)
+            {
+                SerializedProperty stNames = indexProperty.FindPropertyRelative(nameof(StateController.stateControllerSubName));
+                if (stNames != null)
+                {
+                    string stpathName = stNames.stringValue;
+                    EditorGUI.TextField(rect, stpathName);
+                }
+            }
         };
 
         _stateList[ID] = _stateListDraw;
