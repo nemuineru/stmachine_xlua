@@ -406,23 +406,6 @@ public class StateDefList_Inspector_Old : Editor
     }
 }
 
-//ステートコントローラー全体で用いるためのクラス.
-//
-[CustomPropertyDrawer(typeof(StateController), true)]
-public class StateContDrawer : PropertyDrawer
-{
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-    {
-        PropertyDrawerUtility.DrawDefaultGUI(position, property, label);
-        return;
-    }
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        return PropertyDrawerUtility.GetDefaultPropertyHeight(property, label);
-    }
-}
-
-
 //set non-foldout but seems not working..
 public class NoFoldoutDrawer : PropertyDrawer
 {

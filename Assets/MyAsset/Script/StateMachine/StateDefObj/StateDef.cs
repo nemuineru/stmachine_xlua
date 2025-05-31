@@ -288,14 +288,14 @@ public class StateController
 
     //stateIDはLuaに送られた,事前計算での情報とLua読み出しのスクリプトで判別する.
     //これもLua事後計算のパラメータとして組み込んで考えるべきだろうか？
+    [SerializeField]
     public stateID ID;
 
     public bool isIDValid(int[] ID)
     {
         return this.ID.valueGet(ID, entity);
     }
-
-    public string stateControllerSubName = "";
+    public string stateControllerSubName;
     internal static string stControllerName = null;
     
 

@@ -35,16 +35,18 @@ public class StateDefList_Inspector : Editor
 
 
     //stateDefList_Index : List<stateDef>の選択インデックス値
-
-    int sDefSelectedIndex = -1;
+    int sDefSelectedIndex = 0;
 
     //stateList_Index : List<state>の選択インデックス値
-    int scSelectedIndex = 0;
+    int stateListIndex = -1;
+
 
     //StateDefのList表示用管理クラス
     ReorderableList _stateDefList;
     //選択したStateDefをSerializedPropertyとして考える
     SerializedProperty DefListProperty, SelectedDefProperty;
+    StateDefListObject targetStateDefLists;
+    StateDef targetedStates;
 
 
     //選択されたStateDef内のステコンのList表示用管理クラス
@@ -66,6 +68,7 @@ public class StateDefList_Inspector : Editor
 
     void OnEnable()
     {
+        targetStateDefLists = (StateDefListObject)target;
         stateDefPicker_OnEnable();
     }
 
@@ -79,7 +82,10 @@ public class StateDefList_Inspector : Editor
         using (new GUILayout.HorizontalScope())
         {
             stateDefPicker_OnGUI();
-            selectedDef_stateList_OnGUI();
+            if (SelectedDefProperty != null)
+            {
+                selectedDef_stateList_OnGUI();
+            }
         }
         serializedObject.ApplyModifiedProperties();
     }
@@ -97,9 +103,10 @@ public class StateDefList_Inspector : Editor
     void stateDefPicker_OnGUI()
     {
         //スコープの作成
-        using (GUILayout.VerticalScope verticalScope =
-        new GUILayout.VerticalScope(EditorStyles.helpBox))
+        using (GUILayout.ScrollViewScope verticalScScope =
+        new GUILayout.ScrollViewScope(ParamScrollPos,EditorStyles.helpBox, GUILayout.MaxWidth(240f) , GUILayout.MaxHeight(640f)))
         {
+            ParamScrollPos = verticalScScope.scrollPosition;
             GUILayout.Label("StateDef");
             _stateDefList.DoLayoutList();
         }
@@ -112,6 +119,23 @@ public class StateDefList_Inspector : Editor
         DefListProperty = serializedObject.FindProperty(nameof(StateDefListObject.stateDefs));
         _stateDefList = new ReorderableList(serializedObject, DefListProperty, draggable: true, displayHeader: false,
         displayAddButton: true, displayRemoveButton: true);
+
+        //stateDefList自体はそれぞれが一段として表記される.
+
+        _stateDefList.elementHeightCallback = index =>
+        {
+            selectedDef_statelist_OnEnable(index);
+            return EditorGUIUtility.singleLineHeight;
+        };
+
+        //ステート宣言データの消去時.　バグの温床.. 
+        _stateDefList.onRemoveCallback = (index) =>
+        {
+            targetStateDefLists.stateDefs.RemoveAt(index.index);
+            SelectedDefProperty = null;
+        };
+
+        //StateDefListの描写時.
 
         _stateDefList.drawElementCallback = (rect, index, active, focused) =>
         {
@@ -127,15 +151,18 @@ public class StateDefList_Inspector : Editor
             selectedDef_statelist_OnEnable(index);
             if (active == true)
             {
+                targetedStates = targetStateDefLists.stateDefs[index];
                 SelectedDefProperty = currentDef;
-                scSelectedIndex = index;
+                //前回と違うものを選択されているなら選択ステートをリセットする.
+                if (sDefSelectedIndex != index)
+                {
+                    sDefSelectedIndex = index;
+                    stateListIndex = -1;
+                }
             }
 
-        };
-        _stateDefList.elementHeightCallback = index =>
-        {
-            return EditorGUIUtility.singleLineHeight;
-        };
+        }
+            ;
     }
 
     //Enable時でのStateControllerListの描写
@@ -153,15 +180,73 @@ public class StateDefList_Inspector : Editor
         //_stateListDraw.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "te");
         _stateListDraw.drawElementCallback = (rect, index, active, focused) =>
         {
-            var indexProperty = selectedDefs.GetArrayElementAtIndex(index);
+            SerializedProperty indexProperty = selectedDefs.GetArrayElementAtIndex(index);
             if (indexProperty != null)
             {
-                SerializedProperty stNames = indexProperty.FindPropertyRelative(nameof(StateController.stateControllerSubName));
+                SerializedProperty stNames =
+                indexProperty.FindPropertyRelative(nameof(StateController.stateControllerSubName));
+                SerializedProperty stIDs =
+                indexProperty.FindPropertyRelative(nameof(StateController.ID));
+
+
+                //このstNamesが存在しないなら、おそらくNULL値が全てに入っているはず.
                 if (stNames != null)
                 {
-                    string stpathName = stNames.stringValue;
-                    EditorGUI.TextField(rect, stpathName);
+                    string stSubname = stNames.stringValue;
+                    using (GUILayout.HorizontalScope HScope = new GUILayout.HorizontalScope())
+                    {
+                        Rect horizonSize = rect;
+                        horizonSize.height = EditorGUIUtility.singleLineHeight;
+                        string stateTypeName = targetedStates.StateList[index].GetType().ToString();
+
+                        //ステートコントローラーの名称.
+                        EditorGUI.LabelField(horizonSize, stateTypeName);
+                        horizonSize.x = horizonSize.x + (stateTypeName.Length + 2f) * 8f;
+                        horizonSize.width -= (stateTypeName.Length + 2f) * 8f;
+
+                        //ID表記. これいる？
+                        /*
+                        string IDName = "____";
+                        EditorGUI.LabelField(horizonSize, stIDs.intValue.ToString());
+                        horizonSize.x = horizonSize.x + IDName.Length * 4f;
+                        horizonSize.width -= IDName.Length * 4f;
+                        */
+
+
+                        //ユーザー定義の名称
+                        EditorGUI.TextField(horizonSize, stSubname);
+                    }
+                    //選択されているなら..
+                    if (active)
+                    {
+                        stateListIndex = index;
+                        rect.y += EditorGUIUtility.singleLineHeight;
+                        EditorGUI.PropertyField(rect, indexProperty);
+                    }
+                    Rect NextSize = rect;
+                    NextSize.y += EditorGUIUtility.singleLineHeight;
+                    NextSize.height += EditorGUIUtility.singleLineHeight;
                 }
+            }
+        };
+
+        _stateListDraw.onAddDropdownCallback = (rect, index) =>
+        {
+            PropertyDropDown(rect, index);
+        };
+
+        _stateListDraw.elementHeightCallback = (index) =>
+        {
+            //選択されているならそれを拡大表記したい.
+            if (index == stateListIndex)
+            {
+                SerializedProperty indexProperty = selectedDefs.GetArrayElementAtIndex(index);
+                return PropertyDrawerUtility.GetDefaultPropertyHeight
+                (indexProperty, label: GUIContent.none) + EditorGUIUtility.singleLineHeight;
+            }
+            else
+            {
+                return EditorGUIUtility.singleLineHeight;
             }
         };
 
@@ -171,22 +256,60 @@ public class StateDefList_Inspector : Editor
     //GUI描写時. この時点での_stateListを描写する.
     void selectedDef_stateList_OnGUI()
     {
-        using (GUILayout.ScrollViewScope StateDefScr =
-        new GUILayout.ScrollViewScope(ParamScrollPos, EditorStyles.helpBox, GUILayout.MinWidth(120), GUILayout.MaxWidth(900)))
+        if (SelectedDefProperty != null)
         {
-            //LuaScript, ベースIDなどを記述.
-            SerializedProperty stDefNameProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.StateDefName));
-            SerializedProperty stDefIDProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.StateDefID));
-            //LuaConditionの文章習得.
-            SerializedProperty LuScript = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.LuaAsset));
+            using (GUILayout.ScrollViewScope StateDefScr =
+                new GUILayout.ScrollViewScope(ParamScrollPos, EditorStyles.helpBox, GUILayout.MinWidth(120), GUILayout.MaxWidth(900)))
+            {
+                //LuaScript, ベースIDなどを記述.
+                SerializedProperty stDefNameProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.StateDefName));
+                SerializedProperty stDefIDProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.StateDefID));
+                //LuaConditionの文章習得.
+                SerializedProperty LuScript = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.LuaAsset));
 
-            //基本情報の表示
-            EditorGUILayout.PropertyField(stDefNameProperty);
-            EditorGUILayout.PropertyField(stDefIDProperty);
-            EditorGUILayout.PropertyField(LuScript);
+                //基本情報の表示
+                EditorGUILayout.PropertyField(stDefNameProperty);
+                EditorGUILayout.PropertyField(stDefIDProperty);
+                EditorGUILayout.PropertyField(LuScript);
 
-            //stateControllerListを描写
-            _stateList[scSelectedIndex].DoLayoutList();
+                //stateControllerListを描写
+                _stateList[sDefSelectedIndex].DoLayoutList();
+            }
         }
     }
+
+    //アセットの追加ボタンメニュー. StateControllerを継承したサブクラスをメニューとして出す.
+    private void PropertyDropDown(Rect buttonRect, ReorderableList list)
+    {
+        GenericMenu menu = new GenericMenu();
+
+        foreach (Type executeState in executableStateControllerType)
+        {
+            menu.AddItem(new GUIContent(executeState.FullName), on: false, func: () =>
+            {
+                StateController Instance = Activator.CreateInstance(executeState) as StateController;
+                targetedStates.StateList.Add(Instance);
+            });
+        }
+
+        menu.DropDown(buttonRect);
+    }
 }
+
+//ステートコントローラー全体で用いるためのクラス.
+//
+[CustomPropertyDrawer(typeof(StateController), true)]
+public class StateContDrawer : PropertyDrawer
+{
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        PropertyDrawerUtility.DrawDefaultGUI(position, property, label);
+        return;
+    }
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+    {
+        return PropertyDrawerUtility.GetDefaultPropertyHeight(property, label);
+    }
+}
+
+
