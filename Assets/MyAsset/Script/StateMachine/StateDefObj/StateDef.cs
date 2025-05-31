@@ -234,7 +234,7 @@ public class StateDef
                 {
                     //stateにluaOutputParamsを予め登録.
                     state.loadParams = luaOutputParams;
-                    Debug.Log("Executed " + state.ToString());
+                    //Debug.Log("Executed " + state.ToString());
 
                     //実際に実行.
                     state.OnExecute();

@@ -189,7 +189,7 @@ public class MainNodeConfigurator
     {
         for (int i = 0; i < Mixers.Length; i++)
         {
-            if (Mixers[i].def.ID == AnimID)
+            if (Mixers[i] != null && Mixers[i].def.ID == AnimID)
             {
                 Mixers[i].def.CurrentParamPos = paramSet;
             }            

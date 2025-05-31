@@ -29,28 +29,12 @@ MonoBehaviour:
         verd, 0 ) \r\n                    end\r\n                return verd\r\n           
         end\r\n        "
       entity: {fileID: 0}
-    LuaAsset: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 13b365a8419da704db1d5867ceb26d49, type: 3}
     StateList:
     - rid: 3002629213760520198
     - rid: 3002629213760520199
     - rid: 3002629213760520200
     - rid: 3002629213760520201
-  - StateDefName: Jumping
-    entity: {fileID: 0}
-    StateDefID: 1
-    PriorCondition:
-      LuaScript: "\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
-        function QueuedStateID(in_entity)\r\n\r\n                    verd = {}\r\n                   
-        if ( LC:isEntityOnGround(in_entity) == true ) then \r\n                       
-        table.insert( verd, 1 )\r\n                    end\r\n                   
-        if( LC:CheckStateTime(in_entity) > 0 ) then\r\n                        table.insert(
-        verd, 0 ) \r\n                    end\r\n                return verd\r\n           
-        end\r\n        "
-      entity: {fileID: 0}
-    LuaAsset: {fileID: 0}
-    StateList:
-    - rid: 3002629213760520202
-    - rid: 3002629213760520203
   - StateDefName: Jumping
     entity: {fileID: 0}
     StateDefID: 1
