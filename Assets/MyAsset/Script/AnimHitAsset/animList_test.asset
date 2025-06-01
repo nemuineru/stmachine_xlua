@@ -15,7 +15,7 @@ MonoBehaviour:
   animDef:
   - mixType: 1
     MixParamName: 
-    CurrentParamPos: {x: -2.9189796, y: 0.92841566}
+    CurrentParamPos: {x: 3.1519356e-21, y: 6.1625703e-21}
     ID: 0
     Name: Movement
     animClip:
@@ -28,8 +28,8 @@ MonoBehaviour:
       speed: 0
       startFrame: 0
       cycleOffset: 0
-      mixPosition: {x: 1, y: 0}
-    - Clip: {fileID: 7400000, guid: 2ab024ca71c2e444589dc4e094bd4029, type: 2}
+      mixPosition: {x: -1, y: 0}
+    - Clip: {fileID: 7400000, guid: 7443f9112c567254eb7c324efb27134f, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
       speed: 0
       startFrame: 0
       cycleOffset: 0
-      mixPosition: {x: -1, y: 0}
+      mixPosition: {x: 1, y: 0}
     blendInTime: 0
     blendOutTime: 2
   - mixType: 0
