@@ -10,6 +10,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using System.Drawing;
 
 //再生ノード組み立て.
 public class MixAnimNode
@@ -384,7 +385,7 @@ public class AnimDef
                     {
                         x_distAll += (cl.pos - CurrentParamPos).magnitude;
 
-                        Debug.Log(cl.Angle);
+                        //Debug.Log(cl.Angle);
                     }
                     //角度が最も近いものにおいて、一番目ののVectorをProjectした際の値が1を超えるなら2つPosの角度
 
@@ -421,36 +422,50 @@ public class AnimDef
                     isReached = (Cross(vector1, pos_1.pos - Vector2.zero) * Cross(vector1, pos_2.pos - Vector2.zero) < 0) &&
                     (Cross(vector2, Vector2.zero - pos_1.pos) * Cross(vector2, CurrentParamPos - pos_1.pos ) < 0);
 
-                    //isReachedがfalseなら、計算点は最接近した三角形の中にあると考える
+                    //isReachedがtrueなら、計算点は最接近した三角形の外にあると考える
                     //また、角度で比較
                     if (isReached)
                     {
                         Debug.Log("IsReached : On");
-                        float angle_0 = Vector2.Angle(animPos[0].pos, CurrentParamPos);
-                        float angle_1 = Vector2.Angle(animPos[1].pos, CurrentParamPos);
+                        float angle_0 = Vector2.Angle(pos_1.pos, CurrentParamPos);
+                        float angle_1 = Vector2.Angle(pos_2.pos, CurrentParamPos);
                         //Debug.Log( animClip[animPos[0].index].Clip.name + " : " + angle_0);
                         //Debug.Log( animClip[animPos[1].index].Clip.name + " : " + angle_1);
-                        animClip[animPos[0].index].MixWeightSet = BaseWeight * (angle_1 / (angle_0 + angle_1));
-                        animClip[animPos[1].index].MixWeightSet = BaseWeight * (angle_0 / (angle_0 + angle_1));
+                        animClip[pos_1.index].MixWeightSet = BaseWeight * (angle_1 / (angle_0 + angle_1));
+                        animClip[pos_2.index].MixWeightSet = BaseWeight * (angle_0 / (angle_0 + angle_1));
                         break;
                     }
+                    //交点が存在しない時..
                     //(0,0)が存在するなら最短3角の位置を考慮..
                     //UPDATE : 原点を指定した時、[0] (1 , 0), [1](-1, 0)の時バグる. 多分直線だから..
                     else if (hasCenter)
                     {
+                        Debug.Log("IsReached : Off");
+                        float angle_0 = Vector2.Angle(pos_1.pos, CurrentParamPos);
+                        float angle_1 = Vector2.Angle(pos_2.pos, CurrentParamPos);
+                        
+                        float angleWeight_All = angle_0 + angle_1;
+                        float angleWeight_0 = angle_0 / angleWeight_All;
+                        float angleWeight_1 = angle_1 / angleWeight_All;
 
-                        float angle_0 = Vector2.Angle(animPos[0].pos, CurrentParamPos);
-                        float angle_1 = Vector2.Angle(animPos[1].pos, CurrentParamPos);
-                        Vector2 line = (animPos[1].pos - animPos[0].pos).normalized;
-                        Vector2 retPoint_1 = animPos[0].pos + Vector2.Dot(CurrentParamPos - animPos[0].pos, line) * line;
-                        Vector2 retPoint_2 = animPos[0].pos + Vector2.Dot(Vector2.zero - animPos[0].pos, line) * line;
-                        float pWeight = (retPoint_1 - CurrentParamPos).magnitude / (retPoint_2).magnitude;
+                        //Debug.Log(angleWeight_All);
+
+                        //線分との垂直距離
+                        Vector2 line = (pos_1.pos - pos_2.pos);
+                        Vector2 animPos1_2PerpPos = PerpendicularFootPoint(pos_1.pos,pos_2.pos ,CurrentParamPos);
+                        Vector2 animPosBasePerpPos = PerpendicularFootPoint(pos_1.pos,pos_2.pos ,Vector2.zero);
+                        float Dist_PT = Vector2.Distance(animPos1_2PerpPos, CurrentParamPos);
+                        float Dist_Cer = Vector2.Distance(animPosBasePerpPos, Vector2.zero);
+
+                        Debug.Log(Dist_PT + ":" + "a" +Dist_Cer);
+
+                        float pAllWeight = Dist_PT / Dist_Cer;
                         //Debug.Log("Weight - " + pWeight + animPos[0].pos + animPos[1].pos);
                         //Debug.Log( animClip[animPos[0].index].Clip.name + " : " + angle_0);
                         //Debug.Log( animClip[animPos[1].index].Clip.name + " : " + angle_1);
-                        animClip[center.index].MixWeightSet = BaseWeight * pWeight;
-                        animClip[animPos[0].index].MixWeightSet = BaseWeight * (angle_1 / (angle_0 + angle_1)) * (1 - pWeight);
-                        animClip[animPos[1].index].MixWeightSet = BaseWeight * (angle_0 / (angle_0 + angle_1)) * (1 - pWeight);
+                        animClip[center.index].MixWeightSet = BaseWeight * pAllWeight;
+                        animClip[pos_1.index].MixWeightSet = BaseWeight * (angle_1 / (angle_0 + angle_1)) * (1 - pAllWeight);
+                        animClip[pos_2.index].MixWeightSet = BaseWeight * (angle_0 / (angle_0 + angle_1)) * (1 - pAllWeight);
                         break;
                     }
                     //最後に距離で比較
@@ -530,6 +545,13 @@ public class AnimDef
         // 2次元ベクトルの外積を返す
         float Cross(Vector2 vector1, Vector2 vector2) {
             return vector1.x * vector2.y - vector1.y * vector2.x;
+        }
+
+        // 点Pから直線ABに下ろした垂線の足の座標を返す
+        Vector2 PerpendicularFootPoint(Vector2 a, Vector2 b, Vector2 p)
+        {
+            Vector2 ab = (b - a).normalized;
+            return a + Vector2.Dot(p - a, ab) * ab;
         }
     }
 
