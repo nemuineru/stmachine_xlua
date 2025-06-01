@@ -176,9 +176,9 @@ public class StateDef
     public Entity entity;
     public int StateDefID = 0;
     
-    //executing state is decided from this.
     public lua_Read PriorCondition;
 
+    //executing state is decided from this.
     public TextAsset LuaAsset;
 
     [SerializeReference, SerializeField]
@@ -199,7 +199,7 @@ public class StateDef
             env.Global.Set("LC", new LC());
 
             //メインのLUA仮想マシンに読み出すテキストを以下に記述.
-            env.DoString(PriorCondition.LuaScript);
+            env.DoString(LuaAsset.text);
 
             //読み出しのQueueStateIDを記述するためのメソッドを作成
             lua_Read.CalcValues.QueuedStateID stateVerd =
@@ -402,7 +402,7 @@ public class scJump : StateController
 {        
     internal override void OnExecute()
     {
-        entity.rigid.velocity += Vector3.up * 10.0f;
+        entity.rigid.velocity += Vector3.up * 3.0f;
     }
 }
 
@@ -445,9 +445,10 @@ public class scRotateTowards : StateController
     internal override void OnExecute()
     {
         Vector3 vect = Vector3.ProjectOnPlane(entity.rigid.velocity, Vector3.up);
-        if (vect.sqrMagnitude > Mathf.Epsilon)
+        //比較がepsilonだとダメっぽそう
+        if (vect.sqrMagnitude > 0.01f)
         {
-            Quaternion RotateTowards = Quaternion.LookRotation(vect, Vector3.up);
+            Quaternion RotateTowards = Quaternion.LookRotation(vect.normalized, Vector3.up);
             entity.transform.rotation = Quaternion.Lerp(entity.transform.rotation, RotateTowards, RotateWeight);
         }
     }

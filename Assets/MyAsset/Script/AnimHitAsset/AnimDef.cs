@@ -304,10 +304,13 @@ public class AnimDef
             index = id;
             pos = p;
             WeightSet = 1f;
+            Angle = 0f;
         }
         internal int index;
         internal float WeightSet;
-        internal Vector2 pos;   
+        internal Vector2 pos;
+
+        internal float Angle;
     }
 
     public void ChangeWeight(float BaseWeight)
@@ -327,6 +330,9 @@ public class AnimDef
             animClip[i].MixWeightSet = 0;
             animPos[i].index = i;
             animPos[i].pos = animClip[i].mixPosition;
+            float angle = Vector2.SignedAngle(animPos[i].pos, Vector2.up);
+            angle = angle >= 0 ? angle : 360 + angle;
+            animPos[i].Angle = angle;
         }
         animPos = animPos.OrderBy(v => v.pos.SqrMagnitude()).ToArray();
         //原点位置に有るモーションを取得.            
@@ -359,12 +365,14 @@ public class AnimDef
                     }
                     break;
                 }
-                //シンプルじゃない..
-                case MixType.Simple2D : 
+
+            //原点を基準に、角度が近い線分同士との原点との距離を求める.
+            //現状シンプルじゃないので考える...
+            case MixType.Simple2D:
                 {
-                //角度が0に近い程最上位. 座標0,0が含まれるものは別とする.               
-                animPos = animPos.ToList().FindAll(v => v.pos.sqrMagnitude > Mathf.Epsilon)
-                .OrderBy(v => Vector2.Angle(v.pos , CurrentParamPos)).ToArray();
+                    //角度を0基準でソート.  0でないものを選択..             
+                    animPos = animPos.ToList().FindAll(v => v.pos.sqrMagnitude > Mathf.Epsilon)
+                    .OrderBy(v => v.Angle).ToArray();
 
                     float x_distAll = 0;
                     float WeightRest = 1;
@@ -375,63 +383,83 @@ public class AnimDef
                     foreach (clipPosStatement cl in animPos)
                     {
                         x_distAll += (cl.pos - CurrentParamPos).magnitude;
+
+                        Debug.Log(cl.Angle);
                     }
                     //角度が最も近いものにおいて、一番目ののVectorをProjectした際の値が1を超えるなら2つPosの角度
 
                     bool isReached = false;
-                    clipPosStatement pos_1 = animPos[0]; 
+                    float curPosAngle = Vector2.SignedAngle(CurrentParamPos, Vector2.up);
+
+                    clipPosStatement pos_1 = animPos[0];
                     clipPosStatement pos_2 = animPos[1];
 
-                    //三角形の内外判定.
-                    Vector2 pos_1To2 = pos_2.pos - pos_1.pos;
-                    Vector2 pos_CurTo1 = CurrentParamPos - pos_1.pos;
-                    Vector2 pos_CurTo2 = CurrentParamPos - pos_2.pos;
+                    curPosAngle = curPosAngle >= 0 ? curPosAngle : 360 + curPosAngle;
 
-                    float C1 = pos_1To2.x * pos_CurTo2.y - pos_1To2.y * pos_CurTo2.x;
-                    float C2 = -(pos_2.pos.x) * CurrentParamPos.y - -(pos_2.pos.y) * CurrentParamPos.x;
-                    float C3 = pos_1.pos.x * pos_CurTo1.y - pos_1.pos.y * pos_CurTo1.x;
-                    isReached = (C1 >= 0 && C2 >= 0 && C3 >= 0) || 
-                                (C1 <= 0 && C2 <= 0 && C3 <= 0); // Vector2.Angle(animPos[0].pos , CurrentParamPos) == 0;
 
-                    //角度で比較
-                    if(!isReached)
+                    for (int i = 0; i < animPos.Length; i++)
                     {
-                        Debug.Log(string.Format("{0} : {1} : {2}",C1,C2,C3));
-                        //Debug.Log("IsReached : On");
-                        float angle_0 = Vector2.Angle(animPos[0].pos,CurrentParamPos);
-                        float angle_1 = Vector2.Angle(animPos[1].pos,CurrentParamPos);
+                        //Max値ならそのまま
+                        if (i == animPos.Length - 1)
+                        {
+                            pos_1 = animPos[i];
+                            pos_2 = animPos[0];
+                            break;
+                        }
+                        if (animPos[i].Angle <= curPosAngle && animPos[i + 1].Angle >= curPosAngle)
+                        {
+                            pos_1 = animPos[i];
+                            pos_2 = animPos[i + 1];
+                            break;
+                        }
+                    }
+
+                    //2つの線分の交差判定(原点 -> 基準点 X パラメータ1点 - パラメータ2点)
+                    Vector2 vector1 = CurrentParamPos;
+                    Vector2 vector2 = pos_2.pos - pos_1.pos;
+
+                    isReached = (Cross(vector1, pos_1.pos - Vector2.zero) * Cross(vector1, pos_2.pos - Vector2.zero) < 0) &&
+                    (Cross(vector2, Vector2.zero - pos_1.pos) * Cross(vector2, CurrentParamPos - pos_1.pos ) < 0);
+
+                    //isReachedがfalseなら、計算点は最接近した三角形の中にあると考える
+                    //また、角度で比較
+                    if (isReached)
+                    {
+                        Debug.Log("IsReached : On");
+                        float angle_0 = Vector2.Angle(animPos[0].pos, CurrentParamPos);
+                        float angle_1 = Vector2.Angle(animPos[1].pos, CurrentParamPos);
                         //Debug.Log( animClip[animPos[0].index].Clip.name + " : " + angle_0);
                         //Debug.Log( animClip[animPos[1].index].Clip.name + " : " + angle_1);
-                        animClip[animPos[0].index].MixWeightSet = BaseWeight * (angle_1 / ( angle_0 + angle_1));
-                        animClip[animPos[1].index].MixWeightSet = BaseWeight * (angle_0 / ( angle_0 + angle_1));
+                        animClip[animPos[0].index].MixWeightSet = BaseWeight * (angle_1 / (angle_0 + angle_1));
+                        animClip[animPos[1].index].MixWeightSet = BaseWeight * (angle_0 / (angle_0 + angle_1));
                         break;
                     }
                     //(0,0)が存在するなら最短3角の位置を考慮..
                     //UPDATE : 原点を指定した時、[0] (1 , 0), [1](-1, 0)の時バグる. 多分直線だから..
-                    else if(hasCenter)
+                    else if (hasCenter)
                     {
 
-                        float angle_0 = Vector2.Angle(animPos[0].pos,CurrentParamPos);
-                        float angle_1 = Vector2.Angle(animPos[1].pos,CurrentParamPos);
+                        float angle_0 = Vector2.Angle(animPos[0].pos, CurrentParamPos);
+                        float angle_1 = Vector2.Angle(animPos[1].pos, CurrentParamPos);
                         Vector2 line = (animPos[1].pos - animPos[0].pos).normalized;
-                        Vector2 retPoint_1 = animPos[0].pos + Vector2.Dot(CurrentParamPos - animPos[0].pos,line) * line;
-                        Vector2 retPoint_2 = animPos[0].pos + Vector2.Dot(Vector2.zero - animPos[0].pos,line) * line;
+                        Vector2 retPoint_1 = animPos[0].pos + Vector2.Dot(CurrentParamPos - animPos[0].pos, line) * line;
+                        Vector2 retPoint_2 = animPos[0].pos + Vector2.Dot(Vector2.zero - animPos[0].pos, line) * line;
                         float pWeight = (retPoint_1 - CurrentParamPos).magnitude / (retPoint_2).magnitude;
                         //Debug.Log("Weight - " + pWeight + animPos[0].pos + animPos[1].pos);
                         //Debug.Log( animClip[animPos[0].index].Clip.name + " : " + angle_0);
                         //Debug.Log( animClip[animPos[1].index].Clip.name + " : " + angle_1);
                         animClip[center.index].MixWeightSet = BaseWeight * pWeight;
-                        animClip[animPos[0].index].MixWeightSet = BaseWeight * (angle_1 / ( angle_0 + angle_1)) * (1 - pWeight);
-                        animClip[animPos[1].index].MixWeightSet = BaseWeight * (angle_0 / ( angle_0 + angle_1)) * (1 - pWeight);
+                        animClip[animPos[0].index].MixWeightSet = BaseWeight * (angle_1 / (angle_0 + angle_1)) * (1 - pWeight);
+                        animClip[animPos[1].index].MixWeightSet = BaseWeight * (angle_0 / (angle_0 + angle_1)) * (1 - pWeight);
                         break;
-                    }                    
+                    }
                     //最後に距離で比較
                     for (int i = 0; i < animClip.Length; i++)
                     {
                         //現在パラメータ位置の距離で比較    
                         float distSelect = (animPos[i].pos - CurrentParamPos).magnitude;
-                        float curRest = (1f - distSelect/x_distAll);
-                        Debug.Log( animClip[animPos[i].index].Clip.name + " : " + curRest);
+                        float curRest = (1f - distSelect / x_distAll);
+                        Debug.Log(animClip[animPos[i].index].Clip.name + " : " + curRest);
                         animClip[animPos[i].index].MixWeightSet = BaseWeight * curRest * WeightRest;
                         WeightRest = Mathf.Clamp01(WeightRest - curRest);
                     }
@@ -439,8 +467,8 @@ public class AnimDef
                 }
             //極座標での相対値.
             //via Gradient Band Interpolation shader..;                
-                case MixType.FreeForm2D:
-                {                             
+            case MixType.FreeForm2D:
+                {
                     float weightAll = 0;
                     int i = 0;
                     foreach (clipPosStatement cl in animPos)
@@ -448,12 +476,12 @@ public class AnimDef
                         float weight = 1.0f;
                         for (int j = 0; j < animPos.Length; j++)
                         {
-                            if(i == j)
+                            if (i == j)
                             {
                                 continue;
                             }
-                        //float point_mag_j = animPos[j].magnitude;
-                        }                        
+                            //float point_mag_j = animPos[j].magnitude;
+                        }
                         i++;
                     }
                     break;
@@ -461,42 +489,47 @@ public class AnimDef
 
             //直交座標系.
             //via runevision's animation thesis.
-                case MixType.Cartesian2D : 
-            {
-                float weightAll = 0;
-                int i = 0;
-                foreach (clipPosStatement cl in animPos)
+            case MixType.Cartesian2D:
                 {
-                    var Dir1 = cl.pos - CurrentParamPos;
-                    float Weight = 1f;
-                    for (int j = 0; j < animPos.Length; j++)
+                    float weightAll = 0;
+                    int i = 0;
+                    foreach (clipPosStatement cl in animPos)
                     {
-                        if (j == i)
+                        var Dir1 = cl.pos - CurrentParamPos;
+                        float Weight = 1f;
+                        for (int j = 0; j < animPos.Length; j++)
                         {
-                            continue;
+                            if (j == i)
+                            {
+                                continue;
+                            }
+                            var Dir2 = cl.pos - animPos[j].pos;
+                            var newWeight = Mathf.Clamp01(1f - (Vector2.Dot(Dir1, Dir2) / Dir2.sqrMagnitude));
+                            Weight = Mathf.Min(Weight, newWeight);
                         }
-                        var Dir2 = cl.pos - animPos[j].pos;
-                        var newWeight = Mathf.Clamp01(1f - (Vector2.Dot(Dir1, Dir2) / Dir2.sqrMagnitude));
-                        Weight = Mathf.Min(Weight, newWeight);
-                    }                    
-                    animPos[i].WeightSet  = Weight;
-                    weightAll += animPos[i].WeightSet;
-                    Debug.Log(animPos[i].WeightSet);
-                    i++;
-                }
+                        animPos[i].WeightSet = Weight;
+                        weightAll += animPos[i].WeightSet;
+                        //Debug.Log(animPos[i].WeightSet);
+                        i++;
+                    }
                     for (int xl = 0; xl < animPos.Length; xl++)
                     {
                         animClip[animPos[xl].index].MixWeightSet =
                         BaseWeight * (animPos[xl].WeightSet / weightAll);
-                    }                    
+                    }
                     break;
-            }
+                }
             //指定以外のもの
             default:
-            {
-                break;
-            }
-                
+                {
+                    break;
+                }
+
+        }
+
+        // 2次元ベクトルの外積を返す
+        float Cross(Vector2 vector1, Vector2 vector2) {
+            return vector1.x * vector2.y - vector1.y * vector2.x;
         }
     }
 

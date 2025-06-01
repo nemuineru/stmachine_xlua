@@ -12,7 +12,7 @@ public class Entity : MonoBehaviour
     public class EntityInfo
     {
         public string name;
-        public int ID;        
+        public int ID;
     }
 
     public Rigidbody rigid;
@@ -21,12 +21,12 @@ public class Entity : MonoBehaviour
 
     //移動用の設定など.
     public Transform targetTo;
-    
+
     public CinemachineVirtualCamera vCam;
 
     //ステートID.
     public int CurrentStateID = 0;
-    
+
 
     //アニメーション管理用.
     public int animID = 0;
@@ -39,7 +39,7 @@ public class Entity : MonoBehaviour
     public Color CurColor;
 
     public bool isOnGround;
-    
+
 
     Material mat;
     public SkinnedMeshRenderer mesh;
@@ -73,7 +73,7 @@ public class Entity : MonoBehaviour
 
     string verd_1;
     [SerializeField]
-    Vector3 raycenter =  Vector3.down * 0.5f;
+    Vector3 raycenter = Vector3.down * 0.5f;
 
     // Update is called once per frame
     void FixedUpdate()
@@ -86,138 +86,145 @@ public class Entity : MonoBehaviour
         wishingVect = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up) * wish.y
          + Vector3.ProjectOnPlane(vCam.transform.right, Vector3.up) * wish.x;
         stateTime += Time.deltaTime;
-        mat.SetColor("_Color",CurColor);
+        mat.SetColor("_Color", CurColor);
 
         //地面判定.
         Ray ray = new Ray(transform.position + raycenter + Vector3.up * Physics.defaultContactOffset, Vector3.down);
 
         RaycastHit hitInfo;
-        Physics.Raycast(ray,out hitInfo,0.05f ,LayerMask.GetMask("Terrain"));
-        
+        Physics.Raycast(ray, out hitInfo, 0.05f, LayerMask.GetMask("Terrain"));
+
         isOnGround = (hitInfo.collider != null);
 
         StateDef currentState =
         DefList.stateDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
-        if(currentState != null)
+        if (currentState != null)
         {
             //Debug.Log("Executed stateDef - " + CurrentStateID);
             currentState.Execute();
         }
     }
-    
+
+//アニメーション変更..
     public void ChangeAnim()
     {
         AnimDef animFindByID = animListObject.animDef.ToList().Find(x => x.ID == animID);
-        if(animFindByID != null)
+        if (animFindByID != null)
         {
             MainAnimMixer.ChangeAnim(animFindByID);
         }
+    }
+
+//アニメーションパラメータ変更..
+    public void ChangeAnimWeight(Vector2 inputParams)
+    {
+        
     }
 
 
     //前プロジェクトのように、スクリプト内でステートをとりあえず記述.
     //今回は最初のstatedefのLua内で読み出すステートを指定.
 
-/*
-    void DefSet()
-    {
-        
-        //StateDef_1
+    /*
+        void DefSet()
+        {
 
-        //ステートタイムが0以上でカラーなどを変更.
-        //また、ジャンプボタンが押されているならステート変更.
-        string Lua_StateDef_0 = @"
-            local Entity = CS.Entity;
-            -- ステート変更のファンクション
-                function QueuedStateID(in_entity)
+            //StateDef_1
 
-                    selfOnGrd = LC:isEntityOnGround(in_entity)
-                    selfJump = LC:CheckButtonPressed()
-                    selfStTime = LC:CheckStateTime(in_entity) 
+            //ステートタイムが0以上でカラーなどを変更.
+            //また、ジャンプボタンが押されているならステート変更.
+            string Lua_StateDef_0 = @"
+                local Entity = CS.Entity;
+                -- ステート変更のファンクション
+                    function QueuedStateID(in_entity)
 
-                    verd = {}
-                    if (selfOnGrd == true and selfJump == true) then 
-                        table.insert( verd, 1 )
-                    end
+                        selfOnGrd = LC:isEntityOnGround(in_entity)
+                        selfJump = LC:CheckButtonPressed()
+                        selfStTime = LC:CheckStateTime(in_entity) 
 
-                    if(selfOnGrd == true) then
-                        table.insert( verd, 2 )
-                    end
+                        verd = {}
+                        if (selfOnGrd == true and selfJump == true) then 
+                            table.insert( verd, 1 )
+                        end
 
-                    if( LC:CheckStateTime(in_entity) > 0 ) then
-                        table.insert( verd, 0 ) 
-                    end
-                return verd
-            end
-        ";
+                        if(selfOnGrd == true) then
+                            table.insert( verd, 2 )
+                        end
 
-        StateDef def_1 = new StateDef();
-        def_1.StateDefName = "OnInitLoad";
-        def_1.entity = this;
-        def_1.StateDefID = 0;
-        def_1.PriorCondition = new lua_Read(Lua_StateDef_0);
+                        if( LC:CheckStateTime(in_entity) > 0 ) then
+                            table.insert( verd, 0 ) 
+                        end
+                    return verd
+                end
+            ";
 
-
-//stateDef, StateList
-
-        scJump _stJump= new scJump();
-        _stJump.stateID = 1;
-
-        scChangeState _CgState = new scChangeState();
-        _CgState.stateID = 1;
-        _CgState.changeTo = 1;
-
-        scColorChange _stColorChange_1 = new scColorChange();
-        _stColorChange_1.stateID = 0;
-        _stColorChange_1.color = Color.white;
-
-        scMove mov = new scMove();
-        mov.stateID = 2;
-
-        def_1.StateList = new List<StateController>{ _stJump, _stColorChange_1, _CgState, mov};
+            StateDef def_1 = new StateDef();
+            def_1.StateDefName = "OnInitLoad";
+            def_1.entity = this;
+            def_1.StateDefID = 0;
+            def_1.PriorCondition = new lua_Read(Lua_StateDef_0);
 
 
-//StateDef_2
+    //stateDef, StateList
 
-        //ステートタイムが0以上でカラーなどを変更.
-        //また、地面上ならステート変更.
-        string Lua_StateDef_1 = @"
-            -- ステート変更のファンクション
-                function QueuedStateID(in_entity)
+            scJump _stJump= new scJump();
+            _stJump.stateID = 1;
 
-                    verd = {}
-                    if ( LC:isEntityOnGround(in_entity) == true ) then 
-                        table.insert( verd, 1 )
-                    end
-                    if( LC:CheckStateTime(in_entity) > 0 ) then
-                        table.insert( verd, 0 ) 
-                    end
-                return verd
-            end
-        ";
+            scChangeState _CgState = new scChangeState();
+            _CgState.stateID = 1;
+            _CgState.changeTo = 1;
 
+            scColorChange _stColorChange_1 = new scColorChange();
+            _stColorChange_1.stateID = 0;
+            _stColorChange_1.color = Color.white;
 
-        StateDef def_2 = new StateDef();
-        def_2.StateDefName = "Jumping";
-        def_2.StateDefID = 1;
-        def_2.entity = this;
-        def_2.PriorCondition = new lua_Read(Lua_StateDef_1);
+            scMove mov = new scMove();
+            mov.stateID = 2;
+
+            def_1.StateList = new List<StateController>{ _stJump, _stColorChange_1, _CgState, mov};
 
 
-//stateDef_2, StateList
+    //StateDef_2
 
-        scColorChange _stColorChange_2 = new scColorChange();
-        _stColorChange_2.stateID = 0;
-        _stColorChange_2.color = Color.red;
+            //ステートタイムが0以上でカラーなどを変更.
+            //また、地面上ならステート変更.
+            string Lua_StateDef_1 = @"
+                -- ステート変更のファンクション
+                    function QueuedStateID(in_entity)
 
-        scChangeState _CgState_2 = new scChangeState();
-        _CgState_2.stateID = 1;
-        _CgState_2.changeTo = 0;
+                        verd = {}
+                        if ( LC:isEntityOnGround(in_entity) == true ) then 
+                            table.insert( verd, 1 )
+                        end
+                        if( LC:CheckStateTime(in_entity) > 0 ) then
+                            table.insert( verd, 0 ) 
+                        end
+                    return verd
+                end
+            ";
 
-        def_2.StateList = new List<StateController>{ _stColorChange_2, _CgState_2};
+
+            StateDef def_2 = new StateDef();
+            def_2.StateDefName = "Jumping";
+            def_2.StateDefID = 1;
+            def_2.entity = this;
+            def_2.PriorCondition = new lua_Read(Lua_StateDef_1);
 
 
-        DefList.stateDefs = new List<StateDef>{ def_1, def_2 };
-    }
-*/
+    //stateDef_2, StateList
+
+            scColorChange _stColorChange_2 = new scColorChange();
+            _stColorChange_2.stateID = 0;
+            _stColorChange_2.color = Color.red;
+
+            scChangeState _CgState_2 = new scChangeState();
+            _CgState_2.stateID = 1;
+            _CgState_2.changeTo = 0;
+
+            def_2.StateList = new List<StateController>{ _stColorChange_2, _CgState_2};
+
+
+            DefList.stateDefs = new List<StateDef>{ def_1, def_2 };
+        }
+    */
 }
