@@ -576,28 +576,52 @@ public class AnimDef
 
     float DefWeight = 1f;
 
-    clssDef[] clssDefs = new clssDef[0];
+    //アニメーションごとにオーバーライド・設定可能な判定をここで設定する.
+    //null値が挿入されているならデフォルトを使用.
+    clssSetting clssSetting = new clssSetting();
 
 }
 
 
+[System.Serializable]
+class clssSetting
+{
+    //アニメーションごとにオーバーライド・設定可能な判定をここで設定する.
+    //ここで記述されたclssは調整済みのデフォルトに挿入する形で設定される
+    //null値が挿入されているならなにもしない.
+    clssDef[] clssDefs = new clssDef[0];
 
+    //デフォルトClssを除去するためのリスト. 
+    //除去指定をデフォルトのClssのオブジェ名称から消す.
+    string[] disableClssList = new string[0];
+}
 
 [System.Serializable]
 class clssDef
 {
+    //やられ判定と当たり判定をenumで管理する
     public enum ClssType
     {
         Hit,
         Attack
     }
     public ClssType clssType;
-    //対象キャラクターのどのゲームオブジェクトに追随するか？
-    public string attachTo;    
+    //対象キャラクターのどのゲームオブジェクトに追随するか..を取得し、下のattachTransformに値を入力.
+    public string attachTo;
+
+    Transform attachTransform;
 
     //wを半径とする.
-    Vector3 startPos, endPos;
-    float w;
+    internal Vector3 startPos, endPos;
+    internal float w;
 
     float StartTime = 0f, EndTime = 10f;
+
+    //当たり判定の判別など.
+    public bool isCollided(clssDef compareTo)
+    {
+        float ptDistCheck = w + compareTo.w;
+        return false;
+    }
+    
 }
