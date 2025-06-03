@@ -27,7 +27,7 @@ class TrisUtil
         float minDistance = float.MaxValue;
 
         //頂点同士の距離を計算.
-        //全部の組み合わせを先ず計算
+        //全部の組み合わせを先ず計算する
         for (int i = 0; i < points1.Length; i++)
         {
             for (int j = 0; j < points2.Length; j++)
@@ -41,6 +41,7 @@ class TrisUtil
         }
 
         //辺と三角形の距離を計算.
+        //
 
         return minDistance;
     }
