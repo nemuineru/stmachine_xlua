@@ -270,13 +270,13 @@ public class PlaneDistCheck_1
 
     public static Vector3[] PushVect(Vector3[] f, Vector3 pusher)
     {
-            Vector3[] push = new Vector3[f.Length + 1];
-            for(int i = 0; i < f.Length; i++)
-            {
-                push[i] = f[i];
-            }
-            push[push.Length - 1] = pusher;
-            return push;
+        Vector3[] push = new Vector3[f.Length + 1];
+        for(int i = 0; i < f.Length; i++)
+        {
+            push[i] = f[i];
+        }
+        push[push.Length - 1] = pusher;
+        return push;
     }
 
     public static bool Finder(Vector3 V1, Vector3 V2, float V1_Cap_dist, float V2_Cap_dist, out Vector3 V3)
