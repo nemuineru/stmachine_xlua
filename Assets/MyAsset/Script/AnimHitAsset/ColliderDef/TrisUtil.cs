@@ -84,7 +84,21 @@ class TrisUtil
             closestPointOnLine1 = Point;
             return;
         }
-        //2線分が平行であるなら垂線の　端点の一つをP1に決定する.
+
+        //2線分が平行であるなら垂線の端点の一つをP1に決定する.
+        //決定されなかった場合S2_P1を指定.
+        if (Vector3.Cross(S1_p1 - S1_p2, S2_p1 - S2_p2) == Vector3.zero)
+        {
+            distance = 0f;
+            //S1の端点をP1に決定.
+            closestPointOnLine1 = S1_p1;
+            //S2の端点をP2に決定.
+            closestPointOnLine2 = S2_p1;
+            //線分同士で、
+            var Point_1 = NearestPointOnLineSegment(S2_p1, S2_p2, S1_p1);
+            var Point_2 = NearestPointOnLineSegment(S1_p1, S1_p1, S2_p1);
+            return;
+        }
 
     }
 
