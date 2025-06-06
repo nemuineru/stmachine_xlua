@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//三角形が成す平行四辺形の最少接面球を考える際は原点 - p1p2中点の距離 x p1p2の距離の半分との比較を考えてみる.
+//多分、三角平面から求めるよりも手軽で済むはず
+
 class TrisUtil
 {
     public struct Triangle
@@ -9,6 +12,7 @@ class TrisUtil
         public Vector3 p0;
         public Vector3 p1;
         public Vector3 p2;
+        Vector3[] vs;
 
         public Triangle(Vector3 p0, Vector3 p1, Vector3 p2)
         {
@@ -25,6 +29,18 @@ class TrisUtil
             }
         }
 
+        public Vector3[] vs
+        {
+            get
+            {
+                if (vs == null)
+                {
+                    vs = new Vector3[] { p0, p1, p2 };
+                }
+                return vs;
+            }
+        }
+
         public bool isValidPoint(Vector3 point)
         {
             return true;
@@ -33,73 +49,151 @@ class TrisUtil
 
     public float TrisDistance(Triangle t1, Triangle t2)
     {
-        // Calculate the distance between the two triangles
-        Vector3[] points1 = { t1.p0, t1.p1, t1.p2 };
-        Vector3[] points2 = { t2.p0, t2.p1, t2.p2 };
-
         float minDistance = float.MaxValue;
+        Vector3 T1_Nearest = Vector3.zero;
+        Vector3 T2_Nearest = Vector3.zero;
 
         //先ず三角面が成す平面同士において、それぞれ面が平行であるかを確認
         bool isPallarel = Vector3.Cross(t1.Normal, t2.Normal).magnitude > Mathf.Epsilon;
+        //平行でないなら、交点が有るか求める
+        if (!isPallarel)
+        {
+            Vector3 GetPos;
+            //交点が存在するなら、距離は0
+            if (GetTrisCrossPoint(t1, t2, out GetPos))
+            {
+                T1_Nearest = GetPos;
+                T2_Nearest = GetPos;
+                return 0;
+            }
+        }
 
 
         //頂点と面の距離を計算.
-        for (int i = 0; i < points1.Length; i++)
+        //今回は三角_1の点 - 三角_2の面を対象に.
+        for (int i = 0; i < t1.vs.Length; i++)
         {
+            Vector3 NearestPoint = Vector3.ProjectOnPlane(t1.vs[i], t2.Normal);
+            float dist = (NearestPoint - t1.vs[i]).magnitude;
 
+            //点・面同士の最短がその対象の面にあって、最短距離で有る場合なら登録.
+            if (detectPointIsEnclosedByPolygon(NearestPoint, t2.p0, t2.p1, t2.p2) && dist < minDistance)
+            {
+                T1_Nearest = t1.vs[i];
+                T2_Nearest = NearestPoint;
+                minDistance = dist;
+            }
         }
 
-        //辺と三角形の距離を計算.
-        //
+        //次に三角_2の点 - 三角_1の面を対象に.
+        for (int i = 0; i < t2.vs.Length; i++)
+        {
+            Vector3 NearestPoint = Vector3.ProjectOnPlane(t2.vs[i], t1.Normal);
+            float dist = (NearestPoint - t2.vs[i]).magnitude;
 
+            //点・面同士の最短がその対象の面にあって、最短距離で有る場合なら登録.
+            if (detectPointIsEnclosedByPolygon(NearestPoint, t1.p0, t1.p1, t1.p2) && dist < minDistance)
+            {
+                T2_Nearest = t2.vs[i];
+                T1_Nearest = NearestPoint;
+                minDistance = dist;
+            }
+        }
+
+        //線分と三角形の距離を計算.
+        //3x3組ずつ..
+        for (int i = 0; i < t1.vs.Length; i++)
+        {
+            int next_i = i < t1.vs.Length ? i + 1 : 0;
+            for (int j = 0; j < t2.vs.Length; j++)
+            {
+                int next_j = j < t2.vs.Length ? j + 1 : 0;
+                //三角1, 三角2のそれぞれの線分頂点
+                Vector3 T1_pt1 = t1.vs[i];
+                Vector3 T1_pt2 = t1.vs[next_i];
+                Vector3 T2_pt1 = t1.vs[j];
+                Vector3 T2_pt2 = t1.vs[next_j];
+
+                //最短距離と頂点の一時格納..
+                float dist = 0;
+                Vector3 T1_Pos = Vector3.zero;
+                Vector3 T2_Pos = Vector3.zero;
+
+                //導出.
+                LineDist(T1_pt1, T1_pt2, T2_pt1, T2_pt2, dist, out T1_Pos, T2_Pos);
+                if (dist < minDistance)
+                {
+                    minDistance = dist;
+                    //T1,T2の最接近距離を格納.
+                    T1_Nearest = T1_Pos;
+                    T2_Nearest = T2_Pos;
+                }
+            }
+        }
+
+        //最短距離の導出を完了.
         return minDistance;
     }
 
+    //三角面内に指定の点が存在するなら..
+    //via https://gist.github.com/hiroakioishi/d56c78671f0b0d7c9e34
+    bool detectPointIsEnclosedByPolygon(Vector3 p, Vector3 v0, Vector3 v1, Vector3 v2)
+    {
+        Vector3 n = Vector3.Normalize(Vector3.Cross(v1 - v0, v2 - v1));
+
+        Vector3 n0 = Vector3.Normalize(Vector3.Cross(v1 - v0, p - v1));
+        Vector3 n1 = Vector3.Normalize(Vector3.Cross(v2 - v1, p - v2));
+        Vector3 n2 = Vector3.Normalize(Vector3.Cross(v0 - v2, p - v0));
+
+        if ((1.0f - Vector3.Dot(n, n0)) > 0.001f) return false;
+        if ((1.0f - Vector3.Dot(n, n1)) > 0.001f) return false;
+        if ((1.0f - Vector3.Dot(n, n2)) > 0.001f) return false;
+
+        return true;
+    }
 
     //三角が成す頂点の組を出力し、交差しているかを調査したい.
     //2つの平面が成す線と三角辺の交点を求める.
-    public bool GetTrisCrossPoint(Vector3[] P1, Vector3[] P2, out Vector3 crossPos)
+    //http://marupeke296.com/COL_3D_No21_TriTri.html より拝借
+    public bool GetTrisCrossPoint(Triangle Tri_1, Triangle Tri_2, out Vector3 crossPos)
     {
-        var P1_Normal = GetPlaneVertices(P1);
-        var P2_Normal = GetPlaneVertices(P2);
-        P1_startPoint = Vert_1[0];
-        P2_startPoint = Vert_2[0];
-        //P1の3線分求める. 
-        float P1_d0 = (Vector3.Dot(P2_Normal, P1[0] - P2_startPoint));
-        float P1_d1 = (Vector3.Dot(P2_Normal, P1[1] - P2_startPoint));
-        float P1_d2 = (Vector3.Dot(P2_Normal, P1[2] - P2_startPoint));
+        //P1の3線分・正規化された対象の平面との比較距離を求める.
+        //基準点は 三角形の原点としている点.
+        float P1_d0 = (Vector3.Dot(Tri_2.Normal, Tri_1.p0 - Tri_2.p0));
+        float P1_d1 = (Vector3.Dot(Tri_2.Normal, Tri_1.p1 - Tri_2.p0));
+        float P1_d2 = (Vector3.Dot(Tri_2.Normal, Tri_1.p2 - Tri_2.p0));
 
         //P2も同様.        
-        float P2_d0 = (Vector3.Dot(P1_Normal, P2[0] - P1_startPoint));
-        float P2_d1 = (Vector3.Dot(P1_Normal, P2[1] - P1_startPoint));
-        float P2_d2 = (Vector3.Dot(P1_Normal, P2[2] - P1_startPoint));
+        float P2_d0 = (Vector3.Dot(Tri_1.Normal, Tri_2.p0 - Tri_1.p0));
+        float P2_d1 = (Vector3.Dot(Tri_1.Normal, Tri_2.p1 - Tri_1.p0));
+        float P2_d2 = (Vector3.Dot(Tri_1.Normal, Tri_2.p2 - Tri_1.p0));
 
         Vector3[] P1_Find = new Vector3[];
         Vector3[] P2_Find = new Vector3[];
 
         //交点発見時、2つ組として発見されるなら比較する
-        if (Finder(Vert_1[0], Vert_1[1], P1_d0, P1_d1, out Vector3 v_f0))
+        if (getPointToPoint_RatioFinder(Tri_1.p0, Tri_1.p1, P1_d0, P1_d1, out Vector3 v_f0))
         {
             P1_Find += v_f0;
         }
-        if (Finder(Vert_1[0], Vert_1[2], P1_d0, P1_d2, out Vector3 v_f1))
+        if (getPointToPoint_RatioFinder(Tri_1.p0, Tri_1.p2, P1_d0, P1_d2, out Vector3 v_f1))
         {
             P1_Find += v_f1;
         }
-        if (Finder(Vert_1[1], Vert_1[2], P1_d2, P1_d0, out Vector3 v_f2))
+        if (getPointToPoint_RatioFinder(Tri_1.p1, Tri_1.p2, P1_d2, P1_d0, out Vector3 v_f2))
         {
             P1_Find += v_f2;
         }
 
-        if (Finder(Vert_2[0], Vert_2[1], P2_d0, P2_d1, out Vector3 v_g0))
+        if (getPointToPoint_RatioFinder(Tri_2.p0, Tri_2.p1, P2_d0, P2_d1, out Vector3 v_g0))
         {
             P2_Find += v_g0;
         }
-        if (Finder(Vert_2[0], Vert_2[2], P2_d0, P2_d2, out Vector3 v_g1))
+        if (getPointToPoint_RatioFinder(Tri_2.p0, Tri_2.p2, P2_d0, P2_d2, out Vector3 v_g1))
         {
             P2_Find += v_g1;
         }
-        if (Finder(Vert_1[1], Vert_1[2], P1_d2, P1_d0, out Vector3 v_f2))
+        if (getPointToPoint_RatioFinder(Tri_2.p1, Tri_2.p2, P1_d2, P1_d0, out Vector3 v_f2))
         {
             P2_Find += v_g2;
         }
@@ -111,7 +205,7 @@ class TrisUtil
         }
         //x軸の値から比較.
         if (!isRange_x(P1_Find[0], P1_Find[1], P2_Find[0]) && !isRange_x(P1_Find[0], P1_Find[1], P2_Find[1]) &&
-        !isRange_x(P2_Find[0], P2_Find[1], P1_Find[0]) && !isRange_x(P2_Find[0], P2_Find[1], P1_Find[1]) )
+        !isRange_x(P2_Find[0], P2_Find[1], P1_Find[0]) && !isRange_x(P2_Find[0], P2_Find[1], P1_Find[1]))
         {
             return false;
         }
@@ -121,13 +215,13 @@ class TrisUtil
 
     //x軸での範囲内で評価する.
     bool isRange_x(Vector3 X_1, Vector3 X_2, Vector3 Y)
-    {        
+    {
         if (X_1.x > X_2.x)
         {
             return Y.x <= X_1.x && Y.x >= X_2.x;
         }
         else
-        { 
+        {
             return Y.x <= X_2.x && Y.x >= X_1.x;
         }
     }
@@ -135,15 +229,19 @@ class TrisUtil
     //WTF
     //"直線上の交点を比で求める"　要は、平面法線との内分比率を求める.
     //また、この値が0-1を超えていればV1-V2上に線分が存在しない、ということになる.
-    public static bool Finder(Vector3 V1, Vector3 V2, float V1_Cap_dist, float V2_Cap_dist, out Vector3 V3)
+    public static bool getPointToPoint_RatioFinder(Vector3 V1, Vector3 V2, float V1_Cap_dist, float V2_Cap_dist, out Vector3 V3)
     {
-        Vector3 vs = V1 + (V2 - V1) * (V1_Cap_dist / (V1_Cap_dist - V2_Cap_dist));
-        V3 = vs;
-        float InnerDist = (vs - V1).magnitude / (V2 - V1).magnitude;
-        float Sign = Vector3.Dot(vs - V1, V2 - V1);
-        if (InnerDist <= 1f && Sign >= 0f)
+        //縮退している際は0と設定する.
+        if (V1_Cap_dist - V2_Cap_dist != 0)
         {
-            return true;
+            Vector3 vs = V1 + (V2 - V1) * (V1_Cap_dist / (V1_Cap_dist - V2_Cap_dist));
+            V3 = vs;
+            float InnerDist = (vs - V1).magnitude / (V2 - V1).magnitude;
+            float Sign = Vector3.Dot(vs - V1, V2 - V1);
+            if (InnerDist <= 1f && Sign >= 0f)
+            {
+                return true;
+            }
         }
         return false;
     }
@@ -241,7 +339,7 @@ class TrisUtil
         //双方の端点が最短となる.
         S1_VectVal = Mathf.Clamp01(S1_VectVal);
         closestPointOnLine1 = S1_p1 + LineVect_S1 * S1_VectVal;
-        distance = Vector3.Distance(closestPointOnLine1,closestPointOnLine2);
+        distance = Vector3.Distance(closestPointOnLine1, closestPointOnLine2);
         return;
 
     }
@@ -267,7 +365,7 @@ class TrisUtil
         //2線分が平行であるなら垂線の端点の一つをP1に決定する.
         float Par = D_L1 * D_L2 - D_L2 * D_L2;
         if (Mathf.Abs(Par) < Mathf.Epsilon)
-        { 
+        {
             Vector3 outVect;
             float f = calcPointLineDist(L1_Start, L1_End, L2_Start, out L2_CPT, out L2_CPT_Ratio);
             L1_CPT = L1_Start;
@@ -319,9 +417,9 @@ class TrisUtil
         Vector3 line = (b - a);
         float length = line.magnitude;
         //線が縮退していないことを確認.
-        if (length> 0.0f)
+        if (length > 0.0f)
         {
-            vt = Vector3.Dot(line,(p - a)) / length;
+            vt = Vector3.Dot(line, (p - a)) / length;
         }
         //係数を求めることで、線分計算時の係数計算が簡略化.
         o = a + line * vt;
