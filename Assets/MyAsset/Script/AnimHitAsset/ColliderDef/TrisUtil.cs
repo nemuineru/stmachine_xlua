@@ -41,7 +41,7 @@ class TrisUtil
             }
             vs[0] = p0;
             vs[1] = p1;
-            vs[2] = p1;
+            vs[2] = p2;
         }
 
         public bool isValidPoint(Vector3 point)
@@ -77,9 +77,10 @@ class TrisUtil
         //今回は三角_1の点 - 三角_2の面を対象に.
         for (int i = 0; i < t1.vs.Length; i++)
         {
-            Vector3 NearestPoint = Vector3.ProjectOnPlane(t1.vs[i], t2.Normal);
+            Plane plane = new Plane(t2.Normal, t2.p0);
+            Vector3 NearestPoint = plane.ClosestPointOnPlane(t1.vs[i]);
             float dist = (NearestPoint - t1.vs[i]).magnitude;
-            Gizmos.DrawSphere(NearestPoint, 0.1f);
+            //Gizmos.DrawSphere(NearestPoint, 0.1f);
 
             //点・面同士の最短がその対象の面にあって、最短距離で有る場合なら登録.
             if (detectPointIsEnclosedByPolygon(NearestPoint, t2.p0, t2.p1, t2.p2) && dist < minDistance)
@@ -94,9 +95,10 @@ class TrisUtil
         //次に三角_2の点 - 三角_1の面を対象に.
         for (int i = 0; i < t2.vs.Length; i++)
         {
-            Vector3 NearestPoint = Vector3.ProjectOnPlane(t2.vs[i], t1.Normal);
+            Plane plane = new Plane(t1.Normal, t1.p0);
+            Vector3 NearestPoint = plane.ClosestPointOnPlane(t2.vs[i]);
             float dist = (NearestPoint - t2.vs[i]).magnitude;
-            Gizmos.DrawSphere(NearestPoint, 0.1f);
+            //Gizmos.DrawSphere(NearestPoint, 0.1f);
 
 
             //点・面同士の最短がその対象の面にあって、最短距離で有る場合なら登録.
@@ -264,6 +266,11 @@ class TrisUtil
         V3 = V1;
         return false;
     }
+
+    static public Vector3 ClosestPointOnPlane(Vector3 planeOffset, Vector3 planeNormal, Vector3 point)
+    => point + DistanceFromPlane(planeOffset, planeNormal, point) * planeNormal;
+static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, Vector3 point)
+    => Vector3.Dot(planeOffset - point, planeNormal);
 
 
 
