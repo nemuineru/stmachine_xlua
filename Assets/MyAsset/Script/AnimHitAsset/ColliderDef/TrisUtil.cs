@@ -378,7 +378,9 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
 
         //双方の端点が最短となる.
         S1_VectVal = Mathf.Clamp01(S1_VectVal);
+            Debug.Log(S2_VectVal + " " + S1_VectVal);
         closestPointOnLine1 = S1_p1 + LineVect_S1 * S1_VectVal;
+        closestPointOnLine2 = S2_p1 + LineVect_S2 * S2_VectVal;
         distance = Vector3.Distance(closestPointOnLine1, closestPointOnLine2);
         return;
 
