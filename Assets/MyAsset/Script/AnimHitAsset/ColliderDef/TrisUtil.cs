@@ -194,7 +194,7 @@ class TrisUtil
             Array.Resize(ref P1_Find, P1_Find.Length + 1);
             P1_Find[P1_Find.Length - 1] = v_f1;
         }
-        if (getPointToPoint_RatioFinder(Tri_1.p1, Tri_1.p2, P1_d2, P1_d0, out Vector3 v_f2))
+        if (getPointToPoint_RatioFinder(Tri_1.p1, Tri_1.p2, P1_d1, P1_d2, out Vector3 v_f2))
         {
             Array.Resize(ref P1_Find, P1_Find.Length + 1);
             P1_Find[P1_Find.Length - 1] = v_f2;
@@ -202,26 +202,32 @@ class TrisUtil
 
         if (getPointToPoint_RatioFinder(Tri_2.p0, Tri_2.p1, P2_d0, P2_d1, out Vector3 v_g0))
         {
-            Array.Resize(ref P2_Find, P1_Find.Length + 1);
+            Array.Resize(ref P2_Find, P2_Find.Length + 1);
             P2_Find[P2_Find.Length - 1] = v_g0;
         }
         if (getPointToPoint_RatioFinder(Tri_2.p0, Tri_2.p2, P2_d0, P2_d2, out Vector3 v_g1))
         {
-            Array.Resize(ref P2_Find, P1_Find.Length + 1);
+            Array.Resize(ref P2_Find, P2_Find.Length + 1);
             P2_Find[P2_Find.Length - 1]  = v_g1;
         }
-        if (getPointToPoint_RatioFinder(Tri_2.p1, Tri_2.p2, P1_d2, P1_d0, out Vector3 v_g2))
+        if (getPointToPoint_RatioFinder(Tri_2.p1, Tri_2.p2, P2_d1, P2_d2, out Vector3 v_g2))
         {
-            Array.Resize(ref P2_Find, P1_Find.Length + 1);
+            Array.Resize(ref P2_Find, P2_Find.Length + 1);
             P2_Find[P2_Find.Length - 1]  = v_g2;
         }
 
         //偽の時、三角の交点が存在しなかったと考える.
         if (P1_Find.Length != 2 || P2_Find.Length != 2)
         {
+            
             crossPos = Tri_1.p0;
             return false;
         }
+        Debug.Log("Finding Intersects");
+        Gizmos.DrawWireSphere(P1_Find[0],0.05f);
+        Gizmos.DrawWireSphere(P1_Find[1],0.05f);
+        Gizmos.DrawWireSphere(P2_Find[0],0.05f);
+        Gizmos.DrawWireSphere(P1_Find[1],0.05f);
         //x軸の値から比較.
         if (!isRange_x(P1_Find[0], P1_Find[1], P2_Find[0]) && !isRange_x(P1_Find[0], P1_Find[1], P2_Find[1]) &&
         !isRange_x(P2_Find[0], P2_Find[1], P1_Find[0]) && !isRange_x(P2_Find[0], P2_Find[1], P1_Find[1]))
@@ -352,11 +358,11 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
         closestPointOnLine1 = S1_p2 - LineVect_S1 * S1_VectVal;
         Gizmos.DrawCube(closestPointOnLine1,Vector3.one * 0.01f);
         
-        distance = calcPointLineDist
+        distance = calcPointOnLineSegmentDist
         (S2_p1, S2_p2, closestPointOnLine1, out closestPointOnLine2, out S2_VectVal);
         if (S2_VectVal >= 0.0f && S2_VectVal <= 1.0f)
         {
-            Debug.Log(S2_VectVal);
+            Debug.Log("s2 - " + S2_VectVal);
             Debug.Log("Nearest Found at S1 point");
             return;
         }
@@ -364,14 +370,13 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
         //S2側が外に有るためクランプ・垂線を下ろす.
         Debug.Log(S2_VectVal);
         S2_VectVal = Mathf.Clamp01(S2_VectVal);
-        closestPointOnLine2 = S2_p2 - LineVect_S2 * S2_VectVal;
+        closestPointOnLine2 = S2_p1 + LineVect_S2 * S2_VectVal;
         
         Gizmos.DrawWireSphere(closestPointOnLine2, 0.01f);
-        distance = calcPointLineDist
+        distance = calcPointOnLineSegmentDist
         (S1_p1, S1_p2, closestPointOnLine2, out closestPointOnLine1, out S1_VectVal);
         if (S1_VectVal >= 0.0f && S1_VectVal <= 1.0f)
         {
-            Debug.Log(S1_VectVal);
             Debug.Log("Nearest Found at S2 point");
             return;
         }
