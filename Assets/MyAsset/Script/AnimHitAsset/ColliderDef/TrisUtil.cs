@@ -57,11 +57,12 @@ class TrisUtil
         Vector3 T2_Nearest = Vector3.zero;
 
         //先ず三角面が成す平面同士において、それぞれ面が平行であるかを確認
-        bool isPallarel = Vector3.Cross(t1.Normal, t2.Normal).magnitude > Mathf.Epsilon;
+        bool isPallarel = Vector3.Cross(t1.Normal, t2.Normal).magnitude < Mathf.Epsilon;
         //平行でないなら、交点が有るか求める
         if (!isPallarel)
         {
             Vector3 GetPos;
+            Debug.Log("Triangles are not parallel, checking for intersection.");
             //交点が存在するなら、距離は0
             if (GetTrisCrossPoint(t1, t2, out GetPos))
             {
@@ -134,7 +135,6 @@ class TrisUtil
                 LineDist(T1_pt1, T1_pt2, T2_pt1, T2_pt2, out dist, out T1_Pos, out T2_Pos);
                 if (dist < minDistance)
                 {
-                    Debug.Log("Nearest Point at : " + T1_Pos + " and " + T2_Pos);
                     minDistance = dist;
                     //T1,T2の最接近距離を格納.
                     T1_Nearest = T1_Pos;
@@ -275,14 +275,14 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
 
 
     //S1-(p1 p2), S2-(p1, p2)で表記される線分の距離を演算する.
-    void LineDist(Vector3 S1_p1, Vector3 S1_p2, Vector3 S2_p1, Vector3 S2_p2,
+    public void LineDist(Vector3 S1_p1, Vector3 S1_p2, Vector3 S2_p1, Vector3 S2_p2,
     out float distance, out Vector3 closestPointOnLine1, out Vector3 closestPointOnLine2)
     {
         //最初は無限大
         distance = Mathf.Infinity;
 
-        float S1_Dist = 0f;
-        float S2_Dist = 0f;
+        float S1_Dist = Vector3.Distance(S1_p1, S1_p2);
+        float S2_Dist = Vector3.Distance(S2_p1, S2_p2);
 
         closestPointOnLine1 = S1_p1;
         closestPointOnLine2 = S2_p1;
@@ -324,6 +324,7 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
         //この時、計算されたベクトル系数が0-1の間にあるなら、そのまま使用
         if (Vector3.Cross(LineVect_S1, LineVect_S2) == Vector3.zero)
         {
+            Debug.Log("Lines are parallel.");
             distance = calcPointOnLineSegmentDist(S2_p1, S2_p2, S1_p1, out closestPointOnLine2, out S2_VectVal);
             if (S2_VectVal >= 0.0f && S2_VectVal <= 1.0f)
             {
@@ -338,27 +339,40 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
             if (S1_VectVal >= 0.0f && S1_VectVal <= 1.0f &&
             S2_VectVal >= 0.0f && S2_VectVal <= 1.0f)
             {
+                Debug.Log("Nearest Found at inside line");
                 return;
             }
         }
 
+
+        Debug.Log(string.Format("S1, {0}, S2 {1}",S1_VectVal , S2_VectVal));
         //S1が外縁に有ると考えてクランプして垂線を下ろす.
+        Debug.Log(S1_VectVal);
         S1_VectVal = Mathf.Clamp01(S1_VectVal);
-        closestPointOnLine1 = S1_p1 + LineVect_S1 * S1_VectVal;
-        distance = calcPointOnLineSegmentDist
+        closestPointOnLine1 = S1_p2 - LineVect_S1 * S1_VectVal;
+        Gizmos.DrawCube(closestPointOnLine1,Vector3.one * 0.01f);
+        
+        distance = calcPointLineDist
         (S2_p1, S2_p2, closestPointOnLine1, out closestPointOnLine2, out S2_VectVal);
         if (S2_VectVal >= 0.0f && S2_VectVal <= 1.0f)
         {
+            Debug.Log(S2_VectVal);
+            Debug.Log("Nearest Found at S1 point");
             return;
         }
 
         //S2側が外に有るためクランプ・垂線を下ろす.
+        Debug.Log(S2_VectVal);
         S2_VectVal = Mathf.Clamp01(S2_VectVal);
-        closestPointOnLine2 = S2_p1 + LineVect_S2 * S2_VectVal;
-        distance = calcPointOnLineSegmentDist
+        closestPointOnLine2 = S2_p2 - LineVect_S2 * S2_VectVal;
+        
+        Gizmos.DrawWireSphere(closestPointOnLine2, 0.01f);
+        distance = calcPointLineDist
         (S1_p1, S1_p2, closestPointOnLine2, out closestPointOnLine1, out S1_VectVal);
         if (S1_VectVal >= 0.0f && S1_VectVal <= 1.0f)
         {
+            Debug.Log(S1_VectVal);
+            Debug.Log("Nearest Found at S2 point");
             return;
         }
 
@@ -374,53 +388,54 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
     //2直線の最短距離・位置.
     //参考..
     //https://stackoverflow.com/questions/22303495/translate-python-in-to-unity-c-sharp-maths-or-how-to-find-shortest-distance-be
-
-    float calcLinesDist(Vector3 L1_Start, Vector3 L1_End, Vector3 L2_Start, Vector3 L2_End,
-    out Vector3 L1_CPT, out Vector3 L2_CPT, out float L1_CPT_Ratio, out float L2_CPT_Ratio)
+    public float calcLinesDist
+    (Vector3 L1_Start, Vector3 L1_End,
+    Vector3 L2_Start, Vector3 L2_End, out Vector3 closestPointLine1, out Vector3 closestPointLine2
+    , out float L1_CPT_Ratio, out float L2_CPT_Ratio)
     {
-        Vector3 Line_1 = L1_End - L1_Start;
-        Vector3 Line_2 = L2_End - L2_Start;
 
-        //ライン方向ベクトル同士とそれ自体の内積の比較.
-        float D_L1 = Vector3.Dot(Line_1, Line_1);
-        float D_L2 = Vector3.Dot(Line_2, Line_2);
+        closestPointLine1 = Vector3.zero;
+        closestPointLine2 = Vector3.zero;
+        Vector3 lineVec1 = L1_End - L1_Start;
+        Vector3 lineVec2 = L2_End - L2_Start;
 
-        float D_LF = Vector3.Dot(Line_1, Line_2);
+        float D_L1 = Vector3.Dot(lineVec1, lineVec1);
+        float D_L2 = Vector3.Dot(lineVec2, lineVec2);
 
-        //この値が0である時は平行になるが..
-        //2線分が平行であるなら垂線の端点の一つをP1に決定する.
-        float Par = D_L1 * D_L2 - D_L2 * D_L2;
-        if (Mathf.Abs(Par) < Mathf.Epsilon)
+        float D_LF = Vector3.Dot(lineVec1, lineVec2);
+
+        float d = D_L1 * D_L2 - D_LF * D_LF;
+
+        //lines are not parallel
+        if (d != 0.0f)
         {
-            Vector3 outVect;
-            float f = calcPointLineDist(L1_Start, L1_End, L2_Start, out L2_CPT, out L2_CPT_Ratio);
-            L1_CPT = L1_Start;
-            L1_CPT_Ratio = 0.0f;
-            return f;
+            Vector3 r = L1_End - L2_End;
+            float D_L1_StP = Vector3.Dot(lineVec1, r);
+            float D_L2_StP = Vector3.Dot(lineVec2, r);
+
+            float s = (D_LF * D_L2_StP - D_L1_StP * D_L2) / d;
+            float t = (D_L1 * D_L2_StP - D_L1_StP * D_LF) / d;
+
+            closestPointLine1 = L1_End + lineVec1 * s;
+            closestPointLine2 = L2_End + lineVec2 * t;
+            L1_CPT_Ratio = -s;
+            L2_CPT_Ratio = -t;
         }
-
-        //始点位置同士が成す内積値を求める
-        Vector3 D_StartPoint = L1_Start - L2_Start;
-
-        //始点位置同士の内積値が求まったなら、ライン成分値との内積を求める.
-        float D_L1_StP = Vector3.Dot(Line_1, D_StartPoint);
-        float D_L2_StP = Vector3.Dot(Line_2, D_StartPoint);
-
-        L1_CPT_Ratio = (D_LF * D_L2_StP - D_L1_StP * D_L2) / Par;
-        L2_CPT_Ratio = (D_L1 * D_L2_StP - D_L1_StP * D_LF) / Par;
-
-        L1_CPT = L1_Start + Line_1 * L1_CPT_Ratio;
-        L2_CPT = L2_Start + Line_2 * L2_CPT_Ratio;
-
-        //最接近点の距離を計算
-        return (L1_CPT - L2_CPT).magnitude;
-    }
+        else
+        {
+            float f = calcPointLineDist(L1_Start, L1_End, L2_Start, out closestPointLine2, out L2_CPT_Ratio);
+            closestPointLine1 = L1_Start;
+            L1_CPT_Ratio = 0.0f;
+        }
+        //Debug.Log("Ratio - " + L1_CPT_Ratio + " &" + L2_CPT_Ratio);
+    return Vector3.Distance(closestPointLine1, closestPointLine2);
+}
 
     // 頂点と線分距離
     //また、端点位置の値も考慮.
     // 点Pから最も近い線分AB上にある点o,係数をvt,距離をreturnで返す
     // https://sleepygamersmemo.blogspot.com/2019/03/perpendicular-foot-point.html より,拝借.
-    float calcPointOnLineSegmentDist(Vector3 a, Vector3 b, Vector3 p, out Vector3 o, out float vt)
+    public float calcPointOnLineSegmentDist(Vector3 a, Vector3 b, Vector3 p, out Vector3 o, out float vt)
     {
         Vector3 ab = b - a;
         float length = ab.magnitude;
