@@ -576,28 +576,140 @@ public class AnimDef
 
     float DefWeight = 1f;
 
+    public bool useDefaultClss;
+
     //アニメーションごとにオーバーライド・設定可能な判定をここで設定する.
-    //null値が挿入されているならデフォルトを使用.
+    //null値が挿入されているならデフォルトを使用..と考える.
     clssSetting clssSetting = new clssSetting();
 
 }
 
 
 [System.Serializable]
-class clssSetting
+public class clssSetting
 {
     //アニメーションごとにオーバーライド・設定可能な判定をここで設定する.
     //ここで記述されたclssは調整済みのデフォルトに挿入する形で設定される
     //null値が挿入されているならなにもしない.
-    clssDef[] clssDefs = new clssDef[0];
+    public List<clssDef> clssDefs = new List<clssDef>();
 
     //デフォルトClssを除去するためのリスト. 
     //除去指定をデフォルトのClssのオブジェ名称から消す.
-    string[] disableClssList = new string[0];
+    public List<string> disableClssList = new List<string>();
+
+    //使用する当たり判定を用意する.
+    public List<clssDef> findclss(clssDef.ClssType useType, float frame, Entity entity)
+    {
+        List<clssDef> findDefs = new List<clssDef>();
+        foreach (clssDef cls in clssDefs)
+        {
+            if (cls.StartTime > frame || cls.EndTime < frame && cls.clssType == useType)
+            {
+                findDefs.Add(cls);
+            }
+        }
+        foreach(clssDef cls in entity.defaultClss.clssDefs)
+        if (cls.clssType == useType && !disableClssList.Any(dz => dz == cls.attachTo))
+        {
+            findDefs.Add(cls);
+        }
+        return findDefs;
+    }
+    
+    //使用する当たり判定を用意する.
+    public List<clssDef> findclss(clssDef.ClssType useType, float frame)
+    {
+        List<clssDef> findDefs = new List<clssDef>();
+        foreach (clssDef cls in clssDefs)
+        {
+            if (cls.StartTime > frame || cls.EndTime < frame && cls.clssType == useType)
+            {
+                findDefs.Add(cls);
+            }
+        }
+        return findDefs;
+    }
+
+    public bool clssCollided(out Vector3 v1, out Vector3 v2, out float dist, clssDef.ClssType useType,
+    clssSetting compareTo, float frame)
+    {
+        List<clssDef> clssRef = new List<clssDef>();
+        List<clssDef> clssCompareTo = new List<clssDef>();
+        v1 = Vector3.zero;
+        v2 = Vector3.zero;
+        dist = Mathf.Infinity;
+        bool isCollided_any = false;
+        if (useType == clssDef.ClssType.Attack)
+        {
+            clssRef = findclss(useType, frame);
+            clssCompareTo = compareTo.findclss(clssDef.ClssType.Hit, frame);
+        }
+        else
+        {
+            clssRef = findclss(useType, frame);
+            clssCompareTo = compareTo.findclss(clssDef.ClssType.Attack, frame);
+        }
+        foreach (clssDef cls in clssRef)
+        {
+            foreach (clssDef compcls in clssCompareTo)
+            {
+                float compareing;
+                Vector3 v_a, v_b;
+                bool isCollided = cls.isCollided(out v_a, out v_b, out compareing, compcls);
+                if (isCollided && compareing < dist)
+                {
+                    v1 = v_a;
+                    v2 = v_b;
+                    compareing = dist;
+                    isCollided_any = true;
+                }
+            }
+        }
+        return isCollided_any;
+    }
+
+    public bool clssCollided(out Vector3 v1, out Vector3 v2, out float dist, clssDef.ClssType useType,
+    clssSetting compareTo, float frame, Entity entity_self, Entity entity_compareTo)
+    {
+        List<clssDef> clssRef = new List<clssDef>();
+        List<clssDef> clssCompareTo = new List<clssDef>();
+        v1 = Vector3.zero;
+        v2 = Vector3.zero;
+        dist = Mathf.Infinity;
+        bool isCollided_any = false;
+        if (useType == clssDef.ClssType.Attack)
+        {
+            clssRef = findclss(useType, frame, entity_self);
+            clssCompareTo = compareTo.findclss(clssDef.ClssType.Hit, frame, entity_compareTo);
+        }
+        else
+        {
+            clssRef = findclss(useType, frame, entity_self);
+            clssCompareTo = compareTo.findclss(clssDef.ClssType.Attack, frame, entity_compareTo);
+        }
+        foreach (clssDef cls in clssRef)
+        {
+            foreach (clssDef compcls in clssCompareTo)
+            {
+                float compareing;
+                Vector3 v_a, v_b;
+                bool isCollided = cls.isCollided(out v_a, out v_b, out compareing, compcls);
+                if (isCollided && compareing < dist)
+                {
+                    v1 = v_a;
+                    v2 = v_b;
+                    compareing = dist;
+                    isCollided_any = true;
+                }
+            }
+        }
+        return isCollided_any;
+    }
 }
 
 [System.Serializable]
-class clssDef
+[SerializeField]
+public class clssDef
 {
     //やられ判定と当たり判定をenumで管理する
     public enum ClssType
@@ -608,20 +720,170 @@ class clssDef
     public ClssType clssType;
     //対象キャラクターのどのゲームオブジェクトに追随するか..を取得し、下のattachTransformに値を入力.
     public string attachTo;
+    public bool showGizmo;
 
     Transform attachTransform;
 
     //wを半径とする.
+    //スタートポジション・終了ポジションはtransformを基準とする.
+    //attachTransformが存在しない際は
+    [SerializeField]
     internal Vector3 startPos, endPos;
-    internal float w;
+    [SerializeField]
+    internal float width;
 
-    float StartTime = 0f, EndTime = 10f;
+    //前回のスタート・終了ポジションを設定.
+    Vector3 _lastcalcStartPos = Vector3.zero;
+    Vector3 _lastcalcEndPos = Vector3.zero;
 
-    //当たり判定の判別など.
-    public bool isCollided(clssDef compareTo)
+    //当たり判定設定時間 - 設定終了時間を表す.
+    internal float StartTime = 0f, EndTime = 10f;
+
+    //基準Transformを軸にしたカプセルコライダの設定
+    public (Vector3, Vector3) getGlobalPos()
     {
-        float ptDistCheck = w + compareTo.w;
+        Vector3 start, end;
+        if (attachTransform != null)
+        {
+            Transform t = attachTransform;
+
+            start = t.position + t.rotation * startPos;
+            end = t.position + t.rotation * endPos;
+        }
+        else
+        {
+            start = startPos;
+            end = endPos;
+        }
+        return (start, end);
+    }
+
+    //デバッグ用. 後で消す。
+    public void setTransform(Transform tfm)
+    {
+        attachTransform = tfm;
+    }
+
+    //entity自体のトランスフォームを読み出し.
+    //attachToが存在しない際はentityのルートを選択する.
+    public void initTransform(Entity entity)
+    {
+        attachTransform = entity.transform;
+        if (attachTo != null)
+        {
+            //entity中のすべての階層のtransformを取得.
+            //一度しかやらないことを想定..
+            Transform[] transforms = entity.allChildTransforms;
+            foreach (Transform t in transforms)
+            {
+                if (t.name == attachTo)
+                {
+                    attachTransform = t;
+                    return;
+                }
+            }
+        }
+    }
+
+    public void DrawCapsule()
+    {
+        Vector3 pos_1, pos_2;
+        (pos_1 , pos_2) = getGlobalPos();
+        DrawCapsuleGizmo_Tool(pos_1, pos_2, width);
+    }
+
+//Gizmoの描写
+    public void DrawCapsuleGizmo_Tool(Vector3 start, Vector3 end, float radius)
+    {
+        var preMatrix = Gizmos.matrix;
+
+        // カプセル空間（(0, 0)からZ軸方向にカプセルが伸びる空間）からワールド座標系への変換行列
+        Gizmos.matrix = Matrix4x4.TRS(start, Quaternion.FromToRotation(Vector3.forward, end), Vector3.one);
+
+        // 球体を描画
+        var distance = (end - start).magnitude;
+        var capsuleStart = Vector3.zero;
+        var capsuleEnd = Vector3.forward * distance;
+        Gizmos.DrawWireSphere(capsuleStart, radius);
+        Gizmos.DrawWireSphere(capsuleEnd, radius);
+
+        // ラインを描画
+        var offsets = new Vector3[] { new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f) };
+        for (int i = 0; i < offsets.Length; i++)
+        {
+            Gizmos.DrawLine(capsuleStart + offsets[i] * radius, capsuleEnd + offsets[i] * radius);
+        }
+
+        Gizmos.matrix = preMatrix;
+    }
+
+    //最後のポジションの計算
+    public void updatelastPos()
+    {
+        (_lastcalcStartPos, _lastcalcEndPos) = getGlobalPos();
+    }
+
+    //当たり判定の計算
+    public bool isCollided(out Vector3 v1 , out Vector3 v2 , out float dist , clssDef compareTo)
+    {
+        v1 = Vector3.zero;
+        v2 = Vector3.zero;
+        dist = Mathf.Infinity;
+        (Vector3 midPos_1, float base_distToMid) = GetMid();
+        (Vector3 midPos_2, float compare_distToMid) = compareTo.GetMid();
+        if ((midPos_2 - midPos_1).magnitude <= (base_distToMid + width + compare_distToMid + compareTo.width))
+        {
+            //ボール型の当たり判定概形（要は平行四面 + カプセルスイープの範囲を考慮した最小最接球を導出.）
+            Gizmos.DrawSphere(midPos_1, base_distToMid + width);
+            Gizmos.DrawSphere(midPos_1, compare_distToMid + compareTo.width);
+
+            TrisUtil.Triangle T1_0, T1_1 , T2_0 , T2_1;
+            (T1_0, T1_1) = GetTriangle_MovedPlane();
+            (T2_0, T2_1) = compareTo.GetTriangle_MovedPlane();
+
+            //v1は自己の当たり判定位置　v2は相手の.
+            getLeastPos(ref dist, ref v1, ref v2, T1_0, T2_0);
+            getLeastPos(ref dist, ref v1, ref v2, T1_1, T2_0);
+            getLeastPos(ref dist, ref v1, ref v2, T1_0, T2_1);
+            getLeastPos(ref dist, ref v1, ref v2, T1_1, T2_1);
+
+            if (dist <= width + compareTo.width)
+            {
+                return true;
+            }
+        }
         return false;
+    }
+    
+    public void getLeastPos(ref float last, ref Vector3 v1, ref Vector3 v2, TrisUtil.Triangle t1, TrisUtil.Triangle t2)
+    {
+        float d1;
+        Vector3 v1_ch, v2_ch;
+        TrisUtil TU = new TrisUtil();
+        (d1, v1_ch, v2_ch) = TU.TrisDistance(t1, t2);
+        if (last > d1)
+        {
+            last = d1;
+            v1 = v1_ch;
+            v2 = v2_ch;
+        }
+    }
+
+    public (TrisUtil.Triangle, TrisUtil.Triangle) GetTriangle_MovedPlane()
+    {
+        TrisUtil.Triangle Compare_1_0 = new TrisUtil.Triangle(startPos, endPos, _lastcalcStartPos);
+        TrisUtil.Triangle Compare_1_1 = new TrisUtil.Triangle(endPos, _lastcalcStartPos, _lastcalcEndPos);
+        return (Compare_1_0, Compare_1_1);
+    }
+
+    public (Vector3, float) GetMid()
+    {
+        Vector3 st, end;
+        (st, end) = getGlobalPos();
+        float f_1 = (st - _lastcalcEndPos).sqrMagnitude;
+        float f_2 = (end - _lastcalcStartPos).sqrMagnitude;
+        float Dist = f_1 > f_2 ? f_1 : f_2;
+        return ((st + _lastcalcEndPos) / 2f, Dist);
     }
     
 }

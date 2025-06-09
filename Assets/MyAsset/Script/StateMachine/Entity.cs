@@ -27,6 +27,10 @@ public class Entity : MonoBehaviour
     //ステートID.
     public int CurrentStateID = 0;
 
+    public clssSetting defaultClss;
+    
+    public Transform[] allChildTransforms;
+
 
     //アニメーション管理用.
     public int animID = 0;
@@ -51,6 +55,7 @@ public class Entity : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        allChildTransforms = GetComponentsInChildren<Transform>(true);
         mat = mesh.material;
         animator = GetComponent<Animator>();
 

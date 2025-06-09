@@ -8,7 +8,7 @@ using UnityEngine;
 //三角形が成す平行四辺形の最少接面球を考える際は原点 - p1p2中点の距離 x p1p2の距離の半分との比較を考えてみる.
 //多分、三角平面から求めるよりも手軽で済むはず
 
-class TrisUtil
+public class TrisUtil
 {
     public class Triangle
     {
@@ -224,10 +224,10 @@ class TrisUtil
             return false;
         }
         Debug.Log("Finding Intersects");
-        Gizmos.DrawWireSphere(P1_Find[0],0.05f);
-        Gizmos.DrawWireSphere(P1_Find[1],0.05f);
-        Gizmos.DrawWireSphere(P2_Find[0],0.05f);
-        Gizmos.DrawWireSphere(P1_Find[1],0.05f);
+        //Gizmos.DrawWireSphere(P1_Find[0],0.05f);
+        //Gizmos.DrawWireSphere(P1_Find[1],0.05f);
+        //Gizmos.DrawWireSphere(P2_Find[0],0.05f);
+        //Gizmos.DrawWireSphere(P1_Find[1],0.05f);
         //x軸の値から比較.
         if (!isRange_x(P1_Find[0], P1_Find[1], P2_Find[0]) && !isRange_x(P1_Find[0], P1_Find[1], P2_Find[1]) &&
         !isRange_x(P2_Find[0], P2_Find[1], P1_Find[0]) && !isRange_x(P2_Find[0], P2_Find[1], P1_Find[1]))
@@ -356,7 +356,7 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
         Debug.Log(S1_VectVal);
         S1_VectVal = Mathf.Clamp01(S1_VectVal);
         closestPointOnLine1 = S1_p2 - LineVect_S1 * S1_VectVal;
-        Gizmos.DrawCube(closestPointOnLine1,Vector3.one * 0.01f);
+        //Gizmos.DrawCube(closestPointOnLine1,Vector3.one * 0.01f);
         
         distance = calcPointOnLineSegmentDist
         (S2_p1, S2_p2, closestPointOnLine1, out closestPointOnLine2, out S2_VectVal);
@@ -372,7 +372,7 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
         S2_VectVal = Mathf.Clamp01(S2_VectVal);
         closestPointOnLine2 = S2_p1 + LineVect_S2 * S2_VectVal;
         
-        Gizmos.DrawWireSphere(closestPointOnLine2, 0.01f);
+        //Gizmos.DrawWireSphere(closestPointOnLine2, 0.01f);
         distance = calcPointOnLineSegmentDist
         (S1_p1, S1_p2, closestPointOnLine2, out closestPointOnLine1, out S1_VectVal);
         if (S1_VectVal >= 0.0f && S1_VectVal <= 1.0f)
