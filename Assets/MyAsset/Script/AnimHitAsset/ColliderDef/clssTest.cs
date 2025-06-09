@@ -32,6 +32,17 @@ public class clssTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (compareTo != null)
+        {
+            Debug.Log("Checking");
+            bool isCollided =
+            clssSetting.clssCollided(out Vector3 v1, out Vector3 v2, out float dist,
+            clssDef.ClssType.Hit, compareTo.clssSetting, 0.1f);
+            if (isCollided)
+            {
+                Debug.Log("Hit Detected");
+                Debug.DrawLine(v1,v2,Color.red);
+            }
+        }
     }
 }
