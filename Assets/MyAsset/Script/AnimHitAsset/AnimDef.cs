@@ -10,7 +10,6 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 using Unity.VisualScripting;
-using System.Drawing;
 
 //再生ノード組み立て.
 public class MixAnimNode
@@ -597,22 +596,38 @@ public class clssSetting
     //除去指定をデフォルトのClssのオブジェ名称から消す.
     public List<string> disableClssList = new List<string>();
 
+    public void clssPosUpdate()
+    {
+        foreach (clssDef cls in clssDefs)
+        {
+            cls.updatelastPos();
+        }
+    }
+
     //使用する当たり判定を用意する.
     public List<clssDef> findclss(clssDef.ClssType useType, float frame, Entity entity)
     {
         List<clssDef> findDefs = new List<clssDef>();
         foreach (clssDef cls in clssDefs)
         {
-            if (cls.StartTime > frame || cls.EndTime < frame && cls.clssType == useType)
+            if (cls.StartTime < frame || cls.EndTime > frame && cls.clssType == useType)
             {
+                clssDef newDef = new clssDef();
+                newDef = cls;
+                newDef._entity = entity;
+
                 findDefs.Add(cls);
             }
         }
-        foreach(clssDef cls in entity.defaultClss.clssDefs)
-        if (cls.clssType == useType && !disableClssList.Any(dz => dz == cls.attachTo))
-        {
-            findDefs.Add(cls);
-        }
+        foreach (clssDef cls in entity.defaultClss.clssDefs)
+            if (cls.clssType == useType && !disableClssList.Any(dz => dz == cls.attachTo))
+            {
+                clssDef newDef = new clssDef();
+                newDef = cls;
+                newDef._entity = entity;
+
+                findDefs.Add(cls);
+            }
         return findDefs;
     }
     
@@ -622,7 +637,7 @@ public class clssSetting
         List<clssDef> findDefs = new List<clssDef>();
         foreach (clssDef cls in clssDefs)
         {
-            if (cls.StartTime > frame || cls.EndTime < frame && cls.clssType == useType)
+            if (cls.StartTime < frame || cls.EndTime > frame && cls.clssType == useType)
             {
                 findDefs.Add(cls);
             }
@@ -630,6 +645,7 @@ public class clssSetting
         return findDefs;
     }
 
+    //clss同士の接触判定を行う.
     public bool clssCollided(out Vector3 v1, out Vector3 v2, out float dist, clssDef.ClssType useType,
     clssSetting compareTo, float frame)
     {
@@ -653,6 +669,7 @@ public class clssSetting
         {
             foreach (clssDef compcls in clssCompareTo)
             {
+                cls.DrawUPos(Color.red);
                 float compareing;
                 Vector3 v_a, v_b;
                 bool isCollided = cls.isCollided(out v_a, out v_b, out compareing, compcls);
@@ -721,6 +738,7 @@ public class clssDef
     //対象キャラクターのどのゲームオブジェクトに追随するか..を取得し、下のattachTransformに値を入力.
     public string attachTo;
     public bool showGizmo;
+    public Entity _entity;
 
     Transform attachTransform;
 
@@ -758,7 +776,20 @@ public class clssDef
         return (start, end);
     }
 
-    //デバッグ用. 後で消す。
+    public void DrawUPos(UnityEngine.Color color)
+    {
+        Vector3 v0_1, v0_2;
+        Vector3 v1_1 = _lastcalcStartPos, v1_2 = _lastcalcEndPos;
+        (v0_1, v0_2) = getGlobalPos();
+        
+        Debug.DrawLine(v0_1,v0_2,color);
+        Debug.DrawLine(v1_1,v1_2,color);
+        Debug.DrawLine(v0_1,v1_1,color);
+        Debug.DrawLine(v0_2,v1_2,color);
+    }
+
+    //当たり判定指定
+    //
     public void setTransform(Transform tfm)
     {
         attachTransform = tfm;
@@ -768,6 +799,7 @@ public class clssDef
     //attachToが存在しない際はentityのルートを選択する.
     public void initTransform(Entity entity)
     {
+        _entity = entity;
         attachTransform = entity.transform;
         if (attachTo != null)
         {
@@ -788,7 +820,7 @@ public class clssDef
     public void DrawCapsule()
     {
         Vector3 pos_1, pos_2;
-        (pos_1 , pos_2) = getGlobalPos();
+        (pos_1, pos_2) = getGlobalPos();
         DrawCapsuleGizmo_Tool(pos_1, pos_2, width);
     }
 
@@ -816,8 +848,8 @@ public class clssDef
         if ((midPos_2 - midPos_1).magnitude <= (base_distToMid + width + compare_distToMid + compareTo.width))
         {
             //ボール型の当たり判定概形（要は平行四面 + カプセルスイープの範囲を考慮した最小最接球を導出.）
-            Gizmos.DrawSphere(midPos_1, base_distToMid + width);
-            Gizmos.DrawSphere(midPos_1, compare_distToMid + compareTo.width);
+            //Gizmos.DrawSphere(midPos_1, base_distToMid + width);
+            //Gizmos.DrawSphere(midPos_1, compare_distToMid + compareTo.width);
 
             TrisUtil.Triangle T1_0, T1_1 , T2_0 , T2_1;
             (T1_0, T1_1) = GetTriangle_MovedPlane();
@@ -829,6 +861,8 @@ public class clssDef
             getLeastPos(ref dist, ref v1, ref v2, T1_0, T2_1);
             getLeastPos(ref dist, ref v1, ref v2, T1_1, T2_1);
 
+
+
             if (dist <= width + compareTo.width)
             {
                 return true;
@@ -837,6 +871,7 @@ public class clssDef
         return false;
     }
     
+    //三角面同士の最短距離導出
     public void getLeastPos(ref float last, ref Vector3 v1, ref Vector3 v2, TrisUtil.Triangle t1, TrisUtil.Triangle t2)
     {
         float d1;
@@ -851,6 +886,7 @@ public class clssDef
         }
     }
 
+    //動作方向の平行四面近似する三角面の導出
     public (TrisUtil.Triangle, TrisUtil.Triangle) GetTriangle_MovedPlane()
     {
         TrisUtil.Triangle Compare_1_0 = new TrisUtil.Triangle(startPos, endPos, _lastcalcStartPos);
@@ -858,6 +894,7 @@ public class clssDef
         return (Compare_1_0, Compare_1_1);
     }
 
+    //動作方向の平行四面の中点位置・及び頂点の最長距離を導出.
     public (Vector3, float) GetMid()
     {
         Vector3 st, end;

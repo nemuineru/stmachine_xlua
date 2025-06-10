@@ -26,12 +26,17 @@ public class clssTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
+        foreach (clssDef c in clssSetting.clssDefs)
+        {
+            c.setTransform(this.transform);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        clssSetting.clssPosUpdate();
         if (compareTo != null)
         {
             Debug.Log("Checking");
@@ -41,8 +46,14 @@ public class clssTest : MonoBehaviour
             if (isCollided)
             {
                 Debug.Log("Hit Detected");
-                Debug.DrawLine(v1,v2,Color.red);
+                Debug.DrawLine(v1, v2, Color.cyan);
             }
         }
+
+        foreach (clssDef c in clssSetting.clssDefs)
+        {
+            c.getGlobalPos();
+        }
+        
     }
 }
