@@ -669,7 +669,7 @@ public class clssSetting
         {
             foreach (clssDef compcls in clssCompareTo)
             {
-                cls.DrawUPos(Color.red);
+                //cls.DrawUPos(Color.red);
                 float compareing;
                 Vector3 v_a, v_b;
                 bool isCollided = cls.isCollided(out v_a, out v_b, out compareing, compcls);

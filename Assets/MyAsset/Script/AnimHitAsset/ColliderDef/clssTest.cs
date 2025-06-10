@@ -46,7 +46,8 @@ public class clssTest : MonoBehaviour
             if (isCollided)
             {
                 Debug.Log("Hit Detected");
-                Debug.DrawLine(v1, v2, Color.cyan);
+                Debug.DrawLine(v1, v2 + Vector3.up, Color.cyan);
+                Debug.DrawLine(v1, v2 + Vector3.left, Color.magenta);
             }
         }
 
