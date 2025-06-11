@@ -15,7 +15,7 @@ MonoBehaviour:
   animDef:
   - mixType: 1
     MixParamName: 
-    CurrentParamPos: {x: 3.1519356e-21, y: 6.1625703e-21}
+    CurrentParamPos: {x: 0, y: 6.981818e-21}
     ID: 0
     Name: Movement
     animClip:
@@ -46,6 +46,17 @@ MonoBehaviour:
       mixPosition: {x: 1, y: 0}
     blendInTime: 0
     blendOutTime: 2
+    useDefaultClss: 1
+    clssSetting:
+      clssDefs:
+      - clssType: 0
+        attachTo: 
+        showGizmo: 0
+        _entity: {fileID: 0}
+        startPos: {x: 0, y: 0, z: 0}
+        endPos: {x: 0, y: 0, z: 0}
+        width: 0.28
+      disableClssList: []
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
@@ -69,6 +80,10 @@ MonoBehaviour:
       mixPosition: {x: -1, y: 0}
     blendInTime: 0.5
     blendOutTime: 0.5
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs: []
+      disableClssList: []
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
@@ -82,3 +97,7 @@ MonoBehaviour:
       mixPosition: {x: 0, y: 0}
     blendInTime: 0
     blendOutTime: 0.05
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs: []
+      disableClssList: []

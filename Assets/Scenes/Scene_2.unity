@@ -308,6 +308,10 @@ MonoBehaviour:
   targetTo: {fileID: 0}
   vCam: {fileID: 1661577789}
   CurrentStateID: 0
+  defaultClss:
+    clssDefs: []
+    disableClssList: []
+  allChildTransforms: []
   animID: 0
   animListObject: {fileID: 11400000, guid: fa3e95b17fea8fc4e9b0432af0719e70, type: 2}
   CurColor: {r: 0, g: 0, b: 0, a: 0}

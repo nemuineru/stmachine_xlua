@@ -579,6 +579,7 @@ public class AnimDef
 
     //アニメーションごとにオーバーライド・設定可能な判定をここで設定する.
     //null値が挿入されているならデフォルトを使用..と考える.
+    [SerializeField]
     clssSetting clssSetting = new clssSetting();
 
 }
