@@ -21,6 +21,7 @@ public class TrisUtil
             this.p0 = p0;
             this.p1 = p1;
             this.p2 = p2;
+            setVs();
         }
 
         public Vector3 Normal
@@ -69,6 +70,7 @@ public class TrisUtil
                 Debug.Log("Crossed At : " + GetPos);
                 T1_Nearest = GetPos;
                 T2_Nearest = GetPos;
+                Debug.DrawLine(T1_Nearest,T2_Nearest,Color.red);
                 return (0f, T1_Nearest, T2_Nearest);
             }
         }
@@ -142,6 +144,8 @@ public class TrisUtil
                 }
             }
         }
+
+        Debug.DrawLine(T1_Nearest,T2_Nearest,Color.red);
 
         //最短距離の導出を完了.
         return (minDistance, T1_Nearest, T2_Nearest);
@@ -330,7 +334,7 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
         //この時、計算されたベクトル系数が0-1の間にあるなら、そのまま使用
         if (Vector3.Cross(LineVect_S1, LineVect_S2) == Vector3.zero)
         {
-            Debug.Log("Lines are parallel.");
+            //Debug.Log("Lines are parallel.");
             distance = calcPointOnLineSegmentDist(S2_p1, S2_p2, S1_p1, out closestPointOnLine2, out S2_VectVal);
             if (S2_VectVal >= 0.0f && S2_VectVal <= 1.0f)
             {
@@ -345,15 +349,15 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
             if (S1_VectVal >= 0.0f && S1_VectVal <= 1.0f &&
             S2_VectVal >= 0.0f && S2_VectVal <= 1.0f)
             {
-                Debug.Log("Nearest Found at inside line");
+                //Debug.Log("Nearest Found at inside line");
                 return;
             }
         }
 
 
-        Debug.Log(string.Format("S1, {0}, S2 {1}",S1_VectVal , S2_VectVal));
+        //Debug.Log(string.Format("S1, {0}, S2 {1}",S1_VectVal , S2_VectVal));
         //S1が外縁に有ると考えてクランプして垂線を下ろす.
-        Debug.Log(S1_VectVal);
+        //Debug.Log(S1_VectVal);
         S1_VectVal = Mathf.Clamp01(S1_VectVal);
         closestPointOnLine1 = S1_p2 - LineVect_S1 * S1_VectVal;
         //Gizmos.DrawCube(closestPointOnLine1,Vector3.one * 0.01f);
@@ -362,13 +366,13 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
         (S2_p1, S2_p2, closestPointOnLine1, out closestPointOnLine2, out S2_VectVal);
         if (S2_VectVal >= 0.0f && S2_VectVal <= 1.0f)
         {
-            Debug.Log("s2 - " + S2_VectVal);
-            Debug.Log("Nearest Found at S1 point");
+            //Debug.Log("s2 - " + S2_VectVal);
+            //Debug.Log("Nearest Found at S1 point");
             return;
         }
 
         //S2側が外に有るためクランプ・垂線を下ろす.
-        Debug.Log(S2_VectVal);
+        //Debug.Log(S2_VectVal);
         S2_VectVal = Mathf.Clamp01(S2_VectVal);
         closestPointOnLine2 = S2_p1 + LineVect_S2 * S2_VectVal;
         
@@ -377,13 +381,13 @@ static public float DistanceFromPlane(Vector3 planeOffset, Vector3 planeNormal, 
         (S1_p1, S1_p2, closestPointOnLine2, out closestPointOnLine1, out S1_VectVal);
         if (S1_VectVal >= 0.0f && S1_VectVal <= 1.0f)
         {
-            Debug.Log("Nearest Found at S2 point");
+            //Debug.Log("Nearest Found at S2 point");
             return;
         }
 
         //双方の端点が最短となる.
         S1_VectVal = Mathf.Clamp01(S1_VectVal);
-            Debug.Log(S2_VectVal + " " + S1_VectVal);
+            //Debug.Log(S2_VectVal + " " + S1_VectVal);
         closestPointOnLine1 = S1_p1 + LineVect_S1 * S1_VectVal;
         closestPointOnLine2 = S2_p1 + LineVect_S2 * S2_VectVal;
         distance = Vector3.Distance(closestPointOnLine1, closestPointOnLine2);

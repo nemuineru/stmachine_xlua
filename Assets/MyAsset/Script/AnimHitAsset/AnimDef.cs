@@ -665,6 +665,7 @@ public class clssSetting
             clssRef = findclss(useType, frame);
             clssCompareTo = compareTo.findclss(clssDef.ClssType.Attack, frame);
         }
+        
         foreach (clssDef cls in clssRef)
         {
             foreach (clssDef compcls in clssCompareTo)
@@ -827,8 +828,11 @@ public class clssDef
 //Gizmoの描写
     public void DrawCapsuleGizmo_Tool(Vector3 start, Vector3 end, float radius)
     {
-        Gizmos.DrawWireSphere(start, radius);
-        Gizmos.DrawWireSphere(end, radius);
+        int x = (int)((end - start).magnitude / radius);
+        for (int i = 0; i < x + 1; i++)
+        { 
+            Gizmos.DrawWireSphere(start + (end - start) * ((float)i / x), radius);
+        }
     }
 
     //最後のポジションの計算
@@ -855,12 +859,33 @@ public class clssDef
             (T1_0, T1_1) = GetTriangle_MovedPlane();
             (T2_0, T2_1) = compareTo.GetTriangle_MovedPlane();
 
+
+            /*
+            //デバッグ用に表示.
+            //
+            //2025-06-11 : 三角形の配列形式表示で見たところ、全配列でvectorが0になってたのでsetvs()をコールするようにした.
+            string g = "" , f = "";
+            int i = 0;
+            foreach (Vector3 posList_T1 in T1_0.vs)
+            {
+                f += string.Format("pos{0} : {1}", i, posList_T1);
+                i++;
+            }
+            foreach (Vector3 posList_T2 in T2_0.vs)
+            {
+                g += string.Format(" pos{0} : {1}", i, posList_T2);
+                i++;
+            }
+            Debug.Log(f + g);
+            */
+            
             //v1は自己の当たり判定位置　v2は相手の.
             getLeastPos(ref dist, ref v1, ref v2, T1_0, T2_0);
             getLeastPos(ref dist, ref v1, ref v2, T1_1, T2_0);
             getLeastPos(ref dist, ref v1, ref v2, T1_0, T2_1);
             getLeastPos(ref dist, ref v1, ref v2, T1_1, T2_1);
 
+            //Debug.Log(dist);
 
 
             if (dist <= width + compareTo.width)
@@ -889,8 +914,11 @@ public class clssDef
     //動作方向の平行四面近似する三角面の導出
     public (TrisUtil.Triangle, TrisUtil.Triangle) GetTriangle_MovedPlane()
     {
-        TrisUtil.Triangle Compare_1_0 = new TrisUtil.Triangle(startPos, endPos, _lastcalcStartPos);
-        TrisUtil.Triangle Compare_1_1 = new TrisUtil.Triangle(endPos, _lastcalcStartPos, _lastcalcEndPos);
+        Vector3 stPos, ePos;
+        (stPos, ePos) = getGlobalPos();
+        TrisUtil.Triangle Compare_1_0 = new TrisUtil.Triangle(stPos, ePos, _lastcalcStartPos);
+        TrisUtil.Triangle Compare_1_1 = new TrisUtil.Triangle(ePos, _lastcalcStartPos, _lastcalcEndPos);
+        //Debug.Log(_lastcalcEndPos.ToString() + _lastcalcStartPos.ToString());
         return (Compare_1_0, Compare_1_1);
     }
 
