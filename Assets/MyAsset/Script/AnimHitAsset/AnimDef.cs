@@ -267,6 +267,8 @@ public class MainNodeConfigurator
 // アニメーションID, アニメーション名, アニメーションの速度, 
 // アニメーションの基本ブレンド（イン・アウト）タイムなど
 // また、基礎の当たり判定リスト(カプセル型)を登録.
+// 2025-06-12
+// clssの表示設定もやらねば..
 [System.Serializable]
 public class AnimDef
 {
