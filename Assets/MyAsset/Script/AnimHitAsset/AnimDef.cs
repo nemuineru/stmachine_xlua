@@ -268,7 +268,7 @@ public class MainNodeConfigurator
 // アニメーションの基本ブレンド（イン・アウト）タイムなど
 // また、基礎の当たり判定リスト(カプセル型)を登録.
 // 2025-06-12
-// clssの表示設定もやらねば..
+// clssの表示設定もやらねば.
 [System.Serializable]
 public class AnimDef
 {
@@ -277,7 +277,7 @@ public class AnimDef
     //ミキシングするアニメのウェイトなど.
     public class Anims
     {
-        public Anims(){}
+        public Anims() { }
         public Anims(AnimationClip clip) => Clip = clip;
         public AnimationClip Clip;
         public float speed = 1f, startFrame, cycleOffset;
@@ -421,7 +421,7 @@ public class AnimDef
                     Vector2 vector2 = pos_2.pos - pos_1.pos;
 
                     isReached = (Cross(vector1, pos_1.pos - Vector2.zero) * Cross(vector1, pos_2.pos - Vector2.zero) < 0) &&
-                    (Cross(vector2, Vector2.zero - pos_1.pos) * Cross(vector2, CurrentParamPos - pos_1.pos ) < 0);
+                    (Cross(vector2, Vector2.zero - pos_1.pos) * Cross(vector2, CurrentParamPos - pos_1.pos) < 0);
 
                     //isReachedがtrueなら、計算点は最接近した三角形の外にあると考える
                     //また、角度で比較
@@ -444,7 +444,7 @@ public class AnimDef
                         Debug.Log("IsReached : Off");
                         float angle_0 = Vector2.Angle(pos_1.pos, CurrentParamPos);
                         float angle_1 = Vector2.Angle(pos_2.pos, CurrentParamPos);
-                        
+
                         float angleWeight_All = angle_0 + angle_1;
                         float angleWeight_0 = angle_0 / angleWeight_All;
                         float angleWeight_1 = angle_1 / angleWeight_All;
@@ -453,12 +453,12 @@ public class AnimDef
 
                         //線分との垂直距離
                         Vector2 line = (pos_1.pos - pos_2.pos);
-                        Vector2 animPos1_2PerpPos = PerpendicularFootPoint(pos_1.pos,pos_2.pos ,CurrentParamPos);
-                        Vector2 animPosBasePerpPos = PerpendicularFootPoint(pos_1.pos,pos_2.pos ,Vector2.zero);
+                        Vector2 animPos1_2PerpPos = PerpendicularFootPoint(pos_1.pos, pos_2.pos, CurrentParamPos);
+                        Vector2 animPosBasePerpPos = PerpendicularFootPoint(pos_1.pos, pos_2.pos, Vector2.zero);
                         float Dist_PT = Vector2.Distance(animPos1_2PerpPos, CurrentParamPos);
                         float Dist_Cer = Vector2.Distance(animPosBasePerpPos, Vector2.zero);
 
-                        Debug.Log(Dist_PT + ":" + "a" +Dist_Cer);
+                        Debug.Log(Dist_PT + ":" + "a" + Dist_Cer);
 
                         float pAllWeight = Dist_PT / Dist_Cer;
                         //Debug.Log("Weight - " + pWeight + animPos[0].pos + animPos[1].pos);
@@ -544,7 +544,8 @@ public class AnimDef
         }
 
         // 2次元ベクトルの外積を返す
-        float Cross(Vector2 vector1, Vector2 vector2) {
+        float Cross(Vector2 vector1, Vector2 vector2)
+        {
             return vector1.x * vector2.y - vector1.y * vector2.x;
         }
 
@@ -557,7 +558,7 @@ public class AnimDef
     }
 
     public enum MixType
-    { 
+    {
         Liner,
         Simple2D,
         FreeForm2D,
@@ -572,7 +573,7 @@ public class AnimDef
     public int ID;
     public string Name;
 
-    public Anims[] animClip;   
+    public Anims[] animClip;
     public float blendInTime, blendOutTime;
 
     float DefWeight = 1f;
@@ -583,6 +584,11 @@ public class AnimDef
     //null値が挿入されているならデフォルトを使用..と考える.
     [SerializeField]
     clssSetting clssSetting = new clssSetting();
+
+    void CheckClssCollision()
+    {
+        
+    }
 
 }
 
