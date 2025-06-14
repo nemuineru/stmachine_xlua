@@ -5,6 +5,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
 using System.Linq;
+using System.ComponentModel;
+using UnityEditor;
 
 
 public class Entity : MonoBehaviour
@@ -29,12 +31,16 @@ public class Entity : MonoBehaviour
 
     public clssSetting defaultClss;
     
-    public Transform[] allChildTransforms;
+    internal Transform[] allChildTransforms;
 
 
     //アニメーション管理用.
     public int animID = 0;
     public AnimlistObject animListObject;
+
+    //AnimListObject自体を変更しないとする.
+    [ReadOnly(true)]
+    public AnimlistObject _animListObject_onGame;
     Animator animator;
 
     PlayableOutput PrimalPlayableOut;
@@ -70,10 +76,12 @@ public class Entity : MonoBehaviour
         PrimalPlayableOut = new PlayableOutput();
         if (animListObject != null && animator != null)
         {
+            _animListObject_onGame = Instantiate(animListObject);
             MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
-            PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.MainMixer);
+            PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.mixMixer);
             ChangeAnim();
         }
+        defaultClss.initClss(this);
     }
 
     string verd_1;
@@ -113,7 +121,7 @@ public class Entity : MonoBehaviour
 //アニメーション変更..
     public void ChangeAnim()
     {
-        AnimDef animFindByID = animListObject.animDef.ToList().Find(x => x.ID == animID);
+        AnimDef animFindByID = _animListObject_onGame.animDef.ToList().Find(x => x.ID == animID);
         if (animFindByID != null)
         {
             MainAnimMixer.ChangeAnim(animFindByID);

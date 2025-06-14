@@ -167,11 +167,21 @@ public class MixAnimNode
 
 public class MainNodeConfigurator
 {
+    //MainAnimNodeが使うRootTransform
+    //ここは必ず入れる..
+    //setupGraphで自動的に適応
+    public Entity root;
+
     //PlayableAPIの元グラフ.
     public PlayableGraph PrimalGraph;
     //ミックス先のミキサー。メインノードにつなぐため設定する。
-    public AnimationLayerMixerPlayable MainMixer = new AnimationLayerMixerPlayable();
+    public AnimationLayerMixerPlayable mixMixer = new AnimationLayerMixerPlayable();
+
+    //ミキシングされるアニメーションDef/アニメーションノード
     public MixAnimNode[] Mixers = new MixAnimNode[8];
+
+    //メインDef・アニメーションのノード.
+    public AnimDef MainAnimDef;
 
     public void SetupGraph(ref Animator animator, ref PlayableOutput PrimalPlayableOut)
     {
@@ -179,12 +189,19 @@ public class MainNodeConfigurator
         PrimalGraph = PlayableGraph.Create("reference");
         //OutPutにanimatorを指定.
 
+        //rootにEntityを指定する.
+        //このコンポーネントが呼び出す際animatorの付いた
+        // gameobjectはEntityが存在するものとして扱っているが,
+        //頭悪いなぁ..
+        root = animator.gameObject.GetComponent<Entity>();
+        
         PrimalPlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
         //初期はMixerの数分のノードのみ.
-        MainMixer = AnimationLayerMixerPlayable.Create(PrimalGraph, Mixers.Length);
-        
+        mixMixer = AnimationLayerMixerPlayable.Create(PrimalGraph, Mixers.Length);
+
     }
 
+    //AnimIDで検索し、アニメーションのパラメータを変更する.
     public void ChangeAnimParams(int AnimID, Vector2 paramSet)
     {
         for (int i = 0; i < Mixers.Length; i++)
@@ -192,12 +209,13 @@ public class MainNodeConfigurator
             if (Mixers[i] != null && Mixers[i].def.ID == AnimID)
             {
                 Mixers[i].def.CurrentParamPos = paramSet;
-            }            
+            }
         }
     }
 
     //アニメ変更時の挙動.
-    //defを代入し、リセットする
+    //defを代入し、リセットする.
+    //この時、MainAnimは代数に変更.
     public void ChangeAnim(AnimDef def)
     {
         //接続先で、最も小さい値でソケットが空いているものを選択
@@ -224,9 +242,10 @@ public class MainNodeConfigurator
             node = Mixers[indexOfEmpty];
             node.def = def;
             node.CreatePlayerNodes(ref PrimalGraph);
+            MainAnimDef = node.def;
 
             //接続.
-            PrimalGraph.Connect(node.Mixer, 0, MainMixer, indexOfEmpty);
+            PrimalGraph.Connect(node.Mixer, 0, mixMixer, indexOfEmpty);
             Debug.Log("Mixer Connected to " + indexOfEmpty);
             SetAnim();
         }
@@ -239,8 +258,8 @@ public class MainNodeConfigurator
         float All = 0;
         for (int ids = 0; ids < Mixers.Length; ids++)
         {
-            if(Mixers[ids] != null)            
-            All += Mixers[ids].MixWeight;
+            if (Mixers[ids] != null)
+                All += Mixers[ids].MixWeight;
         }
         foreach (var m in Mixers)
         {
@@ -249,17 +268,19 @@ public class MainNodeConfigurator
                 m.Animations();
                 //In-Outの設定を反映させる.
                 //Debug.Log(Mixers[i].def.ID + " MixerWeight " + Mixers[i].MixWeight / All);
-                MainMixer.SetInputWeight(i, Mixers[i].MixWeight / All);
+                mixMixer.SetInputWeight(i, Mixers[i].MixWeight / All);
                 if (m.isEndTime())
                 {
                     string MixOf = m.def.ID.ToString();
-                    PrimalGraph.Disconnect(MainMixer, i);
+                    PrimalGraph.Disconnect(mixMixer, i);
                     Mixers[i] = null;
                     //Debug.Log("Mixer Erased : " + MixOf);
                 }
             }
             i++;
         }
+        MainAnimDef.initEntityAt(root);
+        MainAnimDef.checkClssCapsule();
     }   
 }
 
@@ -585,9 +606,25 @@ public class AnimDef
     [SerializeField]
     clssSetting clssSetting = new clssSetting();
 
-    void CheckClssCollision()
+
+    public void initEntityAt(Entity init)
     {
-        
+        clssSetting.initClss(init);
+    }
+
+    public void checkClssCapsule()
+    {
+        clssSetting.clssPosUpdate();
+        List<clssDef> ca = clssSetting.findclss(clssDef.ClssType.Hit, 0f);
+        ca.AddRange(clssSetting.findclss(clssDef.ClssType.Attack, 0f));
+        foreach (clssDef c in ca)
+        {
+            if (c.showGizmo == true)
+            {
+                c.getGlobalPos();
+                c.DrawCapsule();
+            }
+        }
     }
 
 }
@@ -604,6 +641,18 @@ public class clssSetting
     //デフォルトClssを除去するためのリスト. 
     //除去指定をデフォルトのClssのオブジェ名称から消す.
     public List<string> disableClssList = new List<string>();
+    Entity root;
+
+    //entityで読み出すclssにentityを用意する.
+    public void initClss(Entity entity)
+    {
+        root = entity;
+        foreach (clssDef c in clssDefs)
+        {
+            c._entity = root;
+            c.initTransform(c._entity);
+        }
+    }
 
     public void clssPosUpdate()
     {
@@ -613,33 +662,6 @@ public class clssSetting
         }
     }
 
-    //使用する当たり判定を用意する.
-    public List<clssDef> findclss(clssDef.ClssType useType, float frame, Entity entity)
-    {
-        List<clssDef> findDefs = new List<clssDef>();
-        foreach (clssDef cls in clssDefs)
-        {
-            if (cls.StartTime < frame || cls.EndTime > frame && cls.clssType == useType)
-            {
-                clssDef newDef = new clssDef();
-                newDef = cls;
-                newDef._entity = entity;
-
-                findDefs.Add(cls);
-            }
-        }
-        foreach (clssDef cls in entity.defaultClss.clssDefs)
-            if (cls.clssType == useType && !disableClssList.Any(dz => dz == cls.attachTo))
-            {
-                clssDef newDef = new clssDef();
-                newDef = cls;
-                newDef._entity = entity;
-
-                findDefs.Add(cls);
-            }
-        return findDefs;
-    }
-    
     //使用する当たり判定を用意する.
     public List<clssDef> findclss(clssDef.ClssType useType, float frame)
     {
@@ -651,6 +673,11 @@ public class clssSetting
                 findDefs.Add(cls);
             }
         }
+        foreach (clssDef defaultcls in root.defaultClss.clssDefs)
+            if (defaultcls.clssType == useType && !disableClssList.Any(dz => dz == defaultcls.attachTo))
+            {                
+                findDefs.Add(defaultcls);
+            }
         return findDefs;
     }
 
@@ -706,13 +733,13 @@ public class clssSetting
         bool isCollided_any = false;
         if (useType == clssDef.ClssType.Attack)
         {
-            clssRef = findclss(useType, frame, entity_self);
-            clssCompareTo = compareTo.findclss(clssDef.ClssType.Hit, frame, entity_compareTo);
+            clssRef = findclss(useType, frame);
+            clssCompareTo = compareTo.findclss(clssDef.ClssType.Hit, frame);
         }
         else
         {
-            clssRef = findclss(useType, frame, entity_self);
-            clssCompareTo = compareTo.findclss(clssDef.ClssType.Attack, frame, entity_compareTo);
+            clssRef = findclss(useType, frame);
+            clssCompareTo = compareTo.findclss(clssDef.ClssType.Attack, frame);
         }
         foreach (clssDef cls in clssRef)
         {
@@ -750,7 +777,7 @@ public class clssDef
     public bool showGizmo;
     public Entity _entity;
 
-    Transform attachTransform;
+    public Transform attachTransform;
 
     //wを半径とする.
     //スタートポジション・終了ポジションはtransformを基準とする.
@@ -831,16 +858,51 @@ public class clssDef
     {
         Vector3 pos_1, pos_2;
         (pos_1, pos_2) = getGlobalPos();
-        DrawCapsuleGizmo_Tool(pos_1, pos_2, width);
+            //Debug.Log("Drawin Capsules at" + pos_1.ToString() + pos_2.ToString());
+        DrawCapsuleGizmo_Tool(pos_1, pos_2, width,
+        clssType == ClssType.Hit ? Color.blue : Color.red);
     }
 
 //Gizmoの描写
-    public void DrawCapsuleGizmo_Tool(Vector3 start, Vector3 end, float radius)
+    public void DrawCapsuleGizmo_Tool(Vector3 start, Vector3 end, float radius, Color col)
     {
         int x = (int)((end - start).magnitude / radius);
-        for (int i = 0; i < x + 1; i++)
-        { 
-            Gizmos.DrawWireSphere(start + (end - start) * ((float)i / x), radius);
+        for (int i = 0; i < x + 1 ; i++)
+        {
+            Debug.Log("Drawin Capsules");
+            Vector3 DrawAt = start + (end - start) * ((float)i / Mathf.Max(1, x));
+            Debug.Log("Drawin Sphere at" + DrawAt);
+            DrawWireSphere_OnDebug(DrawAt, radius, col);
+        }
+    }
+
+    public void DrawWireSphere_OnDebug(Vector3 pos, float radius, Color col)
+    {
+        int segs = 12;
+        Debug.Log(pos);
+        for (int i = 0; i < segs; i++)
+        {
+            Vector3 drawer_1 = pos +
+            Quaternion.AngleAxis(360f * i / segs, Vector3.up) * (Vector3.right * radius);
+            Vector3 drawer_2 = pos +
+            Quaternion.AngleAxis(360f * (i + 1) / segs, Vector3.up) * (Vector3.right * radius);
+            Debug.DrawLine(drawer_1, drawer_2, col);
+        }
+        for (int i = 0; i < segs; i++)
+        {
+            Vector3 drawer_1 = pos +
+            Quaternion.AngleAxis(360f * i / segs,Vector3.right) * (Vector3.up * radius);
+            Vector3 drawer_2 = pos +
+            Quaternion.AngleAxis(360f * (i + 1) / segs,Vector3.right) * (Vector3.up * radius);
+            Debug.DrawLine(drawer_1,drawer_2, col);
+        }
+        for (int i = 0; i < segs; i++)
+        {
+            Vector3 drawer_1 = pos +
+            Quaternion.AngleAxis(360f * i / segs,Vector3.forward) * (Vector3.right * radius);
+            Vector3 drawer_2 = pos +
+            Quaternion.AngleAxis(360f * (i + 1) / segs,Vector3.forward) * (Vector3.right * radius);
+            Debug.DrawLine(drawer_1,drawer_2, col);
         }
     }
 

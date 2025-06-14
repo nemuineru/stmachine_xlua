@@ -33,7 +33,7 @@ public class AnimNodeMain : MonoBehaviour
 
         MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
         
-        PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.MainMixer);
+        PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.mixMixer);
         
         ChangeAnim();
 
