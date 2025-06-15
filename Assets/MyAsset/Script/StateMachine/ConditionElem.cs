@@ -105,6 +105,7 @@ public class LC
 
     public float CheckStateTime(Entity et)
     {
+        Debug.Log(et.stateTime);
         return et.stateTime;
     }
 

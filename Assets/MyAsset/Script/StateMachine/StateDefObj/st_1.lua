@@ -20,8 +20,12 @@ function QueuedStateID(in_entity)
         table.insert( verd, 2 )
     end
 
-    if( LC:CheckStateTime(in_entity) > 0 ) then
+    if( LC:CheckStateTime(in_entity) > 2 ) then
         table.insert( verd, 0 ) 
+    end
+    -- idleのanimを指定する
+    if( LC:CheckStateTime(in_entity) == 2 ) then
+        table.insert( verd, 100 ) 
     end
     return verd
 end

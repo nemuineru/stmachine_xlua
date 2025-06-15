@@ -175,6 +175,9 @@ public class StateDef
     public string StateDefName = "Default";
     public Entity entity;
     public int StateDefID = 0;
+
+    //フレーム数で考慮
+    internal int stateTime = 0;
     
     public lua_Read PriorCondition;
 
@@ -326,7 +329,8 @@ public class scAnimSet : StateController
     internal override void OnExecute()
     {
         entity.animID = changeAnimID.valueGet(loadParams,entity);
-        AnimDef animFindByID = entity.animListObject.animDef.ToList().Find(x => x.ID == changeAnimID.valueGet(loadParams,entity));
+        AnimDef animFindByID = entity._animListObject_onGame.animDef.ToList().Find
+        (x => x.ID == changeAnimID.valueGet(loadParams, entity));
         //設定されたIDが見つかれば、そのParameterと同様に設定..
         if (animFindByID != null)
         {
@@ -350,12 +354,17 @@ public class scAnimParamChange : StateController
 
     internal override void OnExecute()
     {
-        AnimDef animFindByID =
-        entity.MainAnimMixer.Mixers.First(x => x.def.ID ==  changeAnimID.valueGet(loadParams,entity)).def;
-        //設定されたIDが見つかれば、そのParameterと同様に設定..
-        if (animFindByID != null)
+        MixAnimNode findNode = entity.MainAnimMixer.Mixers.First(x => x != null
+        && x.def.ID == changeAnimID.valueGet(loadParams, entity));
+        if (findNode != null)
         {
-            entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet(loadParams,entity));
+            AnimDef animFindByID =
+            findNode.def;
+            //設定されたIDが見つかれば、そのParameterと同様に設定..
+            if (animFindByID != null)
+            {
+                entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet(loadParams, entity));
+            }
         }
     }
 }
@@ -429,7 +438,7 @@ public class scChangeState : StateController
     internal override void OnExecute()
     {
         // Debug.Log("stateTime set to 0");
-        entity.stateTime = 0;
+        entity.isStateChanged = true;
         // Debug.Log("stateID changes to " + changeTo);
         entity.CurrentStateID = changeTo;
         // Debug.Log("stchanged END");

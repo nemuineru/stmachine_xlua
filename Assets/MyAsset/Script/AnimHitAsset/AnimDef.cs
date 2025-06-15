@@ -106,24 +106,38 @@ public class MixAnimNode
         }
         */
 
-        //アニメのウェイトを自動的に設定する.
-        public void changeMixerWeight()
+    //アニメのウェイトを自動的に設定する.
+    public void changeMixerWeight()
+    {
+        if(def != null)
         {
-            if(def != null)
+            //currentAnimTimeが0の時、wgが0となるので..
+            float InTime = Mathf.Clamp01((Mathf.Epsilon + currentAnimTime - startAnimTime) / (Mathf.Epsilon + def.blendInTime));
+            float OutTime = Mathf.Clamp01((endAnimTime - currentAnimTime) / (Mathf.Epsilon + def.blendOutTime));
+            float wg = InTime * OutTime;
+            //Debug.Log(this.def.ID + " WeightTime : " + wg);
+            //全体のミキシングの時間を設定する.
+            MixWeight = wg;
+            // デバッグ表示 - ミックスウェイト値の表示
+            Debug.Log(this.def.ID + " Time Calclation MixWeight - " + MixWeight + " calc As " + InTime + "," + OutTime );
+            
+            
+            // AnimDef中のWeight値は1で固定とする.
+            // MixWeightの時間を考慮してアニメーションの設定をしたいが、
+            // ロード開始時に屈みポーズのままからスタートするので修正が必要..
+            // おそらくはwgの値が0となっている際が原因だろうか
+            
+            def.ChangeWeight(1f);
+
+            //defで設定したanimclipのMixWeightをここで指定する.
+            for (int i = 0; i < PlayList.Length; i++)
             {
-                //全体のミキシングの時間を設定する.
-                MixWeight = Mathf.Clamp01((currentAnimTime  - startAnimTime) / (Mathf.Epsilon + def.blendInTime)) * 
-                Mathf.Clamp01((endAnimTime - currentAnimTime) / (Mathf.Epsilon + def.blendOutTime));
-                //Debug.Log(this.def.ID + " MixWeight - " + MixWeight);
-                def.ChangeWeight(1f);
-                //時間設定.
-                for (int i = 0; i < PlayList.Length; i++)
-                {
-                    var player = PlayList[i];
-                    Mixer.SetInputWeight(i, def.animClip[i].MixWeightSet);
-                }
+                var player = PlayList[i];
+                Mixer.SetInputWeight(i, def.animClip[i].MixWeightSet);
+                //Debug.Log(this.def.ID + " MixWeight - " + def.animClip[i].MixWeightSet);
             }
         }
+    }
 
         //現アニメーションの時間を現在時刻に設定。
         public void Animations()
@@ -194,7 +208,7 @@ public class MainNodeConfigurator
         // gameobjectはEntityが存在するものとして扱っているが,
         //頭悪いなぁ..
         root = animator.gameObject.GetComponent<Entity>();
-        
+
         PrimalPlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
         //初期はMixerの数分のノードのみ.
         mixMixer = AnimationLayerMixerPlayable.Create(PrimalGraph, Mixers.Length);
@@ -247,28 +261,33 @@ public class MainNodeConfigurator
             //接続.
             PrimalGraph.Connect(node.Mixer, 0, mixMixer, indexOfEmpty);
             Debug.Log("Mixer Connected to " + indexOfEmpty);
-            SetAnim();
         }
     }
 
     //アニメーションの設定・ミキサーのウェイト設定..
-    public void SetAnim()
+    public void ___SetAnim()
     {
         int i = 0;
         float All = 0;
         for (int ids = 0; ids < Mixers.Length; ids++)
         {
-            if (Mixers[ids] != null)
+            if (Mixers[ids] != null && !Mixers[ids].isEndTime())
+            {
+                Debug.Log(ids + " of MixerWeight " + Mixers[ids].MixWeight);
                 All += Mixers[ids].MixWeight;
+            }
         }
         foreach (var m in Mixers)
         {
             if (m != null)
             {
+                //あれ,なんでこんな所にanimMixerを変えるスクリプトが付いてるんだ...?
                 m.Animations();
-                //In-Outの設定を反映させる.
-                //Debug.Log(Mixers[i].def.ID + " MixerWeight " + Mixers[i].MixWeight / All);
-                mixMixer.SetInputWeight(i, Mixers[i].MixWeight / All);
+                //In-Outの設定を反映させる..はず.
+                //現段階だと、1 / 全部のMIXERの数となってるため、In-Out割合を考慮して取得する必要がある..
+                float WeightSet = All != 0 ? Mixers[i].MixWeight / All : 1f;
+                Debug.Log(Mixers[i].def.ID + " MixerWeight " + WeightSet);
+                mixMixer.SetInputWeight(i, WeightSet);
                 if (m.isEndTime())
                 {
                     string MixOf = m.def.ID.ToString();
@@ -281,8 +300,51 @@ public class MainNodeConfigurator
         }
         MainAnimDef.initEntityAt(root);
         MainAnimDef.checkClssCapsule();
+    }
+    
+    //修正したい.
+    public void SetAnim()
+    {
+        int i = 0;
+        float All = 0;
+        foreach (var m in Mixers)
+        {
+            if (m != null)
+            {
+                //mixerのアニメーションを先ず更新
+                //EndTimeに到達しているならAllから外す.
+                m.Animations();
+                if (m.isEndTime())
+                {
+                    string MixOf = m.def.ID.ToString();
+                    PrimalGraph.Disconnect(mixMixer, i);
+                    Mixers[i] = null;
+                    Debug.Log("Mixer Erased : " + MixOf);
+                }
+                else
+                {
+                    All += Mixers[i].MixWeight;
+                }
+            }
+            i++;
+        }
+
+        for (int ids = 0; ids < Mixers.Length && Mixers.Length != 0; ids++)
+        {
+            if (Mixers[ids] != null)
+            {
+                float WeightSet = All != 0 ? Mixers[ids].MixWeight / All : 1f;
+                Debug.Log(string.Format("ID {0} - All : {1} - MixWeight {2}", Mixers[ids].def.ID, All, WeightSet));
+                mixMixer.SetInputWeight(ids, WeightSet);
+            }
+        }
+        MainAnimDef.initEntityAt(root);
+        MainAnimDef.checkClssCapsule();
     }   
 }
+
+
+    
 
 //animDefには以下を登録 - 
 // アニメーションID, アニメーション名, アニメーションの速度, 
@@ -338,6 +400,7 @@ public class AnimDef
 
     public void ChangeWeight(float BaseWeight)
     {
+        //Debug.Log("Base Weight is " + BaseWeight);
         //AnimClipが1以下ならWeightは1のまま.
         if (animClip.Length <= 1)
         {
@@ -346,7 +409,6 @@ public class AnimDef
         }
 
         //インデックス値などを登録.
-        //この時、全ウェイトを0に設定.
         clipPosStatement[] animPos = new clipPosStatement[animClip.Length];
         for (int i = 0; i < animClip.Length; i++)
         {

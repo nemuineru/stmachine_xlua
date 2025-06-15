@@ -309,13 +309,38 @@ MonoBehaviour:
   vCam: {fileID: 1661577789}
   CurrentStateID: 0
   defaultClss:
-    clssDefs: []
+    clssDefs:
+    - clssType: 0
+      attachTo: Face
+      showGizmo: 1
+      _entity: {fileID: 0}
+      attachTransform: {fileID: 0}
+      startPos: {x: 0, y: 0, z: 0}
+      endPos: {x: 0, y: 0, z: 0}
+      width: 0.1
+    - clssType: 0
+      attachTo: hip
+      showGizmo: 1
+      _entity: {fileID: 0}
+      attachTransform: {fileID: 0}
+      startPos: {x: 0, y: -0.07, z: 0}
+      endPos: {x: 0, y: 0.18, z: 0}
+      width: 0.14
+    - clssType: 1
+      attachTo: hand.L
+      showGizmo: 1
+      _entity: {fileID: 0}
+      attachTransform: {fileID: 0}
+      startPos: {x: 0, y: 0, z: 0}
+      endPos: {x: 0, y: 0.04, z: 0}
+      width: 0.08
     disableClssList: []
-  allChildTransforms: []
   animID: 0
   animListObject: {fileID: 11400000, guid: fa3e95b17fea8fc4e9b0432af0719e70, type: 2}
+  _animListObject_onGame: {fileID: 0}
   CurColor: {r: 0, g: 0, b: 0, a: 0}
   isOnGround: 1
+  isStateChanged: 0
   mesh: {fileID: 1048282691}
   DefList: {fileID: 11400000, guid: 50b674ead1e1ddb439138d3f4f503ba1, type: 2}
   wishingVect: {x: 0, y: 0, z: 0}

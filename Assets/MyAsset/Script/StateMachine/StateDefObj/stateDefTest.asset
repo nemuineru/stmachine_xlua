@@ -35,10 +35,10 @@ MonoBehaviour:
     - rid: 3002629213760520200
     - rid: 3002629213760520198
     - rid: 3002629213760520201
-    - rid: 3002629528666767591
     - rid: 3002629528666767590
+    - rid: 3002629528666767591
     - rid: 3579422750824726546
-  - StateDefName: Jumping
+  - StateDefName: Jabbin
     entity: {fileID: 0}
     StateDefID: 1
     PriorCondition:
@@ -52,8 +52,9 @@ MonoBehaviour:
       entity: {fileID: 0}
     LuaAsset: {fileID: -8122155829129254986, guid: cd00f5aa3ee1af945b2501f30c22bbeb, type: 3}
     StateList:
-    - rid: 3002629213760520202
+    - rid: 3579423065411158016
     - rid: 3002629213760520203
+    - rid: 3002629213760520202
   - StateDefName: Jumping
     entity: {fileID: 0}
     StateDefID: 2
@@ -126,7 +127,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 1
+          value: 80
           stLuaLoads: 
         stateControllerSubName: Jump
     - rid: 3002629213760520199
@@ -163,7 +164,7 @@ MonoBehaviour:
           value: 0
           stLuaLoads: 
         stateControllerSubName: ColorChange_red
-        color: {r: 1, g: 0, b: 0, a: 1}
+        color: {r: 1, g: 0.4669811, b: 0.4669811, a: 1}
     - rid: 3002629213760520203
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
@@ -226,3 +227,25 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: rotate
         RotateWeight: 0
+    - rid: 3579423065411158016
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: AnimSet_Jab
+        changeAnimID:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue: 2
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 

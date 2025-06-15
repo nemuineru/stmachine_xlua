@@ -19,7 +19,7 @@ public class Entity : MonoBehaviour
 
     public Rigidbody rigid;
 
-    public float stateTime;
+    public int stateTime;
 
     //移動用の設定など.
     public Transform targetTo;
@@ -36,7 +36,8 @@ public class Entity : MonoBehaviour
 
     //アニメーション管理用.
     public int animID = 0;
-    public AnimlistObject animListObject;
+    [SerializeField]
+    AnimlistObject animListObject;
 
     //AnimListObject自体を変更しないとする.
     [ReadOnly(true)]
@@ -49,6 +50,9 @@ public class Entity : MonoBehaviour
     public Color CurColor;
 
     public bool isOnGround;
+
+    //ステート直後のステート時間を0にするため、追加.
+    public bool isStateChanged = false;
 
 
     Material mat;
@@ -91,6 +95,9 @@ public class Entity : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        isStateChanged = false;
+
+        //SetAnimは毎フレーム更新する.
         MainAnimMixer.SetAnim();
         MainAnimMixer.PrimalGraph.Play();
 
@@ -98,7 +105,6 @@ public class Entity : MonoBehaviour
         Vector2 wish = (InputInstance.self.inputValues.MovingAxisRead);
         wishingVect = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up) * wish.y
          + Vector3.ProjectOnPlane(vCam.transform.right, Vector3.up) * wish.x;
-        stateTime += Time.deltaTime;
         mat.SetColor("_Color", CurColor);
 
         //地面判定.
@@ -113,9 +119,10 @@ public class Entity : MonoBehaviour
         DefList.stateDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
         if (currentState != null)
         {
-            //Debug.Log("Executed stateDef - " + CurrentStateID);
+            Debug.Log("Executed stateDef - " + CurrentStateID + " at time of " + stateTime);
             currentState.Execute();
         }
+        stateTime = isStateChanged ? 0 : stateTime + 1;
     }
 
 //アニメーション変更..
@@ -127,13 +134,6 @@ public class Entity : MonoBehaviour
             MainAnimMixer.ChangeAnim(animFindByID);
         }
     }
-
-//アニメーションパラメータ変更..
-    public void ChangeAnimWeight(Vector2 inputParams)
-    {
-        
-    }
-
 
     //前プロジェクトのように、スクリプト内でステートをとりあえず記述.
     //今回は最初のstatedefのLua内で読み出すステートを指定.
