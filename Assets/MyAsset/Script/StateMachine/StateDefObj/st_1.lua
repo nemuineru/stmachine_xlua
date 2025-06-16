@@ -12,7 +12,7 @@ function QueuedStateID(in_entity)
     selfStTime = LC:CheckStateTime(in_entity) 
 
     verd = {}
-    if (selfOnGrd == true and selfJump == true) then 
+    if (selfOnGrd == true and selfJump == true and LC:CheckStateTime(in_entity) > 6) then 
         table.insert( verd, 1 )
     end
 
@@ -20,11 +20,11 @@ function QueuedStateID(in_entity)
         table.insert( verd, 2 )
     end
 
-    if( LC:CheckStateTime(in_entity) > 2 ) then
+    if( LC:CheckStateTime(in_entity) > 1 ) then
         table.insert( verd, 0 ) 
     end
     -- idleのanimを指定する
-    if( LC:CheckStateTime(in_entity) == 2 ) then
+    if( LC:CheckStateTime(in_entity) == 1 ) then
         table.insert( verd, 100 ) 
     end
     return verd

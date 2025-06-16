@@ -5,12 +5,18 @@ local Debug = CS.UnityEngine.Debug;
     function QueuedStateID(in_entity)
 
         verd = {}
-        Debug.Log(LC:CheckStateTime(in_entity))
-        if ( LC:CheckStateTime(in_entity) > 10 ) then 
+        CurrentTime = LC:CheckStateTime(in_entity)
+        selfJump = LC:CheckButtonPressed()
+        if ( CurrentTime > 9 ) then 
             table.insert( verd, 1 )
         end
-        if( LC:CheckStateTime(in_entity) == 0 ) then
+        if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
+        end
+
+        -- Kick Combo
+        if( CurrentTime == 9 and selfJump == true) then
+            table.insert( verd, 2 ) 
         end
     return verd
 end 

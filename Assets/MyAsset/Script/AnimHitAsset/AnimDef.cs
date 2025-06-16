@@ -28,6 +28,8 @@ public class MixAnimNode
 
         public float MixWeight = 1f;
 
+        public bool isAdditive;
+
 
 
         [SerializeField]
@@ -83,7 +85,7 @@ public class MixAnimNode
             
             
             //Output先は固定のため0.
-            Mixer.ConnectInput(i, PlayList[PlayList.Length - 1], 0);
+            Mixer.ConnectInput(i, PlayList[PlayList.Length - 1], 0);            
             SetStartTime(Time.time);
             //最初に設定されたinputWeightに合わせる.
             //Mixer.SetInputWeight(i, 1f / def.animClip.Length);//anims.MixWeightSet);
@@ -211,7 +213,7 @@ public class MainNodeConfigurator
 
         PrimalPlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
         //初期はMixerの数分のノードのみ.
-        mixMixer = AnimationLayerMixerPlayable.Create(PrimalGraph, Mixers.Length);
+        mixMixer = AnimationLayerMixerPlayable.Create(PrimalGraph, Mixers.Length, false);
 
     }
 
@@ -230,7 +232,7 @@ public class MainNodeConfigurator
     //アニメ変更時の挙動.
     //defを代入し、リセットする.
     //この時、MainAnimは代数に変更.
-    public void ChangeAnim(AnimDef def)
+    public void ChangeAnim(AnimDef def, bool AdditiveIsTrue = false)
     {
         //接続先で、最も小さい値でソケットが空いているものを選択
         int indexOfEmpty = -1;
@@ -254,9 +256,12 @@ public class MainNodeConfigurator
             }
             Mixers[indexOfEmpty] = new MixAnimNode();
             node = Mixers[indexOfEmpty];
+            node.isAdditive = AdditiveIsTrue;
             node.def = def;
             node.CreatePlayerNodes(ref PrimalGraph);
             MainAnimDef = node.def;
+            //Additiveに設定するか？
+            mixMixer.SetLayerAdditive((uint)indexOfEmpty, AdditiveIsTrue);
 
             //接続.
             PrimalGraph.Connect(node.Mixer, 0, mixMixer, indexOfEmpty);
@@ -301,12 +306,16 @@ public class MainNodeConfigurator
         MainAnimDef.initEntityAt(root);
         MainAnimDef.checkClssCapsule();
     }
-    
+
     //修正したい.
+    //何かパラメータ値が足りないのだろうか。　トランジションの間に
+    //変な屈みポーズが見られる.
+    //Additiveに設定されていないなら..という感じだろうか?
     public void SetAnim()
     {
         int i = 0;
         float All = 0;
+        float Max = 0;
         foreach (var m in Mixers)
         {
             if (m != null)
@@ -323,19 +332,31 @@ public class MainNodeConfigurator
                 }
                 else
                 {
-                    All += Mixers[i].MixWeight;
+                    if (m.isAdditive != true)
+                    {
+                        All += m.MixWeight;
+                        Max = Mathf.Max(Max, m.MixWeight);
+                    }
                 }
             }
             i++;
         }
+        float F = 0;
 
         for (int ids = 0; ids < Mixers.Length && Mixers.Length != 0; ids++)
         {
             if (Mixers[ids] != null)
             {
-                float WeightSet = All != 0 ? Mixers[ids].MixWeight / All : 1f;
+                float Selected = Mixers[ids].MixWeight;
+                float WeightSet = All > 0 ? Selected / Max : 1f;
+                if (Mixers[ids].isAdditive)
+                {
+                    WeightSet = Selected;
+                }
                 Debug.Log(string.Format("ID {0} - All : {1} - MixWeight {2}", Mixers[ids].def.ID, All, WeightSet));
                 mixMixer.SetInputWeight(ids, WeightSet);
+                F += WeightSet;
+                Debug.Log(F);
             }
         }
         MainAnimDef.initEntityAt(root);
@@ -931,9 +952,9 @@ public class clssDef
         int x = (int)((end - start).magnitude / radius);
         for (int i = 0; i < x + 1 ; i++)
         {
-            Debug.Log("Drawin Capsules");
+            //Debug.Log("Drawin Capsules");
             Vector3 DrawAt = start + (end - start) * ((float)i / Mathf.Max(1, x));
-            Debug.Log("Drawin Sphere at" + DrawAt);
+            //Debug.Log("Drawin Sphere at" + DrawAt);
             DrawWireSphere_OnDebug(DrawAt, radius, col);
         }
     }
@@ -941,7 +962,7 @@ public class clssDef
     public void DrawWireSphere_OnDebug(Vector3 pos, float radius, Color col)
     {
         int segs = 12;
-        Debug.Log(pos);
+        //Debug.Log(pos);
         for (int i = 0; i < segs; i++)
         {
             Vector3 drawer_1 = pos +

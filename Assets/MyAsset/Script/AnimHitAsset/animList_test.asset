@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: animList_test
   m_EditorClassIdentifier: 
   animDef:
-  - mixType: 1
+  - mixType: 3
     MixParamName: 
-    CurrentParamPos: {x: 0, y: 6.981818e-21}
+    CurrentParamPos: {x: 0, y: 0}
     ID: 0
     Name: Movement
     animClip:
@@ -44,14 +44,14 @@ MonoBehaviour:
       startFrame: 0
       cycleOffset: 0
       mixPosition: {x: 1, y: 0}
-    blendInTime: 0
-    blendOutTime: 0
+    blendInTime: 0.1
+    blendOutTime: 0.001
     useDefaultClss: 1
     clssSetting:
       clssDefs:
       - clssType: 0
         attachTo: UpperLeg.L
-        showGizmo: 0
+        showGizmo: 1
         _entity: {fileID: 0}
         attachTransform: {fileID: 0}
         startPos: {x: 0, y: 0, z: 0}
@@ -70,17 +70,43 @@ MonoBehaviour:
       startFrame: 0
       cycleOffset: 0
       mixPosition: {x: 0, y: 0}
-    blendInTime: 0
-    blendOutTime: 0.05
+    blendInTime: 0.1
+    blendOutTime: 0.2
     useDefaultClss: 0
     clssSetting:
       clssDefs:
       - clssType: 1
-        attachTo: hand.R
-        showGizmo: 0
+        attachTo: hand.L
+        showGizmo: 1
         _entity: {fileID: 0}
         attachTransform: {fileID: 0}
         startPos: {x: 0, y: 0, z: 0}
+        endPos: {x: 0, y: 0, z: 0}
+        width: 0.18
+      disableClssList:
+      - Face
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
+    ID: 3
+    Name: Punch
+    animClip:
+    - Clip: {fileID: 7400000, guid: 418d04f5b5a9f8e429e08773447a79ad, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0.1
+    blendOutTime: 0.2
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs:
+      - clssType: 1
+        attachTo: LowerLeg.R
+        showGizmo: 1
+        _entity: {fileID: 0}
+        attachTransform: {fileID: 0}
+        startPos: {x: 0, y: 0.15, z: 0}
         endPos: {x: 0, y: 0, z: 0}
         width: 0.18
       disableClssList:

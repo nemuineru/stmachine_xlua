@@ -55,6 +55,7 @@ MonoBehaviour:
     - rid: 3579423065411158016
     - rid: 3002629213760520203
     - rid: 3002629213760520202
+    - rid: 3579423095655497728
   - StateDefName: Jumping
     entity: {fileID: 0}
     StateDefID: 2
@@ -69,7 +70,6 @@ MonoBehaviour:
       entity: {fileID: 0}
     LuaAsset: {fileID: -8122155829129254986, guid: cd00f5aa3ee1af945b2501f30c22bbeb, type: 3}
     StateList:
-    - rid: 3002629213760520202
     - rid: 3002629213760520203
   - StateDefName: Jumping
     entity: {fileID: 0}
@@ -249,3 +249,12 @@ MonoBehaviour:
           stParamValue: {x: 0, y: 0}
           useID: -1
           stLuaLoads: 
+    - rid: 3579423095655497728
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: ChangeState To LowKick
+        changeTo: 2

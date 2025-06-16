@@ -385,20 +385,28 @@ public class scMove : StateController
     }
 }
 
-
+//攻撃判定プログラム.
 [System.Serializable]
 [SerializeField]
 public class scHitDef : StateController
 {
+
     [SerializeField]
-    stParams<int> changeAnimID;
+    stParams<float> Damage;
     
     [SerializeField]
     stParams<Vector2> animParameter; 
 
+    [SerializeField]
+    stParams<Vector3> HitVect;
+    
+    [SerializeField]
+    stParams<int> HitPause;
+    
+
     internal override void OnExecute()
     {
-        
+
     }
 
 }
