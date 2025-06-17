@@ -125,6 +125,7 @@ public class InputCommandBuffer : MonoBehaviour
 
         buff.MoveAxis = InputInstance.self.inputValues.MovingAxis;
         inputs = InputInstance.self.inputValues.MovingAxis_Digital;
+
         inputs += (InputInstance.self.inputValues.MainButton_Read) * 0B_00000001;
         inputs += (InputInstance.self.inputValues.ActionButton_Read) * 0B_00000010;
         inputs += (InputInstance.self.inputValues.SubButton_Read) *  0B_00000100;
