@@ -77,8 +77,8 @@ public class entityInputManager
     // A, Bを離したとき.. 10000以降を参照し 値を調査
     // 
 
-    void CheckInput()
+    void CheckInput(string command)
     {
-
+        
     }
 }
