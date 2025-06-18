@@ -75,10 +75,30 @@ public class entityInputManager
     // InputValueの入力に0の後に1が有るものを探す.
     // "A^ .. B^.. ハット記号"
     // A, Bを離したとき.. 10000以降を参照し 値を調査
+    // コンマ(,)でコマンドごとを分ける.
     // 
 
     void CheckInput(string command)
     {
-        
+        string[] commands = command.Split(',');
+        structInputs[] anlInputs = new structInputs[8];
+        //2進数のボタン比較用.
+        anlInputs[0] = new structInputs(0B_00000001,"M");
+        anlInputs[1] = new structInputs(0B_00000010,"A");
+        anlInputs[2] = new structInputs(0B_00000100,"S");
+        anlInputs[3] = new structInputs(0B_00001000,"U");
+        anlInputs[4] = new structInputs(0B_00010000,"E1");
+        anlInputs[5] = new structInputs(0B_00100000,"E2");
+        anlInputs[6] = new structInputs(0B_01000000,"st");
+        anlInputs[7] = new structInputs(0B_10000000,"sl");
+
     }
+    struct structInputs
+    {
+        public structInputs(int bitSet, string strSet) { bitNum = bitSet; drawStr = strSet; }
+
+        public int bitNum { get; set; }
+        public string drawStr { get; set; }
+    }
+    
 }
