@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 //entityの持つInput管理用クラス.
@@ -78,19 +79,37 @@ public class entityInputManager
     // コンマ(,)でコマンドごとを分ける.
     // 
 
-    void CheckInput(string command)
+    void CheckInput(string command, int buffer)
     {
         string[] commands = command.Split(',');
+        for (int i = 0; i < commands.Length; i++)
+        {
+            //前後及び余分な空白を消す.
+            commands[i] = commands[i].Trim().Replace(" ", "");
+        }
         structInputs[] anlInputs = new structInputs[8];
         //2進数のボタン比較用.
-        anlInputs[0] = new structInputs(0B_00000001,"M");
-        anlInputs[1] = new structInputs(0B_00000010,"A");
-        anlInputs[2] = new structInputs(0B_00000100,"S");
-        anlInputs[3] = new structInputs(0B_00001000,"U");
-        anlInputs[4] = new structInputs(0B_00010000,"E1");
-        anlInputs[5] = new structInputs(0B_00100000,"E2");
-        anlInputs[6] = new structInputs(0B_01000000,"st");
-        anlInputs[7] = new structInputs(0B_10000000,"sl");
+        anlInputs[0] = new structInputs(0B_00000001, "a");
+        anlInputs[1] = new structInputs(0B_00000010, "b");
+        anlInputs[4] = new structInputs(0B_00010000, "c");
+        anlInputs[2] = new structInputs(0B_00000100, "x");
+        anlInputs[3] = new structInputs(0B_00001000, "y");
+        anlInputs[5] = new structInputs(0B_00100000, "z");
+        anlInputs[6] = new structInputs(0B_01000000, "s");
+        anlInputs[7] = new structInputs(0B_10000000, "o");
+
+        //コンマで区切られたコマンド値の読み出し..
+        //buffer値に基づき、commandBufferの配列を読み出す..
+        //(~!)xxab(^_)
+        //という感じで.
+        //小文字と大文字は分ける.
+        foreach (string sCom in commands)
+        {
+            string conditions = Regex.Match(sCom, @"[~_^]").Value;
+            string seconds = Regex.Match(sCom, @"[\d]").Value;
+            string button = Regex.Match(sCom, @"[a-z]").Value;
+            string stick = Regex.Match(sCom, @"[A-Z]").Value;
+        }
 
     }
     struct structInputs
