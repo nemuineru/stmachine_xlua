@@ -38,6 +38,7 @@ public class entityInputManager
     public commandRecord[] commandBuffer = new commandRecord[1];
 
     //手動キャラクター操作用の呼び出しクラス.
+    //これ、接続したコントローラー別に読み出したいけど時間かかりそうなのでやめる.
     void RecordInput_Player()
     {
         //ニュートラルを基準とする.
@@ -98,17 +99,33 @@ public class entityInputManager
         anlInputs[6] = new structInputs(0B_01000000, "s");
         anlInputs[7] = new structInputs(0B_10000000, "o");
 
+        //最新のコマンドバッファ値.
+        int commandBuffer_max = commandBuffer.Length;
+
+
         //コンマで区切られたコマンド値の読み出し..
         //buffer値に基づき、commandBufferの配列を読み出す..
         //(~!)xxab(^_)
         //という感じで.
         //小文字と大文字は分ける.
+
+        //時間かかるから先ずはbutton + conditionの一部だけ使う.
         foreach (string sCom in commands)
         {
             string conditions = Regex.Match(sCom, @"[~_^]").Value;
             string seconds = Regex.Match(sCom, @"[\d]").Value;
             string button = Regex.Match(sCom, @"[a-z]").Value;
             string stick = Regex.Match(sCom, @"[A-Z]").Value;
+
+
+            switch (button[0])
+            {
+                case 'a':
+                    {
+                        break;
+                    }
+            }
+
         }
 
     }
