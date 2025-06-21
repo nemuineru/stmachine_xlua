@@ -117,13 +117,42 @@ public class entityInputManager
             string button = Regex.Match(sCom, @"[a-z]").Value;
             string stick = Regex.Match(sCom, @"[A-Z]").Value;
 
+            structInputs structInputs = anlInputs[7];
+
 
             switch (button[0])
             {
                 case 'a':
                     {
+                        structInputs = anlInputs[0];
                         break;
                     }
+                case 'b':
+                    {
+                        structInputs = anlInputs[1];
+                        break;
+                    }
+            }
+            
+            int b = commandBuffer[0].inputs;
+
+            switch (conditions[0])
+            {
+                //押した瞬間を確認
+                case '_':
+                    {
+                        break;
+                    }
+                //話された瞬間を確認
+                case '/':
+                    {
+                        break;
+                    }
+                //defaultは入力値のみを見るとして..
+                default:
+                    {
+                        break;
+                    } 
             }
 
         }
