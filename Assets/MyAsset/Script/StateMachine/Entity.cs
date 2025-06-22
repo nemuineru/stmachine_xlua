@@ -62,6 +62,9 @@ public class Entity : MonoBehaviour
 
     public Vector3 wishingVect;
 
+    //Input Manager for each entitys
+    internal entityInputManager entityInput = new entityInputManager();
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -95,6 +98,11 @@ public class Entity : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //後で消します.
+        //
+        entityInput.RecordInput_Player(0);
+
+
         isStateChanged = false;
 
         //SetAnimは毎フレーム更新する.

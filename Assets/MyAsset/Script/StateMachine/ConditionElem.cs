@@ -109,8 +109,8 @@ public class LC
         return et.stateTime;
     }
 
-    public bool CheckButtonPressed()
+    public bool CheckButtonPressed(Entity et)
     {
-        return InputInstance.self.inputValues.MainButton_Read == 10;
+        return et.entityInput.CheckInput("a_",1);
     }
 }

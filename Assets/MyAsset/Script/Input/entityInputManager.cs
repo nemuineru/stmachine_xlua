@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 //entityの持つInput管理用クラス.
 //
@@ -36,18 +39,20 @@ public class entityInputManager
 
     //コマンド記録用.
     public commandRecord[] commandBuffer = new commandRecord[1];
+    //60個まで登録.
+    int commandBuffer_max = 60;
 
     //手動キャラクター操作用の呼び出しクラス.
     //これ、接続したコントローラー別に読み出したいけど時間かかりそうなのでやめる.
-    void RecordInput_Player()
+    public void RecordInput_Player(int controllerID)
     {
         //ニュートラルを基準とする.
         //上下左右の値を考える - 
 
         int inputs = 5;
-        commandRecord buff = new commandRecord();
+        commandRecord rec = new commandRecord();
 
-        buff.MoveAxis = InputInstance.self.inputValues.MovingAxis;
+        rec.MoveAxis = InputInstance.self.inputValues.MovingAxis;
         inputs = InputInstance.self.inputValues.MovingAxis_Digital;
 
         //以下、MainButtonなどは10の倍数値が最初から足されているため、ボタンインプット値の読み出しの際は
@@ -60,9 +65,30 @@ public class entityInputManager
         inputs += (InputInstance.self.inputValues.Extra2Button_Read) * 0B_00100000;
         inputs += (InputInstance.self.inputValues.MenuButton_Read) * 0B_01000000;
         inputs += (InputInstance.self.inputValues.SubMenuButton_Read) * 0B_10000000;
-        buff.inputs = inputs;
-        commandBuffer.CopyTo(commandBuffer = new commandRecord[commandBuffer.Length + 1], 0);
-        commandBuffer[commandBuffer.Length - 1] = buff;
+        rec.inputs = inputs;
+        RecordInput_Core(rec);
+    }
+
+    //behaviorDesignerに読み込ませるためのインプット
+    public void RecordInput_AI()
+    {
+
+    }
+
+    void RecordInput_Core(commandRecord b)
+    {
+        //一番古いコマンドが最後尾になるため、消し飛ばす
+        if (commandBuffer.Length > commandBuffer_max)
+        {
+            commandRecord[] coms = commandBuffer;
+            Array.Copy(coms,0,commandBuffer,1,commandBuffer_max - 1);
+        }
+        else
+        {
+            commandBuffer.CopyTo(commandBuffer = new commandRecord[commandBuffer.Length + 1], 0);
+        }
+        //一番最初にくっつける
+        commandBuffer[0] = b;
     }
 
     //commandRecordのinputsは,下記に考慮される - 
@@ -80,8 +106,9 @@ public class entityInputManager
     // コンマ(,)でコマンドごとを分ける.
     // 
 
-    void CheckInput(string command, int buffer)
+    public bool CheckInput(string command, int buffer)
     {
+        bool result = false;
         string[] commands = command.Split(',');
         for (int i = 0; i < commands.Length; i++)
         {
@@ -117,47 +144,91 @@ public class entityInputManager
             string button = Regex.Match(sCom, @"[a-z]").Value;
             string stick = Regex.Match(sCom, @"[A-Z]").Value;
 
-            structInputs structInputs = anlInputs[7];
+            structInputs checker = anlInputs[7];
 
 
             switch (button[0])
             {
                 case 'a':
                     {
-                        structInputs = anlInputs[0];
+                        checker = anlInputs[0];
                         break;
                     }
                 case 'b':
                     {
-                        structInputs = anlInputs[1];
+                        checker = anlInputs[1];
                         break;
                     }
             }
-            
-            int b = commandBuffer[0].inputs;
 
+            int b_rn, b_bf;
+
+            b_rn = commandBuffer[0].inputs;
+            b_bf = b_rn;
+            if (commandBuffer_max > 1)
+            {
+                b_bf = commandBuffer[1].inputs;
+            }
+
+
+            //conditionの最初の文問のみ..
             switch (conditions[0])
             {
                 //押した瞬間を確認
+                //2フレーム以上必要.
                 case '_':
                     {
+                        if (ButtonCheck(b_rn, checker.bitNum) == '+' && commandBuffer_max > 1 &&
+                        ButtonCheck(b_bf, checker.bitNum) == '-')
+                        {
+                            result = true;
+                        }
                         break;
                     }
                 //話された瞬間を確認
-                case '/':
+                //1フレのみ.
+                case '^':
                     {
+                        if (ButtonCheck(b_rn, checker.bitNum) == '-')
+                        {
+                            result = true;
+                        }
                         break;
                     }
                 //defaultは入力値のみを見るとして..
+                //1フレのみを計測
                 default:
                     {
+                        if (ButtonCheck(b_rn, checker.bitNum) == '+')
+                        {
+                            result = true;
+                        }
                         break;
-                    } 
+                    }
             }
 
         }
-
+        return result;
     }
+
+    //選択した
+    char ButtonCheck(int button, int bitNum)
+    {
+        int Stick = button % 10;
+        int buttonInput_Push = (button - Stick) % 10000;
+        int buttonInput_Release = ((button - Stick) - buttonInput_Push) / 10000;
+
+        if ((bitNum & buttonInput_Push / 10) != 0)
+        {
+            return '+';
+        }
+        if ((bitNum & buttonInput_Release) != 0)
+        {
+            return '-';
+        }
+        return '.';
+    }
+
     struct structInputs
     {
         public structInputs(int bitSet, string strSet) { bitNum = bitSet; drawStr = strSet; }
