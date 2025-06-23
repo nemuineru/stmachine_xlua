@@ -169,6 +169,7 @@ public class entityInputManager
             {
                 b_bf = commandBuffer[1].inputs;
             }
+            Debug.Log(b_rn + " " + b_bf);
 
 
             //conditionの最初の文問のみ..
@@ -178,8 +179,9 @@ public class entityInputManager
                 //2フレーム以上必要.
                 case '_':
                     {
+                    Debug.Log("cmd check - pressPulse");
                         if (ButtonCheck(b_rn, checker.bitNum) == '+' && commandBuffer_max > 1 &&
-                        ButtonCheck(b_bf, checker.bitNum) == '-')
+                        (ButtonCheck(b_bf, checker.bitNum) == '.' || ButtonCheck(b_bf, checker.bitNum) == '-'))
                         {
                             result = true;
                         }

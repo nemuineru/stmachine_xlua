@@ -8,7 +8,7 @@ local Debug = CS.UnityEngine.Debug;
 -- ステート変更のファンクション
 function QueuedStateID(in_entity)
     selfOnGrd = LC:isEntityOnGround(in_entity)
-    selfJump = LC:CheckButtonPressed()
+    selfJump = LC:CheckButtonPressed(in_entity)
     selfStTime = LC:CheckStateTime(in_entity) 
 
     verd = {}

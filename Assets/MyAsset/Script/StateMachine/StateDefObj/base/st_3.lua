@@ -3,20 +3,17 @@ local Debug = CS.UnityEngine.Debug;
 
 -- ステート変更のファンクション
     function QueuedStateID(in_entity)
-
         verd = {}
         CurrentTime = LC:CheckStateTime(in_entity)
-        selfJump = LC:CheckButtonPressed()
-        if ( CurrentTime > 9 ) then 
-            table.insert( verd, 1 )
-        end
+        selfJump = LC:CheckButtonPressed(in_entity)
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-
-        -- Kick Combo
-        if( CurrentTime == 9 and selfJump == true) then
-            table.insert( verd, 2 ) 
+        if ( CurrentTime > 6 and CurrentTime <= 12 and selfJump ) then 
+            table.insert( verd, 2 )
+        end
+        if ( CurrentTime > 12 ) then 
+            table.insert( verd, 1 )
         end
     return verd
 end 

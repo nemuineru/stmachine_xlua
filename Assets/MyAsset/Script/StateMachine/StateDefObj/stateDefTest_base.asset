@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85bef611c4806534aab65ba4d51677e3, type: 3}
-  m_Name: stateDefTest
+  m_Name: stateDefTest_base
   m_EditorClassIdentifier: 
   stateDefs:
   - StateDefName: OnInitLoad
@@ -74,6 +74,7 @@ MonoBehaviour:
     - rid: 3579423095655497729
     - rid: 3002629213760520203
     - rid: 3579423095655497732
+    - rid: 3579423253479817222
   references:
     version: 2
     RefIds:
@@ -252,4 +253,13 @@ MonoBehaviour:
           value: 3
           stLuaLoads: 
         stateControllerSubName: SelfState Change
+        changeTo: 1
+    - rid: 3579423253479817222
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Back to jab
         changeTo: 1
