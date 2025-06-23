@@ -385,7 +385,9 @@ public class scMove : StateController
     }
 }
 
-//攻撃判定プログラム.
+//攻撃判定設定 - 指定の攻撃をシステムに予約する
+//攻撃があたった対象を予約されたステート番号5000..
+//ぶっちゃけめんどくせー。
 [System.Serializable]
 [SerializeField]
 public class scHitDef : StateController
