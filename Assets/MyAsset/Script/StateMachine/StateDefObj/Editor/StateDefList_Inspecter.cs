@@ -267,10 +267,18 @@ public class StateDefList_Inspector : Editor
                 //LuaConditionの文章習得.
                 SerializedProperty LuScript = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.LuaAsset));
 
+                SerializedProperty preStateVerdict = SelectedDefProperty.FindPropertyRelative("preStateVerdictName");
+                SerializedProperty preParamLoad = SelectedDefProperty.FindPropertyRelative("ParamLoadName");
+
                 //基本情報の表示
                 EditorGUILayout.PropertyField(stDefNameProperty);
                 EditorGUILayout.PropertyField(stDefIDProperty);
                 EditorGUILayout.PropertyField(LuScript);
+                EditorGUILayout.Space();
+                EditorGUILayout.PropertyField(preStateVerdict);
+                EditorGUILayout.PropertyField(preParamLoad);
+                EditorGUILayout.Space();
+
 
                 //stateControllerListを描写
                 _stateList[sDefSelectedIndex].DoLayoutList();

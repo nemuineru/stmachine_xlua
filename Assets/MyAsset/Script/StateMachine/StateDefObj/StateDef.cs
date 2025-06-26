@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Analytics;
 using XLua;
 using XLua.LuaDLL;
 
@@ -184,6 +186,9 @@ public class StateDef
     //executing state is decided from this.
     public TextAsset LuaAsset;
 
+    public string preStateVerdictName = "QueuedStateID";
+    public string ParamLoadName = "LuaOutput";
+
     [SerializeReference, SerializeField]
     public List<StateController> StateList = new List<StateController>();
 
@@ -202,17 +207,21 @@ public class StateDef
             env.Global.Set("LC", new LC());
 
             //メインのLUA仮想マシンに読み出すテキストを以下に記述.
+            if (LuaAsset != null)
+            { 
+                
             env.DoString(LuaAsset.text);
 
             //読み出しのQueueStateIDを記述するためのメソッドを作成
             lua_Read.CalcValues.QueuedStateID stateVerd =
-            env.Global.Get<lua_Read.CalcValues.QueuedStateID>("QueuedStateID");
+            env.Global.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
 
             //ステート宣言パラメータのメソッド作成
             lua_Read.CalcValues.luaOutParams stateDefParams =
-            env.Global.Get<lua_Read.CalcValues.luaOutParams>("LuaOutput");
+            env.Global.Get<lua_Read.CalcValues.luaOutParams>(ParamLoadName);
 
-            //executeStateIDsにはQueuedStateIDの値を入力
+                //executeStateIDsにはQueuedStateIDの値を入力
+            
             int[] ExecuteStateIDs = stateVerd.Invoke(entity);
             if (stateDefParams != null)
             {
@@ -225,7 +234,6 @@ public class StateDef
                 executingStr += ExecuteStateIDs[i] + " , ";
             }
             // Debug.Log(executingStr);
-
 
 
             //def中にあるstateを全部リストアップ
@@ -266,6 +274,7 @@ public class StateDef
                 }
             }
             */
+            }
         }
         else
         {
@@ -408,7 +417,7 @@ public class scHitDef : StateController
 
     internal override void OnExecute()
     {
-
+        //entity.MainAnimMixer.MainAnimDef.
     }
 
 }
