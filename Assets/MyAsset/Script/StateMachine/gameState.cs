@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class gameState : MonoBehaviour
-{ 
-    void Update()
+{
+    public List<Entity> entityList;
+    void ProvokeHitDef(Entity calledEntity)
     {
-
+        
     }
 }

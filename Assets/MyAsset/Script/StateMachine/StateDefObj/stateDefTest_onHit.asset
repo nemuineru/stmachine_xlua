@@ -20,6 +20,8 @@ MonoBehaviour:
       LuaScript: 
       entity: {fileID: 0}
     LuaAsset: {fileID: 0}
+    preStateVerdictName: 
+    ParamLoadName: 
     StateList:
     - rid: 3579423253479817227
   - StateDefName: OnHit
@@ -29,6 +31,8 @@ MonoBehaviour:
       LuaScript: 
       entity: {fileID: 0}
     LuaAsset: {fileID: 0}
+    preStateVerdictName: 
+    ParamLoadName: 
     StateList:
     - rid: 3579423253479817227
   references:
