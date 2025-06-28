@@ -10,6 +10,8 @@ using XLua.LuaDLL;
 
 //StateControllerに入力されるジェネリックの属性値に合わせ、計算.
 //Vector3とかstringとか入れられるようにしたい.
+//2025-06-28
+//I NEED TO MARK THIS WORK ON HITDEF
 [System.Serializable]
 public class stParams<Type>
 {
