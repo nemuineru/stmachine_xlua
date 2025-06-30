@@ -365,7 +365,7 @@ public class MainNodeConfigurator
 }
 
 
-    
+
 
 //animDefには以下を登録 - 
 // アニメーションID, アニメーション名, アニメーションの速度, 
@@ -687,7 +687,7 @@ public class AnimDef
     //アニメーションごとにオーバーライド・設定可能な判定をここで設定する.
     //null値が挿入されているならデフォルトを使用..と考える.
     [SerializeField]
-    clssSetting clssSetting = new clssSetting();
+    public clssSetting clssSetting = new clssSetting();
 
 
     public void initEntityAt(Entity init)
@@ -710,6 +710,14 @@ public class AnimDef
         }
     }
 
+    public bool clssCollided(Entity checkEntity)
+    {
+        //比較対象のentityの時間が取れてなーい！！
+        bool resl = clssSetting.clssCollided
+        (out Vector3 v1, out Vector3 v2, out float d,
+        clssDef.ClssType.Hit, checkEntity.defaultClss, 0f);
+        return resl;
+    }
 }
 
 
