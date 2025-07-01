@@ -9,7 +9,7 @@ public class gameState : MonoBehaviour
     static public gameState self;
     void Awake()
     {
-        if (self != null)
+        if (self == null)
         {
             self = this;
         }
@@ -22,7 +22,7 @@ public class gameState : MonoBehaviour
     public List<Entity> entityList;
 
     //HitDefを発火する際のイベント
-    void ProvokeHitDef(Entity calledEntity)
+    public void ProvokeHitDef(Entity calledEntity)
     {
         foreach (Entity e in entityList)
         {
@@ -36,7 +36,7 @@ public class gameState : MonoBehaviour
                     e.isStateChanged = true;
                     //一先ず、プレースホルダーとして
                     e.CurrentStateID = 5000;
-                    e.rigid.velocity = e.gameObject.transform.forward * -3.0f;
+                    e.rigid.velocity = e.gameObject.transform.forward * -3.0f + Vector3.up * 3.0f;
                 }
             }
         }

@@ -62,6 +62,9 @@ public class Entity : MonoBehaviour
 
     public Vector3 wishingVect;
 
+    //この秒数が0にならない限り動きを止める. stateTimeなども同様.
+    internal float HitPauseTime;
+
     //Input Manager for each entitys
     internal entityInputManager entityInput = new entityInputManager();
 

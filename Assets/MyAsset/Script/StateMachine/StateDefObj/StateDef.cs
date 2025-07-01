@@ -415,11 +415,11 @@ public class scHitDef : StateController
     
     [SerializeField]
     stParams<int> HitPause;
-    
+
 
     internal override void OnExecute()
     {
-        //entity.MainAnimMixer.MainAnimDef.
+        gameState.self.ProvokeHitDef(entity);
     }
 
 }
