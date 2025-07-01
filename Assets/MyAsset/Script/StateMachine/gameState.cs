@@ -20,6 +20,8 @@ public class gameState : MonoBehaviour
     }
 
     public List<Entity> entityList;
+
+    //HitDefを発火する際のイベント
     void ProvokeHitDef(Entity calledEntity)
     {
         foreach (Entity e in entityList)
@@ -28,11 +30,22 @@ public class gameState : MonoBehaviour
             if (e != calledEntity)
             {
                 bool f = calledEntity.MainAnimMixer.MainAnimDef.clssCollided(e);
+                //hitしたなら一先ずAnim番号を5000に飛ばしたい. ChangeState(5000)の最優先Queueとして組み込む.
                 if (f == true)
                 {
-
+                    e.isStateChanged = true;
+                    //一先ず、プレースホルダーとして
+                    e.CurrentStateID = 5000;
+                    e.rigid.velocity = e.gameObject.transform.forward * -3.0f;
                 }
             }
         }
     }
+
+}
+
+class hitDefParams
+{
+    Vector3 velset;
+    (float, float) hitStopTime = (0.3f, 0.3f);
 }
