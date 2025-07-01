@@ -50,7 +50,7 @@ MonoBehaviour:
           _setEssential: 0
           _setHidden: 1
           loadTypes: 0
-          stParamValue: 0
+          stParamValue: 5000
           useID: -1
           stLuaLoads: 
         animParameter:
