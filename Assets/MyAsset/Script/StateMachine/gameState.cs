@@ -29,6 +29,7 @@ public class gameState : MonoBehaviour
             //selfには反応しない
             if (e != calledEntity)
             {
+                Debug.Log(e.gameObject.name);
                 bool f = calledEntity.MainAnimMixer.MainAnimDef.clssCollided(e);
                 //hitしたなら一先ずAnim番号を5000に飛ばしたい. ChangeState(5000)の最優先Queueとして組み込む.
                 if (f == true)

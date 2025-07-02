@@ -19,9 +19,9 @@ MonoBehaviour:
     PriorCondition:
       LuaScript: 
       entity: {fileID: 0}
-    LuaAsset: {fileID: 0}
-    preStateVerdictName: 
-    ParamLoadName: 
+    LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
+    preStateVerdictName: QueuedStateID_0
+    ParamLoadName: LuaOutput
     StateList:
     - rid: 3579423253479817227
   - StateDefName: OnHit
@@ -30,11 +30,12 @@ MonoBehaviour:
     PriorCondition:
       LuaScript: 
       entity: {fileID: 0}
-    LuaAsset: {fileID: 0}
-    preStateVerdictName: 
-    ParamLoadName: 
+    LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
+    preStateVerdictName: QueuedStateID_5000
+    ParamLoadName: LuaOutput
     StateList:
     - rid: 3579423253479817227
+    - rid: 4404388549547524096
   references:
     version: 2
     RefIds:
@@ -45,7 +46,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: BaseAnim
+        stateControllerSubName: DamageAnim
         changeAnimID:
           _setEssential: 0
           _setHidden: 1
@@ -60,3 +61,12 @@ MonoBehaviour:
           stParamValue: {x: 0, y: 0}
           useID: -1
           stLuaLoads: 
+    - rid: 4404388549547524096
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Set To base
+        changeTo: 0

@@ -121,7 +121,7 @@ public class MixAnimNode
             //全体のミキシングの時間を設定する.
             MixWeight = wg;
             // デバッグ表示 - ミックスウェイト値の表示
-            Debug.Log(this.def.ID + " Time Calclation MixWeight - " + MixWeight + " calc As " + InTime + "," + OutTime );
+            //Debug.Log(this.def.ID + " Time Calclation MixWeight - " + MixWeight + " calc As " + InTime + "," + OutTime );
             
             
             // AnimDef中のWeight値は1で固定とする.
@@ -243,7 +243,7 @@ public class MainNodeConfigurator
             if (Mixers[i] == null)
             {
                 indexOfEmpty = i;
-                Debug.Log("Mixer Changing to " + def.ID + " as input of " + indexOfEmpty);
+                //Debug.Log("Mixer Changing to " + def.ID + " as input of " + indexOfEmpty);
                 break;
             }
         }
@@ -265,7 +265,7 @@ public class MainNodeConfigurator
 
             //接続.
             PrimalGraph.Connect(node.Mixer, 0, mixMixer, indexOfEmpty);
-            Debug.Log("Mixer Connected to " + indexOfEmpty);
+            //Debug.Log("Mixer Connected to " + indexOfEmpty);
         }
     }
 
@@ -328,7 +328,7 @@ public class MainNodeConfigurator
                     string MixOf = m.def.ID.ToString();
                     PrimalGraph.Disconnect(mixMixer, i);
                     Mixers[i] = null;
-                    Debug.Log("Mixer Erased : " + MixOf);
+                    //Debug.Log("Mixer Erased : " + MixOf);
                 }
                 else
                 {
@@ -353,10 +353,10 @@ public class MainNodeConfigurator
                 {
                     WeightSet = Selected;
                 }
-                Debug.Log(string.Format("ID {0} - All : {1} - MixWeight {2}", Mixers[ids].def.ID, All, WeightSet));
+                //Debug.Log(string.Format("ID {0} - All : {1} - MixWeight {2}", Mixers[ids].def.ID, All, WeightSet));
                 mixMixer.SetInputWeight(ids, WeightSet);
                 F += WeightSet;
-                Debug.Log(F);
+                //Debug.Log(F);
             }
         }
         MainAnimDef.initEntityAt(root);
@@ -715,7 +715,7 @@ public class AnimDef
         //比較対象のentityの時間が取れてなーい！！
         bool resl = clssSetting.clssCollided
         (out Vector3 v1, out Vector3 v2, out float d,
-        clssDef.ClssType.Hit, checkEntity.defaultClss, 0f);
+        clssDef.ClssType.Hit, checkEntity.MainAnimMixer.MainAnimDef.clssSetting, 0f);
         return resl;
     }
 }
