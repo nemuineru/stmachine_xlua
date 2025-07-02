@@ -49,6 +49,13 @@ public class TrisUtil
         {
             return true;
         }
+
+        public void DrawTris()
+        {
+            Debug.DrawLine(p0,p1);
+            Debug.DrawLine(p1,p2);
+            Debug.DrawLine(p0,p2);
+        }
     }
 
     public (float, Vector3, Vector3) TrisDistance(Triangle t1, Triangle t2)

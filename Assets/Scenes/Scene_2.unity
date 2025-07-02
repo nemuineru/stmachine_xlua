@@ -205,6 +205,8 @@ MonoBehaviour:
       startPos: {x: 0, y: 0, z: 0}
       endPos: {x: 0, y: 0, z: 0}
       width: 0.1
+      _lastcalcStartPos: {x: 0, y: 0, z: 0}
+      _lastcalcEndPos: {x: 0, y: 0, z: 0}
     - clssType: 0
       attachTo: hip
       showGizmo: 1
@@ -213,6 +215,8 @@ MonoBehaviour:
       startPos: {x: 0, y: -0.07, z: 0}
       endPos: {x: 0, y: 0.18, z: 0}
       width: 0.14
+      _lastcalcStartPos: {x: 0, y: 0, z: 0}
+      _lastcalcEndPos: {x: 0, y: 0, z: 0}
     - clssType: 1
       attachTo: hand.R
       showGizmo: 1
@@ -221,6 +225,8 @@ MonoBehaviour:
       startPos: {x: 0, y: 0, z: 0}
       endPos: {x: 0, y: 0.04, z: 0}
       width: 0.08
+      _lastcalcStartPos: {x: 0, y: 0, z: 0}
+      _lastcalcEndPos: {x: 0, y: 0, z: 0}
     disableClssList: []
   animID: 0
   animListObject: {fileID: 11400000, guid: fa3e95b17fea8fc4e9b0432af0719e70, type: 2}
@@ -427,6 +433,8 @@ MonoBehaviour:
       startPos: {x: 0, y: 0, z: 0}
       endPos: {x: 0, y: 0, z: 0}
       width: 0.1
+      _lastcalcStartPos: {x: 0, y: 0, z: 0}
+      _lastcalcEndPos: {x: 0, y: 0, z: 0}
     - clssType: 0
       attachTo: hip
       showGizmo: 1
@@ -435,6 +443,8 @@ MonoBehaviour:
       startPos: {x: 0, y: -0.07, z: 0}
       endPos: {x: 0, y: 0.18, z: 0}
       width: 0.14
+      _lastcalcStartPos: {x: 0, y: 0, z: 0}
+      _lastcalcEndPos: {x: 0, y: 0, z: 0}
     - clssType: 1
       attachTo: hand.R
       showGizmo: 1
@@ -443,6 +453,8 @@ MonoBehaviour:
       startPos: {x: 0, y: 0, z: 0}
       endPos: {x: 0, y: 0.04, z: 0}
       width: 0.08
+      _lastcalcStartPos: {x: 0, y: 0, z: 0}
+      _lastcalcEndPos: {x: 0, y: 0, z: 0}
     disableClssList: []
   animID: 0
   animListObject: {fileID: 11400000, guid: fa3e95b17fea8fc4e9b0432af0719e70, type: 2}

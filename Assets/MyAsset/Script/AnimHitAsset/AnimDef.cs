@@ -879,8 +879,8 @@ public class clssDef
     internal float width;
 
     //前回のスタート・終了ポジションを設定.
-    Vector3 _lastcalcStartPos = Vector3.zero;
-    Vector3 _lastcalcEndPos = Vector3.zero;
+    public Vector3 _lastcalcStartPos = Vector3.zero;
+    public Vector3 _lastcalcEndPos = Vector3.zero;
 
     //当たり判定設定時間 - 設定終了時間を表す.
     internal float StartTime = 0f, EndTime = 10f;
@@ -1021,6 +1021,11 @@ public class clssDef
             (T1_0, T1_1) = GetTriangle_MovedPlane();
             (T2_0, T2_1) = compareTo.GetTriangle_MovedPlane();
 
+            T1_0.DrawTris();
+            T1_1.DrawTris();
+            T2_0.DrawTris();
+            T2_1.DrawTris();
+
 
             /*
             //デバッグ用に表示.
@@ -1040,7 +1045,7 @@ public class clssDef
             }
             Debug.Log(f + g);
             */
-            
+
             //v1は自己の当たり判定位置　v2は相手の.
             getLeastPos(ref dist, ref v1, ref v2, T1_0, T2_0);
             getLeastPos(ref dist, ref v1, ref v2, T1_1, T2_0);
@@ -1078,8 +1083,12 @@ public class clssDef
     {
         Vector3 stPos, ePos;
         (stPos, ePos) = getGlobalPos();
+        TrisUtil.Triangle Compare_1_0 = new TrisUtil.Triangle(stPos, ePos, ePos);
+        TrisUtil.Triangle Compare_1_1 = new TrisUtil.Triangle(stPos, ePos, ePos);
+        /*
         TrisUtil.Triangle Compare_1_0 = new TrisUtil.Triangle(stPos, ePos, _lastcalcStartPos);
         TrisUtil.Triangle Compare_1_1 = new TrisUtil.Triangle(ePos, _lastcalcStartPos, _lastcalcEndPos);
+        */
         //Debug.Log(_lastcalcEndPos.ToString() + _lastcalcStartPos.ToString());
         return (Compare_1_0, Compare_1_1);
     }
