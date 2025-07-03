@@ -193,7 +193,7 @@ MonoBehaviour:
   rigid: {fileID: 0}
   stateTime: 0
   targetTo: {fileID: 0}
-  vCam: {fileID: 1661577789}
+  vCam: {fileID: 0}
   CurrentStateID: 0
   defaultClss:
     clssDefs:

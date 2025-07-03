@@ -2,23 +2,24 @@
 local Debug = CS.UnityEngine.Debug;
 
 -- ステート変更のファンクション (0)
-    function QueuedStateID_0(in_entity)
-        verd = {}
-        CurrentTime = LC:CheckStateTime(in_entity)
-        if( CurrentTime == 0 ) then
-            table.insert( verd, 0 ) 
-        end
+function QueuedStateID_0(in_entity)
+    verd = {}
+    CurrentTime = LC:CheckStateTime(in_entity)
+    if( CurrentTime == 0 ) then
+        table.insert( verd, 0 ) 
+    end
     return verd
-end 
+end
 
 -- ステート変更のファンクション (5000)
-    function QueuedStateID_5000(in_entity)
+    function QueuedStateID_Hit(in_entity)
         verd = {}
-        CurrentTime = LC:CheckStateTime(in_entity)
-        if( CurrentTime == 0 ) then
+        CurrentR = LC:CheckStateTime(in_entity)
+        if( CurrentR == 0 ) then
+            Debug.Log("damage Amim")
             table.insert( verd, 0 ) 
         end
-        if ( CurrentTime > 12 ) then 
+        if ( CurrentR > 12 ) then 
             table.insert( verd, 1 )
         end
     return verd

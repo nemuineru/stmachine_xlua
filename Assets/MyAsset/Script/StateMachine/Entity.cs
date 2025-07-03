@@ -30,7 +30,7 @@ public class Entity : MonoBehaviour
     public int CurrentStateID = 0;
 
     public clssSetting defaultClss;
-    
+
     internal Transform[] allChildTransforms;
 
 
@@ -115,8 +115,11 @@ public class Entity : MonoBehaviour
 
 
         Vector2 wish = (InputInstance.self.inputValues.MovingAxisRead);
-        wishingVect = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up) * wish.y
-         + Vector3.ProjectOnPlane(vCam.transform.right, Vector3.up) * wish.x;
+        if (vCam != null)
+        { 
+            wishingVect = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up) * wish.y
+            + Vector3.ProjectOnPlane(vCam.transform.right, Vector3.up) * wish.x;
+        }
         mat.SetColor("_Color", CurColor);
 
         //地面判定.
@@ -137,7 +140,7 @@ public class Entity : MonoBehaviour
         stateTime = isStateChanged ? 0 : stateTime + 1;
     }
 
-//アニメーション変更..
+    //アニメーション変更..
     public void ChangeAnim()
     {
         AnimDef animFindByID = _animListObject_onGame.animDef.ToList().Find(x => x.ID == animID);
@@ -145,6 +148,25 @@ public class Entity : MonoBehaviour
         {
             MainAnimMixer.ChangeAnim(animFindByID);
         }
+    }
+
+    public bool hitCheck(Entity checkEntity)
+    {
+        bool resl = false;
+        clssSetting cEnemy = checkEntity.MainAnimMixer.MainAnimDef.clssSetting;
+        if (cEnemy != null && MainAnimMixer.MainAnimDef.clssSetting != null)
+        {
+
+            //比較対象のentityの時間が取れてなーい！！
+            resl = MainAnimMixer.MainAnimDef.clssSetting.clssCollided
+            (out Vector3 v1, out Vector3 v2, out float d,
+            clssDef.ClssType.Hit, cEnemy, 0.1f);
+        }
+        else
+        {
+            Debug.Log("cant find enemy Clss!");
+        }
+        return resl;
     }
 
     //前プロジェクトのように、スクリプト内でステートをとりあえず記述.

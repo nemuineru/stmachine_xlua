@@ -270,6 +270,7 @@ public class MainNodeConfigurator
     }
 
     //アニメーションの設定・ミキサーのウェイト設定..
+    /*
     public void ___SetAnim()
     {
         int i = 0;
@@ -306,6 +307,7 @@ public class MainNodeConfigurator
         MainAnimDef.initEntityAt(root);
         MainAnimDef.checkClssCapsule();
     }
+    */
 
     //修正したい.
     //何かパラメータ値が足りないのだろうか。　トランジションの間に
@@ -711,25 +713,6 @@ public class AnimDef
             }
         }
     }
-
-    public bool clssCollided(Entity checkEntity)
-    {
-        bool resl = false;
-        clssSetting cEnemy = checkEntity.MainAnimMixer.MainAnimDef.clssSetting;
-        if (cEnemy != null && clssSetting != null)
-        {
-
-            //比較対象のentityの時間が取れてなーい！！
-            resl = clssSetting.clssCollided
-        (out Vector3 v1, out Vector3 v2, out float d,
-        clssDef.ClssType.Hit, cEnemy, 0f);
-        }
-        else
-        {
-            Debug.Log("cant find enemy Clss!");
-        }
-            return resl;
-    }
 }
 
 
@@ -768,6 +751,7 @@ public class clssSetting
     //使用する当たり判定を用意する.
     public List<clssDef> findclss(clssDef.ClssType useType, float frame)
     {
+        //clssDef内のclssを用意.
         List<clssDef> findDefs = new List<clssDef>();
         foreach (clssDef cls in clssDefs)
         {
@@ -776,11 +760,19 @@ public class clssSetting
                 findDefs.Add(cls);
             }
         }
-        foreach (clssDef defaultcls in root.defaultClss.clssDefs)
-            if (defaultcls.clssType == useType && !disableClssList.Any(dz => dz == defaultcls.attachTo))
-            {                
-                findDefs.Add(defaultcls);
-            }
+        if (root != null)
+        {
+            //Entity内のclssを用意. 除外対象をdisableClssから検索して削除.
+            foreach (clssDef defaultcls in root.defaultClss.clssDefs)
+                if (defaultcls.clssType == useType && !disableClssList.Any(dz => dz == defaultcls.attachTo))
+                {
+                    findDefs.Add(defaultcls);
+                }
+        }
+        else
+        {
+            Debug.Log("cant find default");
+        }
         return findDefs;
     }
 
@@ -788,7 +780,9 @@ public class clssSetting
     public bool clssCollided(out Vector3 v1, out Vector3 v2, out float dist, clssDef.ClssType useType,
     clssSetting compareTo, float frame)
     {
+        //clssRef <= 呼び出し側の比較するclssカプセル.
         List<clssDef> clssRef = new List<clssDef>();
+        //clssCompareTO <= 比較対象の使用するclssカプセル.
         List<clssDef> clssCompareTo = new List<clssDef>();
         v1 = Vector3.zero;
         v2 = Vector3.zero;

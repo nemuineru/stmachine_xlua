@@ -188,8 +188,8 @@ public class StateDef
     //executing state is decided from this.
     public TextAsset LuaAsset;
 
-    public string preStateVerdictName = "QueuedStateID";
-    public string ParamLoadName = "LuaOutput";
+    public string preStateVerdictName;
+    public string ParamLoadName;
 
     [SerializeReference, SerializeField]
     public List<StateController> StateList = new List<StateController>();

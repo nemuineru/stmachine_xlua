@@ -31,10 +31,11 @@ MonoBehaviour:
       LuaScript: 
       entity: {fileID: 0}
     LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
-    preStateVerdictName: QueuedStateID_5000
+    preStateVerdictName: QueuedStateID_Hit
     ParamLoadName: LuaOutput
     StateList:
     - rid: 4404388569968803840
+    - rid: 4404388575372902408
     - rid: 4404388549547524096
   references:
     version: 2
@@ -92,3 +93,12 @@ MonoBehaviour:
           stParamValue: {x: 0, y: 0}
           useID: -1
           stLuaLoads: 
+    - rid: 4404388575372902408
+      type: {class: scColorChange, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: 
+        color: {r: 0.031847, g: 0, b: 1, a: 1}
