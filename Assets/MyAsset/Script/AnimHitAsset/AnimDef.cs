@@ -690,11 +690,13 @@ public class AnimDef
     public clssSetting clssSetting = new clssSetting();
 
 
+    //clsssettingにEntityを登録.
     public void initEntityAt(Entity init)
     {
         clssSetting.initClss(init);
     }
 
+    //カプセルの描写
     public void checkClssCapsule()
     {
         clssSetting.clssPosUpdate();
@@ -702,9 +704,9 @@ public class AnimDef
         ca.AddRange(clssSetting.findclss(clssDef.ClssType.Attack, 0f));
         foreach (clssDef c in ca)
         {
+            c.getGlobalPos();
             if (c.showGizmo == true)
             {
-                c.getGlobalPos();
                 c.DrawCapsule();
             }
         }
@@ -712,11 +714,21 @@ public class AnimDef
 
     public bool clssCollided(Entity checkEntity)
     {
-        //比較対象のentityの時間が取れてなーい！！
-        bool resl = clssSetting.clssCollided
+        bool resl = false;
+        clssSetting cEnemy = checkEntity.MainAnimMixer.MainAnimDef.clssSetting;
+        if (cEnemy != null && clssSetting != null)
+        {
+
+            //比較対象のentityの時間が取れてなーい！！
+            resl = clssSetting.clssCollided
         (out Vector3 v1, out Vector3 v2, out float d,
-        clssDef.ClssType.Hit, checkEntity.MainAnimMixer.MainAnimDef.clssSetting, 0f);
-        return resl;
+        clssDef.ClssType.Hit, cEnemy, 0f);
+        }
+        else
+        {
+            Debug.Log("cant find enemy Clss!");
+        }
+            return resl;
     }
 }
 
@@ -732,7 +744,7 @@ public class clssSetting
     //デフォルトClssを除去するためのリスト. 
     //除去指定をデフォルトのClssのオブジェ名称から消す.
     public List<string> disableClssList = new List<string>();
-    Entity root;
+    public Entity root;
 
     //entityで読み出すclssにentityを用意する.
     public void initClss(Entity entity)
@@ -1083,12 +1095,12 @@ public class clssDef
     {
         Vector3 stPos, ePos;
         (stPos, ePos) = getGlobalPos();
-        TrisUtil.Triangle Compare_1_0 = new TrisUtil.Triangle(stPos, ePos, ePos);
-        TrisUtil.Triangle Compare_1_1 = new TrisUtil.Triangle(stPos, ePos, ePos);
-        /*
+        //TrisUtil.Triangle Compare_1_0 = new TrisUtil.Triangle(stPos, ePos, ePos);
+        //TrisUtil.Triangle Compare_1_1 = new TrisUtil.Triangle(stPos, ePos, ePos);
+        
         TrisUtil.Triangle Compare_1_0 = new TrisUtil.Triangle(stPos, ePos, _lastcalcStartPos);
         TrisUtil.Triangle Compare_1_1 = new TrisUtil.Triangle(ePos, _lastcalcStartPos, _lastcalcEndPos);
-        */
+        
         //Debug.Log(_lastcalcEndPos.ToString() + _lastcalcStartPos.ToString());
         return (Compare_1_0, Compare_1_1);
     }

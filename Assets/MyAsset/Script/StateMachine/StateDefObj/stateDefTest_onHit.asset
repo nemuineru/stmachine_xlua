@@ -34,12 +34,43 @@ MonoBehaviour:
     preStateVerdictName: QueuedStateID_5000
     ParamLoadName: LuaOutput
     StateList:
-    - rid: 3579423253479817227
+    - rid: 4404388569968803840
     - rid: 4404388549547524096
   references:
     version: 2
     RefIds:
     - rid: 3579423253479817227
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: default
+        changeAnimID:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 4404388549547524096
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Set To base
+        changeTo: 0
+    - rid: 4404388569968803840
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:
         ID:
@@ -61,12 +92,3 @@ MonoBehaviour:
           stParamValue: {x: 0, y: 0}
           useID: -1
           stLuaLoads: 
-    - rid: 4404388549547524096
-      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 1
-          stLuaLoads: 
-        stateControllerSubName: Set To base
-        changeTo: 0

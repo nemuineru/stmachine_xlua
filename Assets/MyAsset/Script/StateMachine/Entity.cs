@@ -101,6 +101,7 @@ public class Entity : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        defaultClss.clssPosUpdate();
         //後で消します.
         //
         entityInput.RecordInput_Player(0);

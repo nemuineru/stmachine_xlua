@@ -30,6 +30,7 @@ public class gameState : MonoBehaviour
             if (e != calledEntity)
             {
                 Debug.Log(e.gameObject.name);
+                //それぞれのentityの現在再生中のAnimatorが持つClssに対して衝突判定.
                 bool f = calledEntity.MainAnimMixer.MainAnimDef.clssCollided(e);
                 //hitしたなら一先ずAnim番号を5000に飛ばしたい. ChangeState(5000)の最優先Queueとして組み込む.
                 if (f == true)
@@ -37,7 +38,7 @@ public class gameState : MonoBehaviour
                     e.isStateChanged = true;
                     //一先ず、プレースホルダーとして
                     e.CurrentStateID = 5000;
-                    e.rigid.velocity = e.gameObject.transform.forward * -3.0f + Vector3.up * 3.0f;
+                    e.rigid.velocity = e.gameObject.transform.forward * -0.1f + Vector3.up * 6.0f;
                 }
             }
         }
