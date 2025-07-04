@@ -35,9 +35,20 @@ public class gameState : MonoBehaviour
                 if (f == true)
                 {
                     e.isStateChanged = true;
-                    //一先ず、プレースホルダーとして
+                    //一先ず、プレースホルダーとして入れるが... 何か5000に移動していない. そもそも
+                    //stateが機能していない..
                     e.CurrentStateID = 5000;
-                    e.rigid.velocity = e.gameObject.transform.forward * -0.1f + Vector3.up * 6.0f;
+                    e.stateTime = 0;
+
+                    //placeholder for velocity
+                    Vector3 HitVect =
+                    Vector3.ProjectOnPlane(e.transform.position - calledEntity.transform.position,Vector3.up);
+                    e.rigid.velocity = HitVect.normalized * 0.2f + Vector3.up * 3.5f;
+
+
+                    //placeholder for rotation
+                    e.transform.rotation =
+                    Quaternion.Lerp(e.transform.rotation,Quaternion.LookRotation(-HitVect,Vector3.up),0.6f);
                     Debug.Log( "Hit : " + e.gameObject.name);
                 }
             }

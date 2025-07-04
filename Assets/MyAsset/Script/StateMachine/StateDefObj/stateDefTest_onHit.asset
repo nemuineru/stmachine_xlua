@@ -24,6 +24,7 @@ MonoBehaviour:
     ParamLoadName: LuaOutput
     StateList:
     - rid: 3579423253479817227
+    - rid: 4404388598234480643
   - StateDefName: OnHit
     entity: {fileID: 0}
     StateDefID: 5000
@@ -100,5 +101,14 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
+        stateControllerSubName: Orange Enough
+        color: {r: 1, g: 0.6214301, b: 0.2216981, a: 1}
+    - rid: 4404388598234480643
+      type: {class: scColorChange, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
         stateControllerSubName: 
-        color: {r: 0.031847, g: 0, b: 1, a: 1}
+        color: {r: 0.5577163, g: 0.77340966, b: 0.7830189, a: 1}

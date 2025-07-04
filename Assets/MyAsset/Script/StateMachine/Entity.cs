@@ -134,8 +134,13 @@ public class Entity : MonoBehaviour
         DefList.stateDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
         if (currentState != null)
         {
-            //Debug.Log("Executed stateDef - " + CurrentStateID + " at time of " + stateTime);
+            //Debug.Log("Executed stateDef - " + CurrentStateID);
+            // + " at time of " + stateTime
             currentState.Execute();
+        }
+        else
+        {
+            Debug.LogError("Loaded State is null : " + CurrentStateID);
         }
         stateTime = isStateChanged ? 0 : stateTime + 1;
     }
