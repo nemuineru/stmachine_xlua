@@ -57,8 +57,10 @@ MonoBehaviour:
         startPos: {x: 0, y: 0, z: 0}
         endPos: {x: 0, y: 0, z: 0}
         width: 0.18
-      disableClssList:
-      - hip
+        _lastcalcStartPos: {x: 0, y: 0, z: 0}
+        _lastcalcEndPos: {x: 0, y: 0, z: 0}
+      disableClssList: []
+      root: {fileID: 0}
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
@@ -83,8 +85,11 @@ MonoBehaviour:
         startPos: {x: 0, y: 0, z: 0}
         endPos: {x: 0, y: 0, z: 0}
         width: 0.18
+        _lastcalcStartPos: {x: 0, y: 0, z: 0}
+        _lastcalcEndPos: {x: 0, y: 0, z: 0}
       disableClssList:
       - Face
+      root: {fileID: 0}
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
@@ -109,15 +114,18 @@ MonoBehaviour:
         startPos: {x: 0, y: 0.39, z: 0}
         endPos: {x: 0, y: 0, z: 0}
         width: 0.12
+        _lastcalcStartPos: {x: 0, y: 0, z: 0}
+        _lastcalcEndPos: {x: 0, y: 0, z: 0}
       disableClssList:
       - Face
+      root: {fileID: 0}
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
     ID: 5000
     Name: Damaged
     animClip:
-    - Clip: {fileID: 7400000, guid: fdca6446140081445841352d007d36e7, type: 2}
+    - Clip: {fileID: 7400000, guid: b9d0f8945e39fab4483759590460fc2b, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
@@ -126,14 +134,7 @@ MonoBehaviour:
     blendOutTime: 0.2
     useDefaultClss: 0
     clssSetting:
-      clssDefs:
-      - clssType: 1
-        attachTo: LowerLeg.R
-        showGizmo: 1
-        _entity: {fileID: 0}
-        attachTransform: {fileID: 0}
-        startPos: {x: 0, y: 0.39, z: 0}
-        endPos: {x: 0, y: 0, z: 0}
-        width: 0.12
+      clssDefs: []
       disableClssList:
       - Face
+      root: {fileID: 0}

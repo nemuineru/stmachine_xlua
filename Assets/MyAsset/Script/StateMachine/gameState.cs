@@ -43,7 +43,12 @@ public class gameState : MonoBehaviour
                     //placeholder for velocity
                     Vector3 HitVect =
                     Vector3.ProjectOnPlane(e.transform.position - calledEntity.transform.position,Vector3.up);
-                    e.rigid.velocity = HitVect.normalized * 0.2f + Vector3.up * 3.5f;
+                    e.rigid.velocity = HitVect.normalized * 0.2f + Vector3.up * 2.5f;
+
+                    calledEntity.HitPauseTime = 4;
+                    e.HitPauseTime = 8;
+                    e.ChangeAnim(.1f);
+                    
 
 
                     //placeholder for rotation

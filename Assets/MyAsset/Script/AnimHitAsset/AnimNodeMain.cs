@@ -59,7 +59,7 @@ public class AnimNodeMain : MonoBehaviour
 
     void Update()
     {
-        MainAnimMixer.SetAnim();
+        MainAnimMixer.SetAnim(true);
         MainAnimMixer.PrimalGraph.Play();
         //インプットが入力された時..
         /*

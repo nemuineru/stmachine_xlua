@@ -63,9 +63,10 @@ public class MixAnimNode
         return endAnimTime != Mathf.Infinity;        
     }
 
-    public void SetEnd()
+    public void SetEnd(float offset)
     {
         endAnimTime = currentAnimTime + def.blendOutTime;
+        currentAnimTime += offset;
     }
 
         //初期化.
@@ -85,8 +86,10 @@ public class MixAnimNode
             
             
             //Output先は固定のため0.
-            Mixer.ConnectInput(i, PlayList[PlayList.Length - 1], 0);            
-            SetStartTime(Time.time);
+            Mixer.ConnectInput(i, PlayList[PlayList.Length - 1], 0);
+
+            //startTimeを0に.            
+            SetStartTime(0f);
             //最初に設定されたinputWeightに合わせる.
             //Mixer.SetInputWeight(i, 1f / def.animClip.Length);//anims.MixWeightSet);
 
@@ -142,10 +145,14 @@ public class MixAnimNode
     }
 
         //現アニメーションの時間を現在時刻に設定。
-        public void Animations()
+        public void Animations(bool TickDef)
         {
-            SetCurrentTime(Time.time);
-            changeMixerWeight();
+        //Time.timeだとpauseが聞かないため..
+            if(TickDef)
+            {
+            SetCurrentTime(currentAnimTime + Time.deltaTime);
+            }
+        changeMixerWeight();
             for (int i = 0; i < PlayList.Length; i++)
             {
                 //var playClip = def.animClip[i];
@@ -214,7 +221,6 @@ public class MainNodeConfigurator
         PrimalPlayableOut = AnimationPlayableOutput.Create(PrimalGraph, "Output", animator);
         //初期はMixerの数分のノードのみ.
         mixMixer = AnimationLayerMixerPlayable.Create(PrimalGraph, Mixers.Length, false);
-
     }
 
     //AnimIDで検索し、アニメーションのパラメータを変更する.
@@ -232,7 +238,7 @@ public class MainNodeConfigurator
     //アニメ変更時の挙動.
     //defを代入し、リセットする.
     //この時、MainAnimは代数に変更.
-    public void ChangeAnim(AnimDef def, bool AdditiveIsTrue = false)
+    public void ChangeAnim(AnimDef def, bool AdditiveIsTrue = false, float timeoffset = 0.0f)
     {
         //接続先で、最も小さい値でソケットが空いているものを選択
         int indexOfEmpty = -1;
@@ -252,13 +258,19 @@ public class MainNodeConfigurator
             foreach (var m in Mixers)
             {
                 if (m != null && !m.isEndTimeSet())
-                    m.SetEnd();
+                {
+                    m.SetEnd(timeoffset);
+                }
             }
             Mixers[indexOfEmpty] = new MixAnimNode();
             node = Mixers[indexOfEmpty];
             node.isAdditive = AdditiveIsTrue;
             node.def = def;
             node.CreatePlayerNodes(ref PrimalGraph);
+
+            //init Entity on new Connection. Dont Forget it!
+            node.def.initEntityAt(root);
+            node.SetCurrentTime(timeoffset);
             MainAnimDef = node.def;
             //Additiveに設定するか？
             mixMixer.SetLayerAdditive((uint)indexOfEmpty, AdditiveIsTrue);
@@ -267,6 +279,11 @@ public class MainNodeConfigurator
             PrimalGraph.Connect(node.Mixer, 0, mixMixer, indexOfEmpty);
             //Debug.Log("Mixer Connected to " + indexOfEmpty);
         }
+    }
+
+    public void Tick()
+    { 
+        
     }
 
     //アニメーションの設定・ミキサーのウェイト設定..
@@ -313,7 +330,7 @@ public class MainNodeConfigurator
     //何かパラメータ値が足りないのだろうか。　トランジションの間に
     //変な屈みポーズが見られる.
     //Additiveに設定されていないなら..という感じだろうか?
-    public void SetAnim()
+    public void SetAnim(bool TickDef)
     {
         int i = 0;
         float All = 0;
@@ -324,7 +341,7 @@ public class MainNodeConfigurator
             {
                 //mixerのアニメーションを先ず更新
                 //EndTimeに到達しているならAllから外す.
-                m.Animations();
+                m.Animations(TickDef);
                 if (m.isEndTime())
                 {
                     string MixOf = m.def.ID.ToString();
@@ -769,6 +786,7 @@ public class clssSetting
                     findDefs.Add(defaultcls);
                 }
         }
+        //初期ロード時rootが登録されていない. 何故だろう？
         else
         {
             Debug.Log("cant find default");

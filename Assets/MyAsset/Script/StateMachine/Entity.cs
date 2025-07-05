@@ -7,6 +7,7 @@ using UnityEngine.Playables;
 using System.Linq;
 using System.ComponentModel;
 using UnityEditor;
+using DG.Tweening;
 
 
 public class Entity : MonoBehaviour
@@ -98,10 +99,13 @@ public class Entity : MonoBehaviour
     [SerializeField]
     Vector3 raycenter = Vector3.down * 0.5f;
 
+    Vector3 pausedVel = Vector3.zero;
+
     // Update is called once per frame
     void FixedUpdate()
     {
         defaultClss.clssPosUpdate();
+        
         //後で消します.
         //
         entityInput.RecordInput_Player(0);
@@ -109,10 +113,26 @@ public class Entity : MonoBehaviour
 
         isStateChanged = false;
 
-        //SetAnimは毎フレーム更新する.
-        MainAnimMixer.SetAnim();
+        //SetAnimはHitPauseが0で無い限り毎フレーム更新する.
+        {
+            bool isPaused = (HitPauseTime > 0);
+            if (isPaused)
+            {
+                pausedVel = pausedVel == Vector3.zero ? rigid.velocity : pausedVel;
+                rigid.isKinematic = isPaused;
+            }
+            else if (pausedVel != Vector3.zero)
+            {
+                rigid.isKinematic = isPaused;
+                Debug.Log("unpaused");
+                rigid.velocity = pausedVel;
+                pausedVel = Vector3.zero;
+            }
+            rigid.isKinematic = isPaused;
+            MainAnimMixer.SetAnim((HitPauseTime <= 0));
+            HitPauseTime -= 1.0f;
+        }
         MainAnimMixer.PrimalGraph.Play();
-
 
         Vector2 wish = (InputInstance.self.inputValues.MovingAxisRead);
         if (vCam != null)
@@ -130,6 +150,7 @@ public class Entity : MonoBehaviour
 
         isOnGround = (hitInfo.collider != null);
 
+        //state実行..
         StateDef currentState =
         DefList.stateDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
         if (currentState != null)
@@ -142,16 +163,16 @@ public class Entity : MonoBehaviour
         {
             Debug.LogError("Loaded State is null : " + CurrentStateID);
         }
-        stateTime = isStateChanged ? 0 : stateTime + 1;
+        stateTime = isStateChanged && HitPauseTime <= 0 ? 0 : stateTime + 1;
     }
 
     //アニメーション変更..
-    public void ChangeAnim()
+    public void ChangeAnim(float timeoffset = 0.0f)
     {
         AnimDef animFindByID = _animListObject_onGame.animDef.ToList().Find(x => x.ID == animID);
         if (animFindByID != null)
         {
-            MainAnimMixer.ChangeAnim(animFindByID);
+            MainAnimMixer.ChangeAnim(animFindByID, default, timeoffset);
         }
     }
 
