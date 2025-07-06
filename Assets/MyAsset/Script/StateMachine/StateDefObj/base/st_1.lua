@@ -8,11 +8,18 @@ local Debug = CS.UnityEngine.Debug;
 -- ステート変更のファンクション
 function QueuedStateID(in_entity)
     selfOnGrd = LC:isEntityOnGround(in_entity)
-    selfJump = LC:CheckButtonPressed(in_entity, "b_")
+    AttackCmd_jp = LC:CheckButtonPressed(in_entity, "a")
+    AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
     selfStTime = LC:CheckStateTime(in_entity) 
 
     verd = {}
-    if (selfOnGrd == true and selfJump == true and LC:CheckStateTime(in_entity) > 6) then 
+
+    -- jump cmd
+    if(selfOnGrd == true and AttackCmd_jp == true) then
+        table.insert( verd, 3) 
+    end
+
+    if (selfOnGrd == true and AttackCmd_b == true and LC:CheckStateTime(in_entity) > 6) then 
         table.insert( verd, 1 )
     end
 
@@ -26,6 +33,25 @@ function QueuedStateID(in_entity)
     -- idleのanimを指定する
     if( LC:CheckStateTime(in_entity) == 1 ) then
         table.insert( verd, 100 ) 
+    end
+    return verd
+end
+
+
+function QueuedStateID_J(in_entity)    
+    Debug.Log("Checking Entity Jumping");
+    selfStTime =  LC:CheckStateTime(in_entity)
+    selfOnGrd_f = LC:isEntityOnGround(in_entity)
+    AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
+    if(selfOnGrd_f == true) then
+        table.insert( verd, 1 )
+    end
+    if(AttackCmd_b == true) then
+        table.insert(verd, 2)
+    end
+    -- idleのanimを指定する
+    if(selfStTime == 0) then
+        table.insert( verd, 0 ) 
     end
     return verd
 end

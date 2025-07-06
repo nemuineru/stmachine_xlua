@@ -8,6 +8,7 @@ using System.Linq;
 using System.ComponentModel;
 using UnityEditor;
 using DG.Tweening;
+using System;
 
 
 public class Entity : MonoBehaviour
@@ -79,8 +80,9 @@ public class Entity : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         //DefList = (StateDefListObject)StateDefListObject.CreateInstance(typeof(StateDefListObject));
         //DefSet();
-        //設定されたDefListに対しこのエンティティを指定する.
-        DefList.stateDefs.ForEach(def => def.entity = this);
+
+        //StateDefはDeepCopyしないように.
+        
         //DefList.stateDefs.ForEach(def => def.PriorCondition = def.PriorCondition);
 
         //アニメ設定.
@@ -142,27 +144,31 @@ public class Entity : MonoBehaviour
         }
         mat.SetColor("_Color", CurColor);
 
-        //地面判定.
-        Ray ray = new Ray(transform.position + raycenter + Vector3.up * Physics.defaultContactOffset, Vector3.down);
-
-        RaycastHit hitInfo;
-        Physics.Raycast(ray, out hitInfo, 0.05f, LayerMask.GetMask("Terrain"));
-
-        isOnGround = (hitInfo.collider != null);
-
         //state実行..
         StateDef currentState =
         DefList.stateDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
         if (currentState != null)
         {
             //Debug.Log("Executed stateDef - " + CurrentStateID);
-            // + " at time of " + stateTime
-            currentState.Execute();
+            // + " at time of " + stateTime            
+            //the StateDef needs as deepcopy?
+            currentState.Execute(this);
         }
         else
         {
             Debug.LogError("Loaded State is null : " + CurrentStateID);
         }
+        
+        //地面判定.
+        //raycenter
+        Ray ray = new Ray(transform.position + Vector3.up * 0.009f, Vector3.down);
+        Debug.DrawRay(ray.origin ,Mathf.Max(0 , -rigid.velocity.y)* Vector3.down);
+
+        RaycastHit hitInfo;
+        Physics.Raycast(ray, out hitInfo, Mathf.Max(0.01f , -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
+
+        isOnGround = (hitInfo.collider != null);
+
         stateTime = isStateChanged && HitPauseTime <= 0 ? 0 : stateTime + 1;
     }
 

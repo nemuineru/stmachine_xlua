@@ -93,8 +93,27 @@ MonoBehaviour:
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
+    ID: 5
+    Name: Jump
+    animClip:
+    - Clip: {fileID: 7400000, guid: 7dd67cce11e9cc64d9d817b21324c527, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0.1
+    blendOutTime: 0.2
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs: []
+      disableClssList:
+      - Face
+      root: {fileID: 0}
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
     ID: 3
-    Name: Punch
+    Name: Kick
     animClip:
     - Clip: {fileID: 7400000, guid: 418d04f5b5a9f8e429e08773447a79ad, type: 2}
       speed: 0
@@ -154,6 +173,35 @@ MonoBehaviour:
     useDefaultClss: 0
     clssSetting:
       clssDefs: []
+      disableClssList:
+      - Face
+      root: {fileID: 0}
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
+    ID: 4
+    Name: Kick
+    animClip:
+    - Clip: {fileID: 7400000, guid: d43dcff2bbe635643b415cee8702203c, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0
+    blendOutTime: 0.2
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs:
+      - clssType: 1
+        attachTo: LowerLeg.R
+        showGizmo: 1
+        _entity: {fileID: 0}
+        attachTransform: {fileID: 0}
+        startPos: {x: 0, y: 0.39, z: 0}
+        endPos: {x: 0, y: 0, z: 0}
+        width: 0.12
+        _lastcalcStartPos: {x: 0, y: 0, z: 0}
+        _lastcalcEndPos: {x: 0, y: 0, z: 0}
       disableClssList:
       - Face
       root: {fileID: 0}

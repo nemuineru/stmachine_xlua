@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using UnityEditor.SearchService;
+using System.Linq;
 
 public class gameState : MonoBehaviour
 {
@@ -20,6 +22,10 @@ public class gameState : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    void Update()
+    {
+        entityList = FindObjectsByType<Entity>(FindObjectsSortMode.InstanceID).ToList();
     }
 
     public List<Entity> entityList;

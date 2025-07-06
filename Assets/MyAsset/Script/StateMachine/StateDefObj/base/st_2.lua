@@ -6,7 +6,7 @@ local Debug = CS.UnityEngine.Debug;
 
         verd = {}
         CurrentTime = LC:CheckStateTime(in_entity)
-        selfJump = LC:CheckButtonPressed(in_entity, "b_")
+        AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
         if ( CurrentTime > 14 ) then 
             table.insert( verd, 1 )
         end
@@ -18,12 +18,12 @@ local Debug = CS.UnityEngine.Debug;
         end
 
         -- Kick Combo
-        if( CurrentTime > 12 and selfJump == true) then
+        if( CurrentTime > 12 and AttackCmd_b == true) then
             table.insert( verd, 2 ) 
         end
 
         -- Jab Combo
-        if( CurrentTime > 8 and CurrentTime <= 12 and selfJump == true) then
+        if( CurrentTime > 8 and CurrentTime <= 12 and AttackCmd_b == true) then
             table.insert( verd, 3 ) 
         end
     return verd

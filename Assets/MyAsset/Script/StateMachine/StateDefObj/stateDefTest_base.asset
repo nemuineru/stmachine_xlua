@@ -34,8 +34,8 @@ MonoBehaviour:
     ParamLoadName: LuaOutput
     StateList:
     - rid: 3002629213760520199
+    - rid: 4404388637674569798
     - rid: 3002629213760520200
-    - rid: 3002629213760520198
     - rid: 3002629213760520201
     - rid: 3002629528666767590
     - rid: 3002629528666767591
@@ -83,17 +83,49 @@ MonoBehaviour:
     - rid: 3579423095655497732
     - rid: 3579423253479817222
     - rid: 4404388637674569761
+  - StateDefName: Air Kicking
+    entity: {fileID: 0}
+    StateDefID: 3
+    PriorCondition:
+      LuaScript: "\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
+        function QueuedStateID(in_entity)\r\n\r\n                    verd = {}\r\n                   
+        if ( LC:isEntityOnGround(in_entity) == true ) then \r\n                       
+        table.insert( verd, 1 )\r\n                    end\r\n                   
+        if( LC:CheckStateTime(in_entity) > 0 ) then\r\n                        table.insert(
+        verd, 0 ) \r\n                    end\r\n                return verd\r\n           
+        end\r\n        "
+      entity: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 3fcddc9c2ce5f8b479bf3d800b4cbf2f, type: 3}
+    preStateVerdictName: QueuedStateID_J
+    ParamLoadName: LuaOutput
+    StateList:
+    - rid: 3579423095655497732
+    - rid: 4404388637674569820
+    - rid: 3002629213760520203
+    - rid: 4404388637674569830
+  - StateDefName: Jumping
+    entity: {fileID: 0}
+    StateDefID: 5
+    PriorCondition:
+      LuaScript: "\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
+        function QueuedStateID(in_entity)\r\n\r\n                    verd = {}\r\n                   
+        if ( LC:isEntityOnGround(in_entity) == true ) then \r\n                       
+        table.insert( verd, 1 )\r\n                    end\r\n                   
+        if( LC:CheckStateTime(in_entity) > 0 ) then\r\n                        table.insert(
+        verd, 0 ) \r\n                    end\r\n                return verd\r\n           
+        end\r\n        "
+      entity: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 13b365a8419da704db1d5867ceb26d49, type: 3}
+    preStateVerdictName: QueuedStateID_J
+    ParamLoadName: LuaOutput
+    StateList:
+    - rid: 4404388637674569802
+    - rid: 4404388637674569825
+    - rid: 4404388637674569799
+    - rid: 4404388637674569800
   references:
     version: 2
     RefIds:
-    - rid: 3002629213760520198
-      type: {class: scJump, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 80
-          stLuaLoads: 
-        stateControllerSubName: Jump
     - rid: 3002629213760520199
       type: {class: scColorChange, ns: , asm: Assembly-CSharp}
       data:
@@ -108,10 +140,10 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 1
+          value: 3
           stLuaLoads: 
         stateControllerSubName: ChangeState To Jumping
-        changeTo: 1
+        changeTo: 5
     - rid: 3002629213760520201
       type: {class: scMove, ns: , asm: Assembly-CSharp}
       data:
@@ -229,7 +261,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: Kick Anim
+        stateControllerSubName: Air Kick Anims
         changeAnimID:
           _setEssential: 0
           _setHidden: 1
@@ -297,15 +329,113 @@ MonoBehaviour:
           useLua: 0
           value: 3
           stLuaLoads: 
-        stateControllerSubName: KickHit
+        stateControllerSubName: Air_KickHit
         hitParams:
           _setEssential: 0
           _setHidden: 1
           loadTypes: 0
           stParamValue:
             Damage: 0
-            velset: {x: 8, y: 5, z: 0}
-            hitStopTime: {x: 4, y: 20}
+            velset: {x: 1, y: 4, z: 0}
+            hitStopTime: {x: 4, y: 4}
+            ChangeState_Enemy: 5050
+          useID: -1
+          stLuaLoads: 
+    - rid: 4404388637674569798
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: ChangeState To Punch
+        changeTo: 1
+    - rid: 4404388637674569799
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: JumpAnim
+        changeAnimID:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue: 5
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 4404388637674569800
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Init State
+        changeTo: 0
+    - rid: 4404388637674569802
+      type: {class: scJump, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Jump Rigid
+    - rid: 4404388637674569820
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Air Kick Anims
+        changeAnimID:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue: 4
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 4404388637674569825
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: ChangeState_ AirKick
+        changeTo: 3
+    - rid: 4404388637674569830
+      type: {class: scHitDef, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 3
+          stLuaLoads: 
+        stateControllerSubName: Air_KickHit
+        hitParams:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue:
+            Damage: 0
+            velset: {x: 20, y: 30, z: 0}
+            hitStopTime: {x: 2, y: 30}
             ChangeState_Enemy: 5050
           useID: -1
           stLuaLoads: 

@@ -177,7 +177,6 @@ public class stateID
 public class StateDef
 {
     public string StateDefName = "Default";
-    public Entity entity;
     public int StateDefID = 0;
 
     //フレーム数で考慮
@@ -199,7 +198,7 @@ public class StateDef
     List<object> luaOutputParams = new List<object>();
 
 
-    public void Execute()
+    public void Execute(Entity entity)
     {
         if (PriorCondition != null)
         {
@@ -210,49 +209,56 @@ public class StateDef
 
             //メインのLUA仮想マシンに読み出すテキストを以下に記述.
             if (LuaAsset != null)
-            { 
-                
-            env.DoString(LuaAsset.text);
+            {
 
-            //読み出しのQueueStateIDを記述するためのメソッドを作成
-            lua_Read.CalcValues.QueuedStateID stateVerd =
-            env.Global.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
+                env.DoString(LuaAsset.text);
 
-            //ステート宣言パラメータのメソッド作成
-            lua_Read.CalcValues.luaOutParams stateDefParams =
-            env.Global.Get<lua_Read.CalcValues.luaOutParams>(ParamLoadName);
+                //読み出しのQueueStateIDを記述するためのメソッドを作成
+                lua_Read.CalcValues.QueuedStateID stateVerd =
+                env.Global.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
+
+                //ステート宣言パラメータのメソッド作成
+                lua_Read.CalcValues.luaOutParams stateDefParams =
+                env.Global.Get<lua_Read.CalcValues.luaOutParams>(ParamLoadName);
 
                 //executeStateIDsにはQueuedStateIDの値を入力
-            
-            int[] ExecuteStateIDs = stateVerd.Invoke(entity);
-            if (stateDefParams != null)
-            {
-                luaOutputParams = stateDefParams.Invoke(entity).ToList();
-            }
 
-            string executingStr = "";
-            for (int i = 0; i < ExecuteStateIDs.Count(); i++)
-            {
-                executingStr += ExecuteStateIDs[i] + " , ";
-            }
+                int[] ExecuteStateIDs = stateVerd.Invoke(entity);
+                if (stateDefParams != null)
+                {
+                    luaOutputParams = stateDefParams.Invoke(entity).ToList();
+                }
+
+                string executingStr = "";
+                if (ExecuteStateIDs != null)
+                {
+                    for (int i = 0; i < ExecuteStateIDs.Count(); i++)
+                    {
+                        executingStr += ExecuteStateIDs[i] + " , ";
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Execute ID is NULL!");
+                }
             // Debug.Log(executingStr);
 
 
-            //def中にあるstateを全部リストアップ
-            foreach (StateController state in StateList)
-            {
-                state.entity = entity;
-                //idがステート読み出しリスト内・もしくはステート自体が読み出し処理を行う場合
-                if (state.isIDValid(ExecuteStateIDs))
-                {
-                    //stateにluaOutputParamsを予め登録.
-                    state.loadParams = luaOutputParams;
-                    //Debug.Log("Executed " + state.ToString());
+                    //def中にあるstateを全部リストアップ
+                    foreach (StateController state in StateList)
+                    {
+                        state.entity = entity;
+                        //idがステート読み出しリスト内・もしくはステート自体が読み出し処理を行う場合
+                        if (state.isIDValid(ExecuteStateIDs))
+                        {
+                            //stateにluaOutputParamsを予め登録.
+                            state.loadParams = luaOutputParams;
+                            //Debug.Log("Executed " + state.ToString());
 
-                    //実際に実行.
-                    state.OnExecute();
-                }
-            }
+                            //実際に実行.
+                            state.OnExecute();
+                        }
+                    }
 
 
             //stateID内にLuaの設定値をセットアップ.
@@ -421,10 +427,11 @@ public class scHitDef : StateController
 [System.Serializable]
 [SerializeField]
 public class scJump : StateController
-{        
+{
     internal override void OnExecute()
     {
-        entity.rigid.velocity += Vector3.up * 3.0f;
+        entity.rigid.velocity = Vector3.ProjectOnPlane(entity.rigid.velocity,Vector3.up) + Vector3.up * 3.0f;
+        entity.isOnGround = false;
     }
 }
 

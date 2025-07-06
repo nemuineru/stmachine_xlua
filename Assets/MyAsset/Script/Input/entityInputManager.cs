@@ -193,41 +193,49 @@ public class entityInputManager
 
 
             //conditionの最初の文問のみ..
-            switch (conditions[0])
-            {
-                //押した瞬間を確認
-                //2フレーム以上必要.
-                case '_':
-                    {
-                    //Debug.Log("cmd check - pressPulse");
-                        if (ButtonCheck(b_rn, checker.bitNum) == '+' && commandBuffer_max > 1 &&
-                        (ButtonCheck(b_bf, checker.bitNum) == '.' || ButtonCheck(b_bf, checker.bitNum) == '-'))
+            if (conditions.Length != 0)
+                switch (conditions[0])
+                {
+                    //押した瞬間を確認
+                    //2フレーム以上必要.
+                    case '_':
                         {
-                            result = true;
+                            //Debug.Log("cmd check - pressPulse");
+                            if (ButtonCheck(b_rn, checker.bitNum) == '+' && commandBuffer_max > 1 &&
+                            (ButtonCheck(b_bf, checker.bitNum) == '.' || ButtonCheck(b_bf, checker.bitNum) == '-'))
+                            {
+                                result = true;
+                            }
+                            break;
                         }
-                        break;
-                    }
-                //話された瞬間を確認
-                //1フレのみ.
-                case '^':
-                    {
-                        if (ButtonCheck(b_rn, checker.bitNum) == '-')
+                    //話された瞬間を確認
+                    //1フレのみ.
+                    case '^':
                         {
-                            result = true;
+                            if (ButtonCheck(b_rn, checker.bitNum) == '-')
+                            {
+                                result = true;
+                            }
+                            break;
                         }
-                        break;
-                    }
-                //defaultは入力値のみを見るとして..
-                //1フレのみを計測
-                default:
-                    {
-                        if (ButtonCheck(b_rn, checker.bitNum) == '+')
+                    //defaultは入力値のみを見るとして..
+                    //1フレのみを計測
+                    default:
                         {
-                            result = true;
+                            if (ButtonCheck(b_rn, checker.bitNum) == '+')
+                            {
+                                result = true;
+                            }
+                            break;
                         }
-                        break;
+                }
+                else
+                {                     
+                    if (ButtonCheck(b_rn, checker.bitNum) == '+')
+                    {
+                        result = true;
                     }
-            }
+                }
 
         }
         return result;
