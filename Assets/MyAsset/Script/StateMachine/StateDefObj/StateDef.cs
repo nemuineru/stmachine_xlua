@@ -405,21 +405,13 @@ public class scHitDef : StateController
 {
 
     [SerializeField]
-    stParams<float> Damage;
-    
-    [SerializeField]
-    stParams<Vector2> animParameter; 
-
-    [SerializeField]
-    stParams<Vector3> HitVect;
-    
-    [SerializeField]
-    stParams<int> HitPause;
+    stParams<hitDefParams> hitParams;
 
 
     internal override void OnExecute()
     {
-        gameState.self.ProvokeHitDef(entity);
+        gameState.self.ProvokeHitDef
+        (entity, hitParams.valueGet(loadParams, entity));
     }
 
 }

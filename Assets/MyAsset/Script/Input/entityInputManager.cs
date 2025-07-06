@@ -159,6 +159,26 @@ public class entityInputManager
                         checker = anlInputs[1];
                         break;
                     }
+                case 'c':
+                    {
+                        checker = anlInputs[4];
+                        break;
+                    }
+                case 'x':
+                    {
+                        checker = anlInputs[2];
+                        break;
+                    }
+                case 'y':
+                    {
+                        checker = anlInputs[3];
+                        break;
+                    }
+                case 'z':
+                    {
+                        checker = anlInputs[5];
+                        break;
+                    }
             }
 
             int b_rn, b_bf;

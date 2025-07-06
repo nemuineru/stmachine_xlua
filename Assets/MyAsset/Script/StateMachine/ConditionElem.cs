@@ -109,8 +109,8 @@ public class LC
         return et.stateTime;
     }
 
-    public bool CheckButtonPressed(Entity et)
+    public bool CheckButtonPressed(Entity et, string command)
     {
-        return et.entityInput.CheckInput("a_",1);
+        return et.entityInput.CheckInput(command,1);
     }
 }

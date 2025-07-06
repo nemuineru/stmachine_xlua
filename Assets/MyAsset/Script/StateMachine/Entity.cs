@@ -174,19 +174,22 @@ public class Entity : MonoBehaviour
         {
             MainAnimMixer.ChangeAnim(animFindByID, default, timeoffset);
         }
+        MainAnimMixer.SetAnim(false);
     }
 
-    public bool hitCheck(Entity checkEntity)
+    public bool hitCheck(Entity checkEntity, out Vector3 HitPoint)
     {
         bool resl = false;
         clssSetting cEnemy = checkEntity.MainAnimMixer.MainAnimDef.clssSetting;
+        HitPoint = Vector3.zero;
         if (cEnemy != null && MainAnimMixer.MainAnimDef.clssSetting != null)
         {
 
             //比較対象のentityの時間が取れてなーい！！
             resl = MainAnimMixer.MainAnimDef.clssSetting.clssCollided
             (out Vector3 v1, out Vector3 v2, out float d,
-            clssDef.ClssType.Hit, cEnemy, 0.1f);
+            clssDef.ClssType.Attack, cEnemy, 0.1f);
+            HitPoint = (v1 + v2) / 2f;
         }
         else
         {

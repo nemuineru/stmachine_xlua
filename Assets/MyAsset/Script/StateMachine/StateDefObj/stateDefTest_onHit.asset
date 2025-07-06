@@ -35,7 +35,20 @@ MonoBehaviour:
     preStateVerdictName: QueuedStateID_Hit
     ParamLoadName: LuaOutput
     StateList:
+    - rid: 4404388575372902408
+    - rid: 4404388549547524096
     - rid: 4404388569968803840
+  - StateDefName: OnHit_Blow
+    entity: {fileID: 0}
+    StateDefID: 5050
+    PriorCondition:
+      LuaScript: 
+      entity: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
+    preStateVerdictName: QueuedStateID_Hit
+    ParamLoadName: LuaOutput
+    StateList:
+    - rid: 4404388637674569735
     - rid: 4404388575372902408
     - rid: 4404388549547524096
   references:
@@ -79,7 +92,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: DamageAnim
+        stateControllerSubName: DamageAnim_Def
         changeAnimID:
           _setEssential: 0
           _setHidden: 1
@@ -112,3 +125,25 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: 
         color: {r: 0.5577163, g: 0.77340966, b: 0.7830189, a: 1}
+    - rid: 4404388637674569735
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: DamageAnim_Blow
+        changeAnimID:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue: 5050
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          _setHidden: 1
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 

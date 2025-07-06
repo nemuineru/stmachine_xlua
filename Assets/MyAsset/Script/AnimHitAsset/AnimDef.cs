@@ -981,11 +981,13 @@ public class clssDef
 //Gizmoの描写
     public void DrawCapsuleGizmo_Tool(Vector3 start, Vector3 end, float radius, Color col)
     {
-        int x = (int)((end - start).magnitude / radius);
-        for (int i = 0; i < x + 1 ; i++)
+        int size = (int)((end - start).magnitude / radius);
+        DrawWireSphere_OnDebug(start, radius, col);
+        DrawWireSphere_OnDebug(end, radius, col);
+        for (int i = 1; i < size + 2 ; i++)
         {
             //Debug.Log("Drawin Capsules");
-            Vector3 DrawAt = start + (end - start) * ((float)i / Mathf.Max(1, x));
+            Vector3 DrawAt = start + (end - start) * ((float)i / Mathf.Max(1, size + 2));
             //Debug.Log("Drawin Sphere at" + DrawAt);
             DrawWireSphere_OnDebug(DrawAt, radius, col);
         }

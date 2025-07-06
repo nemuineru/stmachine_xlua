@@ -82,6 +82,7 @@ MonoBehaviour:
     - rid: 3002629213760520203
     - rid: 3579423095655497732
     - rid: 3579423253479817222
+    - rid: 4404388637674569761
   references:
     version: 2
     RefIds:
@@ -275,34 +276,36 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 10
           stLuaLoads: 
-        stateControllerSubName: hitDef
-        Damage:
+        stateControllerSubName: JabHit
+        hitParams:
           _setEssential: 0
           _setHidden: 1
           loadTypes: 0
-          stParamValue: 0
+          stParamValue:
+            Damage: 50
+            velset: {x: 1, y: 1, z: 0}
+            hitStopTime: {x: 4, y: 8}
+            ChangeState_Enemy: 5000
           useID: -1
           stLuaLoads: 
-        animParameter:
-          _setEssential: 0
-          _setHidden: 1
-          loadTypes: 0
-          stParamValue: {x: 0, y: 0}
-          useID: -1
+    - rid: 4404388637674569761
+      type: {class: scHitDef, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 3
           stLuaLoads: 
-        HitVect:
+        stateControllerSubName: KickHit
+        hitParams:
           _setEssential: 0
           _setHidden: 1
           loadTypes: 0
-          stParamValue: {x: 0, y: 0, z: 0}
-          useID: -1
-          stLuaLoads: 
-        HitPause:
-          _setEssential: 0
-          _setHidden: 1
-          loadTypes: 0
-          stParamValue: 0
+          stParamValue:
+            Damage: 0
+            velset: {x: 8, y: 5, z: 0}
+            hitStopTime: {x: 4, y: 20}
+            ChangeState_Enemy: 5050
           useID: -1
           stLuaLoads: 

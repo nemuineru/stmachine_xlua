@@ -14,12 +14,13 @@ end
 -- ステート変更のファンクション (5000)
     function QueuedStateID_Hit(in_entity)
         verd = {}
+        selfOnGrd = LC:isEntityOnGround(in_entity)
         CurrentR = LC:CheckStateTime(in_entity)
         if( CurrentR == 0 ) then
             Debug.Log("damage Amim")
             table.insert( verd, 0 ) 
         end
-        if ( CurrentR > 12 ) then 
+        if ( CurrentR > 12 and selfOnGrd) then 
             table.insert( verd, 1 )
         end
     return verd
