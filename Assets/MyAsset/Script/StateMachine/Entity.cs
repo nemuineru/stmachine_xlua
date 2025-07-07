@@ -41,6 +41,11 @@ public class Entity : MonoBehaviour
     [SerializeField]
     AnimlistObject animListObject;
 
+    //List化されたanimListObjectからanimDefsのリストを作成する.
+    //他Entityが自分のAnimを参照する際、パラメータ変更を共有してしまうことを懸念.
+
+    List<AnimDef> animDefs;
+
     //AnimListObject自体を変更しないとする.
     [ReadOnly(true)]
     public AnimlistObject _animListObject_onGame;
@@ -189,11 +194,13 @@ public class Entity : MonoBehaviour
     }
 
     //アニメーション変更..
+    //entityが指定されているときはそのEntityのAnimを呼び出すとする...がまだ未実装.
     public void ChangeAnim(float timeoffset = 0.0f)
     {
         AnimDef animFindByID = _animListObject_onGame.animDef.ToList().Find(x => x.ID == animID);
         if (animFindByID != null)
         {
+
             MainAnimMixer.ChangeAnim(animFindByID, default, timeoffset);
         }
         MainAnimMixer.SetAnim(false);
