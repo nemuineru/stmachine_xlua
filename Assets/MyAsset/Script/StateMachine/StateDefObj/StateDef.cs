@@ -4,9 +4,28 @@ using System.Linq;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.Analytics;
 using XLua;
 using XLua.LuaDLL;
+using System;
+
+//EditorExtention. for deepcopy.
+public static class ObjectExtensions
+{
+    public static T DeepClone<T>(this T obj)
+    {
+        using (var ms = new MemoryStream())
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(ms, obj);
+            ms.Position = 0;
+            return (T)formatter.Deserialize(ms);
+        }
+    }
+}
 
 //StateControllerに入力されるジェネリックの属性値に合わせ、計算.
 //Vector3とかstringとか入れられるようにしたい.

@@ -135,6 +135,23 @@ public class StateDefList_Inspector : Editor
             SelectedDefProperty = null;
         };
 
+        //追加時の挙動 - DeepCopyを行いたい.
+        _stateDefList.onAddCallback = (index) =>
+        {
+            StateDef AddDef = new StateDef();
+            targetStateDefLists.stateDefs.Add(AddDef);
+
+            /*
+            //プロパティ検索
+            var properties = type.GetProperties();
+            foreach (var pr in properties)
+            {
+                pr.SetValue(AddDef, pr.GetValue(targetStateDefLists.stateDefs[index.index]));
+            }
+            targetStateDefLists.stateDefs.Add(AddDef);
+            */
+        };
+
         //StateDefListの描写時.
 
         _stateDefList.drawElementCallback = (rect, index, active, focused) =>

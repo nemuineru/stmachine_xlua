@@ -60,7 +60,7 @@ public class Entity : MonoBehaviour
     Material mat;
     public SkinnedMeshRenderer mesh;
 
-    public StateDefListObject DefList;
+    public List<StateDefListObject> DefLists;
 
     public Vector3 wishingVect;
 
@@ -82,7 +82,7 @@ public class Entity : MonoBehaviour
         //DefSet();
 
         //StateDefはDeepCopyしないように.
-        
+
         //DefList.stateDefs.ForEach(def => def.PriorCondition = def.PriorCondition);
 
         //アニメ設定.
@@ -95,7 +95,13 @@ public class Entity : MonoBehaviour
             ChangeAnim();
         }
         defaultClss.initClss(this);
+        foreach (StateDefListObject dObj in DefLists)
+        {
+            loadedDefs.AddRange(dObj.stateDefs);
+        }
     }
+
+    List<StateDef> loadedDefs = new List<StateDef>();
 
     string verd_1;
     [SerializeField]
@@ -144,9 +150,19 @@ public class Entity : MonoBehaviour
         }
         mat.SetColor("_Color", CurColor);
 
+
+        //常時実行StateDef(-1, -2, -3)
+        StateDef AutoState_1 =
+        loadedDefs.Find(stDef => stDef.StateDefID == -1);
+        if(AutoState_1 != null)
+        {
+            AutoState_1.Execute(this);
+        }
+
+
         //state実行..
         StateDef currentState =
-        DefList.stateDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
+        loadedDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
         if (currentState != null)
         {
             //Debug.Log("Executed stateDef - " + CurrentStateID);
