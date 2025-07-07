@@ -9,4 +9,5 @@ todo : 主人公や敵キャラモデリングなど
 そのためにも新規プロジェクトに作るか..
 2.1K - Arenaは学生時代のプロジェクトだし、 "B"から始まるもので考えるか?
 
-2.1K - B3![Bunker Bustin Basterd] Protocols
+2.1K - B3![Bunker Bustin Basterd] Protocols...は長いので
+2.1K - BruteForceがいいかも.
