@@ -1,9 +1,11 @@
-todo : StateDef新規リスト作成時に、クローンされる項目がリンク項目になるのを修正する
-todo : stateDefAsset/AnimdefAssetの複数読み込み機能の標準化とか
-todo : HitDefParamsの修正など. また、stParamsをShow/Hide可能にする. 
+todo : StateDef新規リスト作成時に、クローンされる項目がリンク項目になるのを修正する (1/2 済)
+todo : stateDefAsset/AnimdefAssetの複数読み込み機能の標準化とか (2/3 済)
+todo : HitDefParamsの修正など. また、stParamsをShow/Hide可能にする. (0/4 未) 
 	(右クリックコンテキストにチェックボックスとして表示させられるように..)
-todo : ライフ・パワーバーデザイン
-todo : 主人公や敵キャラモデリングなど
+todo : ライフ・パワーバーデザイン (2/2 済 モックアップ段階)
+todo : 主人公や敵キャラモデリングなど (0/4 未) 
+todo : アニメーション追加 (0/? 未)
+todo : Entityが他Entityの情報(AnimDefとか)を読み取れるように改変 (0/? 未)
 
 タイトルがまだ stmachine_xluaのままだし、正式名称とか考えないとなー.
 そのためにも新規プロジェクトに作るか..
@@ -11,3 +13,5 @@ todo : 主人公や敵キャラモデリングなど
 
 2.1K - B3![Bunker Bustin Basterd] Protocols...は長いので
 2.1K - BruteForceがいいかも.
+
+敵キャラクターのデザインとか考えてなかったなぁ..
