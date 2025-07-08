@@ -17,7 +17,7 @@ end
         selfOnGrd = LC:isEntityOnGround(in_entity)
         CurrentR = LC:CheckStateTime(in_entity)
         if( CurrentR == 0 ) then
-            Debug.Log("damage Amim")
+            -- Debug.Log("damage Amim")
             table.insert( verd, 0 ) 
         end
         if ( CurrentR > 12 and selfOnGrd) then 

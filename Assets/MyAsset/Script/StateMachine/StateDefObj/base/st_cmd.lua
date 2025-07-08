@@ -5,56 +5,31 @@ local Vector3 = CS.UnityEngine.Vector3;
 local Transform = CS.UnityEngine.Transform;
 local Debug = CS.UnityEngine.Debug;
 
--- ステート変更のファンクション
-function QueuedStateID(in_entity)
+-- COMMAND FUNCTION
+function Queue_Cmd(in_entity)
     selfOnGrd = LC:isEntityOnGround(in_entity)
-    AttackCmd_jp = LC:CheckButtonPressed(in_entity, "a")
+    JumpCommand = LC:CheckButtonPressed(in_entity, "a_")
     AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
+    AttackCmd_x = LC:CheckButtonPressed(in_entity, "x_")
     selfStTime = LC:CheckStateTime(in_entity) 
+    stateID = in_entity.CurrentStateID
 
     verd = {}
-
     -- jump cmd
-    if(selfOnGrd == true and AttackCmd_jp == true) then
-        table.insert( verd, 3) 
+    if(selfOnGrd == true and AttackCmd_b == true and stateID == 0) then
+        table.insert( verd, 1) 
     end
 
-    if (selfOnGrd == true and AttackCmd_b == true and LC:CheckStateTime(in_entity) > 6) then 
-        table.insert( verd, 1 )
-    end
-
-    if(selfOnGrd == true) then
+    if (selfOnGrd == true and AttackCmd_x == true and stateID == 0) then 
         table.insert( verd, 2 )
     end
 
-    if( LC:CheckStateTime(in_entity) > 1 ) then
-        table.insert( verd, 0 ) 
-    end
-    -- idleのanimを指定する
-    if( LC:CheckStateTime(in_entity) == 1 ) then
-        table.insert( verd, 100 ) 
+    if( selfOnGrd == false and AttackCmd_x == true and stateID == 5 ) then
+        table.insert( verd, 3 ) 
     end
     return verd
 end
 
-
-function QueuedStateID_J(in_entity)    
-    Debug.Log("Checking Entity Jumping");
-    selfStTime =  LC:CheckStateTime(in_entity)
-    selfOnGrd_f = LC:isEntityOnGround(in_entity)
-    AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
-    if(selfOnGrd_f == true) then
-        table.insert( verd, 1 )
-    end
-    if(AttackCmd_b == true) then
-        table.insert(verd, 2)
-    end
-    -- idleのanimを指定する
-    if(selfStTime == 0) then
-        table.insert( verd, 0 ) 
-    end
-    return verd
-end
 
 function LuaOutput(in_entity)    
     outs = {}

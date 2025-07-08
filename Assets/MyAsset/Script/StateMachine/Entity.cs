@@ -161,6 +161,7 @@ public class Entity : MonoBehaviour
         loadedDefs.Find(stDef => stDef.StateDefID == -1);
         if(AutoState_1 != null)
         {
+            Debug.Log("auto checking -1 state");
             AutoState_1.Execute(this);
         }
 

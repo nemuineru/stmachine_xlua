@@ -39,7 +39,7 @@ end
 
 
 function QueuedStateID_J(in_entity)    
-    Debug.Log("Checking Entity Jumping");
+    -- Debug.Log("Checking Entity Jumping");
     selfStTime =  LC:CheckStateTime(in_entity)
     selfOnGrd_f = LC:isEntityOnGround(in_entity)
     AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")

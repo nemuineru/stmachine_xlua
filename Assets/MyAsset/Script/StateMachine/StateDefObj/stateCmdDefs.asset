@@ -18,7 +18,7 @@ MonoBehaviour:
     PriorCondition:
       LuaScript: 
       entity: {fileID: 0}
-    LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
+    LuaAsset: {fileID: -8122155829129254986, guid: 8e994d9382ba03445bddab6509ecadc4, type: 3}
     preStateVerdictName: Queue_Cmd
     ParamLoadName: LuaOutput
     StateList:
@@ -33,25 +33,25 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 1
           stLuaLoads: 
         stateControllerSubName: Jab_Cmd
-        changeTo: 0
+        changeTo: 1
     - rid: 4404388664824299528
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 2
           stLuaLoads: 
         stateControllerSubName: Kick_Cmd
-        changeTo: 0
+        changeTo: 2
     - rid: 4404388664824299529
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 3
           stLuaLoads: 
         stateControllerSubName: JumpKick_Cmd
-        changeTo: 0
+        changeTo: 3

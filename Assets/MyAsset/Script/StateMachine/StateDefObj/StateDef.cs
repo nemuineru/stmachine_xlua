@@ -242,27 +242,25 @@ public class StateDef
 
                 //executeStateIDsにはQueuedStateIDの値を入力
 
-                int[] ExecuteStateIDs = stateVerd.Invoke(entity);
-                if (stateDefParams != null)
-                {
-                    luaOutputParams = stateDefParams.Invoke(entity).ToList();
-                }
 
-                string executingStr = "";
-                if (ExecuteStateIDs != null)
+                int[] ExecuteStateIDs;
+
+                if (stateVerd != null)
                 {
-                    for (int i = 0; i < ExecuteStateIDs.Count(); i++)
+                    ExecuteStateIDs = stateVerd.Invoke(entity);
+                    if (stateDefParams != null)
                     {
-                        executingStr += ExecuteStateIDs[i] + " , ";
+                        luaOutputParams = stateDefParams.Invoke(entity).ToList();
                     }
-                }
-                else
-                {
-                    Debug.LogError("Execute ID is NULL!");
-                }
-            // Debug.Log(executingStr);
 
-
+                    string executingStr = "";
+                    if (ExecuteStateIDs != null)
+                    {
+                        for (int i = 0; i < ExecuteStateIDs.Count(); i++)
+                        {
+                            executingStr += ExecuteStateIDs[i] + " , ";
+                        }
+                    }                    
                     //def中にあるstateを全部リストアップ
                     foreach (StateController state in StateList)
                     {
@@ -278,6 +276,14 @@ public class StateDef
                             state.OnExecute();
                         }
                     }
+                }
+                else
+                {
+                    //Debug.LogError("Execute ID/stateVerd is NULL!");
+                }
+            // Debug.Log(executingStr);
+
+
 
 
             //stateID内にLuaの設定値をセットアップ.
@@ -499,5 +505,17 @@ public class scRotateTowards : StateController
             Quaternion RotateTowards = Quaternion.LookRotation(vect.normalized, Vector3.up);
             entity.transform.rotation = Quaternion.Lerp(entity.transform.rotation, RotateTowards, RotateWeight);
         }
+    }
+}
+
+
+//設定位置にエフェクトを放出する.
+[System.Serializable]
+[SerializeField]
+public class scEmitEffect : StateController
+{
+    internal override void OnExecute()
+    {
+
     }
 }

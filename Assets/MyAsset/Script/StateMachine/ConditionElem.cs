@@ -88,18 +88,18 @@ public class LC
     {
 
     }
-    
+
     public Vector3 entityPos(Entity et)
-    {        
+    {
         return et.transform.position;
     }
     public Vector3 TargetPos(Entity et)
-    {        
+    {
         return et.targetTo.position;
     }
 
     public bool isEntityOnGround(Entity et)
-    {        
+    {
         return et.isOnGround;
     }
 
@@ -111,6 +111,11 @@ public class LC
 
     public bool CheckButtonPressed(Entity et, string command)
     {
-        return et.entityInput.CheckInput(command,1);
+        return et.entityInput.CheckInput(command, 1);
+    }
+
+    public int CheckStateDefID(Entity et)
+    {
+        return et.CurrentStateID;
     }
 }
