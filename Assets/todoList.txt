@@ -15,3 +15,7 @@ todo : Entityが他Entityの情報(AnimDefとか)を読み取れるように改�
 2.1K - BruteForceがいいかも.
 
 敵キャラクターのデザインとか考えてなかったなぁ..
+
+todo later : コンボ表示. 
+todo later : 画面振動.
+todo later : アクション関連の細かい動作.

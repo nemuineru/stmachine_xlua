@@ -265,7 +265,11 @@ public class MainNodeConfigurator
             Mixers[indexOfEmpty] = new MixAnimNode();
             node = Mixers[indexOfEmpty];
             node.isAdditive = AdditiveIsTrue;
-            node.def = def;
+
+            //DeepCopy defs, so that the Entity itself won't change the property of these.
+            AnimDef cDef = def.Clone();
+
+            node.def = cDef;
             node.CreatePlayerNodes(ref PrimalGraph);
 
             //init Entity on new Connection. Dont Forget it!
@@ -400,7 +404,6 @@ public class AnimDef
     //ミキシングするアニメのウェイトなど.
     public class Anims
     {
-        public Anims() { }
         public Anims(AnimationClip clip) => Clip = clip;
         public AnimationClip Clip;
         public float speed = 1f, startFrame, cycleOffset;
@@ -730,6 +733,21 @@ public class AnimDef
             }
         }
     }
+
+    //Cloneメソッドの拡張..
+    public AnimDef Clone() => new AnimDef
+    {
+        //AnimClipはそのまま..
+        animClip = this.animClip,
+        mixType = this.mixType,
+        MixParamName = this.MixParamName,
+        ID = this.ID,
+        Name = this.Name,
+        blendInTime = this.blendInTime,
+        blendOutTime = this.blendOutTime,
+        useDefaultClss = this.useDefaultClss,
+        clssSetting = this.clssSetting
+    };
 }
 
 

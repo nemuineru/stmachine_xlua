@@ -24,8 +24,16 @@ function Queue_Cmd(in_entity)
         table.insert( verd, 2 )
     end
 
-    if( selfOnGrd == false and AttackCmd_x == true and stateID == 5 ) then
+    if (selfOnGrd == true and AttackCmd_b == true 
+    and stateID == 1 and selfStTime > 6) then 
+        table.insert( verd, 4 )
+    end
+    if( selfOnGrd == false and AttackCmd_x == true and stateID == 50 ) then
         table.insert( verd, 3 ) 
+    end
+
+    if( selfOnGrd == false and AttackCmd_b == true and stateID == 50 ) then
+        table.insert( verd, 5 ) 
     end
     return verd
 end

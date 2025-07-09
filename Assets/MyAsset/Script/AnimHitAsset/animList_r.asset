@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a3bd391a9e706014f88c1ba738a67323, type: 3}
-  m_Name: animList_test
+  m_Name: animList_r
   m_EditorClassIdentifier: 
   animDef:
   - mixType: 3
@@ -50,7 +50,7 @@ MonoBehaviour:
     clssSetting:
       clssDefs:
       - clssType: 0
-        attachTo: UpperLeg.L
+        attachTo: upperleg.l
         showGizmo: 1
         _entity: {fileID: 0}
         attachTransform: {fileID: 0}
@@ -78,7 +78,7 @@ MonoBehaviour:
     clssSetting:
       clssDefs:
       - clssType: 1
-        attachTo: hand.L
+        attachTo: hand.l
         showGizmo: 1
         _entity: {fileID: 0}
         attachTransform: {fileID: 0}
@@ -88,7 +88,7 @@ MonoBehaviour:
         _lastcalcStartPos: {x: 0, y: 0, z: 0}
         _lastcalcEndPos: {x: 0, y: 0, z: 0}
       disableClssList:
-      - Face
+      - head
       root: {fileID: 0}
   - mixType: 0
     MixParamName: 
@@ -102,12 +102,12 @@ MonoBehaviour:
       cycleOffset: 0
       mixPosition: {x: 0, y: 0}
     blendInTime: 0.1
-    blendOutTime: 0.02
+    blendOutTime: 0.1
     useDefaultClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
-      - Face
+      - head
       root: {fileID: 0}
   - mixType: 0
     MixParamName: 
@@ -126,7 +126,7 @@ MonoBehaviour:
     clssSetting:
       clssDefs:
       - clssType: 1
-        attachTo: LowerLeg.R
+        attachTo: lowerleg.r
         showGizmo: 1
         _entity: {fileID: 0}
         attachTransform: {fileID: 0}
@@ -136,7 +136,7 @@ MonoBehaviour:
         _lastcalcStartPos: {x: 0, y: 0, z: 0}
         _lastcalcEndPos: {x: 0, y: 0, z: 0}
       disableClssList:
-      - Face
+      - head
       root: {fileID: 0}
   - mixType: 0
     MixParamName: 
@@ -155,7 +155,7 @@ MonoBehaviour:
     clssSetting:
       clssDefs: []
       disableClssList:
-      - Face
+      - head
       root: {fileID: 0}
   - mixType: 0
     MixParamName: 
@@ -174,15 +174,15 @@ MonoBehaviour:
     clssSetting:
       clssDefs: []
       disableClssList:
-      - Face
+      - head
       root: {fileID: 0}
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
-    ID: 4
-    Name: HKick
+    ID: 5
+    Name: Knifes
     animClip:
-    - Clip: {fileID: 7400000, guid: d43dcff2bbe635643b415cee8702203c, type: 2}
+    - Clip: {fileID: 7400000, guid: ef15f6167a26a9142b12faa0e8237153, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
@@ -193,7 +193,36 @@ MonoBehaviour:
     clssSetting:
       clssDefs:
       - clssType: 1
-        attachTo: LowerLeg.R
+        attachTo: kf01
+        showGizmo: 1
+        _entity: {fileID: 0}
+        attachTransform: {fileID: 0}
+        startPos: {x: 0, y: 0, z: 0.75}
+        endPos: {x: 0.24, y: 0, z: -0.15}
+        width: 0.32
+        _lastcalcStartPos: {x: 0, y: 0, z: 0}
+        _lastcalcEndPos: {x: 0, y: 0, z: 0}
+      disableClssList:
+      - head
+      root: {fileID: 0}
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
+    ID: 4
+    Name: Kick
+    animClip:
+    - Clip: {fileID: 7400000, guid: d43dcff2bbe635643b415cee8702203c, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0
+    blendOutTime: 0.2
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs:
+      - clssType: 1
+        attachTo: lowerleg.r
         showGizmo: 1
         _entity: {fileID: 0}
         attachTransform: {fileID: 0}
@@ -203,5 +232,33 @@ MonoBehaviour:
         _lastcalcStartPos: {x: 0, y: 0, z: 0}
         _lastcalcEndPos: {x: 0, y: 0, z: 0}
       disableClssList:
-      - Face
+      - head
+      root: {fileID: 0}
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
+    ID: 6
+    Name: AirAttack_Knife
+    animClip:
+    - Clip: {fileID: 7400000, guid: 67093dc924031d24c896ff11fa6ff5fa, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0
+    blendOutTime: 0.1
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs:
+      - clssType: 1
+        attachTo: kf01
+        showGizmo: 1
+        _entity: {fileID: 0}
+        attachTransform: {fileID: 0}
+        startPos: {x: 0, y: 0, z: 0.8}
+        endPos: {x: 0, y: 0, z: 0}
+        width: 0.12
+        _lastcalcStartPos: {x: 0, y: 0, z: 0}
+        _lastcalcEndPos: {x: 0, y: 0, z: 0}
+      disableClssList: []
       root: {fileID: 0}

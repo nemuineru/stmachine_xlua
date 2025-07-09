@@ -19,10 +19,6 @@ function QueuedStateID(in_entity)
         table.insert( verd, 3) 
     end
 
-    if (selfOnGrd == true and AttackCmd_b == true and LC:CheckStateTime(in_entity) > 6) then 
-        table.insert( verd, 1 )
-    end
-
     if(selfOnGrd == true) then
         table.insert( verd, 2 )
     end

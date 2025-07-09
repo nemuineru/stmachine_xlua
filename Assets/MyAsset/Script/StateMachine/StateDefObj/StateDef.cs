@@ -13,16 +13,19 @@ using XLua.LuaDLL;
 using System;
 
 //EditorExtention. for deepcopy.
-public static class ObjectExtensions
+public static class ObjectExtension
 {
-    public static T DeepClone<T>(this T obj)
+    // ディープコピーの複製を作る拡張メソッド
+    public static T DeepClone<T>(this T src)
     {
-        using (var ms = new MemoryStream())
+        using (var memoryStream = new System.IO.MemoryStream())
         {
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(ms, obj);
-            ms.Position = 0;
-            return (T)formatter.Deserialize(ms);
+            var binaryFormatter
+              = new System.Runtime.Serialization
+                    .Formatters.Binary.BinaryFormatter();
+            binaryFormatter.Serialize(memoryStream, src); // シリアライズ
+            memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
+            return (T)binaryFormatter.Deserialize(memoryStream); // デシリアライズ
         }
     }
 }
@@ -418,7 +421,7 @@ public class scMove : StateController
 {   
     internal override void OnExecute()
     {
-        entity.rigid.velocity += entity.wishingVect * 10.0f * Time.fixedDeltaTime;
+        entity.rigid.velocity = entity.wishingVect * 100.0f * Time.fixedDeltaTime;
     }
 
     public override string typeGet()
@@ -455,7 +458,7 @@ public class scJump : StateController
 {
     internal override void OnExecute()
     {
-        entity.rigid.velocity = Vector3.ProjectOnPlane(entity.rigid.velocity,Vector3.up) + Vector3.up * 3.0f;
+        entity.rigid.velocity = Vector3.ProjectOnPlane(entity.rigid.velocity,Vector3.up) + Vector3.up * 3.2f;
         entity.isOnGround = false;
     }
 }
@@ -480,12 +483,13 @@ public class scColorChange : StateController
 public class scChangeState : StateController
 {
     public int changeTo = 0;
+    public int priority = 0;
     internal override void OnExecute()
     {
+        //this ChangeState Needs to change-Queues.
+        entity.CListQueue.Add(new Entity.ChangeStateQueue(){ stateDefID = changeTo , priority = priority });
         // Debug.Log("stateTime set to 0");
         entity.isStateChanged = true;
-        // Debug.Log("stateID changes to " + changeTo);
-        entity.CurrentStateID = changeTo;
         // Debug.Log("stchanged END");
     }
 }

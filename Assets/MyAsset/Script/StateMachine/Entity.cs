@@ -118,7 +118,7 @@ public class Entity : MonoBehaviour
     void FixedUpdate()
     {
         defaultClss.clssPosUpdate();
-        
+
         //後で消します.
         //
         entityInput.RecordInput_Player(0);
@@ -149,17 +149,25 @@ public class Entity : MonoBehaviour
 
         Vector2 wish = (InputInstance.self.inputValues.MovingAxisRead);
         if (vCam != null)
-        { 
+        {
             wishingVect = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up) * wish.y
             + Vector3.ProjectOnPlane(vCam.transform.right, Vector3.up) * wish.x;
         }
         mat.SetColor("_Color", CurColor);
 
+        if (CListQueue.Count > 0)
+        {
+            //Most Primal Queue is Most Biggest Number.
+            CListQueue.Sort((CQ_L, CQ_M) => CQ_M.priority - CQ_L.priority);
+            CurrentStateID = CListQueue[0].stateDefID;
+            CListQueue.Clear();
+        }
+
 
         //常時実行StateDef(-1, -2, -3)
-        StateDef AutoState_1 =
+            StateDef AutoState_1 =
         loadedDefs.Find(stDef => stDef.StateDefID == -1);
-        if(AutoState_1 != null)
+        if (AutoState_1 != null)
         {
             Debug.Log("auto checking -1 state");
             AutoState_1.Execute(this);
@@ -180,14 +188,14 @@ public class Entity : MonoBehaviour
         {
             Debug.LogError("Loaded State is null : " + CurrentStateID);
         }
-        
+
         //地面判定.
         //raycenter
         Ray ray = new Ray(transform.position + Vector3.up * 0.009f, Vector3.down);
-        Debug.DrawRay(ray.origin ,Mathf.Max(0 , -rigid.velocity.y)* Vector3.down);
+        Debug.DrawRay(ray.origin, Mathf.Max(0, -rigid.velocity.y) * Vector3.down);
 
         RaycastHit hitInfo;
-        Physics.Raycast(ray, out hitInfo, Mathf.Max(0.01f , -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
+        Physics.Raycast(ray, out hitInfo, Mathf.Max(0.01f, -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
 
         isOnGround = (hitInfo.collider != null);
 
@@ -226,6 +234,14 @@ public class Entity : MonoBehaviour
             Debug.Log("cant find enemy Clss!");
         }
         return resl;
+    }
+
+    internal List<ChangeStateQueue> CListQueue = new List<ChangeStateQueue>();
+
+    internal struct ChangeStateQueue
+    {
+        public int stateDefID;
+        public int priority;
     }
 
     //前プロジェクトのように、スクリプト内でステートをとりあえず記述.
