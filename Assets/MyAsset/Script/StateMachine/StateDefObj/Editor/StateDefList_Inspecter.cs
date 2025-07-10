@@ -267,6 +267,7 @@ public class StateDefList_Inspector : Editor
             }
         };
 
+
         _stateList[ID] = _stateListDraw;
     }
 

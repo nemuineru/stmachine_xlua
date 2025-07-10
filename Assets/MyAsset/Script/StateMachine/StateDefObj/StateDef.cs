@@ -37,9 +37,6 @@ public static class ObjectExtension
 [System.Serializable]
 public class stParams<Type>
 {
-    //MUGENのHITDEFをそのまま移植するとInspectorが大変なことになるので、
-    //必須値以外は隠せるようにしたい.
-
     //デフォルト値の設定.
     //stParamsを設定する際は必ず初期化を行うとする.
     internal Type defaultValue;
@@ -72,9 +69,17 @@ public class stParams<Type>
     [SerializeField]
     bool _setEssential = false;
 
-    //この値が設定されているなら, 値が隠され、デフォルト値が読み出される.
-    [SerializeField]
+
+    //MUGENのHITDEFをそのまま移植するとInspectorが大変なことになるので、
+    //必須値以外は隠せるようにしたい.
+
+    //この値が設定されているなら, Inspector上では隠されるようになる.. 右クリックのメニューで解除される.
     bool _setHidden = true;
+
+    private void toggleHidden()
+    {
+        _setHidden = !_setHidden;
+    }
 
     //実行されたLuaCondition中の変数を読み出すかを後述するEnumに合わせて考慮.
     [SerializeField]
@@ -374,7 +379,7 @@ public class scAnimSet : StateController
     internal override void OnExecute()
     {
         entity.animID = changeAnimID.valueGet(loadParams,entity);
-        AnimDef animFindByID = entity._animListObject_onGame.animDef.ToList().Find
+        AnimDef animFindByID = entity.animDefs.ToList().Find
         (x => x.ID == changeAnimID.valueGet(loadParams, entity));
         //設定されたIDが見つかれば、そのParameterと同様に設定..
         if (animFindByID != null)
@@ -518,6 +523,8 @@ public class scRotateTowards : StateController
 [SerializeField]
 public class scEmitEffect : StateController
 {
+    [SerializeField]
+    stParams<GameObject> EmitObject;
     internal override void OnExecute()
     {
 

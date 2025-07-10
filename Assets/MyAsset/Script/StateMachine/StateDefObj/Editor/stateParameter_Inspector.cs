@@ -10,6 +10,8 @@ using UnityEditor.UIElements;
 using UnityEditorInternal;
 using Unity.Properties;
 using System.Reflection.Emit;
+using Unity.VisualScripting;
+using System.Runtime.Remoting.Contexts;
 
 //ステート基本情報の表示クラス
 //[CustomEditor(typeof(StateDef))]
@@ -20,23 +22,25 @@ public class stateDefShow : Editor
     //選択したStateDefをSerializedPropertyとして考える
     SerializedProperty SelectedDefProperty;
 
+
     //stateDefの詳細表示時のスクロールポジション.
     Vector2 ParamScrollPos;
     public override void OnInspectorGUI()
-    { 
+    {
         selectedDef_stateList_OnGUI();
     }
-    
+
     void OnEnable()
     {
         selectedDef_statelist_OnEnable();
     }
 
+
     void selectedDef_statelist_OnEnable()
     {
         _stateList = new ReorderableList(serializedObject, SelectedDefProperty.FindPropertyRelative("StateList"),
         draggable: true, displayHeader: false,
-        displayAddButton: true , displayRemoveButton : true);
+        displayAddButton: true, displayRemoveButton: true);
         Debug.Log("initializing");
     }
 
@@ -55,20 +59,41 @@ public class stateDefShow : Editor
             EditorGUILayout.PropertyField(stDefNameProperty);
             EditorGUILayout.PropertyField(stDefIDProperty);
             EditorGUILayout.PropertyField(LuScript);
-            
+
             //stateControllerListを描写
             _stateList.DoLayoutList();
         }
     }
-
 }
 
-
+//StateControllerのプロパティドロワー.
+//右クリックで隠せる.
+//[CustomPropertyDrawer(typeof(StateController), true)]
+public class StControllerDrawer : PropertyDrawer
+{
+    public void OnEnable()
+    {
+        EditorApplication.contextualPropertyMenu += OnPropertyContextMenu;
+    }
+    void OnDestroy()
+    {
+        EditorApplication.contextualPropertyMenu -= OnPropertyContextMenu;
+    }
+    void OnPropertyContextMenu(GenericMenu menu, SerializedProperty property)
+    {
+        menu.AddItem(new GUIContent("TEST"), false, () =>
+        {
+            Debug.Log(property.FindPropertyRelative("name").stringValue);
+        });
+        return;
+    }
+}
 
 //ステートコントローラ内のパラメータ表記用クラス.
 [CustomPropertyDrawer(typeof(stParams<>), true)]
 public class sParams_Drawer : PropertyDrawer
 {
+
     public string[] options = new string[] { "Constant Value", "via Condition", "via Calclation" };
 
     //呼び出し方法の記述. 後にDrawerに直にenum形式として記述したい.

@@ -39,16 +39,13 @@ public class Entity : MonoBehaviour
     //アニメーション管理用.
     public int animID = 0;
     [SerializeField]
-    AnimlistObject animListObject;
+    List<AnimlistObject> animListObject;
 
     //List化されたanimListObjectからanimDefsのリストを作成する.
     //他Entityが自分のAnimを参照する際、パラメータ変更を共有してしまうことを懸念.
 
-    List<AnimDef> animDefs;
+    internal List<AnimDef> animDefs = new List<AnimDef>();
 
-    //AnimListObject自体を変更しないとする.
-    [ReadOnly(true)]
-    public AnimlistObject _animListObject_onGame;
     Animator animator;
 
     PlayableOutput PrimalPlayableOut;
@@ -92,13 +89,16 @@ public class Entity : MonoBehaviour
 
         //アニメ設定.
         PrimalPlayableOut = new PlayableOutput();
-        if (animListObject != null && animator != null)
+        foreach (AnimlistObject f in animListObject)
         {
-            _animListObject_onGame = Instantiate(animListObject);
-            MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
-            PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.mixMixer);
-            ChangeAnim();
+            animDefs.AddRange(f.animDef.ToList());
         }
+        if (animListObject != null && animator != null)
+            {
+                MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
+                PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.mixMixer);
+                ChangeAnim();
+            }
         defaultClss.initClss(this);
         foreach (StateDefListObject dObj in DefLists)
         {
@@ -206,7 +206,7 @@ public class Entity : MonoBehaviour
     //entityが指定されているときはそのEntityのAnimを呼び出すとする...がまだ未実装.
     public void ChangeAnim(float timeoffset = 0.0f)
     {
-        AnimDef animFindByID = _animListObject_onGame.animDef.ToList().Find(x => x.ID == animID);
+        AnimDef animFindByID = animDefs.Find(x => x.ID == animID);
         if (animFindByID != null)
         {
 
