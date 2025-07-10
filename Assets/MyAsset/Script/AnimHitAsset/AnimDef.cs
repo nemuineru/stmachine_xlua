@@ -83,6 +83,8 @@ public class MixAnimNode
 
             PlayList[PlayList.Length - 1] =
             AnimationClipPlayable.Create(addGraphTo, anims.Clip);
+            //ApplyFootIKを自動的にoffにする. これ、どうやら不具合の原因ぽそう.
+            PlayList[PlayList.Length - 1].SetApplyFootIK(false);
             
             
             //Output先は固定のため0.
@@ -834,7 +836,7 @@ public class clssSetting
             clssRef = findclss(useType, frame);
             clssCompareTo = compareTo.findclss(clssDef.ClssType.Attack, frame);
         }
-        
+
         foreach (clssDef cls in clssRef)
         {
             foreach (clssDef compcls in clssCompareTo)
@@ -892,6 +894,13 @@ public class clssSetting
         }
         return isCollided_any;
     }
+
+
+    //Cloneメソッドの拡張..
+    public clssSetting Clone() => new clssSetting
+    {
+        
+    };
 }
 
 [System.Serializable]
