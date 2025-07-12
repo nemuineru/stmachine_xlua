@@ -748,7 +748,7 @@ public class AnimDef
         blendInTime = this.blendInTime,
         blendOutTime = this.blendOutTime,
         useDefaultClss = this.useDefaultClss,
-        clssSetting = this.clssSetting
+        clssSetting = this.clssSetting.Clone()
     };
 }
 
@@ -897,10 +897,12 @@ public class clssSetting
 
 
     //Cloneメソッドの拡張..
-    public clssSetting Clone() => new clssSetting
+    public clssSetting Clone()
     {
+        var retDef = new clssSetting();
         
-    };
+        return retDef;
+    }
 }
 
 [System.Serializable]
