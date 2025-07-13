@@ -72,6 +72,9 @@ public class Entity : MonoBehaviour
     //Input Manager for each entitys
     internal entityInputManager entityInput = new entityInputManager();
 
+    //OnHit確認用. 後で整理したい.
+    public bool isStateHit = false;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -102,7 +105,7 @@ public class Entity : MonoBehaviour
         defaultClss.initClss(this);
         foreach (StateDefListObject dObj in DefLists)
         {
-            loadedDefs.AddRange(dObj.stateDefs);
+            loadedDefs.AddRange(dObj.stateDefs);            
         }
     }
 
@@ -160,6 +163,7 @@ public class Entity : MonoBehaviour
             //Most Primal Queue is Most Biggest Number.
             CListQueue.Sort((CQ_L, CQ_M) => CQ_M.priority - CQ_L.priority);
             CurrentStateID = CListQueue[0].stateDefID;
+            isStateHit = false;
             CListQueue.Clear();
         }
 

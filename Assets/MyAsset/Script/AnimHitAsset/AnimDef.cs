@@ -899,8 +899,15 @@ public class clssSetting
     //Cloneメソッドの拡張..
     public clssSetting Clone()
     {
+        //新規に作成.
         var retDef = new clssSetting();
-        
+        foreach (clssDef c in this.clssDefs)
+        {
+            retDef.clssDefs.Add(c.Clone);
+        }
+        //string形式なので自動的にdeepcopyされるはず、というか参照でもいいのか？
+        retDef.disableClssList.AddRange(this.disableClssList);
+
         return retDef;
     }
 }
@@ -909,6 +916,18 @@ public class clssSetting
 [SerializeField]
 public class clssDef
 {
+    //Cloneの拡張
+    public clssDef Clone => new clssDef
+    {
+        clssType = this.clssType,
+        attachTo = this.attachTo,
+        showGizmo = this.showGizmo,
+        startPos = this.startPos,
+        endPos = this.endPos,
+        StartTime = this.StartTime,
+        EndTime = this.EndTime        
+    };
+
     //やられ判定と当たり判定をenumで管理する
     public enum ClssType
     {

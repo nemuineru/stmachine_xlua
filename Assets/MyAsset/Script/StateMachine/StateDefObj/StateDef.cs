@@ -400,20 +400,23 @@ public class scAnimParamChange : StateController
     stParams<int> changeAnimID;
     
     [SerializeField]
-    stParams<Vector2> animParameter; 
+    stParams<Vector2> animParameter;
 
     internal override void OnExecute()
     {
-        MixAnimNode findNode = entity.MainAnimMixer.Mixers.First(x => x != null
-        && x.def.ID == changeAnimID.valueGet(loadParams, entity));
-        if (findNode != null)
+        if (entity.MainAnimMixer.Mixers.Count() > 0)
         {
-            AnimDef animFindByID =
-            findNode.def;
-            //設定されたIDが見つかれば、そのParameterと同様に設定..
-            if (animFindByID != null)
+            MixAnimNode findNode = entity.MainAnimMixer.Mixers.First(x => x != null
+            && x.def.ID == changeAnimID.valueGet(loadParams, entity));
+            if (findNode != null)
             {
-                entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet(loadParams, entity));
+                AnimDef animFindByID =
+                findNode.def;
+                //設定されたIDが見つかれば、そのParameterと同様に設定..
+                if (animFindByID != null)
+                {
+                    entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet(loadParams, entity));
+                }
             }
         }
     }
@@ -449,7 +452,8 @@ public class scHitDef : StateController
 
     internal override void OnExecute()
     {
-        gameState.self.ProvokeHitDef
+        //HitCheckを行う.
+        entity.isStateHit = gameState.self.ProvokeHitDef
         (entity, hitParams.valueGet(loadParams, entity));
     }
 

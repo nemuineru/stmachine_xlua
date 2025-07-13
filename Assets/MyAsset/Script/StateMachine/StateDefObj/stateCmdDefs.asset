@@ -23,9 +23,10 @@ MonoBehaviour:
     ParamLoadName: LuaOutput
     StateList:
     - rid: 4404388664824299527
+    - rid: 4404388799971590145
     - rid: 4404388664824299528
-    - rid: 4404388664824299529
     - rid: 4404388709018370078
+    - rid: 4404388664824299529
     - rid: 4404388709018370091
   references:
     version: 2
@@ -37,7 +38,7 @@ MonoBehaviour:
           useLua: 0
           value: 1
           stLuaLoads: 
-        stateControllerSubName: Jab_Cmd
+        stateControllerSubName: Combo1 Jab_Cmd
         changeTo: 1
         priority: 0
     - rid: 4404388664824299528
@@ -45,29 +46,29 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 2
+          value: 3
           stLuaLoads: 
-        stateControllerSubName: Kick_Cmd
-        changeTo: 2
-        priority: 0
+        stateControllerSubName: Combo3 Kick_Cmd
+        changeTo: 3
+        priority: 2
     - rid: 4404388664824299529
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
         ID:
           useLua: 0
-          value: 3
+          value: 20
           stLuaLoads: 
-        stateControllerSubName: JumpKick_Cmd
-        changeTo: 3
+        stateControllerSubName: JumpCombo Kick_Cmd
+        changeTo: 20
         priority: 0
     - rid: 4404388709018370078
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
         ID:
           useLua: 0
-          value: 4
+          value: 5
           stLuaLoads: 
-        stateControllerSubName: GKnife_Cmd
+        stateControllerSubName: Hard1 GKnife_Cmd
         changeTo: 5
         priority: 1
     - rid: 4404388709018370091
@@ -75,8 +76,18 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 5
+          value: 25
           stLuaLoads: 
-        stateControllerSubName: AKnife_Cmd
-        changeTo: 7
+        stateControllerSubName: JumpHard AKnife_Cmd
+        changeTo: 25
+        priority: 1
+    - rid: 4404388799971590145
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Combo2 Jab_2 Cmd
+        changeTo: 2
         priority: 1

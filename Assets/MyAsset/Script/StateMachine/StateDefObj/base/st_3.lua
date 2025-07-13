@@ -21,6 +21,22 @@ local Debug = CS.UnityEngine.Debug;
     return verd
 end 
 
+-- 地上ハイキック時（コンボフィニッシャー）のステートコマンド..
+    function QueuedStateID_GrdCombo3_Finisher(in_entity)
+        verd = {}
+        CurrentTime = LC:CheckStateTime(in_entity)
+        AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
+        if( CurrentTime == 0 ) then
+            table.insert( verd, 0 ) 
+        end
+        if( CurrentTime == 4 ) then
+            table.insert( verd, 3 ) 
+        end
+        if ( CurrentTime > 12 ) then 
+            table.insert( verd, 1 )
+        end
+    return verd
+end 
 
 -- ステート変更のファンクション
     function QueuedStateID_J_Knife(in_entity)

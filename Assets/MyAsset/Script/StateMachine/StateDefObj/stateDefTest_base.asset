@@ -37,7 +37,7 @@ MonoBehaviour:
     - rid: 3002629528666767590
     - rid: 3002629528666767591
     - rid: 3579422750824726546
-  - StateDefName: Jabbin
+  - StateDefName: Combo1 Jab_First
     StateDefID: 1
     PriorCondition:
       LuaScript: "\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
@@ -57,7 +57,7 @@ MonoBehaviour:
     - rid: 3002629213760520202
     - rid: 3579423095655497736
     - rid: 4404388529659445248
-  - StateDefName: Kicking
+  - StateDefName: Combo2 Jab_Second
     StateDefID: 2
     PriorCondition:
       LuaScript: "\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
@@ -68,7 +68,7 @@ MonoBehaviour:
         verd, 0 ) \r\n                    end\r\n                return verd\r\n           
         end\r\n        "
       entity: {fileID: 0}
-    LuaAsset: {fileID: -8122155829129254986, guid: 3fcddc9c2ce5f8b479bf3d800b4cbf2f, type: 3}
+    LuaAsset: {fileID: -8122155829129254986, guid: cd00f5aa3ee1af945b2501f30c22bbeb, type: 3}
     preStateVerdictName: QueuedStateID
     ParamLoadName: LuaOutput
     StateList:
@@ -76,8 +76,32 @@ MonoBehaviour:
     - rid: 3002629213760520203
     - rid: 3579423095655497732
     - rid: 4404388637674569761
-  - StateDefName: Air Kicking
+  - StateDefName: Combo3 Kick Finisher
     StateDefID: 3
+    PriorCondition:
+      LuaScript: 
+      entity: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 3fcddc9c2ce5f8b479bf3d800b4cbf2f, type: 3}
+    preStateVerdictName: QueuedStateID_GrdCombo3_Finisher
+    ParamLoadName: null
+    StateList:
+    - rid: 4404388799971590146
+    - rid: 4404388799971590147
+    - rid: 4404388799971590148
+  - StateDefName: KnifeStab
+    StateDefID: 5
+    PriorCondition:
+      LuaScript: 
+      entity: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: cd00f5aa3ee1af945b2501f30c22bbeb, type: 3}
+    preStateVerdictName: QueuedStateID_Knife
+    ParamLoadName: null
+    StateList:
+    - rid: 4404388709018370071
+    - rid: 4404388709018370072
+    - rid: 4404388709018370073
+  - StateDefName: AirCombo Kicking
+    StateDefID: 20
     PriorCondition:
       LuaScript: "\r\n            -- \u30B9\u30C6\u30FC\u30C8\u5909\u66F4\u306E\u30D5\u30A1\u30F3\u30AF\u30B7\u30E7\u30F3\r\n               
         function QueuedStateID(in_entity)\r\n\r\n                    verd = {}\r\n                   
@@ -95,20 +119,8 @@ MonoBehaviour:
     - rid: 4404388637674569820
     - rid: 3002629213760520203
     - rid: 4404388637674569830
-  - StateDefName: KnifeStab
-    StateDefID: 5
-    PriorCondition:
-      LuaScript: 
-      entity: {fileID: 0}
-    LuaAsset: {fileID: -8122155829129254986, guid: cd00f5aa3ee1af945b2501f30c22bbeb, type: 3}
-    preStateVerdictName: QueuedStateID_Knife
-    ParamLoadName: null
-    StateList:
-    - rid: 4404388709018370071
-    - rid: 4404388709018370072
-    - rid: 4404388709018370073
-  - StateDefName: AirKnife
-    StateDefID: 7
+  - StateDefName: AirHard Knife
+    StateDefID: 25
     PriorCondition:
       LuaScript: 
       entity: {fileID: 0}
@@ -187,14 +199,12 @@ MonoBehaviour:
         stateControllerSubName: AnimSetter
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: 0
           useID: -1
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: {x: 0, y: 0}
           useID: -1
@@ -209,14 +219,12 @@ MonoBehaviour:
         stateControllerSubName: AnimParamChanger
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: 0
           useID: 0
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 1
           stParamValue: {x: 0, y: 0}
           useID: 0
@@ -240,14 +248,12 @@ MonoBehaviour:
         stateControllerSubName: AnimSet_Jab
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
-          stParamValue: 2
+          stParamValue: 1
           useID: -1
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: {x: 0, y: 0}
           useID: -1
@@ -259,17 +265,15 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: Air Kick Anims
+        stateControllerSubName: AnimSet RHandJab
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
-          stParamValue: 3
+          stParamValue: 2
           useID: -1
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: {x: 0, y: 0}
           useID: -1
@@ -282,7 +286,7 @@ MonoBehaviour:
           value: 0
           stLuaLoads: 
         stateControllerSubName: SO RED
-        color: {r: 1, g: 0.11792451, b: 0.11792451, a: 1}
+        color: {r: 1, g: 0.6273585, b: 0.6273585, a: 1}
     - rid: 3579423095655497736
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
@@ -303,7 +307,6 @@ MonoBehaviour:
         stateControllerSubName: JabHit
         hitParams:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue:
             Damage: 50
@@ -317,18 +320,17 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 3
+          value: 10
           stLuaLoads: 
-        stateControllerSubName: Air_KickHit
+        stateControllerSubName: JabHit
         hitParams:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue:
             Damage: 0
-            velset: {x: 1, y: 4, z: 0}
-            hitStopTime: {x: 4, y: 4}
-            ChangeState_Enemy: 5050
+            velset: {x: 1.8, y: 0.7, z: 0}
+            hitStopTime: {x: 6, y: 9}
+            ChangeState_Enemy: 5000
           useID: -1
           stLuaLoads: 
     - rid: 4404388637674569799
@@ -341,14 +343,12 @@ MonoBehaviour:
         stateControllerSubName: JumpAnim
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: 50
           useID: -1
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: {x: 0, y: 0}
           useID: -1
@@ -381,14 +381,12 @@ MonoBehaviour:
         stateControllerSubName: Air Kick Anims
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
-          stParamValue: 4
+          stParamValue: 20
           useID: -1
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: {x: 0, y: 0}
           useID: -1
@@ -403,13 +401,12 @@ MonoBehaviour:
         stateControllerSubName: Air_KickHit
         hitParams:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue:
             Damage: 0
-            velset: {x: 5, y: 10, z: 0}
-            hitStopTime: {x: 2, y: 30}
-            ChangeState_Enemy: 5050
+            velset: {x: 3, y: 1, z: 0}
+            hitStopTime: {x: 2, y: 8}
+            ChangeState_Enemy: 5000
           useID: -1
           stLuaLoads: 
     - rid: 4404388709018370071
@@ -422,14 +419,12 @@ MonoBehaviour:
         stateControllerSubName: Knifes Anim
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: 5
           useID: -1
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: {x: 0, y: 0}
           useID: -1
@@ -454,7 +449,6 @@ MonoBehaviour:
         stateControllerSubName: Damages
         hitParams:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue:
             Damage: 0
@@ -473,7 +467,6 @@ MonoBehaviour:
         stateControllerSubName: Damage
         hitParams:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue:
             Damage: 0
@@ -492,14 +485,12 @@ MonoBehaviour:
         stateControllerSubName: KnifeAnim
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
-          stParamValue: 6
+          stParamValue: 25
           useID: -1
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: {x: 0, y: 0}
           useID: -1
@@ -514,3 +505,51 @@ MonoBehaviour:
         stateControllerSubName: Init
         changeTo: 0
         priority: 0
+    - rid: 4404388799971590146
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: AnimSet Combo_Finisher Kick
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 3
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 4404388799971590147
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Change to Init
+        changeTo: 0
+        priority: 0
+    - rid: 4404388799971590148
+      type: {class: scHitDef, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 3
+          stLuaLoads: 
+        stateControllerSubName: HitDef_ Kicker
+        hitParams:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue:
+            Damage: 100
+            velset: {x: 3, y: 4, z: 0}
+            hitStopTime: {x: 10, y: 15}
+            ChangeState_Enemy: 5050
+          useID: -1
+          stLuaLoads: 
