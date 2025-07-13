@@ -140,7 +140,7 @@ public class Entity : MonoBehaviour
             else if (pausedVel != Vector3.zero)
             {
                 rigid.isKinematic = isPaused;
-                Debug.Log("unpaused");
+                //Debug.Log("unpaused");
                 rigid.velocity = pausedVel;
                 pausedVel = Vector3.zero;
             }
@@ -173,7 +173,7 @@ public class Entity : MonoBehaviour
         loadedDefs.Find(stDef => stDef.StateDefID == -1);
         if (AutoState_1 != null)
         {
-            Debug.Log("auto checking -1 state");
+            //Debug.Log("auto checking -1 state");
             AutoState_1.Execute(this);
         }
 

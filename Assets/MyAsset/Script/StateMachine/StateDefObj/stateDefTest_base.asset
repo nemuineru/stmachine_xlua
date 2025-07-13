@@ -32,9 +32,9 @@ MonoBehaviour:
     preStateVerdictName: QueuedStateID
     ParamLoadName: LuaOutput
     StateList:
+    - rid: 3002629528666767590
     - rid: 3002629213760520200
     - rid: 3002629213760520201
-    - rid: 3002629528666767590
     - rid: 3002629528666767591
     - rid: 3579422750824726546
   - StateDefName: Combo1 Jab_First
@@ -83,7 +83,7 @@ MonoBehaviour:
       entity: {fileID: 0}
     LuaAsset: {fileID: -8122155829129254986, guid: 3fcddc9c2ce5f8b479bf3d800b4cbf2f, type: 3}
     preStateVerdictName: QueuedStateID_GrdCombo3_Finisher
-    ParamLoadName: null
+    ParamLoadName: LuaOutput
     StateList:
     - rid: 4404388799971590146
     - rid: 4404388799971590147
@@ -188,7 +188,7 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: Change To init
         changeTo: 0
-        priority: 0
+        priority: 1
     - rid: 3002629528666767590
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:
@@ -482,7 +482,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: KnifeAnim
+        stateControllerSubName: AirKnifeAnim
         changeAnimID:
           _setEssential: 0
           loadTypes: 0
@@ -512,7 +512,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: AnimSet Combo_Finisher Kick
+        stateControllerSubName: AnimSet_Combo_Finisher Kick
         changeAnimID:
           _setEssential: 0
           loadTypes: 0

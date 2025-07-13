@@ -32,7 +32,7 @@ end
         if( CurrentTime == 4 ) then
             table.insert( verd, 3 ) 
         end
-        if ( CurrentTime > 12 ) then 
+        if ( CurrentTime > 14 ) then 
             table.insert( verd, 1 )
         end
     return verd

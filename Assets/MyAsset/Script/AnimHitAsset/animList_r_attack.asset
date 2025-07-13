@@ -95,8 +95,8 @@ MonoBehaviour:
         startPos: {x: 0, y: 0.39, z: 0}
         endPos: {x: 0, y: 0, z: 0}
         width: 0.12
-        _lastcalcStartPos: {x: -1.5385988, y: 0.22624813, z: 2.7268457}
-        _lastcalcEndPos: {x: -1.8773737, y: 0.41770977, z: 2.7008846}
+        _lastcalcStartPos: {x: 0, y: 0, z: 0}
+        _lastcalcEndPos: {x: 0, y: 0, z: 0}
       disableClssList:
       - head
       root: {fileID: 0}
@@ -161,7 +161,7 @@ MonoBehaviour:
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
-    ID: 6
+    ID: 25
     Name: AirHardAttack_Knife
     animClip:
     - Clip: {fileID: 7400000, guid: 67093dc924031d24c896ff11fa6ff5fa, type: 2}

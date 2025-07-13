@@ -118,4 +118,10 @@ public class LC
     {
         return et.CurrentStateID;
     }
+
+    //Checker for MainAnimDef's registered list.
+    public int CheckAnimationsListNum(Entity et)
+    {
+        return et.MainAnimMixer.Mixers.Length;
+    }
 }

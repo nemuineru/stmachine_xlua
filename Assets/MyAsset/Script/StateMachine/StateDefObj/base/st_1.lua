@@ -27,7 +27,8 @@ function QueuedStateID(in_entity)
         table.insert( verd, 0 ) 
     end
     -- idleのanimを指定する
-    if( LC:CheckStateTime(in_entity) == 1 ) then
+    -- entityに登録されたmixerの数が0のときは緊急。
+    if( LC:CheckStateTime(in_entity) == 0 or LC:CheckAnimationsListNum(in_entity) == 0) then
         table.insert( verd, 100 ) 
     end
     return verd

@@ -314,6 +314,7 @@ MonoBehaviour:
   DefLists:
   - {fileID: 11400000, guid: a49478fa449368048a98781f2140a6e2, type: 2}
   wishingVect: {x: 0, y: 0, z: 0}
+  isStateHit: 0
   raycenter: {x: 0, y: 0, z: 0}
 --- !u!4 &183720359 stripped
 Transform:
@@ -1507,12 +1508,12 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 50b674ead1e1ddb439138d3f4f503ba1, type: 2}
     - target: {fileID: 5097529176112046051, guid: 064af59b8fcc7cf41bdbf9e53ab133c0, type: 3}
       propertyPath: animListObject.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5097529176112046051, guid: 064af59b8fcc7cf41bdbf9e53ab133c0, type: 3}
       propertyPath: animListObject.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: bb892083bf0420448aab1efe090b6383, type: 2}
+      objectReference: {fileID: 11400000, guid: 9440267e69a0fb5499f1e463af0fde5b, type: 2}
     - target: {fileID: 5097529176112046051, guid: 064af59b8fcc7cf41bdbf9e53ab133c0, type: 3}
       propertyPath: animListObject.Array.data[1]
       value: 

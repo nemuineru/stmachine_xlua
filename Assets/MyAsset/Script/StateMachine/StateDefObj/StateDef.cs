@@ -406,6 +406,17 @@ public class scAnimParamChange : StateController
     {
         if (entity.MainAnimMixer.Mixers.Count() > 0)
         {
+            AnimDef animFindByID = entity.MainAnimMixer.MainAnimDef;
+            if (animFindByID != null)
+            {
+                entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet(loadParams, entity));
+            }
+        }
+        //Sequence Not FoundErrorが出たときのソスコ. 
+        //今も特定のアニメ再生時そこで止まるので解決が必須
+        /*        
+        if (entity.MainAnimMixer.Mixers.Count() > 0)
+        {
             MixAnimNode findNode = entity.MainAnimMixer.Mixers.First(x => x != null
             && x.def.ID == changeAnimID.valueGet(loadParams, entity));
             if (findNode != null)
@@ -419,6 +430,7 @@ public class scAnimParamChange : StateController
                 }
             }
         }
+        */
     }
 }
 
