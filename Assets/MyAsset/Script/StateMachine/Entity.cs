@@ -49,6 +49,8 @@ public class Entity : MonoBehaviour
     Animator animator;
 
     PlayableOutput PrimalPlayableOut;
+
+    [SerializeField]
     public MainNodeConfigurator MainAnimMixer = new MainNodeConfigurator();
 
     public Color CurColor;
