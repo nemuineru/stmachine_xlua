@@ -44,7 +44,7 @@ MonoBehaviour:
       startFrame: 0
       cycleOffset: 0
       mixPosition: {x: 1, y: 0}
-    blendInTime: 0.1
+    blendInTime: 0.05
     blendOutTime: 0.001
     useDefaultClss: 1
     clssSetting:

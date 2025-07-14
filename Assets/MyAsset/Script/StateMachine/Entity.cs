@@ -148,7 +148,6 @@ public class Entity : MonoBehaviour
             }
             rigid.isKinematic = isPaused;
             MainAnimMixer.SetAnim((HitPauseTime <= 0));
-            HitPauseTime -= 1.0f;
         }
         MainAnimMixer.PrimalGraph.Play();
 
@@ -188,6 +187,8 @@ public class Entity : MonoBehaviour
             //Debug.Log("Executed stateDef - " + CurrentStateID);
             // + " at time of " + stateTime            
             //the StateDef needs as deepcopy?
+
+            //isStateChangedはここで変更される..
             currentState.Execute(this);
         }
         else
@@ -205,7 +206,10 @@ public class Entity : MonoBehaviour
 
         isOnGround = (hitInfo.collider != null);
 
-        stateTime = isStateChanged && HitPauseTime <= 0 ? 0 : stateTime + 1;
+        HitPauseTime -= 1.0f;
+        
+        //これかぁ.. HitPauseTimeが設定されているなら特殊処理しないと.
+        stateTime = isStateChanged ? 0 : HitPauseTime >= 0 ? stateTime : stateTime + 1;
     }
 
     //アニメーション変更..

@@ -4524,7 +4524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f39af214c7b64a4d84c9ca08489a65e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitEff: {fileID: 160696, guid: 87baefee9e5cfdc479cdaa171c175d94, type: 3}
+  defaultEff: {fileID: 160696, guid: 87baefee9e5cfdc479cdaa171c175d94, type: 3}
   entityList: []
 --- !u!4 &2028734054
 Transform:

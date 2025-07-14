@@ -12,7 +12,7 @@ local Debug = CS.UnityEngine.Debug;
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-        if( CurrentTime == 4 ) then
+        if( CurrentTime == 4  and not in_entity.isStateHit) then
             table.insert( verd, 10 ) 
         end
     return verd
@@ -29,7 +29,7 @@ end
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-        if( CurrentTime == 5 ) then
+        if( CurrentTime == 5  and not in_entity.isStateHit) then
             table.insert( verd, 10 ) 
         end
     return verd

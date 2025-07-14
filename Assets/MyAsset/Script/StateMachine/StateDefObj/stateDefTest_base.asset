@@ -312,6 +312,7 @@ MonoBehaviour:
             Damage: 50
             velset: {x: 1.5, y: 0, z: 0}
             hitStopTime: {x: 4, y: 8}
+            HitEff: {fileID: 0}
             ChangeState_Enemy: 5000
           useID: -1
           stLuaLoads: 
@@ -330,6 +331,7 @@ MonoBehaviour:
             Damage: 0
             velset: {x: 1.8, y: 0.7, z: 0}
             hitStopTime: {x: 6, y: 9}
+            HitEff: {fileID: 0}
             ChangeState_Enemy: 5000
           useID: -1
           stLuaLoads: 
@@ -406,6 +408,7 @@ MonoBehaviour:
             Damage: 0
             velset: {x: 3, y: 1, z: 0}
             hitStopTime: {x: 2, y: 8}
+            HitEff: {fileID: 0}
             ChangeState_Enemy: 5000
           useID: -1
           stLuaLoads: 
@@ -454,6 +457,7 @@ MonoBehaviour:
             Damage: 0
             velset: {x: 1, y: 2, z: 0}
             hitStopTime: {x: 3, y: 10}
+            HitEff: {fileID: 130626, guid: 763c35982e678ac4bbc44144c42c505f, type: 3}
             ChangeState_Enemy: 5000
           useID: -1
           stLuaLoads: 
@@ -472,6 +476,7 @@ MonoBehaviour:
             Damage: 0
             velset: {x: 4, y: 0, z: 0}
             hitStopTime: {x: 12, y: 25}
+            HitEff: {fileID: 130626, guid: b79e8cdd7ac32d940900158f95728ccb, type: 3}
             ChangeState_Enemy: 5000
           useID: -1
           stLuaLoads: 
@@ -550,6 +555,7 @@ MonoBehaviour:
             Damage: 100
             velset: {x: 3, y: 4, z: 0}
             hitStopTime: {x: 10, y: 15}
+            HitEff: {fileID: 0}
             ChangeState_Enemy: 5050
           useID: -1
           stLuaLoads: 

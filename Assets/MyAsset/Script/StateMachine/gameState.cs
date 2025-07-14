@@ -5,13 +5,16 @@ using DG.Tweening;
 using System;
 using UnityEditor.SearchService;
 using System.Linq;
+using UnityEngine.Serialization;
 
 public class gameState : MonoBehaviour
 {
     //全部のスクリプトからアクセスするように.
     //
     static public gameState self;
-    public GameObject hitEff;
+    
+    [FormerlySerializedAs("hitEff")]
+    public GameObject defaultEff;
     void Awake()
     {
         if (self == null)
@@ -76,7 +79,7 @@ public class gameState : MonoBehaviour
                     Quaternion.Lerp(e.transform.rotation, Quaternion.LookRotation(-HitVect, Vector3.up), 0.6f);
                     Debug.Log("Hit : " + e.gameObject.name);
                     Instantiate
-                    (hitEff, HitPt, Quaternion.identity);
+                    ((useParam.HitEff != null ? useParam.HitEff : defaultEff), HitPt, Quaternion.identity);
                 }
             }
         }
@@ -93,5 +96,7 @@ public class hitDefParams
     public Vector3 velset;
     [SerializeField]
     public Vector2 hitStopTime;
+    [SerializeField]
+    public GameObject HitEff;
     public int ChangeState_Enemy = 5000;
 }
