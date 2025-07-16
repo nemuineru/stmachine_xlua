@@ -7,46 +7,41 @@ using Unity.VisualScripting;
 
 public class enemyInput_Test : Action
 {
-    const string Name = "NavMesh Surface";
+    //ターゲット先・動作方向先
     [SerializeField]
-    string findTags = "Player";
-    NavMeshPath cPaths;
+    SharedVector3 v3_WalkTo;
 
-    GameObject mainObj;
-    NavMeshSurface MainSurface;
+    [SerializeField]
+    SharedGameObject Target;
 
+
+    Vector3 v3_Target = Vector3.zero;
+
+    int currentTick = 0;
     //パスの処理レート設定
     const int mapRouteFindTickRate = 10;
     const float rand_Prov = 0.001f;
-
-    int currentTick = 0;
-
-    //このメソッドクラスの起動時に一度だけ呼び出す.
-    public override void OnAwake()
-    {
-        //最初にNavMeshSurfaceを発見する. 
-        mainObj = GameObject.Find(Name);
-        if (mainObj != null)
-        {
-            MainSurface = mainObj.GetComponent<NavMeshSurface>();
-        }
-    }
+    const float hitboxDist = 2f;
 
     Vector3 Dist = Vector3.zero;
     Vector2 Input = Vector2.zero;
 
+//動かすEntity. これが付いたExternalBehaviorは必ずこれが付いてるはず
+    Entity AIEntity;
+
+    public override void OnAwake()
+    {
+        AIEntity = gameObject.GetComponent<Entity>();
+    }
+
+
     public override TaskStatus OnUpdate()
     {
-        if (currentTick == mapRouteFindTickRate)
+        if (currentTick > mapRouteFindTickRate)
         {
-            currentTick = 0;
-            //path定義
-            cPaths = new NavMeshPath();
-            NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 8f, NavMesh.AllAreas);
-            Vector3 nearPoint = hit.position;
-
-            NavMesh.CalculatePath(nearPoint, GameObject.FindGameObjectWithTag(findTags).transform.position
-            , NavMesh.AllAreas, cPaths);
+            //設定されたbool値がTrue・Rand01値が設定値以上ならコマンド送信 ->
+            //今回は "a_"を入力するとした
+            //AIEntity.entityInput.;
         }
         else
         {
@@ -56,4 +51,38 @@ public class enemyInput_Test : Action
     }
 
 
+}
+
+namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject
+{
+    [TaskCategory("Unity/GameObject")]
+    [TaskDescription("Finds a GameObject by tag only on Awake. Returns success if an object is found. this method is Expanded by nem")]
+    public class FindWithTag_OnAwake : Action
+    {
+        [Tooltip("The tag of the GameObject to find")]
+        public SharedString tag;
+        [Tooltip("Should a random GameObject be found?")]
+        public SharedBool random;
+        [Tooltip("The object found by name")]
+        [RequiredField]
+        public SharedGameObject storeValue;
+
+        public override void OnAwake()
+        {
+            if (random.Value) {
+                var gameObjects = GameObject.FindGameObjectsWithTag(tag.Value);
+                if (gameObjects == null || gameObjects.Length == 0) { return; }
+                storeValue.Value = gameObjects[Random.Range(0, gameObjects.Length)];
+            } else {
+                storeValue.Value = GameObject.FindWithTag(tag.Value);
+            }
+            return;
+        }
+
+        public override void OnReset()
+        {
+            tag.Value = null;
+            storeValue.Value = null;
+        }
+    }
 }
