@@ -7,7 +7,28 @@ using UnityEngine.InputSystem;
 
 public class InputInstance : MonoBehaviour
 {
-    public InputValueManagers inputValues =  new InputValueManagers();
+    
+    static public int GetDigitalAxis(Vector2 Axis)
+    {
+        string deb = "";
+        int ret = 5;
+        float range = 0.2f;
+        if(Mathf.Abs(Axis.x) > range)
+        {
+            deb += ("x" + Mathf.Sign(Axis.x));
+            ret += 1 * (int)Mathf.Sign(Axis.x);
+        }
+
+        if(Mathf.Abs(Axis.y) > range)
+        {
+            deb += ("y" + Mathf.Sign(Axis.y));
+            ret += 3 * (int)Mathf.Sign(Axis.y);
+        }
+        //Debug.Log(deb);
+        return ret;
+    }
+
+    public InputValueManagers inputValues = new InputValueManagers();
     static public InputInstance self;
     // Start is called before the first frame update
     

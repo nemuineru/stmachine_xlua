@@ -69,6 +69,21 @@ public class entityInputManager
         RecordInput_Core(rec);
     }
 
+    //敵AI版. RawInputに入力がないなら入力無しとする
+    public void RecordInput_Enemy(Vector3 movInput, int RawInput = 0)
+    {
+
+        int inputs = 5;
+        commandRecord rec = new commandRecord();
+
+        rec.MoveAxis = movInput;
+        int X_I = InputInstance.GetDigitalAxis(new(movInput.x, movInput.z));
+        inputs += X_I + RawInput;
+
+        rec.inputs = inputs;
+        RecordInput_Core(rec);
+    }
+
     //behaviorDesignerに読み込ませるためのインプット
     public void RecordInput_AI()
     {

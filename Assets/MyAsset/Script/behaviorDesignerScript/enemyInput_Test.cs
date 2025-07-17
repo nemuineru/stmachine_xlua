@@ -14,6 +14,10 @@ public class enemyInput_Test : Action
     [SerializeField]
     SharedGameObject Target;
 
+    //Commandに応じて、入力を与える.
+    [SerializeField]
+    SharedString Command;
+
 
     Vector3 v3_Target = Vector3.zero;
 
@@ -41,7 +45,7 @@ public class enemyInput_Test : Action
         {
             //設定されたbool値がTrue・Rand01値が設定値以上ならコマンド送信 ->
             //今回は "a_"を入力するとした
-            //AIEntity.entityInput.;
+            //AIEntity.entityInput.RecordInput_Enemy();
         }
         else
         {
