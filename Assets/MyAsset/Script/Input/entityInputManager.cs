@@ -69,8 +69,11 @@ public class entityInputManager
         RecordInput_Core(rec);
     }
 
-    //敵AI版. RawInputに入力がないなら入力無しとする
-    public void RecordInput_Enemy(Vector3 movInput, int RawInput = 0)
+    //敵AI版. さて、どうやって判別させようか..
+    //Buttonsの一番最後の文を読み込ませ, そのドベから
+    //二番目以降のボタンに応じて入力するボタンを返す..みたいな感じ..
+    //多分こうすれば押しっぱなしとかの判別が可能?
+    public void Record_Entity_NPC(Vector3 movInput, ref List<string> Buttons)
     {
 
         int inputs = 5;
@@ -78,7 +81,7 @@ public class entityInputManager
 
         rec.MoveAxis = movInput;
         int X_I = InputInstance.GetDigitalAxis(new(movInput.x, movInput.z));
-        inputs += X_I + RawInput;
+        inputs += X_I; //+ RawInput;
 
         rec.inputs = inputs;
         RecordInput_Core(rec);

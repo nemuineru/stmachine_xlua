@@ -9,6 +9,7 @@ using System.ComponentModel;
 using UnityEditor;
 using DG.Tweening;
 using System;
+using BehaviorDesigner.Runtime;
 
 
 public class Entity : MonoBehaviour
@@ -74,6 +75,11 @@ public class Entity : MonoBehaviour
     //Input Manager for each entitys
     internal entityInputManager entityInput = new entityInputManager();
 
+    //The Brain of character. not muscle or vertebrae. using BehaviorDesigner to do.
+    [SerializeField]
+    ExternalBehavior LoadedBehavior;
+    BehaviorTree BTree = new BehaviorTree();
+
     //OnHit確認用. 後で整理したい.
     public bool isStateHit = false;
 
@@ -99,15 +105,21 @@ public class Entity : MonoBehaviour
             animDefs.AddRange(f.animDef.ToList());
         }
         if (animListObject != null && animator != null)
-            {
-                MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
-                PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.mixMixer);
-                ChangeAnim();
-            }
+        {
+            MainAnimMixer.SetupGraph(ref animator, ref PrimalPlayableOut);
+            PrimalPlayableOut.SetSourcePlayable(MainAnimMixer.mixMixer);
+            ChangeAnim();
+        }
         defaultClss.initClss(this);
         foreach (StateDefListObject dObj in DefLists)
         {
-            loadedDefs.AddRange(dObj.stateDefs);            
+            loadedDefs.AddRange(dObj.stateDefs);
+        }
+
+        //initialize behaviors.
+        if (LoadedBehavior != null)
+        {
+            BTree.ExternalBehavior = LoadedBehavior;
         }
     }
 
@@ -124,9 +136,15 @@ public class Entity : MonoBehaviour
     {
         defaultClss.clssPosUpdate();
 
-        //後で消します.
-        //
+        //後で消します. Player用にInputを記録する..
+        //これはBehaviorDesignerに登録させる予定.
         entityInput.RecordInput_Player(0);
+        //play BehaviorDesigner.
+        if (LoadedBehavior != null)
+        {
+            BTree.Start();
+        }
+
 
 
         isStateChanged = false;
