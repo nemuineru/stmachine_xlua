@@ -87,6 +87,22 @@ public class entityInputManager
         RecordInput_Core(rec);
     }
 
+    //Commands - この配列通りに順繰り実行.
+    struct Commands
+    {
+        Vector3 StickPos;
+        float lerpValue;
+        int frame;
+        string commandInput;
+        bool isOverridable, isApplicatable;
+        int BasePriority;
+
+
+    }
+
+    //それぞれのコマンドをいわゆるTCGのカードみたいにする - 
+    //
+
     //behaviorDesignerに読み込ませるためのインプット
     public void RecordInput_AI()
     {
