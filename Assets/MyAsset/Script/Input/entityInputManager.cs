@@ -83,18 +83,31 @@ public class entityInputManager
         int X_I = InputInstance.GetDigitalAxis(new(movInput.x, movInput.z));
         inputs += X_I; //+ RawInput;
 
+        if (cmdParettes.Count > 0)
+        {
+            cmdParettes.Sort((x, y) => x.BasePriority - y.BasePriority);
+            for (int i = 0; i < cmdParettes.Count; i++)
+            {
+                
+            }
+        }
+
         rec.inputs = inputs;
         RecordInput_Core(rec);
     }
 
+    public List<CMDParette> cmdParettes = new List<CMDParette>();
+
     //それぞれのコマンドをいわゆるTCGのカードみたいにする - 
     //CMDParette - この配列通りに順繰り実行.
-    class CMDParette
+    public class CMDParette
     {
         // コマンド全体の時間
         int wholeFrame;
         //スティックの傾き時の基準方向 0ならWorld.Forward方向
         Vector3 forwardRef;
+
+        //Index事に読み込み - 
         List<stickCMD> sCmds;
         //Listとして読み出す
         struct stickCMD
@@ -106,7 +119,7 @@ public class entityInputManager
             //持続フレーム
             int frame;
         }
-        
+
         // /ボタンのインプット. ","でフレームごとに入力する.
         //"a,a,a,a, ,b"なら 4フレーム分 a押し込んで離した後 bを押す.
         string commandInput;
@@ -115,7 +128,7 @@ public class entityInputManager
         bool isSCommandOveridable, isBCommandOveridable, isPauseWait;
 
         //コマンド優先度 - 高いほどそれが基礎として読み込まれる
-        int BasePriority;
+        public int BasePriority;
 
         //現在経過時間.
         int currentElapsedFrame;
