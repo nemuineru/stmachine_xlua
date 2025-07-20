@@ -87,17 +87,38 @@ public class entityInputManager
         RecordInput_Core(rec);
     }
 
-    //Commands - この配列通りに順繰り実行.
-    struct Commands
+    //それぞれのコマンドをいわゆるTCGのカードみたいにする - 
+    //CMDParette - この配列通りに順繰り実行.
+    class CMDParette
     {
-        Vector3 StickPos;
-        float lerpValue;
-        int frame;
+        // コマンド全体の時間
+        int wholeFrame;
+        //スティックの傾き時の基準方向 0ならWorld.Forward方向
+        Vector3 forwardRef;
+        List<stickCMD> sCmds;
+        //Listとして読み出す
+        struct stickCMD
+        {
+            //仮想スティックの登録
+            Vector3 stickPos_L, stickPos_R;
+            //Stickの前ValueとのLerp値
+            float lerpValue;
+            //持続フレーム
+            int frame;
+        }
+        
+        // /ボタンのインプット. ","でフレームごとに入力する.
+        //"a,a,a,a, ,b"なら 4フレーム分 a押し込んで離した後 bを押す.
         string commandInput;
-        bool isOverridable, isApplicatable;
+        // それぞれ - 
+        // スティック情報を元にコマンドを入力可能か / ボタン情報を元にコマンドを入力可能か / ポーズ時間を待つか
+        bool isSCommandOveridable, isBCommandOveridable, isPauseWait;
+
+        //コマンド優先度 - 高いほどそれが基礎として読み込まれる
         int BasePriority;
 
-
+        //現在経過時間.
+        int currentElapsedFrame;
     }
 
     //それぞれのコマンドをいわゆるTCGのカードみたいにする - 

@@ -1,0 +1,23 @@
+ゲーム内情報（例えば、NavMeshやEntityの速度）を元にし、Behavior Designerを使用して
+仮想コントローラーにコマンド入力. このコマンド入力はいわゆるカードデッキとして扱うとする.
+
+コマンドカードは命令により消去可能とする.
+
+[class CMDCard]
+▼ Vector3 BasisInput  ⇐ スティックの傾き時の基準方向 0ならWorld.Forward方向
+	StickCommands [List Struct / Class]
+	▼ Vector3 stick_l, stick_r ⇐ スティックの傾き.
+	▼ float Lerp1 Lerp2 ⇐スティックの倒し速度・変更速度
+	▼ int frameTime ⇐ 倒す時間..
+▼ int WholeFrame ⇐ コマンド全体の時間
+▼ string ButtonCommand ⇐ ボタンのインプット. ","でフレームごとに入力する.
+	"a,a,a,a, ,b"なら ４フレーム分a押し込んでbを押す.
+▼ bool isSCommandOVRDble ⇐ スティック情報を元にコマンドを入力可能か？
+▼ bool isBCommandOVRDble ⇐ ボタン情報を元にコマンドを入力可能か？
+▼ bool isPauseWait ⇐ ポーズ時間を待つか？
+▼ int cmdPriority ⇐ この値が高いほど、優先的に読み込む.
+
+public int currentElapsedFrame ⇐ 経過時間
+
+[static function]
+void EraseCMDCard ⇐ コマンドカードの消去.
