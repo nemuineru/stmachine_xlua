@@ -35,6 +35,7 @@ public class entityInputManager
 
         public int inputs;
         public Vector2 MoveAxis;
+        public Vector2 LookAxis;
     }
 
     //コマンド記録用.
@@ -53,18 +54,19 @@ public class entityInputManager
         commandRecord rec = new commandRecord();
 
         rec.MoveAxis = InputInstance.self.inputValues.MovingAxis;
+        //rec.LookAxis = InputInstance.self.inputValues.Ax;
         inputs = InputInstance.self.inputValues.MovingAxis_Digital;
 
         //以下、MainButtonなどは10の倍数値が最初から足されているため、ボタンインプット値の読み出しの際は
         // inputsを10で割って計算する.
-        inputs += (InputInstance.self.inputValues.MainButton_Read) * 0B_00000001;
-        inputs += (InputInstance.self.inputValues.ActionButton_Read) * 0B_00000010;
-        inputs += (InputInstance.self.inputValues.SubButton_Read) * 0B_00000100;
-        inputs += (InputInstance.self.inputValues.UtilityButton_Read) * 0B_00001000;
-        inputs += (InputInstance.self.inputValues.Extra1Button_Read) * 0B_00010000;
-        inputs += (InputInstance.self.inputValues.Extra2Button_Read) * 0B_00100000;
-        inputs += (InputInstance.self.inputValues.MenuButton_Read) * 0B_01000000;
-        inputs += (InputInstance.self.inputValues.SubMenuButton_Read) * 0B_10000000;
+        inputs += (InputInstance.self.inputValues.MainButton_Read) * 0B_00000001; //a
+        inputs += (InputInstance.self.inputValues.ActionButton_Read) * 0B_00000010; //b
+        inputs += (InputInstance.self.inputValues.SubButton_Read) * 0B_00000100; //x
+        inputs += (InputInstance.self.inputValues.UtilityButton_Read) * 0B_00001000; //y
+        inputs += (InputInstance.self.inputValues.Extra1Button_Read) * 0B_00010000; //c
+        inputs += (InputInstance.self.inputValues.Extra2Button_Read) * 0B_00100000; //z
+        inputs += (InputInstance.self.inputValues.MenuButton_Read) * 0B_01000000; //start
+        inputs += (InputInstance.self.inputValues.SubMenuButton_Read) * 0B_10000000; //menu
         rec.inputs = inputs;
         RecordInput_Core(rec);
     }
@@ -73,24 +75,71 @@ public class entityInputManager
     //Buttonsの一番最後の文を読み込ませ, そのドベから
     //二番目以降のボタンに応じて入力するボタンを返す..みたいな感じ..
     //多分こうすれば押しっぱなしとかの判別が可能?
-    public void Record_Entity_NPC(Vector3 movInput, ref List<string> Buttons)
+
+    //CommandParetteから読み出す.
+    //forwardに設定した値を元に, stickの傾きを設定 - 
+    //stick y軸が前方・後方方向とし、x軸は横軸方向とする.
+    public void Record_Entity_NPC(Vector3 refForwardInput, bool isPaused)
     {
-
-        int inputs = 5;
+        int inputs = 0;
+        Vector2 lStick = Vector2.zero;
         commandRecord rec = new commandRecord();
-
-        rec.MoveAxis = movInput;
-        int X_I = InputInstance.GetDigitalAxis(new(movInput.x, movInput.z));
-        inputs += X_I; //+ RawInput;
 
         if (cmdParettes.Count > 0)
         {
-            cmdParettes.Sort((x, y) => x.BasePriority - y.BasePriority);
+            //cmdParettes内に登録されたコマンドの経過時間を設定
             for (int i = 0; i < cmdParettes.Count; i++)
             {
-                
+                //待機を無視するか？
+                if (!isPaused || !cmdParettes[i].isPauseWait)
+                    cmdParettes[i].currentElapsedFrame++;
+            }
+            cmdParettes.RemoveAll(cd => cd.currentElapsedFrame > cd.wholeFrame);
+            //Priority順に並べる
+            cmdParettes.Sort((x, y) => x.BasePriority - y.BasePriority);
+            bool isStickOverride = false;
+            bool isButtonOverride = false;
+
+
+            for (int i = 0; i < cmdParettes.Count; i++)
+            {
+                CMDParette sel = cmdParettes[i];
+                //まずはスティック傾きのみ検知
+                if (isStickOverride)
+                {
+                    //前のコマンドとの比較
+                    lStick = sel.findsCMDs(commandBuffer[0].MoveAxis, 'l');
+                    isStickOverride = sel.isSCommandOveridable;
+                }
+
+                //ボタンインプット.. ','で区切る
+                if (isButtonOverride)
+                {
+                    isButtonOverride = sel.isBCommandOveridable;
+
+                    string[] commands = cmdParettes[i].commandInput.Split(',');
+                    int mIndex = Mathf.Min(cmdParettes[i].currentElapsedFrame, commands.Length);
+                    string c = commands[mIndex];
+                    if (c != null)
+                    {
+                        c.Trim();
+                        foreach (structInputs stInput in anlInputs)
+                        {
+                            if (c.Contains(stInput.drawStr))
+                            {
+                                inputs += stInput.bitNum * 10;
+                            }
+                        }
+                    }
+                }
             }
         }
+
+        rec.MoveAxis = lStick;
+        int X_I = InputInstance.GetDigitalAxis(new(refForwardInput.x, refForwardInput.z));
+        inputs += X_I; //+ RawInput;
+
+
 
         rec.inputs = inputs;
         RecordInput_Core(rec);
@@ -102,36 +151,80 @@ public class entityInputManager
     //CMDParette - この配列通りに順繰り実行.
     public class CMDParette
     {
-        // コマンド全体の時間
-        int wholeFrame;
-        //スティックの傾き時の基準方向 0ならWorld.Forward方向
-        Vector3 forwardRef;
+        // コマンド全体のかかる時間
+        internal int wholeFrame;
 
         //Index事に読み込み - 
-        List<stickCMD> sCmds;
+        internal List<stickCMD> sCmds_L, sCmds_R;
         //Listとして読み出す
-        struct stickCMD
+        internal struct stickCMD
         {
             //仮想スティックの登録
-            Vector3 stickPos_L, stickPos_R;
+            internal Vector3 stickPos;
             //Stickの前ValueとのLerp値
-            float lerpValue;
+            internal float lerpValue;
             //持続フレーム
-            int frame;
+            internal int frame;
+        }
+
+        internal Vector3 findsCMDs(Vector3 B_Input , char LorR)
+        {
+            //返り値
+            Vector3 v = Vector3.zero;
+
+            //右・左のどっちのスティックを読み出す？
+            //forwardRefの値に従い、
+            List<stickCMD> selCMD = sCmds_L;
+            if (LorR == 'l')
+            {
+                selCMD = sCmds_L;
+            }
+            else if (LorR == 'r')
+            {
+                selCMD = sCmds_R;
+            }
+
+            //経過フレームとの比較
+            int fr_all = 0;
+            foreach (stickCMD c_a in selCMD)
+            {
+                fr_all = +c_a.frame;
+                if (currentElapsedFrame < fr_all)
+                {
+                    Vector3 fw;
+                    if (B_Input != Vector3.zero)
+                    {
+                        fw = Vector3.forward;
+                    }
+                    else
+                    { 
+                        fw = B_Input.normalized;
+                    }
+                    Vector2 stPos = c_a.stickPos;
+                    //90方向の横 + 前方方向
+                    stPos = fw * stPos.y + Quaternion.AngleAxis(90f,Vector3.up) * fw * stPos.x;                    
+                    v = Vector3.Lerp(B_Input,c_a.stickPos,c_a.lerpValue);
+                    
+                    return v;
+                }
+            }
+            return v;
         }
 
         // /ボタンのインプット. ","でフレームごとに入力する.
         //"a,a,a,a, ,b"なら 4フレーム分 a押し込んで離した後 bを押す.
-        string commandInput;
+        internal string commandInput;
         // それぞれ - 
         // スティック情報を元にコマンドを入力可能か / ボタン情報を元にコマンドを入力可能か / ポーズ時間を待つか
-        bool isSCommandOveridable, isBCommandOveridable, isPauseWait;
+        internal bool isSCommandOveridable, isBCommandOveridable, isPauseWait;
 
         //コマンド優先度 - 高いほどそれが基礎として読み込まれる
-        public int BasePriority;
+        internal int BasePriority;
 
-        //現在経過時間.
-        int currentElapsedFrame;
+        //現在経過時間. これはBehaviorDesignerでは変動させない.
+        internal int currentElapsedFrame;
+        //スティックの傾き時の基準方向 0ならWorld.Forward方向. 初期化時、代入
+        internal Vector3 forwardRef;
     }
 
     //それぞれのコマンドをいわゆるTCGのカードみたいにする - 
@@ -172,7 +265,20 @@ public class entityInputManager
     // "A^ .. B^.. ハット記号"
     // A, Bを離したとき.. 10000以降を参照し 値を調査
     // コンマ(,)でコマンドごとを分ける.
-    // 
+
+
+
+    //2進数のボタン比較用.  
+    structInputs[] anlInputs = {
+        new structInputs(0B_00000001, "a"),
+        new structInputs(0B_00000010, "b"),
+        new structInputs(0B_00000100, "c"),
+        new structInputs(0B_00010000, "x"),
+        new structInputs(0B_00001000, "y"),
+        new structInputs(0B_00100000, "z"),
+        new structInputs(0B_01000000, "s"),
+        new structInputs(0B_10000000, "o")
+        };
 
     public bool CheckInput(string command, int buffer)
     {
@@ -183,16 +289,6 @@ public class entityInputManager
             //前後及び余分な空白を消す.
             commands[i] = commands[i].Trim().Replace(" ", "");
         }
-        structInputs[] anlInputs = new structInputs[8];
-        //2進数のボタン比較用.
-        anlInputs[0] = new structInputs(0B_00000001, "a");
-        anlInputs[1] = new structInputs(0B_00000010, "b");
-        anlInputs[4] = new structInputs(0B_00010000, "c");
-        anlInputs[2] = new structInputs(0B_00000100, "x");
-        anlInputs[3] = new structInputs(0B_00001000, "y");
-        anlInputs[5] = new structInputs(0B_00100000, "z");
-        anlInputs[6] = new structInputs(0B_01000000, "s");
-        anlInputs[7] = new structInputs(0B_10000000, "o");
 
         //最新のコマンドバッファ値.
         int commandBuffer_max = commandBuffer.Length;
@@ -276,11 +372,12 @@ public class entityInputManager
                             }
                             break;
                         }
-                    //話された瞬間を確認
-                    //1フレのみ.
+                    //離された瞬間を確認
+                    //2フレーム以上必要.
                     case '^':
                         {
-                            if (ButtonCheck(b_rn, checker.bitNum) == '-')
+                            if ((ButtonCheck(b_rn, checker.bitNum) == '.' || ButtonCheck(b_rn, checker.bitNum) == '-') && commandBuffer_max > 1 &&
+                            ButtonCheck(b_bf, checker.bitNum) == '+')
                             {
                                 result = true;
                             }
@@ -297,13 +394,13 @@ public class entityInputManager
                             break;
                         }
                 }
-                else
-                {                     
-                    if (ButtonCheck(b_rn, checker.bitNum) == '+')
-                    {
-                        result = true;
-                    }
+            else
+            {
+                if (ButtonCheck(b_rn, checker.bitNum) == '+')
+                {
+                    result = true;
                 }
+            }
 
         }
         return result;
