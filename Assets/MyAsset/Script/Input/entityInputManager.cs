@@ -45,7 +45,7 @@ public class entityInputManager
 
     //手動キャラクター操作用の呼び出しクラス.
     //これ、接続したコントローラー別に読み出したいけど時間かかりそうなのでやめる.
-    public void RecordInput_Player(int controllerID)
+    public int Execute_Entity_Player(int controllerID)
     {
         //ニュートラルを基準とする.
         //上下左右の値を考える - 
@@ -53,22 +53,26 @@ public class entityInputManager
         int inputs = 5;
         commandRecord rec = new commandRecord();
 
-        rec.MoveAxis = InputInstance.self.inputValues.MovingAxis;
-        //rec.LookAxis = InputInstance.self.inputValues.Ax;
-        inputs = InputInstance.self.inputValues.MovingAxis_Digital;
+        if (InputInstance.self != null)
+        {
+            rec.MoveAxis = InputInstance.self.inputValues.MovingAxis;
+            //rec.LookAxis = InputInstance.self.inputValues.Ax;
+            inputs = InputInstance.self.inputValues.MovingAxis_Digital;
 
-        //以下、MainButtonなどは10の倍数値が最初から足されているため、ボタンインプット値の読み出しの際は
-        // inputsを10で割って計算する.
-        inputs += (InputInstance.self.inputValues.MainButton_Read) * 0B_00000001; //a
-        inputs += (InputInstance.self.inputValues.ActionButton_Read) * 0B_00000010; //b
-        inputs += (InputInstance.self.inputValues.SubButton_Read) * 0B_00000100; //x
-        inputs += (InputInstance.self.inputValues.UtilityButton_Read) * 0B_00001000; //y
-        inputs += (InputInstance.self.inputValues.Extra1Button_Read) * 0B_00010000; //c
-        inputs += (InputInstance.self.inputValues.Extra2Button_Read) * 0B_00100000; //z
-        inputs += (InputInstance.self.inputValues.MenuButton_Read) * 0B_01000000; //start
-        inputs += (InputInstance.self.inputValues.SubMenuButton_Read) * 0B_10000000; //menu
-        rec.inputs = inputs;
-        RecordInput_Core(rec);
+            //以下、MainButtonなどは10の倍数値が最初から足されているため、ボタンインプット値の読み出しの際は
+            // inputsを10で割って計算する.
+            inputs += (InputInstance.self.inputValues.MainButton_Read) * 0B_00000001; //a
+            inputs += (InputInstance.self.inputValues.ActionButton_Read) * 0B_00000010; //b
+            inputs += (InputInstance.self.inputValues.SubButton_Read) * 0B_00000100; //x
+            inputs += (InputInstance.self.inputValues.UtilityButton_Read) * 0B_00001000; //y
+            inputs += (InputInstance.self.inputValues.Extra1Button_Read) * 0B_00010000; //c
+            inputs += (InputInstance.self.inputValues.Extra2Button_Read) * 0B_00100000; //z
+            inputs += (InputInstance.self.inputValues.MenuButton_Read) * 0B_01000000; //start
+            inputs += (InputInstance.self.inputValues.SubMenuButton_Read) * 0B_10000000; //menu
+            rec.inputs = inputs;
+            RecordInput_Core(rec);
+        }
+        return inputs;
     }
 
     //敵AI版. さて、どうやって判別させようか..
@@ -79,7 +83,7 @@ public class entityInputManager
     //CommandParetteから読み出す.
     //forwardに設定した値を元に, stickの傾きを設定 - 
     //stick y軸が前方・後方方向とし、x軸は横軸方向とする.
-    public void Record_Entity_NPC(Vector3 refForwardInput, bool isPaused)
+    public void Execute_Entity_NPC(Vector3 refForwardInput, bool isPaused)
     {
         int inputs = 0;
         Vector2 lStick = Vector2.zero;
@@ -91,24 +95,24 @@ public class entityInputManager
             for (int i = 0; i < cmdParettes.Count; i++)
             {
                 //待機を無視するか？
-                if (!isPaused || !cmdParettes[i].isPauseWait)
+                if (!isPaused || !cmdParettes[i].parette.isPauseWait)
                     cmdParettes[i].currentElapsedFrame++;
             }
-            cmdParettes.RemoveAll(cd => cd.currentElapsedFrame > cd.wholeFrame);
+            cmdParettes.RemoveAll(cd => cd.currentElapsedFrame > cd.parette.wholeFrame);
             //Priority順に並べる
-            cmdParettes.Sort((x, y) => x.BasePriority - y.BasePriority);
+            cmdParettes.Sort((x, y) => x.parette.BasePriority - y.parette.BasePriority);
             bool isStickOverride = false;
             bool isButtonOverride = false;
 
 
             for (int i = 0; i < cmdParettes.Count; i++)
             {
-                CMDParette sel = cmdParettes[i];
+                CMDParette sel = cmdParettes[i].parette;
                 //まずはスティック傾きのみ検知
                 if (isStickOverride)
                 {
                     //前のコマンドとの比較
-                    lStick = sel.findsCMDs(commandBuffer[0].MoveAxis, 'l');
+                    lStick = sel.findsCMDs(commandBuffer[0].MoveAxis, 'l', cmdParettes[i].currentElapsedFrame);
                     isStickOverride = sel.isSCommandOveridable;
                 }
 
@@ -117,7 +121,7 @@ public class entityInputManager
                 {
                     isButtonOverride = sel.isBCommandOveridable;
 
-                    string[] commands = cmdParettes[i].commandInput.Split(',');
+                    string[] commands = sel.commandInput.Split(',');
                     int mIndex = Mathf.Min(cmdParettes[i].currentElapsedFrame, commands.Length);
                     string c = commands[mIndex];
                     if (c != null)
@@ -145,10 +149,11 @@ public class entityInputManager
         RecordInput_Core(rec);
     }
 
-    public List<CMDParette> cmdParettes = new List<CMDParette>();
+    public List<CMD_Struct> cmdParettes = new List<CMD_Struct>();
 
     //それぞれのコマンドをいわゆるTCGのカードみたいにする - 
     //CMDParette - この配列通りに順繰り実行.
+    //CMDParetteで定数的に扱うのはcurrentElapsedFrameとforwardRef"以外".
     public class CMDParette
     {
         // コマンド全体のかかる時間
@@ -167,7 +172,7 @@ public class entityInputManager
             internal int frame;
         }
 
-        internal Vector3 findsCMDs(Vector3 B_Input , char LorR)
+        internal Vector3 findsCMDs(Vector3 B_Input, char LorR, int ElapsedFrame)
         {
             //返り値
             Vector3 v = Vector3.zero;
@@ -189,7 +194,7 @@ public class entityInputManager
             foreach (stickCMD c_a in selCMD)
             {
                 fr_all = +c_a.frame;
-                if (currentElapsedFrame < fr_all)
+                if (ElapsedFrame < fr_all)
                 {
                     Vector3 fw;
                     if (B_Input != Vector3.zero)
@@ -197,14 +202,14 @@ public class entityInputManager
                         fw = Vector3.forward;
                     }
                     else
-                    { 
+                    {
                         fw = B_Input.normalized;
                     }
                     Vector2 stPos = c_a.stickPos;
                     //90方向の横 + 前方方向
-                    stPos = fw * stPos.y + Quaternion.AngleAxis(90f,Vector3.up) * fw * stPos.x;                    
-                    v = Vector3.Lerp(B_Input,c_a.stickPos,c_a.lerpValue);
-                    
+                    stPos = fw * stPos.y + Quaternion.AngleAxis(90f, Vector3.up) * fw * stPos.x;
+                    v = Vector3.Lerp(B_Input, c_a.stickPos, c_a.lerpValue);
+
                     return v;
                 }
             }
@@ -220,15 +225,21 @@ public class entityInputManager
 
         //コマンド優先度 - 高いほどそれが基礎として読み込まれる
         internal int BasePriority;
-
-        //現在経過時間. これはBehaviorDesignerでは変動させない.
-        internal int currentElapsedFrame;
-        //スティックの傾き時の基準方向 0ならWorld.Forward方向. 初期化時、代入
-        internal Vector3 forwardRef;
     }
 
     //それぞれのコマンドをいわゆるTCGのカードみたいにする - 
     //
+
+    public class CMD_Struct
+    {
+        //現在経過時間. これはBehaviorDesignerでは変動させない.
+        internal int currentElapsedFrame;
+        //スティックの傾き時の基準方向 0ならWorld.Forward方向. 初期化時、代入
+        internal Vector3 forwardRef;
+
+        internal CMDParette parette = new CMDParette();
+    }
+
 
     //behaviorDesignerに読み込ませるためのインプット
     public void RecordInput_AI()
@@ -242,7 +253,7 @@ public class entityInputManager
         if (commandBuffer.Length > commandBuffer_max)
         {
             commandRecord[] coms = commandBuffer;
-            Array.Copy(coms,0,commandBuffer,1,commandBuffer_max - 1);
+            Array.Copy(coms, 0, commandBuffer, 1, commandBuffer_max - 1);
         }
         else
         {

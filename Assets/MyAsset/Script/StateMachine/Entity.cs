@@ -78,7 +78,7 @@ public class Entity : MonoBehaviour
     //The Brain of character. not muscle or vertebrae. using BehaviorDesigner to do.
     [SerializeField]
     ExternalBehavior LoadedBehavior;
-    BehaviorTree BTree = new BehaviorTree();
+    BehaviorTree BTree;
 
     //OnHit確認用. 後で整理したい.
     public bool isStateHit = false;
@@ -119,6 +119,7 @@ public class Entity : MonoBehaviour
         //initialize behaviors.
         if (LoadedBehavior != null)
         {
+            BTree = gameObject.AddComponent<BehaviorTree>();
             BTree.ExternalBehavior = LoadedBehavior;
         }
     }
@@ -138,7 +139,7 @@ public class Entity : MonoBehaviour
 
         //後で消します. Player用にInputを記録する..
         //これはBehaviorDesignerに登録させる予定.
-        entityInput.RecordInput_Player(0);
+        //entityInput.RecordInput_Player(0);
         //play BehaviorDesigner.
         if (LoadedBehavior != null)
         {
@@ -169,7 +170,10 @@ public class Entity : MonoBehaviour
         }
         MainAnimMixer.PrimalGraph.Play();
 
-        Vector2 wish = (InputInstance.self.inputValues.MovingAxisRead);
+        //At Control, wishinvect is Input by command Buffer
+        //これ消したい.
+        Vector2 wish = entityInput.commandBuffer[0].MoveAxis;//(InputInstance.self.inputValues.MovingAxisRead);
+        //Debug.Log(entityInput.commandBuffer[0].MoveAxis);
         if (vCam != null)
         {
             wishingVect = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up) * wish.y

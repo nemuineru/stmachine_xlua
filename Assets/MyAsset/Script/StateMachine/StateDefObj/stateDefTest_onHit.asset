@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateDefs:
   - StateDefName: Default
-    entity: {fileID: 0}
-    StateDefID: 0
+    StateDefID: 1000000
     PriorCondition:
       LuaScript: 
       entity: {fileID: 0}
@@ -26,7 +25,6 @@ MonoBehaviour:
     - rid: 3579423253479817227
     - rid: 4404388598234480643
   - StateDefName: OnHit
-    entity: {fileID: 0}
     StateDefID: 5000
     PriorCondition:
       LuaScript: 
@@ -39,7 +37,6 @@ MonoBehaviour:
     - rid: 4404388549547524096
     - rid: 4404388569968803840
   - StateDefName: OnHit_Blow
-    entity: {fileID: 0}
     StateDefID: 5050
     PriorCondition:
       LuaScript: 
@@ -64,14 +61,12 @@ MonoBehaviour:
         stateControllerSubName: default
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: 0
           useID: -1
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: {x: 0, y: 0}
           useID: -1
@@ -85,6 +80,7 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: Set To base
         changeTo: 0
+        priority: 0
     - rid: 4404388569968803840
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:
@@ -95,14 +91,12 @@ MonoBehaviour:
         stateControllerSubName: DamageAnim_Def
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: 5000
           useID: -1
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: {x: 0, y: 0}
           useID: -1
@@ -135,14 +129,12 @@ MonoBehaviour:
         stateControllerSubName: DamageAnim_Blow
         changeAnimID:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: 5050
           useID: -1
           stLuaLoads: 
         animParameter:
           _setEssential: 0
-          _setHidden: 1
           loadTypes: 0
           stParamValue: {x: 0, y: 0}
           useID: -1

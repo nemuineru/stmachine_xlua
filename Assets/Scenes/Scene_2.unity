@@ -312,8 +312,10 @@ MonoBehaviour:
   isStateChanged: 0
   mesh: {fileID: 1518624745}
   DefLists:
+  - {fileID: 11400000, guid: 50b674ead1e1ddb439138d3f4f503ba1, type: 2}
   - {fileID: 11400000, guid: a49478fa449368048a98781f2140a6e2, type: 2}
   wishingVect: {x: 0, y: 0, z: 0}
+  LoadedBehavior: {fileID: 11400000, guid: c1470366b3bea504686d9b6beddfeb49, type: 2}
   isStateHit: 0
   raycenter: {x: 0, y: 0, z: 0}
 --- !u!4 &183720359 stripped
@@ -1561,6 +1563,10 @@ PrefabInstance:
       propertyPath: vCam
       value: 
       objectReference: {fileID: 1661577789}
+    - target: {fileID: 5097529176112046051, guid: 064af59b8fcc7cf41bdbf9e53ab133c0, type: 3}
+      propertyPath: LoadedBehavior
+      value: 
+      objectReference: {fileID: 11400000, guid: 03f10cc9c0671a049adf2ebf5f2e8fc4, type: 2}
     - target: {fileID: 5097529176112046051, guid: 064af59b8fcc7cf41bdbf9e53ab133c0, type: 3}
       propertyPath: animListObject
       value: 

@@ -46,6 +46,15 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Controller_LookAxis"",
+                    ""type"": ""Value"",
+                    ""id"": ""2263c5bf-ea2c-40e5-9c4b-693862707bac"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Main_Button"",
                     ""type"": ""Value"",
                     ""id"": ""5ed09253-5ee9-41f0-b568-1655f17a383b"",
@@ -305,6 +314,17 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
                     ""action"": ""SubMenu_Button"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b038acd0-5b7d-4e1a-849f-f50aa944bbac"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Controller_LookAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -315,6 +335,7 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
         m_Base = asset.FindActionMap("Base", throwIfNotFound: true);
         m_Base_CursorPosition = m_Base.FindAction("CursorPosition", throwIfNotFound: true);
         m_Base_Controller_MoveAxis = m_Base.FindAction("Controller_MoveAxis", throwIfNotFound: true);
+        m_Base_Controller_LookAxis = m_Base.FindAction("Controller_LookAxis", throwIfNotFound: true);
         m_Base_Main_Button = m_Base.FindAction("Main_Button", throwIfNotFound: true);
         m_Base_Action_Button = m_Base.FindAction("Action_Button", throwIfNotFound: true);
         m_Base_Sub_Button = m_Base.FindAction("Sub_Button", throwIfNotFound: true);
@@ -386,6 +407,7 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
     private List<IBaseActions> m_BaseActionsCallbackInterfaces = new List<IBaseActions>();
     private readonly InputAction m_Base_CursorPosition;
     private readonly InputAction m_Base_Controller_MoveAxis;
+    private readonly InputAction m_Base_Controller_LookAxis;
     private readonly InputAction m_Base_Main_Button;
     private readonly InputAction m_Base_Action_Button;
     private readonly InputAction m_Base_Sub_Button;
@@ -400,6 +422,7 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
         public BaseActions(@Input_Basic wrapper) { m_Wrapper = wrapper; }
         public InputAction @CursorPosition => m_Wrapper.m_Base_CursorPosition;
         public InputAction @Controller_MoveAxis => m_Wrapper.m_Base_Controller_MoveAxis;
+        public InputAction @Controller_LookAxis => m_Wrapper.m_Base_Controller_LookAxis;
         public InputAction @Main_Button => m_Wrapper.m_Base_Main_Button;
         public InputAction @Action_Button => m_Wrapper.m_Base_Action_Button;
         public InputAction @Sub_Button => m_Wrapper.m_Base_Sub_Button;
@@ -423,6 +446,9 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
             @Controller_MoveAxis.started += instance.OnController_MoveAxis;
             @Controller_MoveAxis.performed += instance.OnController_MoveAxis;
             @Controller_MoveAxis.canceled += instance.OnController_MoveAxis;
+            @Controller_LookAxis.started += instance.OnController_LookAxis;
+            @Controller_LookAxis.performed += instance.OnController_LookAxis;
+            @Controller_LookAxis.canceled += instance.OnController_LookAxis;
             @Main_Button.started += instance.OnMain_Button;
             @Main_Button.performed += instance.OnMain_Button;
             @Main_Button.canceled += instance.OnMain_Button;
@@ -457,6 +483,9 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
             @Controller_MoveAxis.started -= instance.OnController_MoveAxis;
             @Controller_MoveAxis.performed -= instance.OnController_MoveAxis;
             @Controller_MoveAxis.canceled -= instance.OnController_MoveAxis;
+            @Controller_LookAxis.started -= instance.OnController_LookAxis;
+            @Controller_LookAxis.performed -= instance.OnController_LookAxis;
+            @Controller_LookAxis.canceled -= instance.OnController_LookAxis;
             @Main_Button.started -= instance.OnMain_Button;
             @Main_Button.performed -= instance.OnMain_Button;
             @Main_Button.canceled -= instance.OnMain_Button;
@@ -502,6 +531,7 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
     {
         void OnCursorPosition(InputAction.CallbackContext context);
         void OnController_MoveAxis(InputAction.CallbackContext context);
+        void OnController_LookAxis(InputAction.CallbackContext context);
         void OnMain_Button(InputAction.CallbackContext context);
         void OnAction_Button(InputAction.CallbackContext context);
         void OnSub_Button(InputAction.CallbackContext context);

@@ -4,7 +4,9 @@ using BehaviorDesigner.Runtime.Tasks;
 using Unity.AI.Navigation;
 using UnityEngine.AI;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
+[TaskCategory("MyAsset")]
 public class enemyInput_Test : Action
 {
     //ターゲット先・動作方向先
@@ -17,6 +19,11 @@ public class enemyInput_Test : Action
     //Commandに応じて、入力を与える.
     [SerializeField]
     SharedString Command;
+
+    //これ、仮想で1fと設定する.
+    [SerializeField]
+    SharedVector2[] virtualStickInput;
+
 
 
     Vector3 v3_Target = Vector3.zero;
@@ -35,24 +42,34 @@ public class enemyInput_Test : Action
 
     public override void OnAwake()
     {
+        if(AIEntity == null)
         AIEntity = gameObject.GetComponent<Entity>();
     }
 
-
-    public override TaskStatus OnUpdate()
+    //とりあえず指定された位置に近づくだけのスクリプトを組む
+    public override void OnStart()
     {
-        if (currentTick > mapRouteFindTickRate)
+        Vector3 fwRef = Vector3.zero;
+        if (v3_WalkTo != null && AIEntity != null)
         {
-            //設定されたbool値がTrue・Rand01値が設定値以上ならコマンド送信 ->
-            //今回は "a_"を入力するとした
-            //AIEntity.entityInput.RecordInput_Enemy();
+            fwRef = ( v3_WalkTo.Value - AIEntity.gameObject.transform.position).normalized;
+            //currentTickが0なら実行..
+            if (currentTick > mapRouteFindTickRate)
+            {
+                entityInputManager.CMD_Struct str = new entityInputManager.CMD_Struct();
+                str.forwardRef = fwRef;
+
+                AIEntity.entityInput.cmdParettes.Add(str);
+
+                currentTick = 0;
+            }
+            else
+            {
+                currentTick++;
+            }
+            AIEntity.entityInput.Execute_Entity_NPC(fwRef,false);
         }
-        else
-        {
-            currentTick++;
-        }
-        return base.OnUpdate();
-    }
+}
 
 
 }

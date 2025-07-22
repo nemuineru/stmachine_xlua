@@ -24,6 +24,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Controller_LookAxis",
+                    "type": "Value",
+                    "id": "2263c5bf-ea2c-40e5-9c4b-693862707bac",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Main_Button",
                     "type": "Value",
                     "id": "5ed09253-5ee9-41f0-b568-1655f17a383b",
@@ -281,6 +290,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SubMenu_Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b038acd0-5b7d-4e1a-849f-f50aa944bbac",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Controller_LookAxis",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
