@@ -30,20 +30,20 @@ public class enemyInput_Test : Action
 
     int currentTick = 0;
     //パスの処理レート設定
-    const int mapRouteFindTickRate = 10;
+    const int mapRouteFindTickRate = 7;
     const float rand_Prov = 0.001f;
     const float hitboxDist = 2f;
 
     Vector3 Dist = Vector3.zero;
     Vector2 Input = Vector2.zero;
 
-//動かすEntity. これが付いたExternalBehaviorは必ずこれが付いてるはず
+    //動かすEntity. これが付いたExternalBehaviorは必ずこれが付いてるはず
     Entity AIEntity;
 
     public override void OnAwake()
     {
-        if(AIEntity == null)
-        AIEntity = gameObject.GetComponent<Entity>();
+        if (AIEntity == null)
+            AIEntity = gameObject.GetComponent<Entity>();
     }
 
     //とりあえず指定された位置に近づくだけのスクリプトを組む
@@ -52,12 +52,30 @@ public class enemyInput_Test : Action
         Vector3 fwRef = Vector3.zero;
         if (v3_WalkTo != null && AIEntity != null)
         {
-            fwRef = ( v3_WalkTo.Value - AIEntity.gameObject.transform.position).normalized;
+            fwRef = Vector3.ProjectOnPlane((v3_WalkTo.Value - AIEntity.gameObject.transform.position),Vector3.up);
+            Vector2 xzref = new Vector2(fwRef.x,fwRef.z);
+            //Debug.Log(fwRef);
             //currentTickが0なら実行..
-            if (currentTick > mapRouteFindTickRate)
+            if (currentTick > mapRouteFindTickRate && AIEntity.entityInput.cmdParettes.Count < 1)
             {
                 entityInputManager.CMD_Struct str = new entityInputManager.CMD_Struct();
-                str.forwardRef = fwRef;
+                str.forwardRef = xzref;
+                str.currentElapsedFrame = 0;
+                entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
+                CP.wholeFrame = 12;
+                //stickコマンド. これむっちゃ変.
+                entityInputManager.CMDParette.stickCMD s_1 =
+                new entityInputManager.CMDParette.stickCMD(Vector2.up, .8f, 4);
+
+                entityInputManager.CMDParette.stickCMD s_2 =
+                new entityInputManager.CMDParette.stickCMD(Vector2.left, .2f, 8);
+
+                CP.isBCommandOveridable = false;
+                CP.isSCommandOveridable = false;
+
+                CP.sCmds_L.Add(s_1);
+                CP.sCmds_L.Add(s_2);
+                str.parette = CP;
 
                 AIEntity.entityInput.cmdParettes.Add(str);
 
@@ -67,11 +85,29 @@ public class enemyInput_Test : Action
             {
                 currentTick++;
             }
-            AIEntity.entityInput.Execute_Entity_NPC(fwRef,false);
         }
+    }
 }
 
 
+[TaskCategory("MyAsset")]
+public class ExecuteNPCCommands : Action
+{
+
+    //動かすEntity. これが付いたExternalBehaviorは必ずこれが付いてるはず
+    Entity AIEntity;
+
+    public override void OnAwake()
+    {
+        if (AIEntity == null)
+            AIEntity = gameObject.GetComponent<Entity>();
+    }
+
+    public override void OnStart()
+    {
+        //Debug.Log("Execution Inputs");
+        AIEntity.entityInput.Execute_Entity_NPC(AIEntity.HitPauseTime <= 0);
+    }
 }
 
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject
@@ -90,11 +126,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject
 
         public override void OnAwake()
         {
-            if (random.Value) {
+            if (random.Value)
+            {
                 var gameObjects = GameObject.FindGameObjectsWithTag(tag.Value);
                 if (gameObjects == null || gameObjects.Length == 0) { return; }
                 storeValue.Value = gameObjects[Random.Range(0, gameObjects.Length)];
-            } else {
+            }
+            else
+            {
                 storeValue.Value = GameObject.FindWithTag(tag.Value);
             }
             return;

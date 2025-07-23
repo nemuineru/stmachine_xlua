@@ -122,6 +122,11 @@ public class Entity : MonoBehaviour
             BTree = gameObject.AddComponent<BehaviorTree>();
             BTree.ExternalBehavior = LoadedBehavior;
         }
+
+        if (vCam != null)
+        {
+            targetTo = vCam.transform;
+        }
     }
 
     List<StateDef> loadedDefs = new List<StateDef>();
@@ -174,10 +179,15 @@ public class Entity : MonoBehaviour
         //これ消したい.
         Vector2 wish = entityInput.commandBuffer[0].MoveAxis;//(InputInstance.self.inputValues.MovingAxisRead);
         //Debug.Log(entityInput.commandBuffer[0].MoveAxis);
-        if (vCam != null)
+        if (targetTo != null)
         {
-            wishingVect = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up) * wish.y
-            + Vector3.ProjectOnPlane(vCam.transform.right, Vector3.up) * wish.x;
+            wishingVect = Vector3.ProjectOnPlane(targetTo.transform.forward, Vector3.up) * wish.y
+            + Vector3.ProjectOnPlane(targetTo.transform.right, Vector3.up) * wish.x;
+        }
+        //何も設定されていないときは世界基準として設定
+        else
+        {
+            wishingVect = Vector3.forward * wish.y + Vector3.right * wish.x;
         }
         mat.SetColor("_Color", CurColor);
 

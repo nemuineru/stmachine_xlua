@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
+using BehaviorDesigner.Runtime.Tasks.Unity.Math;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -83,7 +84,7 @@ public class entityInputManager
     //CommandParetteから読み出す.
     //forwardに設定した値を元に, stickの傾きを設定 - 
     //stick y軸が前方・後方方向とし、x軸は横軸方向とする.
-    public void Execute_Entity_NPC(Vector3 refForwardInput, bool isPaused)
+    public void Execute_Entity_NPC(bool isPaused)
     {
         int inputs = 0;
         Vector2 lStick = Vector2.zero;
@@ -98,50 +99,36 @@ public class entityInputManager
                 if (!isPaused || !cmdParettes[i].parette.isPauseWait)
                     cmdParettes[i].currentElapsedFrame++;
             }
-            cmdParettes.RemoveAll(cd => cd.currentElapsedFrame > cd.parette.wholeFrame);
+            Debug.Log(cmdParettes.Count);
+
             //Priority順に並べる
             cmdParettes.Sort((x, y) => x.parette.BasePriority - y.parette.BasePriority);
-            bool isStickOverride = false;
-            bool isButtonOverride = false;
+            bool isStickOverride = true;
+            bool isButtonOverride = true;
 
 
             for (int i = 0; i < cmdParettes.Count; i++)
             {
-                CMDParette sel = cmdParettes[i].parette;
-                //まずはスティック傾きのみ検知
-                if (isStickOverride)
-                {
-                    //前のコマンドとの比較
-                    lStick = sel.findsCMDs(commandBuffer[0].MoveAxis, 'l', cmdParettes[i].currentElapsedFrame);
-                    isStickOverride = sel.isSCommandOveridable;
-                }
-
-                //ボタンインプット.. ','で区切る
-                if (isButtonOverride)
-                {
-                    isButtonOverride = sel.isBCommandOveridable;
-
-                    string[] commands = sel.commandInput.Split(',');
-                    int mIndex = Mathf.Min(cmdParettes[i].currentElapsedFrame, commands.Length);
-                    string c = commands[mIndex];
-                    if (c != null)
-                    {
-                        c.Trim();
-                        foreach (structInputs stInput in anlInputs)
-                        {
-                            if (c.Contains(stInput.drawStr))
-                            {
-                                inputs += stInput.bitNum * 10;
-                            }
-                        }
-                    }
-                }
+                //最優先位置のコマンドを読み出す.
+                CMD_Struct sel = cmdParettes[i];
+                //Debug.Log("SOverride" + isStickOverride + " in index " + i);
+                //Debug.Log("BOverride" + isButtonOverride + " in index " + i);
+                (inputs, lStick) = sel.GetCommands(commandBuffer[0].MoveAxis, ref isButtonOverride, ref isStickOverride);
+                Debug.Log(inputs.ToString() + " " + lStick.ToString());
             }
+
+            cmdParettes.RemoveAll(cd => cd.currentElapsedFrame > cd.parette.wholeFrame);
+        }
+        else
+        {
+            //MAGIC NUMBER!!!
+            Debug.Log("MAGIC NUMBER LOADED");
+            lStick = Vector2.Lerp(commandBuffer[0].MoveAxis,Vector2.zero,0.8f);
         }
 
         rec.MoveAxis = lStick;
-        int X_I = InputInstance.GetDigitalAxis(new(refForwardInput.x, refForwardInput.z));
-        inputs += X_I; //+ RawInput;
+        //int X_I = InputInstance.GetDigitalAxis(new(ForwardInput.x, refForwardInput.z));
+        //inputs += X_I; //+ RawInput;
 
 
 
@@ -152,33 +139,90 @@ public class entityInputManager
     public List<CMD_Struct> cmdParettes = new List<CMD_Struct>();
 
     //それぞれのコマンドをいわゆるTCGのカードみたいにする - 
+    //CMDParetteの内容は変更しない.
+    public class CMD_Struct
+    {
+        //現在経過時間. これはBehaviorDesignerでは変動させない.
+        internal int currentElapsedFrame;
+        //スティックの傾き時の基準方向 0ならWorld.Forward方向. 初期化時、代入
+        internal Vector3 forwardRef;
+
+        internal CMDParette parette = new CMDParette();
+
+        //CMDparetteから指定したコマンドを取得.
+        //今はボタンインプットと左スティックの移動のみ.
+        internal (int, Vector2) GetCommands(Vector2 B_Input, ref bool isBCommandOveridable, ref bool isSCommandOveridable)
+        {
+            Vector2 lStick = Vector2.zero;
+            int inputs = 0;
+            //まずはスティック傾きのみ検知
+            if (isSCommandOveridable)
+            {
+
+                //前のコマンドとの比較
+                lStick = parette.findStickVel(forwardRef, B_Input, 'l', currentElapsedFrame);
+                isSCommandOveridable = parette.isSCommandOveridable;
+            }
+
+            //ボタンインプット.. ','で区切る
+            if (isBCommandOveridable && parette.commandInput != null)
+            {
+                isBCommandOveridable = parette.isBCommandOveridable;
+
+                string[] commands = parette.commandInput.Split(',');
+                //最低値のindexを取る
+                int mIndex = Mathf.Min(currentElapsedFrame, commands.Length);
+                string cmd_strs = commands[mIndex];
+                if (cmd_strs != null)
+                {
+                    cmd_strs.Trim();
+                    //analysys the structInputs
+                    foreach (structInputs stInput in anlInputs)
+                    {
+                        if (cmd_strs.Contains(stInput.drawStr))
+                        {
+                            //押したときはstInputの10の倍数を与える
+                            inputs += stInput.bitNum * 10;
+                        }
+                    }
+                }
+            }
+            return (inputs, lStick);
+        }
+    }
+
     //CMDParette - この配列通りに順繰り実行.
-    //CMDParetteで定数的に扱うのはcurrentElapsedFrameとforwardRef"以外".
+    //CMDParetteはすべて定数的に扱う.
     public class CMDParette
     {
         // コマンド全体のかかる時間
-        internal int wholeFrame;
+        internal int wholeFrame = 1;
 
         //Index事に読み込み - 
-        internal List<stickCMD> sCmds_L, sCmds_R;
+        internal List<stickCMD> sCmds_L = new List<stickCMD>(), sCmds_R = new List<stickCMD>();
         //Listとして読み出す
         internal struct stickCMD
         {
             //仮想スティックの登録
-            internal Vector3 stickPos;
+            internal Vector2 stickPos;
             //Stickの前ValueとのLerp値
             internal float lerpValue;
             //持続フレーム
             internal int frame;
+            public stickCMD(Vector2 sPos, float lVal, int fr) {
+                stickPos = sPos;
+                lerpValue = lVal;
+                frame = fr;
+            }
         }
 
-        internal Vector3 findsCMDs(Vector3 B_Input, char LorR, int ElapsedFrame)
+        //コマンドと言うかスティック傾きの検知っすねー
+        internal Vector2 findStickVel(Vector2 fw_ref, Vector2 B_stickCMD, char LorR, int ElapsedFrame)
         {
             //返り値
-            Vector3 v = Vector3.zero;
+            Vector2 v = Vector3.zero;
 
             //右・左のどっちのスティックを読み出す？
-            //forwardRefの値に従い、
             List<stickCMD> selCMD = sCmds_L;
             if (LorR == 'l')
             {
@@ -194,21 +238,24 @@ public class entityInputManager
             foreach (stickCMD c_a in selCMD)
             {
                 fr_all = +c_a.frame;
-                if (ElapsedFrame < fr_all)
+                //実行コマンド時間が経過時間を超えたとき
+                //forwardRefの値に従い、値の回転を行う.
+                if (ElapsedFrame <= fr_all)
                 {
-                    Vector3 fw;
-                    if (B_Input != Vector3.zero)
+                    Vector2 fw;
+                    if (fw_ref != Vector2.zero)
                     {
-                        fw = Vector3.forward;
+                        fw = fw_ref.normalized;
+                        Debug.Log(fw);
                     }
                     else
                     {
-                        fw = B_Input.normalized;
+                        fw = Vector2.up;
                     }
                     Vector2 stPos = c_a.stickPos;
                     //90方向の横 + 前方方向
-                    stPos = fw * stPos.y + Quaternion.AngleAxis(90f, Vector3.up) * fw * stPos.x;
-                    v = Vector3.Lerp(B_Input, c_a.stickPos, c_a.lerpValue);
+                    stPos = fw * stPos.y +  -Vector2.Perpendicular(fw) * stPos.x;
+                    v = Vector2.Lerp(B_stickCMD, stPos, c_a.lerpValue);
 
                     return v;
                 }
@@ -227,18 +274,6 @@ public class entityInputManager
         internal int BasePriority;
     }
 
-    //それぞれのコマンドをいわゆるTCGのカードみたいにする - 
-    //
-
-    public class CMD_Struct
-    {
-        //現在経過時間. これはBehaviorDesignerでは変動させない.
-        internal int currentElapsedFrame;
-        //スティックの傾き時の基準方向 0ならWorld.Forward方向. 初期化時、代入
-        internal Vector3 forwardRef;
-
-        internal CMDParette parette = new CMDParette();
-    }
 
 
     //behaviorDesignerに読み込ませるためのインプット
@@ -280,7 +315,7 @@ public class entityInputManager
 
 
     //2進数のボタン比較用.  
-    structInputs[] anlInputs = {
+    static structInputs[] anlInputs = {
         new structInputs(0B_00000001, "a"),
         new structInputs(0B_00000010, "b"),
         new structInputs(0B_00000100, "c"),
@@ -444,3 +479,4 @@ public class entityInputManager
     }
     
 }
+
