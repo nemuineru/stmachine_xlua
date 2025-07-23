@@ -106,7 +106,7 @@ public class entityInputManager
             bool isStickOverride = true;
             bool isButtonOverride = true;
 
-
+            //現状、cmdParettesの値読み出し時
             for (int i = 0; i < cmdParettes.Count; i++)
             {
                 //最優先位置のコマンドを読み出す.
@@ -116,6 +116,7 @@ public class entityInputManager
                 (int inputs_calc, Vector2 lStick_calc) = sel.GetCommands(commandBuffer[0].MoveAxis, ref isButtonOverride, ref isStickOverride);
                 inputs += inputs_calc;
                 lStick += lStick_calc;
+                lStick = lStick.normalized * Mathf.Clamp01(lStick.sqrMagnitude);
                 Debug.Log(inputs.ToString() + " " + lStick.ToString());
             }
 
@@ -163,6 +164,7 @@ public class entityInputManager
 
                 //前のコマンドとの比較. Lerp値はparette内で決定される.
                 lStick = parette.findStickVel(forwardRef, B_Input, 'l', currentElapsedFrame);
+                Debug.Log(lStick.ToString() + " eFrame at " + currentElapsedFrame);
                 isSCommandOveridable = parette.isSCommandOveridable;
             }
 
@@ -258,6 +260,8 @@ public class entityInputManager
                     //90方向の横 + 前方方向
                     stPos = fw * stPos.y +  -Vector2.Perpendicular(fw) * stPos.x;
                     v = Vector2.Lerp(B_stickCMD, stPos, c_a.lerpValue);
+
+                    Debug.Log(v + "Outputted");
 
                     return v;
                 }

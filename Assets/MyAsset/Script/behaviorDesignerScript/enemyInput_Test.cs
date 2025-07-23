@@ -64,19 +64,23 @@ public class enemyInput_Test : Action
                 str.forwardRef = xzref;
                 str.currentElapsedFrame = 0;
                 entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
-                CP.wholeFrame = 8;
+                //全体所要時間. これに届くまで指定のコマンドが実行される.
+                CP.wholeFrame = 64;
                 //stickコマンド. これむっちゃ変.
+                //今理解、全体のstickFrameがwholeFrameを下回る際、0として出力される => この値がoverride対象でないなら、そのまま0を受け継いでしまう.
                 entityInputManager.CMDParette.stickCMD s_1 =
-                new entityInputManager.CMDParette.stickCMD(Vector2.up, .8f, 4);
+                new entityInputManager.CMDParette.stickCMD(Vector2.up, .8f, 34);
 
                 entityInputManager.CMDParette.stickCMD s_2 =
-                new entityInputManager.CMDParette.stickCMD(Vector2.left, .2f, 8);
+                new entityInputManager.CMDParette.stickCMD(Vector2.left, .8f, 34);
 
+                //BCOMMAND,SCOMMANDをオーバーライド不可能に設定した場合、
+                //最終出力時にこのコマンドが優先された場合実行されるコマンドはこれになる..はず
+                CP.isSCommandOveridable = true;
                 CP.isBCommandOveridable = false;
-                CP.isSCommandOveridable = false;
 
                 CP.sCmds_L.Add(s_1);
-                //CP.sCmds_L.Add(s_2);
+                CP.sCmds_L.Add(s_2);
                 str.parette = CP;
 
                 AIEntity.entityInput.cmdParettes.Add(str);
