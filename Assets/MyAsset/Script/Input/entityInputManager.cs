@@ -113,7 +113,9 @@ public class entityInputManager
                 CMD_Struct sel = cmdParettes[i];
                 //Debug.Log("SOverride" + isStickOverride + " in index " + i);
                 //Debug.Log("BOverride" + isButtonOverride + " in index " + i);
-                (inputs, lStick) = sel.GetCommands(commandBuffer[0].MoveAxis, ref isButtonOverride, ref isStickOverride);
+                (int inputs_calc, Vector2 lStick_calc) = sel.GetCommands(commandBuffer[0].MoveAxis, ref isButtonOverride, ref isStickOverride);
+                inputs += inputs_calc;
+                lStick += lStick_calc;
                 Debug.Log(inputs.ToString() + " " + lStick.ToString());
             }
 
@@ -159,7 +161,7 @@ public class entityInputManager
             if (isSCommandOveridable)
             {
 
-                //前のコマンドとの比較
+                //前のコマンドとの比較. Lerp値はparette内で決定される.
                 lStick = parette.findStickVel(forwardRef, B_Input, 'l', currentElapsedFrame);
                 isSCommandOveridable = parette.isSCommandOveridable;
             }

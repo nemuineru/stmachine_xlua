@@ -30,7 +30,7 @@ public class enemyInput_Test : Action
 
     int currentTick = 0;
     //パスの処理レート設定
-    const int mapRouteFindTickRate = 7;
+    const int mapRouteFindTickRate = 2;
     const float rand_Prov = 0.001f;
     const float hitboxDist = 2f;
 
@@ -56,13 +56,15 @@ public class enemyInput_Test : Action
             Vector2 xzref = new Vector2(fwRef.x,fwRef.z);
             //Debug.Log(fwRef);
             //currentTickが0なら実行..
-            if (currentTick > mapRouteFindTickRate && AIEntity.entityInput.cmdParettes.Count < 1)
+            if (currentTick > mapRouteFindTickRate) //&& AIEntity.entityInput.cmdParettes.Count < 1)
             {
                 entityInputManager.CMD_Struct str = new entityInputManager.CMD_Struct();
+                //xzrefに従い、コマンドを出力する. ..要はどの目線を前向き方向にするか。
+                //ここで定義されるのはちょっとまずいので後でFIXしたい
                 str.forwardRef = xzref;
                 str.currentElapsedFrame = 0;
                 entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
-                CP.wholeFrame = 12;
+                CP.wholeFrame = 8;
                 //stickコマンド. これむっちゃ変.
                 entityInputManager.CMDParette.stickCMD s_1 =
                 new entityInputManager.CMDParette.stickCMD(Vector2.up, .8f, 4);
@@ -74,7 +76,7 @@ public class enemyInput_Test : Action
                 CP.isSCommandOveridable = false;
 
                 CP.sCmds_L.Add(s_1);
-                CP.sCmds_L.Add(s_2);
+                //CP.sCmds_L.Add(s_2);
                 str.parette = CP;
 
                 AIEntity.entityInput.cmdParettes.Add(str);
