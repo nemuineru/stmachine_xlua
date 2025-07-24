@@ -30,7 +30,7 @@ public class enemyInput_Test : Action
 
     int currentTick = 0;
     //パスの処理レート設定
-    const int mapRouteFindTickRate = 2;
+    const int mapRouteFindTickRate = 15;
     const float rand_Prov = 0.001f;
     const float hitboxDist = 2f;
 
@@ -50,10 +50,12 @@ public class enemyInput_Test : Action
     public override void OnStart()
     {
         Vector3 fwRef = Vector3.zero;
+        float RotRef = 0f;
         if (v3_WalkTo != null && AIEntity != null)
         {
-            fwRef = Vector3.ProjectOnPlane((v3_WalkTo.Value - AIEntity.gameObject.transform.position),Vector3.up);
-            Vector2 xzref = new Vector2(fwRef.x,fwRef.z);
+            fwRef = Vector3.ProjectOnPlane((v3_WalkTo.Value - AIEntity.transform.position), Vector3.up);
+            RotRef = Vector3.Angle(AIEntity.transform.forward, fwRef);
+            Vector2 xzref = new Vector2(fwRef.x, fwRef.z);
             //Debug.Log(fwRef);
             //currentTickが0なら実行..
             if (currentTick > mapRouteFindTickRate) //&& AIEntity.entityInput.cmdParettes.Count < 1)
@@ -65,18 +67,19 @@ public class enemyInput_Test : Action
                 str.currentElapsedFrame = 0;
                 entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
                 //全体所要時間. これに届くまで指定のコマンドが実行される.
-                CP.wholeFrame = 64;
+                CP.wholeFrame = 12;
                 //stickコマンド. これむっちゃ変.
                 //今理解、全体のstickFrameがwholeFrameを下回る際、0として出力される => この値がoverride対象でないなら、そのまま0を受け継いでしまう.
                 entityInputManager.CMDParette.stickCMD s_1 =
-                new entityInputManager.CMDParette.stickCMD(Vector2.up, .8f, 34);
+                new entityInputManager.CMDParette.stickCMD(Vector2.up, .8f, 7);
 
                 entityInputManager.CMDParette.stickCMD s_2 =
-                new entityInputManager.CMDParette.stickCMD(Vector2.left, .8f, 34);
+                new entityInputManager.CMDParette.stickCMD(Vector2.down, .1f, 6);
 
                 //BCOMMAND,SCOMMANDをオーバーライド不可能に設定した場合、
                 //最終出力時にこのコマンドが優先された場合実行されるコマンドはこれになる..はず
-                CP.isSCommandOveridable = true;
+                CP.BasePriority = 0;
+                CP.isMoveSCommandOveridable = false;
                 CP.isBCommandOveridable = false;
 
                 CP.sCmds_L.Add(s_1);
@@ -90,6 +93,13 @@ public class enemyInput_Test : Action
             else
             {
                 currentTick++;
+            }
+            //それとは別に、視点移動のスクリプトも同様に考える..
+            //視点移動なので毎回やる. 上書き可能.
+            { 
+                entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
+                CP.wholeFrame = 1;
+                CP.BasePriority = 0;
             }
         }
     }

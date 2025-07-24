@@ -57,6 +57,7 @@ public class entityInputManager
         if (InputInstance.self != null)
         {
             rec.MoveAxis = InputInstance.self.inputValues.MovingAxis;
+            rec.LookAxis = InputInstance.self.inputValues.LookingAxis;
             //rec.LookAxis = InputInstance.self.inputValues.Ax;
             inputs = InputInstance.self.inputValues.MovingAxis_Digital;
 
@@ -88,6 +89,7 @@ public class entityInputManager
     {
         int inputs = 0;
         Vector2 lStick = Vector2.zero;
+        Vector2 rStick = Vector2.zero;
         commandRecord rec = new commandRecord();
 
         if (cmdParettes.Count > 0)
@@ -103,22 +105,25 @@ public class entityInputManager
 
             //Priority順に並べる
             cmdParettes.Sort((x, y) => x.parette.BasePriority - y.parette.BasePriority);
-            bool isStickOverride = true;
+            bool isMoveStickOverride = true;
+            bool isLookStickOverride = true;
             bool isButtonOverride = true;
 
             //現状、cmdParettesの値読み出し時
             for (int i = 0; i < cmdParettes.Count; i++)
             {
+                Debug.Log("stickoverride " + isMoveStickOverride);
                 //最優先位置のコマンドを読み出す.
                 CMD_Struct sel = cmdParettes[i];
                 //Debug.Log("SOverride" + isStickOverride + " in index " + i);
                 //Debug.Log("BOverride" + isButtonOverride + " in index " + i);
-                (int inputs_calc, Vector2 lStick_calc) = sel.GetCommands(commandBuffer[0].MoveAxis, ref isButtonOverride, ref isStickOverride);
-                inputs += inputs_calc;
-                lStick += lStick_calc;
-                lStick = lStick.normalized * Mathf.Clamp01(lStick.sqrMagnitude);
+                (int inputs_calc, Vector2 lStick_calc) = sel.GetCommands(commandBuffer[0].MoveAxis, ref isButtonOverride,
+                ref isMoveStickOverride, ref isLookStickOverride, lStick, rStick, inputs);
+                inputs = inputs_calc;
+                lStick = lStick_calc;
                 Debug.Log(inputs.ToString() + " " + lStick.ToString());
             }
+            //lStick = lStick.normalized * Mathf.Clamp01(lStick.sqrMagnitude);
 
             cmdParettes.RemoveAll(cd => cd.currentElapsedFrame > cd.parette.wholeFrame);
         }
@@ -154,18 +159,28 @@ public class entityInputManager
 
         //CMDparetteから指定したコマンドを取得.
         //今はボタンインプットと左スティックの移動のみ.
-        internal (int, Vector2) GetCommands(Vector2 B_Input, ref bool isBCommandOveridable, ref bool isSCommandOveridable)
+        internal (int, Vector2) GetCommands(Vector2 B_Input, ref bool isBCommandOveridable,
+        ref bool isMoveSCommandOveridable, ref bool isLookSCommandOveridable,   
+            Vector2 lStick_f ,Vector2 rStick_f , int inputs_f)
         {
-            Vector2 lStick = Vector2.zero;
-            int inputs = 0;
-            //まずはスティック傾きのみ検知
-            if (isSCommandOveridable)
+            Vector2 lStick = lStick_f;
+            Vector2 rStick = rStick_f;
+            int inputs = inputs_f;
+            //移動スティックはforwardRefを考えるとする
+            if (isMoveSCommandOveridable)
             {
-
                 //前のコマンドとの比較. Lerp値はparette内で決定される.
-                lStick = parette.findStickVel(forwardRef, B_Input, 'l', currentElapsedFrame);
+                lStick += parette.findStickVel(forwardRef, B_Input, 'l', currentElapsedFrame);
                 Debug.Log(lStick.ToString() + " eFrame at " + currentElapsedFrame);
-                isSCommandOveridable = parette.isSCommandOveridable;
+                isMoveSCommandOveridable = parette.isMoveSCommandOveridable;
+            }
+            //視点スティックはforwardRefを考えず, Vector.up(ワールド基準)で考える
+            if (isLookSCommandOveridable)
+            {
+                //前のコマンドとの比較. Lerp値はparette内で決定される.
+                rStick += parette.findStickVel(Vector3.up, B_Input, 'l', currentElapsedFrame);
+                Debug.Log(rStick.ToString() + " eFrame at " + currentElapsedFrame);
+                isLookSCommandOveridable = parette.isLookSCommandOveridable;
             }
 
             //ボタンインプット.. ','で区切る
@@ -241,7 +256,8 @@ public class entityInputManager
             int fr_all = 0;
             foreach (stickCMD c_a in selCMD)
             {
-                fr_all = +c_a.frame;
+                fr_all += c_a.frame;
+                Debug.Log(ElapsedFrame + " / " + fr_all + " vc " + c_a.stickPos);
                 //実行コマンド時間が経過時間を超えたとき
                 //forwardRefの値に従い、値の回転を行う.
                 if (ElapsedFrame <= fr_all)
@@ -250,7 +266,7 @@ public class entityInputManager
                     if (fw_ref != Vector2.zero)
                     {
                         fw = fw_ref.normalized;
-                        Debug.Log(fw);
+                        //Debug.Log(fw);
                     }
                     else
                     {
@@ -261,7 +277,7 @@ public class entityInputManager
                     stPos = fw * stPos.y +  -Vector2.Perpendicular(fw) * stPos.x;
                     v = Vector2.Lerp(B_stickCMD, stPos, c_a.lerpValue);
 
-                    Debug.Log(v + "Outputted");
+                    //Debug.Log(v + "Outputted");
 
                     return v;
                 }
@@ -274,7 +290,7 @@ public class entityInputManager
         internal string commandInput;
         // それぞれ - 
         // スティック情報を元にコマンドを入力可能か / ボタン情報を元にコマンドを入力可能か / ポーズ時間を待つか
-        internal bool isSCommandOveridable, isBCommandOveridable, isPauseWait;
+        internal bool isMoveSCommandOveridable, isLookSCommandOveridable, isBCommandOveridable, isPauseWait;
 
         //コマンド優先度 - 高いほどそれが基礎として読み込まれる
         internal int BasePriority;

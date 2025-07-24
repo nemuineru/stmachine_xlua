@@ -516,6 +516,7 @@ public class scChangeState : StateController
 }
 
 //移動方向に回転を加える.
+//現在はカメラ方向に向けるとしている
 [System.Serializable]
 [SerializeField]
 public class scRotateTowards : StateController
@@ -527,8 +528,14 @@ public class scRotateTowards : StateController
         //比較がepsilonだとダメっぽそう
         if (vect.sqrMagnitude > 0.01f)
         {
+            /*
             Quaternion RotateTowards = Quaternion.LookRotation(vect.normalized, Vector3.up);
             entity.transform.rotation = Quaternion.Lerp(entity.transform.rotation, RotateTowards, RotateWeight);
+            */
+            //カメラ方向に回転.
+            Quaternion RotateTowards = Quaternion.LookRotation(entity.targetTo_fw, Vector3.up);
+            entity.transform.rotation = Quaternion.Lerp(entity.transform.rotation, RotateTowards, RotateWeight);
+            
         }
     }
 }

@@ -38,6 +38,7 @@ public class InputInstance : MonoBehaviour
     public class InputValueManagers
     {
         public Vector2 MovingAxisRead = Vector2.zero;
+        public Vector2 LookingAxisRead = Vector2.zero;
         public Vector2 mAx_Min = Vector2.one * 0.2f;        
         public Vector2 mAx_Max = Vector2.one * 0.95f;
         public int MainButton_Read = 0;
@@ -77,6 +78,16 @@ public class InputInstance : MonoBehaviour
             get {
                     Vector2 vect = self.inputBasic.Base.Controller_MoveAxis.ReadValue<Vector2>();
                     MovingAxisRead = 
+                    new Vector2(Mathf.Sign(vect.x) * Clamp_set_01(mAx_Min.x,mAx_Max.x,vect.Abs().x), 
+                    Mathf.Sign(vect.y) * Clamp_set_01(mAx_Min.y,mAx_Max.y,vect.Abs().y));
+                    return vect;
+                }
+        }
+        public Vector2 LookingAxis
+        {
+            get {
+                    Vector2 vect = self.inputBasic.Base.Controller_LookAxis.ReadValue<Vector2>();
+                    LookingAxisRead = 
                     new Vector2(Mathf.Sign(vect.x) * Clamp_set_01(mAx_Min.x,mAx_Max.x,vect.Abs().x), 
                     Mathf.Sign(vect.y) * Clamp_set_01(mAx_Min.y,mAx_Max.y,vect.Abs().y));
                     return vect;
@@ -186,5 +197,6 @@ public class InputInstance : MonoBehaviour
         inputValues.AnalogButtonSet(inputValues.MenuButton, ref inputValues.MenuButton_Read);
         inputValues.AnalogButtonSet(inputValues.SubMenuButton, ref inputValues.SubMenuButton_Read);
         Vector2 nullV = inputValues.MovingAxis;
+        nullV = inputValues.LookingAxis;
     }
 }

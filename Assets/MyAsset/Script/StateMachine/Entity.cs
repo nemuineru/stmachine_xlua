@@ -24,8 +24,8 @@ public class Entity : MonoBehaviour
 
     public int stateTime;
 
-    //移動用の設定など.
-    public Transform targetTo;
+    //移動用の設定など. fwに設定した値・90度回転方向を考慮 - 
+    public Vector3 targetTo_fw = Vector3.forward;
 
     public CinemachineVirtualCamera vCam;
 
@@ -82,7 +82,7 @@ public class Entity : MonoBehaviour
 
     //OnHit確認用. 後で整理したい.
     public bool isStateHit = false;
-
+    CinemachineOrbitalTransposer transposer;
     // Start is called before the first frame update
     void Awake()
     {
@@ -125,7 +125,7 @@ public class Entity : MonoBehaviour
 
         if (vCam != null)
         {
-            targetTo = vCam.transform;
+            transposer = vCam.GetCinemachineComponent<CinemachineOrbitalTransposer>();
         }
     }
 
@@ -178,11 +178,23 @@ public class Entity : MonoBehaviour
         //At Control, wishinvect is Input by command Buffer
         //これ消したい.
         Vector2 wish = entityInput.commandBuffer[0].MoveAxis;//(InputInstance.self.inputValues.MovingAxisRead);
-        //Debug.Log(entityInput.commandBuffer[0].MoveAxis);
-        if (targetTo != null)
+        Vector2 look = entityInput.commandBuffer[0].LookAxis;//(InputInstance.self.inputValues.MovingAxisRead);
+                                                             //Debug.Log(entityInput.commandBuffer[0].MoveAxis);
+
+        //Vcamが設定されているなら、Camera設定に従いfwを設定する.
+        if (vCam != null)
         {
-            wishingVect = Vector3.ProjectOnPlane(targetTo.transform.forward, Vector3.up) * wish.y
-            + Vector3.ProjectOnPlane(targetTo.transform.right, Vector3.up) * wish.x;
+            targetTo_fw = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up).normalized;
+            transposer.m_XAxis.Value += look.x * 3.0f;
+        }
+        else
+        {
+            targetTo_fw = Quaternion.Euler(0f, 0f, look.x) * targetTo_fw;
+        }
+        if (targetTo_fw != null)
+        {
+            wishingVect = targetTo_fw * wish.y
+            + Quaternion.Euler(0, 90, 0) * targetTo_fw * wish.x;
         }
         //何も設定されていないときは世界基準として設定
         else

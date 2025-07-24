@@ -93,9 +93,10 @@ public class LC
     {
         return et.transform.position;
     }
+
     public Vector3 TargetPos(Entity et)
     {
-        return et.targetTo.position;
+        return et.targetTo_fw;
     }
 
     public bool isEntityOnGround(Entity et)
