@@ -80,6 +80,7 @@ public class enemyInput_Test : Action
                 //最終出力時にこのコマンドが優先された場合実行されるコマンドはこれになる..はず
                 CP.BasePriority = 0;
                 CP.isMoveSCommandOveridable = false;
+                CP.isLookSCommandOveridable = true;
                 CP.isBCommandOveridable = false;
 
                 CP.sCmds_L.Add(s_1);
@@ -96,10 +97,22 @@ public class enemyInput_Test : Action
             }
             //それとは別に、視点移動のスクリプトも同様に考える..
             //視点移動なので毎回やる. 上書き可能.
-            { 
+            {
+                entityInputManager.CMD_Struct lookCMD = new entityInputManager.CMD_Struct();
                 entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
-                CP.wholeFrame = 1;
-                CP.BasePriority = 0;
+                CP.wholeFrame = 2;
+                CP.BasePriority = -1;
+                CP.isMoveSCommandOveridable = true;
+                CP.isBCommandOveridable = true;
+                CP.isLookSCommandOveridable = false;
+                Vector2 pos = Vector2.right * RotRef;
+                entityInputManager.CMDParette.stickCMD l_1 =
+                new entityInputManager.CMDParette.stickCMD(pos, .2f, 7);
+                Debug.Log(pos);
+                CP.sCmds_R.Add(l_1);
+
+                lookCMD.parette = CP;
+                AIEntity.entityInput.cmdParettes.Add(lookCMD);                
             }
         }
     }

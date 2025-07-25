@@ -237,7 +237,7 @@ MonoBehaviour:
           value: 0
           stLuaLoads: 
         stateControllerSubName: rotate
-        RotateWeight: 0.8
+        RotateWeight: 0.5
     - rid: 3579423065411158016
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:

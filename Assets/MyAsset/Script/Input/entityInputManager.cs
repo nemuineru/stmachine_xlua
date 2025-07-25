@@ -104,7 +104,7 @@ public class entityInputManager
             Debug.Log(cmdParettes.Count);
 
             //Priority順に並べる
-            cmdParettes.Sort((x, y) => x.parette.BasePriority - y.parette.BasePriority);
+            cmdParettes.Sort((x, y) =>  y.parette.BasePriority - x.parette.BasePriority);
             bool isMoveStickOverride = true;
             bool isLookStickOverride = true;
             bool isButtonOverride = true;
@@ -117,11 +117,12 @@ public class entityInputManager
                 CMD_Struct sel = cmdParettes[i];
                 //Debug.Log("SOverride" + isStickOverride + " in index " + i);
                 //Debug.Log("BOverride" + isButtonOverride + " in index " + i);
-                (int inputs_calc, Vector2 lStick_calc) = sel.GetCommands(commandBuffer[0].MoveAxis, ref isButtonOverride,
+                (int inputs_calc, Vector2 lStick_calc, Vector2 rStick_calc) = sel.GetCommands(commandBuffer[0].MoveAxis, ref isButtonOverride,
                 ref isMoveStickOverride, ref isLookStickOverride, lStick, rStick, inputs);
                 inputs = inputs_calc;
                 lStick = lStick_calc;
-                Debug.Log(inputs.ToString() + " " + lStick.ToString());
+                rStick = rStick_calc;
+                //Debug.Log(inputs.ToString() + " " + lStick.ToString());
             }
             //lStick = lStick.normalized * Mathf.Clamp01(lStick.sqrMagnitude);
 
@@ -130,11 +131,12 @@ public class entityInputManager
         else
         {
             //MAGIC NUMBER!!!
-            Debug.Log("MAGIC NUMBER LOADED");
+            //Debug.Log("MAGIC NUMBER LOADED");
             lStick = Vector2.Lerp(commandBuffer[0].MoveAxis,Vector2.zero,0.8f);
         }
 
         rec.MoveAxis = lStick;
+        rec.LookAxis = rStick;
         //int X_I = InputInstance.GetDigitalAxis(new(ForwardInput.x, refForwardInput.z));
         //inputs += X_I; //+ RawInput;
 
@@ -159,7 +161,7 @@ public class entityInputManager
 
         //CMDparetteから指定したコマンドを取得.
         //今はボタンインプットと左スティックの移動のみ.
-        internal (int, Vector2) GetCommands(Vector2 B_Input, ref bool isBCommandOveridable,
+        internal (int, Vector2, Vector2) GetCommands(Vector2 B_Input, ref bool isBCommandOveridable,
         ref bool isMoveSCommandOveridable, ref bool isLookSCommandOveridable,   
             Vector2 lStick_f ,Vector2 rStick_f , int inputs_f)
         {
@@ -206,7 +208,7 @@ public class entityInputManager
                     }
                 }
             }
-            return (inputs, lStick);
+            return (inputs, lStick, rStick);
         }
     }
 
