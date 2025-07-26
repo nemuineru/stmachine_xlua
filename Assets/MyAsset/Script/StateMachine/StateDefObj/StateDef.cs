@@ -199,7 +199,8 @@ public class stateID
     }
 }
 
-
+//StateDefのクローンが必須.
+//なんかEntityの指定が重複していそう.
 [System.Serializable]
 public class StateDef
 {
@@ -272,6 +273,7 @@ public class StateDef
                     //def中にあるstateを全部リストアップ
                     foreach (StateController state in StateList)
                     {
+                        //state.Entityに直接登録すると、別キャラクターが参照するため変更必須.
                         state.entity = entity;
                         //idがステート読み出しリスト内・もしくはステート自体が読み出し処理を行う場合
                         if (state.isIDValid(ExecuteStateIDs))
@@ -528,13 +530,11 @@ public class scRotateTowards : StateController
         //比較がepsilonだとダメっぽそう
         if (vect.sqrMagnitude > 0.01f)
         {
-            /*
             Quaternion RotateTowards = Quaternion.LookRotation(vect.normalized, Vector3.up);
             entity.transform.rotation = Quaternion.Lerp(entity.transform.rotation, RotateTowards, RotateWeight);
-            */
             //カメラ方向に回転.
-            Quaternion RotateTowards = Quaternion.LookRotation(entity.targetTo_fw, Vector3.up);
-            entity.transform.rotation = Quaternion.Lerp(entity.transform.rotation, RotateTowards, RotateWeight);
+            //Quaternion RotateTowards = Quaternion.LookRotation(entity.targetTo_fw, Vector3.up);
+            //entity.transform.rotation = Quaternion.Lerp(entity.transform.rotation, RotateTowards, RotateWeight);
             
         }
     }

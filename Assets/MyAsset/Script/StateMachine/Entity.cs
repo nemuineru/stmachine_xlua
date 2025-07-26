@@ -189,12 +189,15 @@ public class Entity : MonoBehaviour
         }
         else
         {
-            targetTo_fw = Quaternion.Euler(0f, 0f, look.x) * targetTo_fw;
+            Debug.Log(look.x);
+            targetTo_fw = Quaternion.Euler(0f, look.x, 0f) * targetTo_fw;
         }
         if (targetTo_fw != null)
         {
             wishingVect = targetTo_fw * wish.y
             + Quaternion.Euler(0, 90, 0) * targetTo_fw * wish.x;
+            //実際の視点.
+            Debug.DrawLine(transform.position,transform.position + targetTo_fw * 3.0f);
         }
         //何も設定されていないときは世界基準として設定
         else

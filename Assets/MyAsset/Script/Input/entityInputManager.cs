@@ -104,7 +104,7 @@ public class entityInputManager
             Debug.Log(cmdParettes.Count);
 
             //Priority順に並べる
-            cmdParettes.Sort((x, y) =>  y.parette.BasePriority - x.parette.BasePriority);
+            cmdParettes.Sort((x, y) => y.parette.BasePriority - x.parette.BasePriority);
             bool isMoveStickOverride = true;
             bool isLookStickOverride = true;
             bool isButtonOverride = true;
@@ -131,8 +131,9 @@ public class entityInputManager
         else
         {
             //MAGIC NUMBER!!!
-            //Debug.Log("MAGIC NUMBER LOADED");
-            lStick = Vector2.Lerp(commandBuffer[0].MoveAxis,Vector2.zero,0.8f);
+            Debug.Log("MAGIC NUMBER LOADED");
+            lStick = Vector2.Lerp(commandBuffer[0].MoveAxis, Vector2.zero, 0.8f);
+            rStick = Vector2.zero;
         }
 
         rec.MoveAxis = lStick;
@@ -173,14 +174,16 @@ public class entityInputManager
             {
                 //前のコマンドとの比較. Lerp値はparette内で決定される.
                 lStick += parette.findStickVel(forwardRef, B_Input, 'l', currentElapsedFrame);
-                Debug.Log(lStick.ToString() + " eFrame at " + currentElapsedFrame);
+                //Debug.Log(lStick.ToString() + " eFrame at " + currentElapsedFrame);
                 isMoveSCommandOveridable = parette.isMoveSCommandOveridable;
             }
+
             //視点スティックはforwardRefを考えず, Vector.up(ワールド基準)で考える
             if (isLookSCommandOveridable)
             {
                 //前のコマンドとの比較. Lerp値はparette内で決定される.
-                rStick += parette.findStickVel(Vector3.up, B_Input, 'l', currentElapsedFrame);
+                if(parette.sCmds_R.Count > 0)
+                rStick += parette.findStickVel(Vector2.right, B_Input, 'r', 0);
                 Debug.Log(rStick.ToString() + " eFrame at " + currentElapsedFrame);
                 isLookSCommandOveridable = parette.isLookSCommandOveridable;
             }
@@ -192,7 +195,7 @@ public class entityInputManager
 
                 string[] commands = parette.commandInput.Split(',');
                 //最低値のindexを取る
-                int mIndex = Mathf.Min(currentElapsedFrame, commands.Length);
+                int mIndex = Mathf.Min(currentElapsedFrame, commands.Length - 1);
                 string cmd_strs = commands[mIndex];
                 if (cmd_strs != null)
                 {
@@ -279,7 +282,7 @@ public class entityInputManager
                     stPos = fw * stPos.y +  -Vector2.Perpendicular(fw) * stPos.x;
                     v = Vector2.Lerp(B_stickCMD, stPos, c_a.lerpValue);
 
-                    //Debug.Log(v + "Outputted");
+                    Debug.Log(v + "Outputted");
 
                     return v;
                 }

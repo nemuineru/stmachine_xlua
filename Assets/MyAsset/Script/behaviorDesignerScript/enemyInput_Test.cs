@@ -30,8 +30,8 @@ public class enemyInput_Test : Action
 
     int currentTick = 0;
     //パスの処理レート設定
-    const int mapRouteFindTickRate = 15;
-    const float rand_Prov = 0.001f;
+    const int mapRouteFindTickRate = 8;
+    const float rand_Prov = 0.2f;
     const float hitboxDist = 2f;
 
     Vector3 Dist = Vector3.zero;
@@ -50,12 +50,10 @@ public class enemyInput_Test : Action
     public override void OnStart()
     {
         Vector3 fwRef = Vector3.zero;
-        float RotRef = 0f;
         if (v3_WalkTo != null && AIEntity != null)
         {
             fwRef = Vector3.ProjectOnPlane((v3_WalkTo.Value - AIEntity.transform.position), Vector3.up);
-            RotRef = Vector3.Angle(AIEntity.transform.forward, fwRef);
-            Vector2 xzref = new Vector2(fwRef.x, fwRef.z);
+            Vector2 xzref = new Vector2(AIEntity.targetTo_fw.x, AIEntity.targetTo_fw.z);
             //Debug.Log(fwRef);
             //currentTickが0なら実行..
             if (currentTick > mapRouteFindTickRate) //&& AIEntity.entityInput.cmdParettes.Count < 1)
@@ -63,18 +61,17 @@ public class enemyInput_Test : Action
                 entityInputManager.CMD_Struct str = new entityInputManager.CMD_Struct();
                 //xzrefに従い、コマンドを出力する. ..要はどの目線を前向き方向にするか。
                 //ここで定義されるのはちょっとまずいので後でFIXしたい
-                str.forwardRef = xzref;
+                str.forwardRef = Vector2.up;
                 str.currentElapsedFrame = 0;
                 entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
                 //全体所要時間. これに届くまで指定のコマンドが実行される.
-                CP.wholeFrame = 12;
+                CP.wholeFrame = 9;
                 //stickコマンド. これむっちゃ変.
                 //今理解、全体のstickFrameがwholeFrameを下回る際、0として出力される => この値がoverride対象でないなら、そのまま0を受け継いでしまう.
                 entityInputManager.CMDParette.stickCMD s_1 =
-                new entityInputManager.CMDParette.stickCMD(Vector2.up, .8f, 7);
-
+                new entityInputManager.CMDParette.stickCMD(Vector2.left + Vector2.up, .1f, 5);
                 entityInputManager.CMDParette.stickCMD s_2 =
-                new entityInputManager.CMDParette.stickCMD(Vector2.down, .1f, 6);
+                new entityInputManager.CMDParette.stickCMD(Vector2.right + Vector2.up, .1f, 4);
 
                 //BCOMMAND,SCOMMANDをオーバーライド不可能に設定した場合、
                 //最終出力時にこのコマンドが優先された場合実行されるコマンドはこれになる..はず
@@ -87,6 +84,11 @@ public class enemyInput_Test : Action
                 CP.sCmds_L.Add(s_2);
                 str.parette = CP;
 
+                if (Random.value < rand_Prov)
+                {
+                    CP.commandInput = ",,,,,a,a,a,";
+                }
+
                 AIEntity.entityInput.cmdParettes.Add(str);
 
                 currentTick = 0;
@@ -95,29 +97,69 @@ public class enemyInput_Test : Action
             {
                 currentTick++;
             }
+        }
+    }
+}
+
+[TaskCategory("MyAsset")]
+public class enemyInput_LookTest : Action
+{ 
+    //ターゲット先・動作方向先
+    [SerializeField]
+    SharedVector3 v3_WalkTo;
+
+    [SerializeField]
+    SharedGameObject Target;
+
+    //Commandに応じて、入力を与える.
+    [SerializeField]
+    SharedString Command;
+
+    //これ、仮想で1fと設定する.
+    [SerializeField]
+    SharedVector2[] virtualStickInput;
+    //動かすEntity. これが付いたExternalBehaviorは必ずこれが付いてるはず
+    Entity AIEntity;
+
+    public override void OnAwake()
+    {
+        if (AIEntity == null)
+            AIEntity = gameObject.GetComponent<Entity>();
+    }
+
+    //とりあえず指定された位置に近づくだけのスクリプトを組む
+    public override void OnStart()
+    {
+        Vector3 fwRef = Vector3.zero;
+        float RotRef = 0f;
+        if (v3_WalkTo != null && AIEntity != null)
+        {
+            fwRef = Vector3.ProjectOnPlane((v3_WalkTo.Value - AIEntity.transform.position), Vector3.up);
+            RotRef = Vector3.SignedAngle(AIEntity.targetTo_fw, fwRef,Vector3.up);
+            Vector2 xzref = new Vector2(fwRef.x, fwRef.z);
             //それとは別に、視点移動のスクリプトも同様に考える..
             //視点移動なので毎回やる. 上書き可能.
             {
                 entityInputManager.CMD_Struct lookCMD = new entityInputManager.CMD_Struct();
+                lookCMD.forwardRef = Vector3.up;
                 entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
                 CP.wholeFrame = 2;
                 CP.BasePriority = -1;
                 CP.isMoveSCommandOveridable = true;
                 CP.isBCommandOveridable = true;
                 CP.isLookSCommandOveridable = false;
-                Vector2 pos = Vector2.right * RotRef;
+                Vector2 pos = Vector2.up * RotRef * 0.1f;
                 entityInputManager.CMDParette.stickCMD l_1 =
-                new entityInputManager.CMDParette.stickCMD(pos, .2f, 7);
+                new entityInputManager.CMDParette.stickCMD(pos, 1f, 1);
                 Debug.Log(pos);
                 CP.sCmds_R.Add(l_1);
 
                 lookCMD.parette = CP;
-                AIEntity.entityInput.cmdParettes.Add(lookCMD);                
+                AIEntity.entityInput.cmdParettes.Add(lookCMD);
             }
         }
     }
 }
-
 
 [TaskCategory("MyAsset")]
 public class ExecuteNPCCommands : Action
