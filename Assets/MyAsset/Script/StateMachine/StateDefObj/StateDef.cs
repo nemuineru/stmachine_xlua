@@ -225,6 +225,16 @@ public class StateDef
     //...Objectで良いのか？
     List<object> luaOutputParams = new List<object>();
 
+    //これも結局Cloneが必須かぁ..
+    public StateDef Clone()
+    {
+        var retDef =  new StateDef();
+        retDef.StateDefName = StateDefName;
+        retDef.StateDefID = StateDefID;
+        retDef.stateTime = stateTime;
+        return retDef;
+    }
+
 
     public void Execute(Entity entity)
     {
@@ -254,6 +264,9 @@ public class StateDef
 
                 int[] ExecuteStateIDs;
 
+                //読み出し時のEntityで、登録重複が見られる場合の誤作動をなんとかしなければ
+                //LuaTableの別々の読み出しにしたいが、なんかおかしい..
+                //StateDef自体をSingleTonにするべきか..
                 if (stateVerd != null)
                 {
                     ExecuteStateIDs = stateVerd.Invoke(entity);
@@ -269,21 +282,20 @@ public class StateDef
                         {
                             executingStr += ExecuteStateIDs[i] + " , ";
                         }
-                    }                    
+                    }
+                    Debug.Log("State Def - " + StateDefID + " State List #s - " + StateList.Count);
                     //def中にあるstateを全部リストアップ
                     foreach (StateController state in StateList)
                     {
-                        //state.Entityに直接登録すると、別キャラクターが参照するため変更必須.
-                        state.entity = entity;
                         //idがステート読み出しリスト内・もしくはステート自体が読み出し処理を行う場合
-                        if (state.isIDValid(ExecuteStateIDs))
+                        if (state.isIDValid(ExecuteStateIDs, entity))
                         {
                             //stateにluaOutputParamsを予め登録.
                             state.loadParams = luaOutputParams;
-                            //Debug.Log("Executed " + state.ToString());
 
                             //実際に実行.
-                            state.OnExecute();
+                            //state.Entityに直接登録すると、別キャラクターが参照するため変更..
+                            state.OnExecute(entity);
                         }
                     }
                 }
@@ -291,32 +303,32 @@ public class StateDef
                 {
                     //Debug.LogError("Execute ID/stateVerd is NULL!");
                 }
-            // Debug.Log(executingStr);
+                // Debug.Log(executingStr);
 
 
 
 
-            //stateID内にLuaの設定値をセットアップ.
-            
-            /*
-            if (ExecuteStateIDs.Count() > 0)
-            {
-                //def中にあるstateを全部リストアップ
-                foreach (StateController state in StateList)
+                //stateID内にLuaの設定値をセットアップ.
+
+                /*
+                if (ExecuteStateIDs.Count() > 0)
                 {
-                    state.entity = entity;
-                    // Debug.Log("Finding stateID " + state.stateID + "," + state.ToString());
-
-                    //Lua設定値の中から..という
-                    if (ExecuteStateIDs.Any(i => state.isIDValid(i)))
+                    //def中にあるstateを全部リストアップ
+                    foreach (StateController state in StateList)
                     {
-                        state.loadParams = luaOutputParams;
-                        Debug.Log("Executed " + state.ToString());
-                        state.OnExecute();
+                        state.entity = entity;
+                        // Debug.Log("Finding stateID " + state.stateID + "," + state.ToString());
+
+                        //Lua設定値の中から..という
+                        if (ExecuteStateIDs.Any(i => state.isIDValid(i)))
+                        {
+                            state.loadParams = luaOutputParams;
+                            Debug.Log("Executed " + state.ToString());
+                            state.OnExecute();
+                        }
                     }
                 }
-            }
-            */
+                */
             }
         }
         else
@@ -337,7 +349,6 @@ public class StateDef
 public class StateController
 {   
     [ReadOnly]
-    internal Entity entity;
     //事前計算済みのパラメータの格納.
     internal List<object> loadParams;
 
@@ -346,7 +357,7 @@ public class StateController
     [SerializeField]
     public stateID ID;
 
-    public bool isIDValid(int[] ID)
+    public bool isIDValid(int[] ID, Entity entity)
     {
         return this.ID.valueGet(ID, entity);
     }
@@ -354,7 +365,7 @@ public class StateController
     internal static string stControllerName = null;
     
 
-    internal virtual void OnExecute()
+    internal virtual void OnExecute(Entity entity)
     {
 
     }
@@ -378,7 +389,7 @@ public class scAnimSet : StateController
     [SerializeField]
     stParams<Vector2> animParameter; 
 
-    internal override void OnExecute()
+    internal override void OnExecute(Entity entity)
     {
         entity.animID = changeAnimID.valueGet(loadParams,entity);
         AnimDef animFindByID = entity.animDefs.ToList().Find
@@ -404,7 +415,7 @@ public class scAnimParamChange : StateController
     [SerializeField]
     stParams<Vector2> animParameter;
 
-    internal override void OnExecute()
+    internal override void OnExecute(Entity entity)
     {
         if (entity.MainAnimMixer.Mixers.Count() > 0)
         {
@@ -441,7 +452,7 @@ public class scAnimParamChange : StateController
 [SerializeField]
 public class scMove : StateController
 {   
-    internal override void OnExecute()
+    internal override void OnExecute(Entity entity)
     {
         entity.rigid.velocity = entity.wishingVect * 100.0f * Time.fixedDeltaTime;
     }
@@ -464,7 +475,7 @@ public class scHitDef : StateController
     stParams<hitDefParams> hitParams;
 
 
-    internal override void OnExecute()
+    internal override void OnExecute(Entity entity)
     {
         //HitCheckを行う.
         entity.isStateHit = gameState.self.ProvokeHitDef
@@ -479,10 +490,11 @@ public class scHitDef : StateController
 [SerializeField]
 public class scJump : StateController
 {
-    internal override void OnExecute()
+    internal override void OnExecute(Entity entity)
     {
         entity.rigid.velocity = Vector3.ProjectOnPlane(entity.rigid.velocity,Vector3.up) + Vector3.up * 3.2f;
         entity.isOnGround = false;
+        Debug.Log("Executed " + "JumpState " + " in " + entity.name + " - " + entity.stateTime);
     }
 }
 
@@ -491,7 +503,7 @@ public class scJump : StateController
 public class scColorChange : StateController
 {        
     public Color color = Color.black;
-    internal override void OnExecute()
+    internal override void OnExecute(Entity entity)
     {
         // Debug.Log("Oncheck Phase of " + this.ToString());
         if(entity != null)
@@ -507,7 +519,7 @@ public class scChangeState : StateController
 {
     public int changeTo = 0;
     public int priority = 0;
-    internal override void OnExecute()
+    internal override void OnExecute(Entity entity)
     {
         //this ChangeState Needs to change-Queues.
         entity.CListQueue.Add(new Entity.ChangeStateQueue(){ stateDefID = changeTo , priority = priority });
@@ -524,7 +536,7 @@ public class scChangeState : StateController
 public class scRotateTowards : StateController
 {
     public float RotateWeight = 0;
-    internal override void OnExecute()
+    internal override void OnExecute(Entity entity)
     {
         Vector3 vect = Vector3.ProjectOnPlane(entity.rigid.velocity, Vector3.up);
         //比較がepsilonだとダメっぽそう
@@ -548,7 +560,7 @@ public class scEmitEffect : StateController
 {
     [SerializeField]
     stParams<GameObject> EmitObject;
-    internal override void OnExecute()
+    internal override void OnExecute(Entity entity)
     {
 
     }

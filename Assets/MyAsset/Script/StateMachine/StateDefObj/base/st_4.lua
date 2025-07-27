@@ -1,12 +1,16 @@
 
 local Debug = CS.UnityEngine.Debug;
 
--- ステート変更のファンクション (0)
+-- ステート変更のファンクション (50)
 function QueuedStateID_0(in_entity)
     verd = {}
+    selfOnGrd = LC:isEntityOnGround(in_entity)
     CurrentTime = LC:CheckStateTime(in_entity)
     if( CurrentTime == 0 ) then
         table.insert( verd, 0 ) 
+    end
+    if(selfOnGrd == true) then
+        table.insert( verd, 1 )
     end
     return verd
 end

@@ -31,7 +31,7 @@ public class enemyInput_Test : Action
     int currentTick = 0;
     //パスの処理レート設定
     const int mapRouteFindTickRate = 8;
-    const float rand_Prov = 0.2f;
+    const float rand_Prov = 1f;
     const float hitboxDist = 2f;
 
     Vector3 Dist = Vector3.zero;

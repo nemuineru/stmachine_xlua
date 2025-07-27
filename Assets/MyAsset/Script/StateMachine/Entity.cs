@@ -189,7 +189,7 @@ public class Entity : MonoBehaviour
         }
         else
         {
-            Debug.Log(look.x);
+            //Debug.Log(look.x);
             targetTo_fw = Quaternion.Euler(0f, look.x, 0f) * targetTo_fw;
         }
         if (targetTo_fw != null)
@@ -225,18 +225,19 @@ public class Entity : MonoBehaviour
             AutoState_1.Execute(this);
         }
 
-
-        //state実行..
+        //state実行.. これは一つだけに実行されるはず.
         StateDef currentState =
         loadedDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
         if (currentState != null)
         {
-            //Debug.Log("Executed stateDef - " + CurrentStateID);
+            //Debug.Log("Executing stateDef - " + CurrentStateID + " at state time of - " + Time.frameCount + stateTime);
             // + " at time of " + stateTime            
             //the StateDef needs as deepcopy?
 
             //isStateChangedはここで変更される..
             currentState.Execute(this);
+            Debug.Log("Executed stateDef - " + CurrentStateID + " at state time of - "  + Time.frameCount + "/"+ stateTime +
+            " " + this.gameObject.name);
         }
         else
         {
