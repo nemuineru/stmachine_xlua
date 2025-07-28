@@ -151,7 +151,7 @@ public class enemyInput_LookTest : Action
                 Vector2 pos = Vector2.up * RotRef * 0.1f;
                 entityInputManager.CMDParette.stickCMD l_1 =
                 new entityInputManager.CMDParette.stickCMD(pos, 1f, 1);
-                Debug.Log(pos);
+                //Debug.Log(pos);
                 CP.sCmds_R.Add(l_1);
 
                 lookCMD.parette = CP;

@@ -101,7 +101,7 @@ public class entityInputManager
                 if (!isPaused || !cmdParettes[i].parette.isPauseWait)
                     cmdParettes[i].currentElapsedFrame++;
             }
-            Debug.Log(cmdParettes.Count);
+            //Debug.Log(cmdParettes.Count);
 
             //Priority順に並べる
             cmdParettes.Sort((x, y) => y.parette.BasePriority - x.parette.BasePriority);
@@ -112,7 +112,7 @@ public class entityInputManager
             //現状、cmdParettesの値読み出し時
             for (int i = 0; i < cmdParettes.Count; i++)
             {
-                Debug.Log("stickoverride " + isMoveStickOverride);
+                //Debug.Log("stickoverride " + isMoveStickOverride);
                 //最優先位置のコマンドを読み出す.
                 CMD_Struct sel = cmdParettes[i];
                 //Debug.Log("SOverride" + isStickOverride + " in index " + i);
@@ -184,7 +184,7 @@ public class entityInputManager
                 //前のコマンドとの比較. Lerp値はparette内で決定される.
                 if(parette.sCmds_R.Count > 0)
                 rStick += parette.findStickVel(Vector2.right, B_Input, 'r', 0);
-                Debug.Log(rStick.ToString() + " eFrame at " + currentElapsedFrame);
+                //Debug.Log(rStick.ToString() + " eFrame at " + currentElapsedFrame);
                 isLookSCommandOveridable = parette.isLookSCommandOveridable;
             }
 
@@ -262,7 +262,7 @@ public class entityInputManager
             foreach (stickCMD c_a in selCMD)
             {
                 fr_all += c_a.frame;
-                Debug.Log(ElapsedFrame + " / " + fr_all + " vc " + c_a.stickPos);
+                //Debug.Log(ElapsedFrame + " / " + fr_all + " vc " + c_a.stickPos);
                 //実行コマンド時間が経過時間を超えたとき
                 //forwardRefの値に従い、値の回転を行う.
                 if (ElapsedFrame <= fr_all)
@@ -282,7 +282,7 @@ public class entityInputManager
                     stPos = fw * stPos.y +  -Vector2.Perpendicular(fw) * stPos.x;
                     v = Vector2.Lerp(B_stickCMD, stPos, c_a.lerpValue);
 
-                    Debug.Log(v + "Outputted");
+                    //Debug.Log(v + "Outputted");
 
                     return v;
                 }

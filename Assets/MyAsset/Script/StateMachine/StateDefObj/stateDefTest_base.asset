@@ -340,7 +340,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 50
           stLuaLoads: 
         stateControllerSubName: JumpAnim
         changeAnimID:
@@ -370,7 +370,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 50
           stLuaLoads: 
         stateControllerSubName: Jump Rigid
     - rid: 4404388637674569820

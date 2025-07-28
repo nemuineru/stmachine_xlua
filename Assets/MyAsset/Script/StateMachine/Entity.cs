@@ -113,7 +113,10 @@ public class Entity : MonoBehaviour
         defaultClss.initClss(this);
         foreach (StateDefListObject dObj in DefLists)
         {
-            loadedDefs.AddRange(dObj.stateDefs);
+            foreach (StateDef state in dObj.stateDefs)
+            {
+                loadedDefs.Add(state.Clone());
+            }
         }
 
         //initialize behaviors.
@@ -236,12 +239,12 @@ public class Entity : MonoBehaviour
 
             //isStateChangedはここで変更される..
             currentState.Execute(this);
-            Debug.Log("Executed stateDef - " + CurrentStateID + " at state time of - "  + Time.frameCount + "/"+ stateTime +
-            " " + this.gameObject.name);
+            //Debug.Log("Executed stateDef - " + CurrentStateID + " at state time of - "  + Time.frameCount + "/"+ stateTime +
+            //" " + this.gameObject.name);
         }
         else
         {
-            Debug.LogError("Loaded State is null : " + CurrentStateID);
+            //Debug.LogError("Loaded State is null : " + CurrentStateID);
         }
 
         //地面判定.

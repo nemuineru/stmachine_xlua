@@ -21,7 +21,7 @@ public static class ObjectExtension
         using (var memoryStream = new System.IO.MemoryStream())
         {
             var binaryFormatter
-              = new System.Runtime.Serialization
+            = new System.Runtime.Serialization
                     .Formatters.Binary.BinaryFormatter();
             binaryFormatter.Serialize(memoryStream, src); // シリアライズ
             memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
@@ -232,6 +232,12 @@ public class StateDef
         retDef.StateDefName = StateDefName;
         retDef.StateDefID = StateDefID;
         retDef.stateTime = stateTime;
+        retDef.PriorCondition = PriorCondition;
+        retDef.LuaAsset = LuaAsset;
+        retDef.preStateVerdictName = preStateVerdictName;
+        retDef.ParamLoadName = ParamLoadName;
+        retDef.StateList = StateList;
+        retDef.luaOutputParams = luaOutputParams;
         return retDef;
     }
 
@@ -251,6 +257,7 @@ public class StateDef
 
                 env.DoString(LuaAsset.text);
 
+
                 //読み出しのQueueStateIDを記述するためのメソッドを作成
                 lua_Read.CalcValues.QueuedStateID stateVerd =
                 env.Global.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
@@ -269,6 +276,8 @@ public class StateDef
                 //StateDef自体をSingleTonにするべきか..
                 if (stateVerd != null)
                 {
+                    //stateverd.Invokeになんかバグっぽいのを見るが、何かStateDefのシングルトン化が行われてない..?
+                    //でもState-1は除外されている. 何故だろう？
                     ExecuteStateIDs = stateVerd.Invoke(entity);
                     if (stateDefParams != null)
                     {
@@ -283,11 +292,12 @@ public class StateDef
                             executingStr += ExecuteStateIDs[i] + " , ";
                         }
                     }
-                    Debug.Log("State Def - " + StateDefID + " State List #s - " + StateList.Count);
+                    //Debug.Log("State Def - " + StateDefID + " State List #s - " + StateList.Count);
                     //def中にあるstateを全部リストアップ
                     foreach (StateController state in StateList)
                     {
                         //idがステート読み出しリスト内・もしくはステート自体が読み出し処理を行う場合
+                        //Debug.LogWarning(entity.gameObject.name + " loads " + state.ID.value.ToString());
                         if (state.isIDValid(ExecuteStateIDs, entity))
                         {
                             //stateにluaOutputParamsを予め登録.
@@ -298,12 +308,13 @@ public class StateDef
                             state.OnExecute(entity);
                         }
                     }
+                    Debug.Log(entity.gameObject.name + " executes stateID" + executingStr + " at the stateDef of " + StateDefID
+                    + " # " + this.GetHashCode());
                 }
                 else
                 {
                     //Debug.LogError("Execute ID/stateVerd is NULL!");
                 }
-                // Debug.Log(executingStr);
 
 
 
@@ -494,7 +505,7 @@ public class scJump : StateController
     {
         entity.rigid.velocity = Vector3.ProjectOnPlane(entity.rigid.velocity,Vector3.up) + Vector3.up * 3.2f;
         entity.isOnGround = false;
-        Debug.Log("Executed " + "JumpState " + " in " + entity.name + " - " + entity.stateTime);
+        //Debug.Log("Executed " + "JumpState " + " in " + entity.name + " - " + entity.stateTime);
     }
 }
 
