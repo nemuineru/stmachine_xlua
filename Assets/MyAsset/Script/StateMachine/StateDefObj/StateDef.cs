@@ -218,6 +218,9 @@ public class StateDef
     public string preStateVerdictName;
     public string ParamLoadName;
 
+    private LuaTable _stateLoadTables;
+    private LuaTable _stateParamTables;
+
     [SerializeReference, SerializeField]
     public List<StateController> StateList = new List<StateController>();
 
@@ -254,8 +257,15 @@ public class StateDef
             //メインのLUA仮想マシンに読み出すテキストを以下に記述.
             if (LuaAsset != null)
             {
-
                 env.DoString(LuaAsset.text);
+
+                var _sLoadT = env.NewTable();
+                _sLoadT.Set("__index",env.Global);
+                _stateLoadTables.SetMetaTable(_sLoadT);
+                
+                //QueueStateIDの呼び出し.
+                env.DoString(LuaAsset.text,preStateVerdictName,_stateLoadTables);
+
 
 
                 //読み出しのQueueStateIDを記述するためのメソッドを作成
@@ -274,15 +284,26 @@ public class StateDef
                 //読み出し時のEntityで、登録重複が見られる場合の誤作動をなんとかしなければ
                 //LuaTableの別々の読み出しにしたいが、なんかおかしい..
                 //StateDef自体をSingleTonにするべきか..
-                if (stateVerd != null)
+                if (_stateLoadTables != null)
                 {
-                    //stateverd.Invokeになんかバグっぽいのを見るが、何かStateDefのシングルトン化が行われてない..?
-                    //でもState-1は除外されている. 何故だろう？
+                    //xLUAの読み出しでなーぜーかー別のstateIDのスクリプト読み出し結果が呼び出されて追加項目になってる.
+                    //クソぉ！！
+                    //...しょーがないのでLight11氏のhttps://light11.hatenadiary.com/entry/2021/08/17/195914
+                    // を参考にリベイクしてみるか..
                     ExecuteStateIDs = stateVerd.Invoke(entity);
                     if (stateDefParams != null)
                     {
                         luaOutputParams = stateDefParams.Invoke(entity).ToList();
                     }
+
+                    
+                    var _sParamT = env.NewTable();
+                    _sParamT.Set("__index",env.Global);
+                    _stateParamTables.SetMetaTable(_sParamT);
+
+                    //ParamTablesの呼び出し.
+                    env.DoString(LuaAsset.text,ParamLoadName,_stateParamTables);
+
 
                     string executingStr = "";
                     if (ExecuteStateIDs != null)
