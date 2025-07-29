@@ -86,7 +86,7 @@ public class enemyInput_Test : Action
 
                 if (Random.value < rand_Prov)
                 {
-                    CP.commandInput = ",,,,,a,a,a,";
+                    CP.commandInput = ",,";//,,,a,a,a,";
                 }
 
                 AIEntity.entityInput.cmdParettes.Add(str);

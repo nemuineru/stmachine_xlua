@@ -35,27 +35,6 @@ function QueuedStateID(in_entity)
     return verd
 end
 
-
-function QueuedStateID_J(in_entity)    
-    -- Debug.Log("Checking Entity Jumping");
-    selfStTime =  LC:CheckStateTime(in_entity)
-    selfOnGrd_f = LC:isEntityOnGround(in_entity)
-    AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
-    -- Debug.Log(selfStTime);
-    if(selfOnGrd_f == true) then
-        table.insert( verd, 1 )
-    end
-    if(AttackCmd_b == true) then
-        table.insert(verd, 2)
-    end
-    -- idleのanimを指定する
-    if(selfStTime == 0) then
-        -- Debug.Log("Jumping Vect");
-        table.insert( verd, 50 ) 
-    end
-    return verd
-end
-
 function LuaOutput(in_entity)    
     outs = {}
 

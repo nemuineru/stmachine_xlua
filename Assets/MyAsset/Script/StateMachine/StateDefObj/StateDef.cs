@@ -209,8 +209,6 @@ public class StateDef
 
     //フレーム数で考慮
     internal int stateTime = 0;
-    
-    public lua_Read PriorCondition;
 
     //executing state is decided from this.
     public TextAsset LuaAsset;
@@ -235,7 +233,6 @@ public class StateDef
         retDef.StateDefName = StateDefName;
         retDef.StateDefID = StateDefID;
         retDef.stateTime = stateTime;
-        retDef.PriorCondition = PriorCondition;
         retDef.LuaAsset = LuaAsset;
         retDef.preStateVerdictName = preStateVerdictName;
         retDef.ParamLoadName = ParamLoadName;
@@ -244,37 +241,57 @@ public class StateDef
         return retDef;
     }
 
+    LuaEnv env;
 
+    void OnInitDef()
+    {
+        env = Lua_OnLoad.main.LEnv;
+        env.Global.Set("LC", new LC());
+
+        
+        var _sLoadT = env.NewTable();
+        _stateLoadTables = env.NewTable();
+        _sLoadT.Set("__index", env.Global);
+        //メタテーブルに登録.
+        _stateLoadTables.SetMetaTable(_sLoadT);
+        _sLoadT.Dispose();
+        _stateLoadTables.Set("LC", new LC());
+
+        
+        var _sParamT = env.NewTable();
+        _stateParamTables = env.NewTable();
+        _sParamT.Set("__index", env.Global);
+        //別のメタテーブルに登録.
+        _stateParamTables.SetMetaTable(_sParamT);
+        _sParamT.Dispose();
+        _stateParamTables.Set("LC", new LC());
+    }
+
+    //Execute時のLuaのStateIDをそれぞれのStateDefに保存させたい.
+    //速度は変えたくないが、LuaTableに保存するべきだろうか..
     public void Execute(Entity entity)
     {
-        if (PriorCondition != null)
-        {
-            //ステートIDを読み出すテーブルをLuaにて作成.
-            LuaEnv env = Lua_OnLoad.main.LEnv;
-
-            env.Global.Set("LC", new LC());
-
+            OnInitDef();
             //メインのLUA仮想マシンに読み出すテキストを以下に記述.
             if (LuaAsset != null)
             {
-                env.DoString(LuaAsset.text);
+                //env.DoString(LuaAsset.text);
 
-                var _sLoadT = env.NewTable();
-                _sLoadT.Set("__index",env.Global);
-                _stateLoadTables.SetMetaTable(_sLoadT);
-                
-                //QueueStateIDの呼び出し.
-                env.DoString(LuaAsset.text,preStateVerdictName,_stateLoadTables);
-
-
+                //QueueStateIDの呼び出し. _stateLoadTableに登録値を呼び出す.
+                env.DoString(LuaAsset.text, preStateVerdictName, _stateLoadTables);
 
                 //読み出しのQueueStateIDを記述するためのメソッドを作成
                 lua_Read.CalcValues.QueuedStateID stateVerd =
-                env.Global.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
+                _stateLoadTables.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
+                //env.Global.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
 
+                //ParamTablesの呼び出し. _stateParamTablesにパラメータ値を呼び出す.
+                env.DoString(LuaAsset.text, ParamLoadName, _stateParamTables);
+                
                 //ステート宣言パラメータのメソッド作成
                 lua_Read.CalcValues.luaOutParams stateDefParams =
-                env.Global.Get<lua_Read.CalcValues.luaOutParams>(ParamLoadName);
+                _stateParamTables.Get<lua_Read.CalcValues.luaOutParams>(ParamLoadName);
+                //env.Global.Get<lua_Read.CalcValues.luaOutParams>(ParamLoadName);
 
                 //executeStateIDsにはQueuedStateIDの値を入力
 
@@ -284,25 +301,20 @@ public class StateDef
                 //読み出し時のEntityで、登録重複が見られる場合の誤作動をなんとかしなければ
                 //LuaTableの別々の読み出しにしたいが、なんかおかしい..
                 //StateDef自体をSingleTonにするべきか..
-                if (_stateLoadTables != null)
+                if (stateVerd != null)
                 {
-                    //xLUAの読み出しでなーぜーかー別のstateIDのスクリプト読み出し結果が呼び出されて追加項目になってる.
-                    //クソぉ！！
-                    //...しょーがないのでLight11氏のhttps://light11.hatenadiary.com/entry/2021/08/17/195914
-                    // を参考にリベイクしてみるか..
+                //xLUAの読み出しでなーぜーかー別のstateIDのスクリプト読み出し結果が呼び出されて追加項目になってる.
+                //クソぉ！！
+                //...しょーがないのでLight11氏のhttps://light11.hatenadiary.com/entry/2021/08/17/195914
+                // を参考にリベイクしてみるか..
+                    
                     ExecuteStateIDs = stateVerd.Invoke(entity);
                     if (stateDefParams != null)
                     {
                         luaOutputParams = stateDefParams.Invoke(entity).ToList();
                     }
 
-                    
-                    var _sParamT = env.NewTable();
-                    _sParamT.Set("__index",env.Global);
-                    _stateParamTables.SetMetaTable(_sParamT);
 
-                    //ParamTablesの呼び出し.
-                    env.DoString(LuaAsset.text,ParamLoadName,_stateParamTables);
 
 
                     string executingStr = "";
@@ -313,7 +325,7 @@ public class StateDef
                             executingStr += ExecuteStateIDs[i] + " , ";
                         }
                     }
-                    //Debug.Log("State Def - " + StateDefID + " State List #s - " + StateList.Count);
+                    Debug.Log("State Def - " + StateDefID + " State List #s - " + StateList.Count);
                     //def中にあるstateを全部リストアップ
                     foreach (StateController state in StateList)
                     {
@@ -329,8 +341,7 @@ public class StateDef
                             state.OnExecute(entity);
                         }
                     }
-                    Debug.Log(entity.gameObject.name + " executes stateID" + executingStr + " at the stateDef of " + StateDefID
-                    + " # " + this.GetHashCode());
+                    Debug.Log(entity.gameObject.name + " executes stateID " + executingStr + " at the stateDef of " + StateDefID);
                 }
                 else
                 {
@@ -361,14 +372,11 @@ public class StateDef
                     }
                 }
                 */
+
+                env.Tick();
             }
         }
-        else
-        {
-            Debug.LogWarning("PriorCondition is Null.");
-        }
     }
-}
 
 
 //ステートベースクラス. ここから派生する. なお、実行判別式はLuaを用いることとする.

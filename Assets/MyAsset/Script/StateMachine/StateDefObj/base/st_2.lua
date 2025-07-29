@@ -22,6 +22,7 @@ end
     function QueuedStateID_Knife(in_entity)
 
         verd = {}
+        table.insert (verd, 10000);
         CurrentTime = LC:CheckStateTime(in_entity)
         if ( CurrentTime > 14 ) then 
             table.insert( verd, 1 )
