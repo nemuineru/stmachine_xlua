@@ -30,7 +30,7 @@ public class enemyInput_Test : Action
 
     int currentTick = 0;
     //パスの処理レート設定
-    const int mapRouteFindTickRate = 8;
+    const int mapRouteFindTickRate = 7;
     const float rand_Prov = 1f;
     const float hitboxDist = 2f;
 
@@ -65,11 +65,11 @@ public class enemyInput_Test : Action
                 str.currentElapsedFrame = 0;
                 entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
                 //全体所要時間. これに届くまで指定のコマンドが実行される.
-                CP.wholeFrame = 9;
+                CP.wholeFrame = 7;
                 //stickコマンド. これむっちゃ変.
                 //今理解、全体のstickFrameがwholeFrameを下回る際、0として出力される => この値がoverride対象でないなら、そのまま0を受け継いでしまう.
                 entityInputManager.CMDParette.stickCMD s_1 =
-                new entityInputManager.CMDParette.stickCMD(Vector2.left + Vector2.up, .1f, 5);
+                new entityInputManager.CMDParette.stickCMD(Vector2.left + Vector2.up, .1f, 6);
                 entityInputManager.CMDParette.stickCMD s_2 =
                 new entityInputManager.CMDParette.stickCMD(Vector2.right + Vector2.up, .1f, 4);
 
@@ -86,7 +86,7 @@ public class enemyInput_Test : Action
 
                 if (Random.value < rand_Prov)
                 {
-                    CP.commandInput = ",,";//,,,a,a,a,";
+                    CP.commandInput = ",,,,,b,b,b,b";
                 }
 
                 AIEntity.entityInput.cmdParettes.Add(str);

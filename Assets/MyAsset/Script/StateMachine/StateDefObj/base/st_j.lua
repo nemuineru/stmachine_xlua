@@ -6,6 +6,7 @@ local Transform = CS.UnityEngine.Transform;
 local Debug = CS.UnityEngine.Debug;
 
 function QueuedStateID(in_entity)
+    verd = {}
     -- Debug.Log("Checking Entity Jumping");
     selfStTime =  LC:CheckStateTime(in_entity)
     selfOnGrd_f = LC:isEntityOnGround(in_entity)

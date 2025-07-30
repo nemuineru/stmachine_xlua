@@ -233,7 +233,7 @@ public class Entity : MonoBehaviour
         loadedDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
         if (currentState != null)
         {
-            Debug.Log("Executing stateDef - " + CurrentStateID + " at state time of - " + Time.frameCount + stateTime);
+            //Debug.Log("Executing stateDef - " + CurrentStateID + " at state time of - " + Time.frameCount + stateTime);
             // + " at time of " + stateTime            
             //the StateDef needs as deepcopy?
 

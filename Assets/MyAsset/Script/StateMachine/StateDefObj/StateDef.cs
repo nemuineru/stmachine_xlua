@@ -245,32 +245,32 @@ public class StateDef
 
     void OnInitDef()
     {
+        Debug.Log("Generating Metatables on " + StateDefID);
         env = Lua_OnLoad.main.LEnv;
         env.Global.Set("LC", new LC());
 
-        
+        //StateID用にメタテーブルを作成.
         var _sLoadT = env.NewTable();
         _stateLoadTables = env.NewTable();
         _sLoadT.Set("__index", env.Global);
         //メタテーブルに登録.
         _stateLoadTables.SetMetaTable(_sLoadT);
         _sLoadT.Dispose();
-        _stateLoadTables.Set("LC", new LC());
 
-        
+        //パラメータテーブルも同様.
         var _sParamT = env.NewTable();
         _stateParamTables = env.NewTable();
         _sParamT.Set("__index", env.Global);
         //別のメタテーブルに登録.
         _stateParamTables.SetMetaTable(_sParamT);
         _sParamT.Dispose();
-        _stateParamTables.Set("LC", new LC());
     }
 
     //Execute時のLuaのStateIDをそれぞれのStateDefに保存させたい.
     //速度は変えたくないが、LuaTableに保存するべきだろうか..
     public void Execute(Entity entity)
     {
+        if (_stateLoadTables == null)
             OnInitDef();
             //メインのLUA仮想マシンに読み出すテキストを以下に記述.
             if (LuaAsset != null)
@@ -325,7 +325,7 @@ public class StateDef
                             executingStr += ExecuteStateIDs[i] + " , ";
                         }
                     }
-                    Debug.Log("State Def - " + StateDefID + " State List #s - " + StateList.Count);
+                    //Debug.Log("State Def - " + StateDefID + " State List #s - " + StateList.Count);
                     //def中にあるstateを全部リストアップ
                     foreach (StateController state in StateList)
                     {
@@ -341,7 +341,7 @@ public class StateDef
                             state.OnExecute(entity);
                         }
                     }
-                    Debug.Log(entity.gameObject.name + " executes stateID " + executingStr + " at the stateDef of " + StateDefID);
+                    //Debug.Log(entity.gameObject.name + " executes stateID " + executingStr + " at the stateDef of " + StateDefID);
                 }
                 else
                 {

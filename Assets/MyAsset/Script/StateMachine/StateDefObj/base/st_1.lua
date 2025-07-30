@@ -10,6 +10,7 @@ function QueuedStateID(in_entity)
     selfOnGrd = LC:isEntityOnGround(in_entity)
     AttackCmd_jp = LC:CheckButtonPressed(in_entity, "a")
     AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
+    ShiftCMD = LC:CheckButtonPressed(in_entity, "y")
     selfStTime = LC:CheckStateTime(in_entity) 
 
     verd = {}
@@ -25,6 +26,10 @@ function QueuedStateID(in_entity)
 
     if( LC:CheckStateTime(in_entity) > 1 ) then
         table.insert( verd, 0 ) 
+    end
+    -- シフト移動の登録.
+    if( ShiftCMD == false ) then
+        table.insert( verd, 800 ) 
     end
     -- idleのanimを指定する
     -- entityに登録されたmixerの数が0のときは緊急。
