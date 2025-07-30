@@ -30,8 +30,8 @@ public class enemyInput_Test : Action
 
     int currentTick = 0;
     //パスの処理レート設定
-    const int mapRouteFindTickRate = 7;
-    const float rand_Prov = 1f;
+    const int mapRouteFindTickRate = 5;
+    const float rand_Prov = 0.05f;
     const float hitboxDist = 2f;
 
     Vector3 Dist = Vector3.zero;
@@ -69,9 +69,7 @@ public class enemyInput_Test : Action
                 //stickコマンド. これむっちゃ変.
                 //今理解、全体のstickFrameがwholeFrameを下回る際、0として出力される => この値がoverride対象でないなら、そのまま0を受け継いでしまう.
                 entityInputManager.CMDParette.stickCMD s_1 =
-                new entityInputManager.CMDParette.stickCMD(Vector2.left + Vector2.up, .1f, 6);
-                entityInputManager.CMDParette.stickCMD s_2 =
-                new entityInputManager.CMDParette.stickCMD(Vector2.right + Vector2.up, .1f, 4);
+                new entityInputManager.CMDParette.stickCMD(Vector2.up, .5f, 10);
 
                 //BCOMMAND,SCOMMANDをオーバーライド不可能に設定した場合、
                 //最終出力時にこのコマンドが優先された場合実行されるコマンドはこれになる..はず
@@ -79,14 +77,13 @@ public class enemyInput_Test : Action
                 CP.isMoveSCommandOveridable = false;
                 CP.isLookSCommandOveridable = true;
                 CP.isBCommandOveridable = false;
-
+                
                 CP.sCmds_L.Add(s_1);
-                CP.sCmds_L.Add(s_2);
                 str.parette = CP;
 
                 if (Random.value < rand_Prov)
                 {
-                    CP.commandInput = ",,,,,b,b,b,b";
+                    CP.commandInput = ",,,,,a,a,a,a";
                 }
 
                 AIEntity.entityInput.cmdParettes.Add(str);

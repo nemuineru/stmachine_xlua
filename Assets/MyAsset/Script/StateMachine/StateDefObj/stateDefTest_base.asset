@@ -72,15 +72,6 @@ MonoBehaviour:
     - rid: 4404388709018370089
     - rid: 4404388709018370090
     - rid: 4404388709018370088
-  - StateDefName: Default
-    StateDefID: 50
-    LuaAsset: {fileID: -8122155829129254986, guid: 0a4fa2b859e4f404e9fb997aabe9fd46, type: 3}
-    preStateVerdictName: QueuedStateID
-    ParamLoadName: LuaOutput
-    StateList:
-    - rid: 4404389163807801372
-    - rid: 4404389163807801373
-    - rid: 4404389163807801374
   - StateDefName: AirCombo Kicking
     StateDefID: 20
     LuaAsset: {fileID: -8122155829129254986, guid: 3fcddc9c2ce5f8b479bf3d800b4cbf2f, type: 3}
@@ -91,6 +82,15 @@ MonoBehaviour:
     - rid: 4404388637674569820
     - rid: 3002629213760520203
     - rid: 4404388637674569830
+  - StateDefName: Jump
+    StateDefID: 50
+    LuaAsset: {fileID: -8122155829129254986, guid: 0a4fa2b859e4f404e9fb997aabe9fd46, type: 3}
+    preStateVerdictName: QueuedStateID
+    ParamLoadName: LuaOutput
+    StateList:
+    - rid: 4404389163807801372
+    - rid: 4404389163807801374
+    - rid: 4404389163807801373
   references:
     version: 2
     RefIds:
@@ -102,7 +102,7 @@ MonoBehaviour:
           value: 3
           stLuaLoads: 
         stateControllerSubName: ChangeState To Jumping
-        changeTo: 51
+        changeTo: 50
         priority: 1
     - rid: 3002629213760520201
       type: {class: scMove, ns: , asm: Assembly-CSharp}
@@ -176,7 +176,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 800
           stLuaLoads: 
         stateControllerSubName: rotate
         RotateWeight: 0.5
@@ -499,5 +499,5 @@ MonoBehaviour:
           value: 1
           stLuaLoads: 
         stateControllerSubName: InitState
-        changeTo: 1
+        changeTo: 0
         priority: 1
