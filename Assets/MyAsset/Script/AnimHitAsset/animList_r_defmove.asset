@@ -86,7 +86,7 @@ MonoBehaviour:
     ID: 5000
     Name: Damaged
     animClip:
-    - Clip: {fileID: 7400000, guid: b9d0f8945e39fab4483759590460fc2b, type: 2}
+    - Clip: {fileID: 7400000, guid: 7b3ee991590f0ec42b8e51cabaaa8cea, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
