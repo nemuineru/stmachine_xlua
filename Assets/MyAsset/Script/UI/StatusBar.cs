@@ -37,6 +37,7 @@ public class StatusBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //ライフとエナジーの描写管理.
         ChangeFill(lifeBar, ref lifeBar_Fill, health);
         ChangeFill(energyBar, ref energyBar_Fill, energy);
     }
@@ -46,6 +47,7 @@ public class StatusBar : MonoBehaviour
         cUpdateTime += Time.deltaTime;
         float Length = 0f;
         float calcHealth = ref_values;
+        //セグメントの計算.
         List<float> sgLength = new List<float>();
         for (int t = 0; t < BaseBar.points.Count - 1; t++)
         {
