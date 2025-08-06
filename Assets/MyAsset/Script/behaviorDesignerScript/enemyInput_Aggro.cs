@@ -1,18 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime.Tasks;
+using Unity.AI.Navigation;
+using UnityEngine.AI;
+using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
-public class enemyInput_Aggro : MonoBehaviour
+namespace enemyInput_Aggro
 {
-    // Start is called before the first frame update
-    void Start()
+    [TaskCategory("MyAsset")]
+    public class enemyCommand_Attack : Action
     {
-        
-    }
+        //Bボタンを押すだけのコマンド.
+        public override void OnAwake()
+        {
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //とりあえず指定された位置に近づくだけのスクリプトを組む
+        public override void OnStart()
+        {
+        }
     }
 }
