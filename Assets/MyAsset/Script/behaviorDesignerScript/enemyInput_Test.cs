@@ -76,7 +76,7 @@ public class enemyInput_Test : Action
                 CP.BasePriority = 0;
                 CP.isMoveSCommandOveridable = false;
                 CP.isLookSCommandOveridable = true;
-                CP.isBCommandOveridable = false;
+                CP.isBCommandOveridable = true;
                 
                 CP.sCmds_L.Add(s_1);
                 str.parette = CP;
