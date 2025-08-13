@@ -22,6 +22,7 @@ namespace enemyInput_Aggro
         [SerializeField]
         SharedVector2[] virtualStickInput;
 
+        const int mapRouteFindTickRate = 5;
 
         //Commandに応じて、入力を与える.
         [SerializeField]
@@ -31,7 +32,7 @@ namespace enemyInput_Aggro
         Entity AIEntity;
 
         //ランダム値がこれを超えない際..
-        const float rand_Prov = 0.05f;
+        const float rand_Prov = 1f;
 
         const float AttackRange = 1.2f;
 
@@ -41,6 +42,7 @@ namespace enemyInput_Aggro
                 AIEntity = gameObject.GetComponent<Entity>();
         }
 
+        int currentTick = 0;
 
         //指定したコマンドを押すだけのスクリプト.
         public override void OnStart()
@@ -48,21 +50,35 @@ namespace enemyInput_Aggro
             //ターゲット先/エンティティが存在するなら
             if (v3_WalkTo != null && AIEntity != null)
             {
-                Vector2 curPos = new Vector2(transform.position.x,transform.position.z);
-                Vector2 xzref = new Vector2(AIEntity.targetTo_fw.x, AIEntity.targetTo_fw.z);
-        
-                //攻撃検知範囲に居るなら"x"コマンドを押す.
-                if (Random.value < rand_Prov && AttackRange < (curPos - xzref).magnitude)
+                if(currentTick >= mapRouteFindTickRate)
                 {
-                    entityInputManager.CMD_Struct InputStruct = new entityInputManager.CMD_Struct();
-                    InputStruct.forwardRef = Vector2.up;
-                    InputStruct.currentElapsedFrame = 0;
-                    //一瞬だけ押すので2フレーム分.
-                    entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
-                    CP.wholeFrame = 2;
-                    CP.commandInput = "x,";
+                    var fwRef = Vector3.ProjectOnPlane((v3_WalkTo.Value - AIEntity.transform.position), Vector3.up);
+                    Vector2 curPos = new Vector2(transform.position.x, transform.position.z);
 
-                    AIEntity.entityInput.cmdParettes.Add(InputStruct);
+                    //攻撃検知範囲に居るならコマンドを押す.
+                    if (Random.value < rand_Prov)
+                    {
+                        entityInputManager.CMD_Struct InputStruct = new entityInputManager.CMD_Struct();
+                        InputStruct.forwardRef = Vector2.up;
+                        InputStruct.currentElapsedFrame = 0;
+                        //一瞬だけ押すので2フレーム分.
+                        entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
+                        CP.wholeFrame = 5;
+                        CP.BasePriority = -2;
+                        CP.isMoveSCommandOveridable = true;
+                        CP.isLookSCommandOveridable = true;
+                        CP.isBCommandOveridable = false;
+
+                        CP.commandInput = Command.GetValue().ToString();
+
+                        AIEntity.entityInput.cmdParettes.Add(InputStruct);
+                        Debug.Log("CMD INPUTTED");
+                    }
+                    currentTick = 0;
+                }
+                else
+                {
+                    currentTick++;
                 }
             }
         }
