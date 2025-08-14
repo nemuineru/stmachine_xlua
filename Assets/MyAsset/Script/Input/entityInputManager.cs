@@ -101,7 +101,7 @@ public class entityInputManager
                 if (!isPaused || !cmdParettes[i].parette.isPauseWait)
                     cmdParettes[i].currentElapsedFrame++;
             }
-            //Debug.Log(cmdParettes.Count);
+            Debug.Log("cmdParette Count " + cmdParettes.Count);
 
             //Priority順に並べる
             cmdParettes.Sort((x, y) => y.parette.BasePriority - x.parette.BasePriority);
@@ -122,7 +122,7 @@ public class entityInputManager
                 inputs = inputs_calc;
                 lStick = lStick_calc;
                 rStick = rStick_calc;
-                //Debug.Log(inputs.ToString() + " " + lStick.ToString());
+                Debug.Log(inputs.ToString() + " " + lStick.ToString());
             }
             //lStick = lStick.normalized * Mathf.Clamp01(lStick.sqrMagnitude);
 
@@ -166,6 +166,7 @@ public class entityInputManager
         ref bool isMoveSCommandOveridable, ref bool isLookSCommandOveridable,   
             Vector2 lStick_f ,Vector2 rStick_f , int inputs_f)
         {
+            //Debug.Log(parette.commandInput);
             Vector2 lStick = lStick_f;
             Vector2 rStick = rStick_f;
             int inputs = inputs_f;
@@ -193,10 +194,12 @@ public class entityInputManager
             {
                 isBCommandOveridable = parette.isBCommandOveridable;
 
+
                 string[] commands = parette.commandInput.Split(',');
                 //最低値のindexを取る
                 int mIndex = Mathf.Min(currentElapsedFrame, commands.Length - 1);
                 string cmd_strs = commands[mIndex];
+
                 if (cmd_strs != null)
                 {
                     cmd_strs.Trim();

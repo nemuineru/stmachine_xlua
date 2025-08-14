@@ -29,14 +29,14 @@ MonoBehaviour:
     useDefaultClss: 0
     clssSetting:
       clssDefs:
-      - clssType: 1
+      - clssType: 0
         attachTo: hand.l
         showGizmo: 1
         _entity: {fileID: 0}
         attachTransform: {fileID: 0}
-        startPos: {x: 0, y: 0, z: 0}
+        startPos: {x: 0, y: -0.49, z: 0}
         endPos: {x: 0, y: 0.33, z: 0}
-        width: 0.18
+        width: 0.29
         _lastcalcStartPos: {x: -2.005118, y: 0.67928535, z: 1.9083921}
         _lastcalcEndPos: {x: -1.7067127, y: 0.8188073, z: 1.8886932}
       disableClssList:
@@ -63,7 +63,7 @@ MonoBehaviour:
         showGizmo: 1
         _entity: {fileID: 0}
         attachTransform: {fileID: 0}
-        startPos: {x: 0, y: 0, z: 0}
+        startPos: {x: 0, y: -0.15, z: 0}
         endPos: {x: 0, y: 0.33, z: 0}
         width: 0.18
         _lastcalcStartPos: {x: -2.005118, y: 0.67928535, z: 1.9083921}

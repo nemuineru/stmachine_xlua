@@ -73,7 +73,7 @@ public class StatusBar : MonoBehaviour
         Vector3 pos = BaseBar.points[index].point * (1 - X) + BaseBar.points[index + 1].point * (X);
         FillBar.SetPointPosition(0, pos);
         FillBar.meshOutOfDate = true;
-        Debug.Log(index + " " + pos);
+        //Debug.Log(index + " " + pos);
 
         //ライフ点滅.
         for (int pt_health_Index = 0; pt_health_Index < lifeBar_Outer.Count; pt_health_Index++)

@@ -32,7 +32,7 @@ namespace enemyInput_Aggro
         Entity AIEntity;
 
         //ランダム値がこれを超えない際..
-        const float rand_Prov = 1f;
+        const float rand_Prov = 0.05f;
 
         const float AttackRange = 1.2f;
 
@@ -64,15 +64,17 @@ namespace enemyInput_Aggro
                         //一瞬だけ押すので2フレーム分.
                         entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
                         CP.wholeFrame = 5;
-                        CP.BasePriority = -2;
+                        CP.BasePriority = 0;
                         CP.isMoveSCommandOveridable = true;
                         CP.isLookSCommandOveridable = true;
                         CP.isBCommandOveridable = false;
 
                         CP.commandInput = Command.GetValue().ToString();
 
+                        InputStruct.parette = CP;
+
                         AIEntity.entityInput.cmdParettes.Add(InputStruct);
-                        Debug.Log("CMD INPUTTED");
+                        //Debug.Log(Command.GetValue().ToString());
                     }
                     currentTick = 0;
                 }

@@ -728,10 +728,16 @@ public class AnimDef
         ca.AddRange(clssSetting.findclss(clssDef.ClssType.Attack, 0f));
         foreach (clssDef c in ca)
         {
+            //Debug.Log(c.attachTo);
             c.getGlobalPos();
+            c.DrawCapsule();
             if (c.showGizmo == true)
             {
-                c.DrawCapsule();
+                if (c.clssType == clssDef.ClssType.Attack)
+                { 
+                    //Debug.Log("attackCapsule");
+                }
+                //c.DrawCapsule();
             }
         }
     }
