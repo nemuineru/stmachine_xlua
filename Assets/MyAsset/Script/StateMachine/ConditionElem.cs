@@ -119,6 +119,12 @@ public class LC
     {
         return et.CurrentStateID;
     }
+    
+    public int CheckAnimID(Entity et)
+    {
+        return et.animID;
+    }
+
 
     //Checker for MainAnimDef's registered list.
     public int CheckAnimationsListNum(Entity et)

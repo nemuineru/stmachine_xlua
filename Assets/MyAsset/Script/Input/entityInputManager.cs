@@ -101,7 +101,7 @@ public class entityInputManager
                 if (!isPaused || !cmdParettes[i].parette.isPauseWait)
                     cmdParettes[i].currentElapsedFrame++;
             }
-            Debug.Log("cmdParette Count " + cmdParettes.Count);
+            //Debug.Log("cmdParette Count " + cmdParettes.Count);
 
             //Priority順に並べる
             cmdParettes.Sort((x, y) => y.parette.BasePriority - x.parette.BasePriority);
@@ -122,7 +122,7 @@ public class entityInputManager
                 inputs = inputs_calc;
                 lStick = lStick_calc;
                 rStick = rStick_calc;
-                Debug.Log(inputs.ToString() + " " + lStick.ToString());
+                //Debug.Log(inputs.ToString() + " " + lStick.ToString());
             }
             //lStick = lStick.normalized * Mathf.Clamp01(lStick.sqrMagnitude);
 

@@ -10,14 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85bef611c4806534aab65ba4d51677e3, type: 3}
-  m_Name: stateDefTest_onHit
+  m_Name: stateDefTest_Default_onHit
   m_EditorClassIdentifier: 
   stateDefs:
   - StateDefName: Default
     StateDefID: 1000000
-    PriorCondition:
-      LuaScript: 
-      entity: {fileID: 0}
     LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
     preStateVerdictName: QueuedStateID_0
     ParamLoadName: LuaOutput
@@ -26,11 +23,8 @@ MonoBehaviour:
     - rid: 4404388598234480643
   - StateDefName: OnHit
     StateDefID: 5000
-    PriorCondition:
-      LuaScript: 
-      entity: {fileID: 0}
     LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
-    preStateVerdictName: QueuedStateID_Hit
+    preStateVerdictName: QueuedStateID_Hit_Def
     ParamLoadName: LuaOutput
     StateList:
     - rid: 4404388575372902408
@@ -38,11 +32,8 @@ MonoBehaviour:
     - rid: 4404388569968803840
   - StateDefName: OnHit_Blow
     StateDefID: 5050
-    PriorCondition:
-      LuaScript: 
-      entity: {fileID: 0}
     LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
-    preStateVerdictName: QueuedStateID_Hit
+    preStateVerdictName: QueuedStateID_Hit_Air
     ParamLoadName: LuaOutput
     StateList:
     - rid: 4404388637674569735

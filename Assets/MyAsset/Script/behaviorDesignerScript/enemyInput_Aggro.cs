@@ -22,6 +22,11 @@ namespace enemyInput_Aggro
         [SerializeField]
         SharedVector2[] virtualStickInput;
 
+        //ランダム値がこれを超えない際..
+        [SerializeField]
+        SharedFloat Freqently;
+
+
         const int mapRouteFindTickRate = 5;
 
         //Commandに応じて、入力を与える.
@@ -30,9 +35,6 @@ namespace enemyInput_Aggro
 
         //動かすEntity. これが付いたExternalBehaviorは必ずこれが付いてるはず
         Entity AIEntity;
-
-        //ランダム値がこれを超えない際..
-        const float rand_Prov = 0.05f;
 
         const float AttackRange = 1.2f;
 
@@ -56,7 +58,7 @@ namespace enemyInput_Aggro
                     Vector2 curPos = new Vector2(transform.position.x, transform.position.z);
 
                     //攻撃検知範囲に居るならコマンドを押す.
-                    if (Random.value < rand_Prov)
+                    if (Random.value < Freqently.Value)
                     {
                         entityInputManager.CMD_Struct InputStruct = new entityInputManager.CMD_Struct();
                         InputStruct.forwardRef = Vector2.up;

@@ -19,7 +19,7 @@ MonoBehaviour:
     ID: 0
     Name: Movement
     animClip:
-    - Clip: {fileID: 7400000, guid: 8ccd8d276dc56c1488d84a56292d2c6b, type: 2}
+    - Clip: {fileID: 7400000, guid: b1746320c4335404a98fc1316048773b, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
       cycleOffset: 0
       mixPosition: {x: 1, y: 0}
     blendInTime: 0.05
-    blendOutTime: 0.001
+    blendOutTime: 0.05
     useDefaultClss: 1
     clssSetting:
       clssDefs:
@@ -86,7 +86,7 @@ MonoBehaviour:
     ID: 5000
     Name: Damaged
     animClip:
-    - Clip: {fileID: 7400000, guid: 7b3ee991590f0ec42b8e51cabaaa8cea, type: 2}
+    - Clip: {fileID: 7400000, guid: df78d3aec4fb10245a4699ee03339e18, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
