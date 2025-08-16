@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85bef611c4806534aab65ba4d51677e3, type: 3}
+  m_Name: stateCmdDefs_Grunt
+  m_EditorClassIdentifier: 
+  stateDefs:
+  - StateDefName: Default
+    StateDefID: -1
+    PriorCondition:
+      LuaScript: 
+      entity: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 8e994d9382ba03445bddab6509ecadc4, type: 3}
+    preStateVerdictName: Queue_Cmd
+    ParamLoadName: LuaOutput
+    StateList:
+    - rid: 4404388664824299527
+    - rid: 4404388799971590145
+    - rid: 4404388664824299528
+    - rid: 4404388709018370078
+    - rid: 4404388664824299529
+    - rid: 4404388709018370091
+  references:
+    version: 2
+    RefIds:
+    - rid: 4404388664824299527
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Combo1 Jab_Cmd
+        changeTo: 1
+        priority: 0
+    - rid: 4404388664824299528
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 3
+          stLuaLoads: 
+        stateControllerSubName: Combo3 Kick_Cmd
+        changeTo: 3
+        priority: 2
+    - rid: 4404388664824299529
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 20
+          stLuaLoads: 
+        stateControllerSubName: JumpCombo Kick_Cmd
+        changeTo: 20
+        priority: 0
+    - rid: 4404388709018370078
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 5
+          stLuaLoads: 
+        stateControllerSubName: Hard1 GKnife_Cmd
+        changeTo: 5
+        priority: 1
+    - rid: 4404388709018370091
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 25
+          stLuaLoads: 
+        stateControllerSubName: JumpHard AKnife_Cmd
+        changeTo: 25
+        priority: 1
+    - rid: 4404388799971590145
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Combo2 Jab_2 Cmd
+        changeTo: 2
+        priority: 1

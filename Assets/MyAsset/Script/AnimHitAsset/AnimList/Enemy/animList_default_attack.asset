@@ -17,9 +17,9 @@ MonoBehaviour:
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
     ID: 1
-    Name: Jab
+    Name: GutPunch
     animClip:
-    - Clip: {fileID: 7400000, guid: cc6d90ac22aa9f146b6a23f470c4344a, type: 2}
+    - Clip: {fileID: 7400000, guid: f2572cbb681bfc24d8838d66770f5010, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
@@ -75,7 +75,7 @@ MonoBehaviour:
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
     ID: 3
-    Name: Kick
+    Name: HeavyAttack
     animClip:
     - Clip: {fileID: 7400000, guid: 418d04f5b5a9f8e429e08773447a79ad, type: 2}
       speed: 0
@@ -99,90 +99,4 @@ MonoBehaviour:
         _lastcalcEndPos: {x: 0, y: 0, z: 0}
       disableClssList:
       - head
-      root: {fileID: 0}
-  - mixType: 0
-    MixParamName: 
-    CurrentParamPos: {x: 0, y: 0}
-    ID: 5
-    Name: Hard_Knifes
-    animClip:
-    - Clip: {fileID: 7400000, guid: ef15f6167a26a9142b12faa0e8237153, type: 2}
-      speed: 0
-      startFrame: 0
-      cycleOffset: 0
-      mixPosition: {x: 0, y: 0}
-    blendInTime: 0
-    blendOutTime: 0.1
-    useDefaultClss: 0
-    clssSetting:
-      clssDefs:
-      - clssType: 1
-        attachTo: kf01
-        showGizmo: 1
-        _entity: {fileID: 0}
-        attachTransform: {fileID: 0}
-        startPos: {x: 0, y: 0, z: 0.75}
-        endPos: {x: 0.24, y: 0, z: -0.15}
-        width: 0.32
-        _lastcalcStartPos: {x: -0.45079607, y: -0.14649418, z: -8.905193}
-        _lastcalcEndPos: {x: -0.108253896, y: 0.6150805, z: -9.31783}
-      disableClssList:
-      - head
-      root: {fileID: 0}
-  - mixType: 0
-    MixParamName: 
-    CurrentParamPos: {x: 0, y: 0}
-    ID: 20
-    Name: Air_Kick
-    animClip:
-    - Clip: {fileID: 7400000, guid: d43dcff2bbe635643b415cee8702203c, type: 2}
-      speed: 0
-      startFrame: 0
-      cycleOffset: 0
-      mixPosition: {x: 0, y: 0}
-    blendInTime: 0
-    blendOutTime: 0.04
-    useDefaultClss: 0
-    clssSetting:
-      clssDefs:
-      - clssType: 1
-        attachTo: lowerleg.r
-        showGizmo: 1
-        _entity: {fileID: 0}
-        attachTransform: {fileID: 0}
-        startPos: {x: 0, y: 0.39, z: 0}
-        endPos: {x: 0, y: 0, z: 0}
-        width: 0.12
-        _lastcalcStartPos: {x: 0.88136834, y: 0.13926509, z: -12.541889}
-        _lastcalcEndPos: {x: 1.2251477, y: 0.30532974, z: -12.4622755}
-      disableClssList:
-      - head
-      root: {fileID: 0}
-  - mixType: 0
-    MixParamName: 
-    CurrentParamPos: {x: 0, y: 0}
-    ID: 25
-    Name: AirHardAttack_Knife
-    animClip:
-    - Clip: {fileID: 7400000, guid: 67093dc924031d24c896ff11fa6ff5fa, type: 2}
-      speed: 0
-      startFrame: 0
-      cycleOffset: 0
-      mixPosition: {x: 0, y: 0}
-    blendInTime: 0
-    blendOutTime: 0.1
-    useDefaultClss: 0
-    clssSetting:
-      clssDefs:
-      - clssType: 1
-        attachTo: kf01
-        showGizmo: 1
-        _entity: {fileID: 0}
-        attachTransform: {fileID: 0}
-        startPos: {x: 0, y: 0, z: 0.8}
-        endPos: {x: 0, y: 0, z: 0}
-        width: 0.12
-        _lastcalcStartPos: {x: -1.87272, y: 0.31435484, z: 3.832837}
-        _lastcalcEndPos: {x: -2.375192, y: 0.73898786, z: 3.377635}
-      disableClssList: []
       root: {fileID: 0}

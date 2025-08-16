@@ -56,18 +56,18 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Main_Button"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""5ed09253-5ee9-41f0-b568-1655f17a383b"",
-                    ""expectedControlType"": ""Analog"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Action_Button"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""88d91bc6-35e8-4e0c-9397-d51c6c2732f0"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
