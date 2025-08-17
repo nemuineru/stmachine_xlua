@@ -24,7 +24,7 @@ public class MixAnimNode
 
         //繋げたAnimの時間設定など. このイベントに応じ、LuaConditionで得られる値も変化する.
         //基本的に、currentAnimTimeをアニメーションの時間の主軸として変更.
-        float startAnimTime = 0f, currentAnimTime = 0f, endAnimTime = Mathf.Infinity;
+        internal float startAnimTime = 0f, currentAnimTime = 0f, endAnimTime = Mathf.Infinity;
 
         public float MixWeight = 1f;
 
@@ -154,7 +154,7 @@ public class MixAnimNode
             {
             SetCurrentTime(currentAnimTime + Time.deltaTime);
             }
-        changeMixerWeight();
+            changeMixerWeight();
             for (int i = 0; i < PlayList.Length; i++)
             {
                 //var playClip = def.animClip[i];
@@ -204,6 +204,7 @@ public class MainNodeConfigurator
 
     //ミキシングされるアニメーションDef/アニメーションノード
     public MixAnimNode[] Mixers = new MixAnimNode[8];
+    MixAnimNode MainMixer;
 
     //メインDef・アニメーションのノード.
     public AnimDef MainAnimDef;
@@ -277,6 +278,7 @@ public class MainNodeConfigurator
             //init Entity on new Connection. Dont Forget it!
             node.def.initEntityAt(root);
             node.SetCurrentTime(timeoffset);
+            MainMixer = node;
             MainAnimDef = node.def;
             //Additiveに設定するか？
             mixMixer.SetLayerAdditive((uint)indexOfEmpty, AdditiveIsTrue);
@@ -287,9 +289,19 @@ public class MainNodeConfigurator
         }
     }
 
+    public int CurrentAnimTime()
+    {
+        int val = 0;
+        if (MainMixer != null)
+        {
+            val = Mathf.CeilToInt(MainMixer.currentAnimTime / (1 / MainAnimDef.animClip.Average(x => x.Clip.frameRate)));
+        }
+        return val;
+    }
+
     public void Tick()
-    { 
-        
+    {
+
     }
 
     //アニメーションの設定・ミキサーのウェイト設定..

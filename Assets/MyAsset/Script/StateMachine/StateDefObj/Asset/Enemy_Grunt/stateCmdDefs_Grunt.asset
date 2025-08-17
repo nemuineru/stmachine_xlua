@@ -15,19 +15,13 @@ MonoBehaviour:
   stateDefs:
   - StateDefName: Default
     StateDefID: -1
-    PriorCondition:
-      LuaScript: 
-      entity: {fileID: 0}
-    LuaAsset: {fileID: -8122155829129254986, guid: 8e994d9382ba03445bddab6509ecadc4, type: 3}
+    LuaAsset: {fileID: -8122155829129254986, guid: 65fd7b4815d6a3444b417f80c6adccb9, type: 3}
     preStateVerdictName: Queue_Cmd
     ParamLoadName: LuaOutput
     StateList:
     - rid: 4404388664824299527
-    - rid: 4404388799971590145
-    - rid: 4404388664824299528
     - rid: 4404388709018370078
     - rid: 4404388664824299529
-    - rid: 4404388709018370091
   references:
     version: 2
     RefIds:
@@ -41,16 +35,6 @@ MonoBehaviour:
         stateControllerSubName: Combo1 Jab_Cmd
         changeTo: 1
         priority: 0
-    - rid: 4404388664824299528
-      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 3
-          stLuaLoads: 
-        stateControllerSubName: Combo3 Kick_Cmd
-        changeTo: 3
-        priority: 2
     - rid: 4404388664824299529
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
@@ -70,24 +54,4 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: Hard1 GKnife_Cmd
         changeTo: 5
-        priority: 1
-    - rid: 4404388709018370091
-      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 25
-          stLuaLoads: 
-        stateControllerSubName: JumpHard AKnife_Cmd
-        changeTo: 25
-        priority: 1
-    - rid: 4404388799971590145
-      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 2
-          stLuaLoads: 
-        stateControllerSubName: Combo2 Jab_2 Cmd
-        changeTo: 2
         priority: 1

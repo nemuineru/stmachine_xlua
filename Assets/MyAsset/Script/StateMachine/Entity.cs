@@ -24,6 +24,9 @@ public class Entity : MonoBehaviour
 
     public int stateTime;
 
+    //アニメのフレーム時間.
+    public int animationFrameTime;
+
     //移動用の設定など. fwに設定した値・90度回転方向を考慮 - 
     public Vector3 targetTo_fw = Vector3.forward;
 
@@ -177,6 +180,7 @@ public class Entity : MonoBehaviour
             MainAnimMixer.SetAnim((HitPauseTime <= 0));
         }
         MainAnimMixer.PrimalGraph.Play();
+        animationFrameTime = MainAnimMixer.CurrentAnimTime();
 
         //At Control, wishinvect is Input by command Buffer
         //これ消したい.

@@ -7,28 +7,29 @@ local Debug = CS.UnityEngine.Debug;
 
 -- COMMAND FUNCTION
 function Queue_Cmd(in_entity)
-    selfOnGrd = LC:isEntityOnGround(in_entity)
-    JumpCommand = LC:CheckButtonPressed(in_entity, "a_")
-    AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
-    AttackCmd_x = LC:CheckButtonPressed(in_entity, "x_")
-    selfStTime = LC:CheckStateTime(in_entity) 
-    stateID = in_entity.CurrentStateID
+        verd = {}
+        selfOnGrd = LC:isEntityOnGround(in_entity)
+        JumpCommand = LC:CheckButtonPressed(in_entity, "a_")
+        AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
+        AttackCmd_x = LC:CheckButtonPressed(in_entity, "x_")
+        selfStTime = LC:CheckStateTime(in_entity) 
+        stateID = in_entity.CurrentStateID
 
-    verd = {}
-    -- combo_1 cmd
-    if(selfOnGrd == true and AttackCmd_b == true and stateID == 0) then
-        table.insert( verd, 1) 
-    end
+        -- combo_1 cmd
+        if(selfOnGrd == true and AttackCmd_b == true and stateID == 0) then
+            table.insert( verd, 1) 
+        end
 
-    -- Hard_1 cmd
-    if (selfOnGrd == true and AttackCmd_x == true and stateID == 0) then 
-        table.insert( verd, 5 )
-    end
+        -- Hard_1 cmd
+        if (selfOnGrd == true and AttackCmd_x == true and stateID == 0) then 
+            table.insert( verd, 5 )
+        end
 
-    -- air_combo cmd
-    if( selfOnGrd == false and AttackCmd_b == true and stateID == 50 ) then
-        table.insert( verd, 20 ) 
-    end
+        -- air_combo cmd
+        -- if( selfOnGrd == false and AttackCmd_b == true and stateID == 50 ) then
+        --    table.insert( verd, 20 ) 
+        -- end
+    return verd
 end
 
 

@@ -5,14 +5,16 @@ local Debug = CS.UnityEngine.Debug;
     function QueuedStateID(in_entity)
 
         verd = {}
-        CurrentTime = LC:CheckStateTime(in_entity)
-        if ( CurrentTime > 12 ) then 
-            table.insert( verd, 1 )
+        --スキを見せるように.
+        CurrentTime = LC:CheckAnimTime(in_entity)
+        if ( CurrentTime > 30 ) then 
+            table.insert( verd, 3 )
         end
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-        if( math.abs(CurrentTime - 4) < 2  and not in_entity.isStateHit) then
+        -- HitDef発生判定
+        if( math.abs(CurrentTime - 10) < 2  and not in_entity.isStateHit) then
             table.insert( verd, 10 ) 
         end
     return verd
