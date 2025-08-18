@@ -6,7 +6,8 @@ local Debug = CS.UnityEngine.Debug;
 
         verd = {}
         --スキを見せるように.
-        CurrentTime = LC:CheckAnimTime(in_entity)
+        AnimTime = LC:CheckAnimTime(in_entity)
+        CurrentTime = LC:CheckStateTime(in_entity)
         if ( CurrentTime > 30 ) then 
             table.insert( verd, 3 )
         end
@@ -14,7 +15,7 @@ local Debug = CS.UnityEngine.Debug;
             table.insert( verd, 0 ) 
         end
         -- HitDef発生判定
-        if( math.abs(CurrentTime - 10) < 2  and not in_entity.isStateHit) then
+        if( math.abs(AnimTime - 10) < 2  and not in_entity.isStateHit) then
             table.insert( verd, 10 ) 
         end
     return verd

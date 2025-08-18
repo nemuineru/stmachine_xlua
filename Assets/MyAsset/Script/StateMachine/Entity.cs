@@ -39,6 +39,11 @@ public class Entity : MonoBehaviour
 
     internal Transform[] allChildTransforms;
 
+    //status for UIs and more
+
+    [SerializeField]
+    internal EntityStatus status;
+
 
     //アニメーション管理用.
     public int animID = 0;
@@ -143,9 +148,23 @@ public class Entity : MonoBehaviour
 
     Vector3 pausedVel = Vector3.zero;
 
+    //Awake後に設定される. UIとか指定したい.
+    void Start()
+    {
+        //プレイヤーとか指定されたタグに設定されていないなら、HP用のUI表示.
+        if (gameObject.tag != "Player" && gameState.self.HPUI != null)
+        {
+            StatusBar_Minimal min = Instantiate(gameState.self.HPUI).GetComponent<StatusBar_Minimal>();
+            min.SetEntity(this);
+            min.transform.parent = transform;
+            min.transform.localPosition = Vector3.up;
+        }
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
+        status.setCurrentValue();
         defaultClss.clssPosUpdate();
 
         //後で消します. Player用にInputを記録する..

@@ -12,6 +12,7 @@ public class gameState : MonoBehaviour
     //全部のスクリプトからアクセスするように.
     //
     static public gameState self;
+    public GameObject HPUI;
     
     [FormerlySerializedAs("hitEff")]
     public GameObject defaultEff;
