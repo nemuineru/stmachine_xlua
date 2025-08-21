@@ -13,7 +13,8 @@ public class SubMenuComponent : MonoBehaviour
     [SerializeField]
     TMP_Text txt;
 
-    public int subSelected;
+    public SubMenuComponent subSelected;
+    public int subSelectedIndex;
     public bool currentSelected = false;
 
     // Start is called before the first frame update
