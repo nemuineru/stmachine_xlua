@@ -7,13 +7,14 @@ public class MainMenuScript : MonoBehaviour
 {
     //サブメニュー. 開くオブジェクトを選択して選択して...という感じ
     [SerializeField]
-    List<SubMenuComponent> menus;
+    SubMenuComponent majorMenu;
 
     [SerializeField]
     AudioSource selectSnd, confirmSnd, cancelSnd;
 
     int Depth;
 
+    [SerializeField]
     int selectedInputFr = 0, cancelInputFr = 0, controlInputFr = 0;
 
     // Start is called before the first frame update
@@ -25,6 +26,7 @@ public class MainMenuScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        selectedInputFr = InputInstance.self.inputValues.MainButton_Read == 10 ? selectedInputFr + 1 : 0;
+        cancelInputFr = InputInstance.self.inputValues.SubButton_Read == 10 ? cancelInputFr + 1 : 0;
     }
 }

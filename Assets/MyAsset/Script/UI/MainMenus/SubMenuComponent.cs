@@ -16,6 +16,8 @@ public class SubMenuComponent : MonoBehaviour
     public SubMenuComponent subSelected;
     public int subSelectedIndex;
     public bool currentSelected = false;
+    
+    public bool currentConfirmed = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,18 +27,25 @@ public class SubMenuComponent : MonoBehaviour
 
     Color selCol = new Color(0xFF,0xCC,0x40);
     Color nonSelCol = new Color(0x40,0x30,0x20);
-    
+
     // Update is called once per frame
     //選択されたさいの自分のテキストを設定
     void Update()
     {
-        if (currentSelected == true)
+        if (txt != null)
         {
-            txt.color = selCol;
+            if (currentSelected == true)
+            {
+                txt.color = selCol;
+            }
+            else
+            {
+                txt.color = nonSelCol;
+            }
         }
-        else
-        {
-            txt.color = nonSelCol;
+        if (subSelected != null)
+        { 
+
         }
     }
 }
