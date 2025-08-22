@@ -25,8 +25,8 @@ public class SubMenuComponent : MonoBehaviour
 
     }
 
-    Color selCol = new Color(0xFF,0xCC,0x40);
-    Color nonSelCol = new Color(0x40,0x30,0x20);
+    Color selCol = new Color(1f, 0.8f, 0.2f);
+    Color nonSelCol = new Color(0.3f, 0.2f, 0.2f);
 
     // Update is called once per frame
     //選択されたさいの自分のテキストを設定
@@ -45,7 +45,7 @@ public class SubMenuComponent : MonoBehaviour
         }
         if (subSelected != null)
         { 
-
+            
         }
     }
 }

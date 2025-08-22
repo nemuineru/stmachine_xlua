@@ -17,6 +17,10 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField]
     int selectedInputFr = 0, cancelInputFr = 0, controlInputFr = 0;
 
+    int prevInput = 0;
+
+    float zeroinputVal = 0.5f;
+
     // Start is called before the first frame update
     void Start()
     {
