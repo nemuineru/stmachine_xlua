@@ -16,7 +16,7 @@ public class SubMenuComponent : MonoBehaviour
     public SubMenuComponent subSelected;
     public int subSelectedIndex;
     public bool currentSelected = false;
-    
+
     public bool currentConfirmed = false;
 
     // Start is called before the first frame update
@@ -30,8 +30,13 @@ public class SubMenuComponent : MonoBehaviour
 
     // Update is called once per frame
     //選択されたさいの自分のテキストを設定
-    void Update()
+    void LateUpdate()
     {
+        updateMenuComps();
+    }
+
+    void updateMenuComps()
+    { 
         if (txt != null)
         {
             if (currentSelected == true)
@@ -43,9 +48,38 @@ public class SubMenuComponent : MonoBehaviour
                 txt.color = nonSelCol;
             }
         }
-        if (subSelected != null)
-        { 
-            
+
+        if (menuTextObjs.Count != 0)
+        {
+            for (int i = 0; i < menuTextObjs.Count; i++)
+            {
+                SubMenuComponent comp = menuTextObjs[i];
+                if (comp != null)
+                {
+                    comp.currentSelected = subSelectedIndex == i;
+                }
+            }
         }
+    }
+
+    //メニュー項目の確認など
+    internal void MenuSelector(int x)
+    {
+        //選択済みなら内部のメニューセレクタを呼び出す.
+        if (subSelected != null)
+        {
+            subSelected.MenuSelector(x);
+        }
+        else
+        {
+            IndexSelector(x);
+        }
+    }
+
+    //ループするメニュー項目のインデックス選択. xに変更値を入力
+    internal void IndexSelector(int x)
+    {
+        subSelectedIndex = subSelectedIndex + x >= menuTextObjs.Count ?
+        0 : (subSelectedIndex + x < 0 ? menuTextObjs.Count - 1 : subSelectedIndex + x);
     }
 }

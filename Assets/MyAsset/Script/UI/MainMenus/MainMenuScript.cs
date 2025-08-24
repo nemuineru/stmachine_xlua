@@ -18,36 +18,56 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField]
     int selectedInputFr = 0, cancelInputFr = 0, controlInputFr = 0;
 
-    [SerializeField,ReadOnly(true)]
+    [SerializeField, ReadOnly(true)]
     int prevSelectInput = 0;
 
-    float setInputVal = 0.75f;
-    float resetInputVal = 0.5f;
+    float setInputVal = 0.4f;
+    float resetInputVal = 0.15f;
+
+    [SerializeField, ReadOnly(true)]
     bool isSelectReset = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        SelectInput();
+    }
+
+    void SelectInput()
+    {
         selectedInputFr = InputInstance.self.inputValues.MainButton_Read == 10 ? selectedInputFr + 1 : 0;
         cancelInputFr = InputInstance.self.inputValues.SubButton_Read == 10 ? cancelInputFr + 1 : 0;
         //Digital Value of this. -1, 0, 1..
-        int yAx =
-        (int)Mathf.Sign(InputInstance.self.inputValues.MovingAxis.y) *
-        Mathf.Min(Mathf.FloorToInt(Mathf.Abs(InputInstance.self.inputValues.MovingAxis.y) / setInputVal), 1);
+        //Input on is like this - 
+        // [       | ]
+        //And resets at low
+        // [  |      ]
 
-        if (prevSelectInput != yAx && isSelectReset == true)
+        controlInputFr =
+        (int)Mathf.Sign(InputInstance.self.inputValues.MovingAxis.y) *
+        (int)Mathf.Clamp01(Mathf.Floor(Mathf.Abs((InputInstance.self.inputValues.MovingAxis.y) / setInputVal)));
+
+        //0でないなら選択..
+        if (prevSelectInput != controlInputFr && isSelectReset == true && controlInputFr != 0)
         {
-            controlInputFr += yAx;
+            Debug.Log("selector inputted");
+            majorMenu.IndexSelector(-controlInputFr);
+            selectSnd.Play();
+
+            //controlInputFr += yAx;
             isSelectReset = false;
         }
-        //reset the value on certain point
-        prevSelectInput = yAx;
-        isSelectReset = !isSelectReset || Mathf.Abs(InputInstance.self.inputValues.MovingAxis.y) < resetInputVal;
+        isSelectReset = isSelectReset || Mathf.Abs(InputInstance.self.inputValues.MovingAxis.y) < resetInputVal;
+        if (isSelectReset)
+        { 
+            //reset the value on certain point
+            prevSelectInput = controlInputFr;
+        }
     }
 }
