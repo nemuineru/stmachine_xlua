@@ -70,9 +70,11 @@ public class MainMenuScript : MonoBehaviour
         }
         isSelectReset = isSelectReset || Mathf.Abs(InputInstance.self.inputValues.MovingAxis.y) < resetInputVal;
         if (isSelectReset)
-        { 
+        {
             //reset the value on certain point
             prevSelectInput = controlInputFr;
         }
+        menuIndexText.text = "./" + majorMenu.getSelectedMenuText();
+        descIndexText.text = "> " + majorMenu.getSelectedMenuDescriptions();
     }
 }

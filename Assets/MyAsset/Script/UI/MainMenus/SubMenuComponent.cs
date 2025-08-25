@@ -68,11 +68,27 @@ public class SubMenuComponent : MonoBehaviour
     internal string getSelectedMenuText()
     {
         string ret = "";
+        if (subSelected != null)
+        {
+            ret = subSelected.getSelectedMenuText();
+        }
+        else
+        {
+            ret = menuText_Indexes;
+        }
         return ret;
     }
-    internal string getMenuDescriptions()
+    internal string getSelectedMenuDescriptions()
     {
         string ret = "";
+        if (subSelected != null)
+        {
+            ret = subSelected.getSelectedMenuDescriptions();
+        }
+        else
+        {
+            ret = menuTextObjs[subSelectedIndex].menuText_Description;
+        }
         return ret;
     }
 
