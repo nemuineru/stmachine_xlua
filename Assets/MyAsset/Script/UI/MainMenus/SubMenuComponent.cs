@@ -8,6 +8,9 @@ using TMPro;
 public class SubMenuComponent : MonoBehaviour
 {
     [SerializeField]
+    internal string menuText_Indexes, menuText_Description;
+
+    [SerializeField]
     List<SubMenuComponent> menuTextObjs;
 
     [SerializeField]
@@ -60,6 +63,17 @@ public class SubMenuComponent : MonoBehaviour
                 }
             }
         }
+    }
+
+    internal string getSelectedMenuText()
+    {
+        string ret = "";
+        return ret;
+    }
+    internal string getMenuDescriptions()
+    {
+        string ret = "";
+        return ret;
     }
 
     //メニュー項目の確認など

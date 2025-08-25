@@ -27,6 +27,10 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField, ReadOnly(true)]
     bool isSelectReset = true;
 
+    //Main Menu - Indexed Text, and Descriptions
+    [SerializeField, ReadOnly(true)]
+    TMP_Text menuIndexText, descIndexText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +45,7 @@ public class MainMenuScript : MonoBehaviour
 
     void SelectInput()
     {
+        //Detecting the longpress
         selectedInputFr = InputInstance.self.inputValues.MainButton_Read == 10 ? selectedInputFr + 1 : 0;
         cancelInputFr = InputInstance.self.inputValues.SubButton_Read == 10 ? cancelInputFr + 1 : 0;
         //Digital Value of this. -1, 0, 1..
