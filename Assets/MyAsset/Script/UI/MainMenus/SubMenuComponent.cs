@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 //サブメニュー　フォー　メインのメニュー。　要はメニュー定義オブジェクトっすね
 //深度が深くなるほど親の負担がかかるので、大メニュー事に設定.
@@ -10,8 +11,38 @@ public class SubMenuComponent : MonoBehaviour
     [SerializeField]
     internal string menuText_Indexes, menuText_Description;
 
+    [System.Serializable]
+    internal class SubMenuSets
+    {
+        //あんまし内部にマジックナンバー仕込みたくねえんだよな
+        Color selCol = new Color(1f, 0.8f, 0.2f);
+        Color nonSelCol = new Color(0.3f, 0.2f, 0.2f);
+
+
+        [SerializeField]
+        internal SubMenuComponent menu;
+        [SerializeField]
+        internal TMP_Text texts;
+        internal bool isSelected;
+
+        internal void SetTxtUpdate()
+        {
+            if (texts != null)
+            {
+                if (isSelected == true)
+                {
+                    texts.color = selCol;
+                }
+                else
+                {
+                    texts.color = nonSelCol;
+                }
+            }
+        }
+    }
+
     [SerializeField]
-    List<SubMenuComponent> menuTextObjs;
+    internal List<SubMenuSets> subMenus;
 
     [SerializeField]
     TMP_Text txt;
@@ -21,6 +52,7 @@ public class SubMenuComponent : MonoBehaviour
     public bool currentSelected = false;
 
     public bool currentConfirmed = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -39,28 +71,14 @@ public class SubMenuComponent : MonoBehaviour
     }
 
     void updateMenuComps()
-    { 
-        if (txt != null)
+    {
+        if (subMenus.Count != 0)
         {
-            if (currentSelected == true)
+            for (int i = 0; i < subMenus.Count; i++)
             {
-                txt.color = selCol;
-            }
-            else
-            {
-                txt.color = nonSelCol;
-            }
-        }
-
-        if (menuTextObjs.Count != 0)
-        {
-            for (int i = 0; i < menuTextObjs.Count; i++)
-            {
-                SubMenuComponent comp = menuTextObjs[i];
-                if (comp != null)
-                {
-                    comp.currentSelected = subSelectedIndex == i;
-                }
+                SubMenuSets comp = subMenus[i];
+                comp.isSelected = subSelectedIndex == i;
+                comp.SetTxtUpdate();
             }
         }
     }
@@ -78,7 +96,8 @@ public class SubMenuComponent : MonoBehaviour
         }
         return ret;
     }
-    internal string getSelectedMenuDescriptions()
+
+    virtual internal string getSelectedMenuDescriptions()
     {
         string ret = "";
         if (subSelected != null)
@@ -87,7 +106,8 @@ public class SubMenuComponent : MonoBehaviour
         }
         else
         {
-            ret = menuTextObjs[subSelectedIndex].menuText_Description;
+            //Debug.Log(subMenus[subSelectedIndex].menu);
+            ret = subMenus[subSelectedIndex].menu.menuText_Description;
         }
         return ret;
     }
@@ -109,7 +129,43 @@ public class SubMenuComponent : MonoBehaviour
     //ループするメニュー項目のインデックス選択. xに変更値を入力
     internal void IndexSelector(int x)
     {
-        subSelectedIndex = subSelectedIndex + x >= menuTextObjs.Count ?
-        0 : (subSelectedIndex + x < 0 ? menuTextObjs.Count - 1 : subSelectedIndex + x);
+        if (subSelected != null)
+        {
+            subSelected.IndexSelector(x);
+        }
+        else
+        {
+            subSelectedIndex = subSelectedIndex + x >= subMenus.Count ?
+            0 : (subSelectedIndex + x < 0 ? subMenus.Count - 1 : subSelectedIndex + x);
+        }
+    }
+
+    internal void setSubMenuActive()
+    {
+        if (subSelected != null)
+        {
+            subSelected.setSubMenuActive();
+        }
+        else
+        {
+            subSelected = subMenus[subSelectedIndex].menu;
+            subSelected.gameObject.SetActive(true);
+            gameObject.SetActive(false);
+        }
+    }
+
+    internal void setSubMenuBack()
+    {
+        if (subSelected != null)
+        {
+            if(subSelected.subSelected != null)
+            subSelected.setSubMenuBack();
+            else
+            {
+                subSelected.gameObject.SetActive(false);
+                subSelected = null;
+                gameObject.SetActive(true);
+            }
+        }
     }
 }

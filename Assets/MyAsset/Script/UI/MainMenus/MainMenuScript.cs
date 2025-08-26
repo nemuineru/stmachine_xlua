@@ -74,7 +74,21 @@ public class MainMenuScript : MonoBehaviour
             //reset the value on certain point
             prevSelectInput = controlInputFr;
         }
+
+        //set Cancel First.
+        if (cancelInputFr == 1 && majorMenu.subSelected != null)
+        {
+            cancelSnd.Play();
+            majorMenu.setSubMenuBack();
+        }
+        if (selectedInputFr == 1)
+        {
+            confirmSnd.Play();
+            majorMenu.setSubMenuActive();
+        }
+
         menuIndexText.text = "./" + majorMenu.getSelectedMenuText();
         descIndexText.text = "> " + majorMenu.getSelectedMenuDescriptions();
     }
+
 }
