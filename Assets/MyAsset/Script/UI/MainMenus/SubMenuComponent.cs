@@ -15,8 +15,8 @@ public class SubMenuComponent : MonoBehaviour
     internal class SubMenuSets
     {
         //あんまし内部にマジックナンバー仕込みたくねえんだよな
-        Color selCol = new Color(1f, 0.8f, 0.2f);
-        Color nonSelCol = new Color(0.3f, 0.2f, 0.2f);
+        Color selCol = new Color(1f, 0.67f, 0.0f);
+        Color nonSelCol = new Color(0.5f, 0.48f, 0.45f);
 
 
         [SerializeField]

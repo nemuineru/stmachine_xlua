@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.ComponentModel;
+using Cinemachine;
 
 public class MainMenuScript : MonoBehaviour
 {
+    [SerializeField]
+    CinemachineVirtualCamera Maincam;
+
     //サブメニュー. 開くオブジェクトを選択して選択して...という感じ
     [SerializeField]
     SubMenuComponent majorMenu;
@@ -34,7 +38,7 @@ public class MainMenuScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        Maincam.Priority = 10;
     }
 
     // Update is called once per frame

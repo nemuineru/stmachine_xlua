@@ -302,8 +302,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145479010}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.051187176, y: 0.898264, z: 0.108777836, w: -0.42269275}
-  m_LocalPosition: {x: 2.7739768, y: -0.40457785, z: 2.2181318}
+  m_LocalRotation: {x: 0.051187154, y: 0.898264, z: 0.108777806, w: -0.42269266}
+  m_LocalPosition: {x: 2.7739763, y: -0.40457773, z: 2.2181313}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -326,7 +326,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 10
+  m_Priority: 0
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 1027681726}
   m_Follow: {fileID: 1027681726}
@@ -366,7 +366,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &226917127
 RectTransform:
   m_ObjectHideFlags: 0
@@ -572,6 +572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6bdaf65c18355748be3d7cd81ebc4e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Maincam: {fileID: 1142243376}
   majorMenu: {fileID: 226917130}
   selectSnd: {fileID: 1901099155}
   confirmSnd: {fileID: 81861616}
@@ -711,7 +712,7 @@ GameObject:
   - component: {fileID: 479882620}
   - component: {fileID: 479882619}
   m_Layer: 5
-  m_Name: mp_quest (1)
+  m_Name: settingTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -858,7 +859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &698252907
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1821,8 +1822,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286349186
-  m_fontColor: {r: 0.509434, g: 0.49875382, b: 0.48780707, a: 1}
+    rgba: 4285758082
+  m_fontColor: {r: 0.509434, g: 0.48, b: 0.45, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2069,8 +2070,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278234623
-  m_fontColor: {r: 1, g: 0.6784314, b: 0, a: 1}
+    rgba: 4278234111
+  m_fontColor: {r: 1, g: 0.67, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2325,7 +2326,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 10
+  m_Priority: 0
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 1649414137}
   m_Follow: {fileID: 1649414137}
@@ -2415,8 +2416,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286349186
-  m_fontColor: {r: 0.509434, g: 0.49875382, b: 0.48780707, a: 1}
+    rgba: 4285758082
+  m_fontColor: {r: 0.50980395, g: 0.4784314, b: 0.45098042, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2950,8 +2951,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1920018474}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.14450535, y: 0.24937841, z: -0.03766268, w: 0.956823}
-  m_LocalPosition: {x: -2.2248921, y: -0.075992405, z: -0.641563}
+  m_LocalRotation: {x: 0.064706914, y: -0.09444926, z: 0.00615209, w: 0.9934055}
+  m_LocalPosition: {x: 0.025, y: 0.85999995, z: -2.365}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3424,8 +3425,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2127540796}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.14450535, y: 0.24937841, z: -0.03766268, w: 0.956823}
-  m_LocalPosition: {x: -2.2248921, y: -0.075992405, z: -0.641563}
+  m_LocalRotation: {x: 0.14450537, y: 0.24937838, z: -0.037662674, w: 0.95682293}
+  m_LocalPosition: {x: -2.2248921, y: -0.07599242, z: -0.64156294}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3448,7 +3449,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 10
+  m_Priority: 0
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 1404765699}
   m_Follow: {fileID: 1404765699}
