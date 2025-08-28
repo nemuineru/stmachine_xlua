@@ -9,6 +9,7 @@ public class EntityStatus
     public float currentHP = 100f;
     public float maxEnergy = 50f;
     public float currentEnergy = 50f;
+    public float BaseAttack = 10f;
 
 
 
