@@ -11,6 +11,7 @@ using UnityEngine.Analytics;
 using XLua;
 using XLua.LuaDLL;
 using System;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 
 //EditorExtention. for deepcopy.
 public static class ObjectExtension
@@ -602,6 +603,6 @@ public class scEmitEffect : StateController
     stParams<GameObject> EmitObject;
     internal override void OnExecute(Entity entity)
     {
-
+        entity.makeInstantiate(EmitObject.valueGet(loadParams,entity));
     }
 }

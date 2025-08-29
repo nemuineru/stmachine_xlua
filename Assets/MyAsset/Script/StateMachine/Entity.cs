@@ -223,7 +223,7 @@ public class Entity : MonoBehaviour
             wishingVect = targetTo_fw * wish.y
             + Quaternion.Euler(0, 90, 0) * targetTo_fw * wish.x;
             //実際の視点.
-            Debug.DrawLine(transform.position,transform.position + targetTo_fw * 3.0f);
+            Debug.DrawLine(transform.position, transform.position + targetTo_fw * 3.0f);
         }
         //何も設定されていないときは世界基準として設定
         else
@@ -243,8 +243,8 @@ public class Entity : MonoBehaviour
 
 
         //常時実行StateDef(-1, -2, -3)
-            StateDef AutoState_1 =
-        loadedDefs.Find(stDef => stDef.StateDefID == -1);
+        StateDef AutoState_1 =
+    loadedDefs.Find(stDef => stDef.StateDefID == -1);
         if (AutoState_1 != null)
         {
             //Debug.Log("auto checking -1 state");
@@ -281,7 +281,7 @@ public class Entity : MonoBehaviour
         isOnGround = (hitInfo.collider != null);
 
         HitPauseTime -= 1.0f;
-        
+
         //これかぁ.. HitPauseTimeが設定されているなら特殊処理しないと.
         stateTime = isStateChanged ? 0 : HitPauseTime >= 0 ? stateTime : stateTime + 1;
     }
@@ -326,6 +326,11 @@ public class Entity : MonoBehaviour
     {
         public int stateDefID;
         public int priority;
+    }
+
+    internal void makeInstantiate(GameObject gObj)
+    {
+        Instantiate(gObj,transform.position,Quaternion.identity);
     }
 
     //前プロジェクトのように、スクリプト内でステートをとりあえず記述.
