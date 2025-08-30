@@ -171,67 +171,32 @@ public class Entity : MonoBehaviour
         //これはBehaviorDesignerに登録させる予定.
         //entityInput.RecordInput_Player(0);
         //play BehaviorDesigner.
-        if (LoadedBehavior != null)
-        {
-            BTree.Start();
-        }
-
-
-
-        isStateChanged = false;
-
-        //SetAnimはHitPauseが0で無い限り毎フレーム更新する.
-        {
-            bool isPaused = (HitPauseTime > 0);
-            if (isPaused)
-            {
-                pausedVel = pausedVel == Vector3.zero ? rigid.velocity : pausedVel;
-                rigid.isKinematic = isPaused;
-            }
-            else if (pausedVel != Vector3.zero)
-            {
-                rigid.isKinematic = isPaused;
-                //Debug.Log("unpaused");
-                rigid.velocity = pausedVel;
-                pausedVel = Vector3.zero;
-            }
-            rigid.isKinematic = isPaused;
-            MainAnimMixer.SetAnim((HitPauseTime <= 0));
-        }
-        MainAnimMixer.PrimalGraph.Play();
-        animationFrameTime = MainAnimMixer.CurrentAnimTime();
-
-        //At Control, wishinvect is Input by command Buffer
-        //これ消したい.
-        Vector2 wish = entityInput.commandBuffer[0].MoveAxis;//(InputInstance.self.inputValues.MovingAxisRead);
-        Vector2 look = entityInput.commandBuffer[0].LookAxis;//(InputInstance.self.inputValues.MovingAxisRead);
-                                                             //Debug.Log(entityInput.commandBuffer[0].MoveAxis);
-
-        //Vcamが設定されているなら、Camera設定に従いfwを設定する.
-        if (vCam != null)
-        {
-            targetTo_fw = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up).normalized;
-            transposer.m_XAxis.Value += look.x * 3.0f;
-        }
-        else
-        {
-            //Debug.Log(look.x);
-            targetTo_fw = Quaternion.Euler(0f, look.x, 0f) * targetTo_fw;
-        }
-        if (targetTo_fw != null)
-        {
-            wishingVect = targetTo_fw * wish.y
-            + Quaternion.Euler(0, 90, 0) * targetTo_fw * wish.x;
-            //実際の視点.
-            Debug.DrawLine(transform.position, transform.position + targetTo_fw * 3.0f);
-        }
-        //何も設定されていないときは世界基準として設定
-        else
-        {
-            wishingVect = Vector3.forward * wish.y + Vector3.right * wish.x;
-        }
+        setanimPlay();
+        setViewCams();
         mat.SetColor("_Color", CurColor);
 
+        executeStates();
+
+
+        //地面判定.
+        //raycenter
+        Ray ray = new Ray(transform.position + Vector3.up * 0.009f, Vector3.down);
+        Debug.DrawRay(ray.origin, Mathf.Max(0, -rigid.velocity.y) * Vector3.down);
+
+        RaycastHit hitInfo;
+        Physics.Raycast(ray, out hitInfo, Mathf.Max(0.01f, -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
+
+        isOnGround = (hitInfo.collider != null);
+
+        HitPauseTime -= 1.0f;
+
+        //これかぁ.. HitPauseTimeが設定されているなら特殊処理しないと.
+        stateTime = isStateChanged ? 0 : HitPauseTime >= 0 ? stateTime : stateTime + 1;
+    }
+
+    void executeStates()
+    {
+        
         if (CListQueue.Count > 0)
         {
             //Most Primal Queue is Most Biggest Number.
@@ -269,22 +234,77 @@ public class Entity : MonoBehaviour
         {
             //Debug.LogError("Loaded State is null : " + CurrentStateID);
         }
-
-        //地面判定.
-        //raycenter
-        Ray ray = new Ray(transform.position + Vector3.up * 0.009f, Vector3.down);
-        Debug.DrawRay(ray.origin, Mathf.Max(0, -rigid.velocity.y) * Vector3.down);
-
-        RaycastHit hitInfo;
-        Physics.Raycast(ray, out hitInfo, Mathf.Max(0.01f, -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
-
-        isOnGround = (hitInfo.collider != null);
-
-        HitPauseTime -= 1.0f;
-
-        //これかぁ.. HitPauseTimeが設定されているなら特殊処理しないと.
-        stateTime = isStateChanged ? 0 : HitPauseTime >= 0 ? stateTime : stateTime + 1;
     }
+
+    //カメラ設定.
+    void setViewCams()
+    {
+        //At Control, wishinvect is Input by command Buffer
+        //これ消したい.
+        Vector2 wish = entityInput.commandBuffer[0].MoveAxis;//(InputInstance.self.inputValues.MovingAxisRead);
+        Vector2 look = entityInput.commandBuffer[0].LookAxis;//(InputInstance.self.inputValues.MovingAxisRead);
+                                                             //Debug.Log(entityInput.commandBuffer[0].MoveAxis);
+
+        //Vcamが設定されているなら、Camera設定に従いfwを設定する.
+        if (vCam != null)
+        {
+            targetTo_fw = Vector3.ProjectOnPlane(vCam.transform.forward, Vector3.up).normalized;
+            transposer.m_XAxis.Value += look.x * 3.0f;
+        }
+        else
+        {
+            //Debug.Log(look.x);
+            targetTo_fw = Quaternion.Euler(0f, look.x, 0f) * targetTo_fw;
+        }
+        if (targetTo_fw != null)
+        {
+            wishingVect = targetTo_fw * wish.y
+            + Quaternion.Euler(0, 90, 0) * targetTo_fw * wish.x;
+            //実際の視点.
+            Debug.DrawLine(transform.position, transform.position + targetTo_fw * 3.0f);
+        }
+        //何も設定されていないときは世界基準として設定
+        else
+        {
+            wishingVect = Vector3.forward * wish.y + Vector3.right * wish.x;
+        }
+    }
+    
+    //アニメーション設定
+    void setanimPlay()
+    { 
+        if (LoadedBehavior != null)
+        {
+            BTree.Start();
+        }
+
+
+
+        isStateChanged = false;
+
+        //SetAnimはHitPauseが0で無い限り毎フレーム更新する.
+        {
+            bool isPaused = (HitPauseTime > 0);
+            if (isPaused)
+            {
+                pausedVel = pausedVel == Vector3.zero ? rigid.velocity : pausedVel;
+                rigid.isKinematic = isPaused;
+            }
+            else if (pausedVel != Vector3.zero)
+            {
+                rigid.isKinematic = isPaused;
+                //Debug.Log("unpaused");
+                rigid.velocity = pausedVel;
+                pausedVel = Vector3.zero;
+            }
+            rigid.isKinematic = isPaused;
+            MainAnimMixer.SetAnim((HitPauseTime <= 0));
+        }
+        MainAnimMixer.PrimalGraph.Play();
+        animationFrameTime = MainAnimMixer.CurrentAnimTime();
+
+    }
+
 
     //アニメーション変更..
     //entityが指定されているときはそのEntityのAnimを呼び出すとする...がまだ未実装.
