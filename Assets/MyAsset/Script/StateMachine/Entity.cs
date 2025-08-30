@@ -194,6 +194,19 @@ public class Entity : MonoBehaviour
         stateTime = isStateChanged ? 0 : HitPauseTime >= 0 ? stateTime : stateTime + 1;
     }
 
+    void setStatusAlign()
+    {
+        if (status.currentHP < 0)
+        { 
+            //stateChange
+            isStateChanged = true;
+
+            //5300をKOステートに変更.
+            CurrentStateID = 5300;
+            stateTime = 0;
+        }
+    }
+
     void executeStates()
     {
         
