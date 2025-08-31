@@ -222,7 +222,7 @@ public class Entity : MonoBehaviour
 
         //常時実行StateDef(-1, -2, -3)
         StateDef AutoState_1 =
-    loadedDefs.Find(stDef => stDef.StateDefID == -1);
+        loadedDefs.Find(stDef => stDef.StateDefID == -1);
         if (AutoState_1 != null)
         {
             //Debug.Log("auto checking -1 state");
