@@ -73,6 +73,8 @@ public class gameState : MonoBehaviour
                     e.transform.DOShakePosition(e.HitPauseTime * Time.fixedDeltaTime, 0.25f, 40, 45);
                     e.ChangeAnim(.1f);
 
+                    e.status.currentHP -= hitDefParams.Damage;
+
 
 
                     //placeholder for rotation

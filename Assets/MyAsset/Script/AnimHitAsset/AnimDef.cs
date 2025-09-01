@@ -1045,7 +1045,7 @@ public class clssDef
     }
 
 //Gizmoの描写
-    public void DrawCapsuleGizmo_Tool(Vector3 start, Vector3 end, float radius, Color col)
+    static public void DrawCapsuleGizmo_Tool(Vector3 start, Vector3 end, float radius, Color col)
     {
         int size = (int)((end - start).magnitude / radius);
         DrawWireSphere_OnDebug(start, radius, col);
@@ -1059,7 +1059,7 @@ public class clssDef
         }
     }
 
-    public void DrawWireSphere_OnDebug(Vector3 pos, float radius, Color col)
+    static public void DrawWireSphere_OnDebug(Vector3 pos, float radius, Color col)
     {
         int segs = 12;
         //Debug.Log(pos);

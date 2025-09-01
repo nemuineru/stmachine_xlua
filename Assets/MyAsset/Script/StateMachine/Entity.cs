@@ -244,24 +244,26 @@ public class Entity : MonoBehaviour
         Vector3 norm =
             new Vector3
             (capCol.direction == 0 ? 1 : 0,
-             capCol.direction == 1 ? 1 : 0,
-             capCol.direction == 2 ? 1 : 0);
+            capCol.direction == 1 ? 1 : 0,
+            capCol.direction == 2 ? 1 : 0);
 
         //カプセル一端の組み合わせ
         Vector3 pos_1 =
-            transform.position + transform.rotation * (capCol.center + norm * capCol.height / 2f);
+            transform.position + Vector3.up * 0.001f + transform.rotation * (capCol.center + norm * (capCol.height / 2f  - capCol.radius));
         Vector3 pos_2 =
-            transform.position + transform.rotation * (capCol.center - norm * capCol.height / 2f);
+            transform.position + Vector3.up * 0.001f  + transform.rotation * (capCol.center - norm * (capCol.height / 2f  - capCol.radius));
 
         //カプセルレイ.
         bool isCapsuleHit =
             Physics.CapsuleCast
             (pos_1, pos_2,
-            capCol.radius - Physics.defaultContactOffset, Vector3.down,
-            out hitInfo,Mathf.Max(0.005f, -rigid.velocity.y), LayerMask.GetMask("Terrain"));
+            capCol.radius, Vector3.down,
+            out hitInfo,Mathf.Max(0.005f, -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
 
-            Debug.DrawLine(pos_1,pos_2);
+        Debug.Log(isCapsuleHit + " - capsuleSet?");
+        clssDef.DrawCapsuleGizmo_Tool(pos_1,pos_2,capCol.radius,Color.cyan);
 
+    
         isOnGround = (hitInfo.collider != null);
     }
 
