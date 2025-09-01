@@ -14,11 +14,37 @@ using BehaviorDesigner.Runtime;
 
 public class Entity : MonoBehaviour
 {
+    //statetype : 体勢の設定. 
+    public enum _stateType
+    {
+        S, //Standing, 立ち状態
+        A, //Air, 空中
+        L //Lying, 
+    }
+
+    public enum _PhysicsType
+    {
+        S, //Standing, 地上の動き
+        A, //Air, 空中. 
+        N //None, 定義なし(摩擦効果を受けない.)
+    }
+
+    public enum _MoveType
+    {
+        I, //Idle, 設定なし
+        A, //Attack, 攻撃中
+        H  //Hit, やられ
+    }
+    public _stateType stateType;
+    public _PhysicsType physicsType;
+    public _MoveType moveType;
+
     public class EntityInfo
     {
         public string name;
         public int ID;
     }
+    
 
     public Rigidbody rigid;
 
@@ -35,6 +61,7 @@ public class Entity : MonoBehaviour
     //ステートID.
     public int CurrentStateID = 0;
 
+    //clssが設定されていない時のプレイヤー当たり判定設定
     public clssSetting defaultClss;
 
     internal Transform[] allChildTransforms;
@@ -43,6 +70,11 @@ public class Entity : MonoBehaviour
 
     [SerializeField]
     internal EntityStatus status;
+
+
+    //親のEntity. Parent化されているならこのEntityの内容を読み出しておく.
+    [SerializeField]
+    internal Entity parentEntity;
 
 
     //アニメーション管理用.
@@ -55,8 +87,10 @@ public class Entity : MonoBehaviour
 
     internal List<AnimDef> animDefs = new List<AnimDef>();
 
+    //アニメーターベース.
     Animator animator;
 
+    //PlayableOutputとして主力となるものを選択.
     PlayableOutput PrimalPlayableOut;
 
     [SerializeField]
@@ -64,16 +98,20 @@ public class Entity : MonoBehaviour
 
     public Color CurColor;
 
+    //地上判定.
     public bool isOnGround;
 
     //ステート直後のステート時間を0にするため、追加.
     public bool isStateChanged = false;
 
-
+    //メインマテリアルとメッシュ.
     Material mat;
     public SkinnedMeshRenderer mesh;
 
+    //stateDefListObjの本元.
+
     public List<StateDefListObject> DefLists;
+
 
     public Vector3 wishingVect;
 
@@ -88,8 +126,13 @@ public class Entity : MonoBehaviour
     ExternalBehavior LoadedBehavior;
     BehaviorTree BTree;
 
+    //CapsuleColliderの格納. キャラクターの地形との判定.
+    CapsuleCollider capCol;
+
     //OnHit確認用. 後で整理したい.
     public bool isStateHit = false;
+
+    //カメラ登録時、格納.
     CinemachineOrbitalTransposer transposer;
     // Start is called before the first frame update
     void Awake()
@@ -99,6 +142,7 @@ public class Entity : MonoBehaviour
         animator = GetComponent<Animator>();
 
         rigid = GetComponent<Rigidbody>();
+        capCol = GetComponent<CapsuleCollider>();
         //DefList = (StateDefListObject)StateDefListObject.CreateInstance(typeof(StateDefListObject));
         //DefSet();
 
@@ -177,16 +221,7 @@ public class Entity : MonoBehaviour
 
         executeStates();
 
-
-        //地面判定.
-        //raycenter
-        Ray ray = new Ray(transform.position + Vector3.up * 0.009f, Vector3.down);
-        Debug.DrawRay(ray.origin, Mathf.Max(0, -rigid.velocity.y) * Vector3.down);
-
-        RaycastHit hitInfo;
-        Physics.Raycast(ray, out hitInfo, Mathf.Max(0.01f, -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
-
-        isOnGround = (hitInfo.collider != null);
+        capsuleRaydraw();
 
         HitPauseTime -= 1.0f;
 
@@ -194,6 +229,43 @@ public class Entity : MonoBehaviour
         stateTime = isStateChanged ? 0 : HitPauseTime >= 0 ? stateTime : stateTime + 1;
     }
 
+    //地面判定.
+    void capsuleRaydraw()
+    {
+        //raycenter
+        //Ray ray = new Ray(transform.position + Vector3.up * 0.009f, Vector3.down);
+        //Debug.DrawRay(ray.origin, Mathf.Max(0, -rigid.velocity.y) * Vector3.down);
+
+        RaycastHit hitInfo;
+
+        //Physics.Raycast(ray, out hitInfo, Mathf.Max(0.01f, -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
+
+        //get Capsule Normals
+        Vector3 norm =
+            new Vector3
+            (capCol.direction == 0 ? 1 : 0,
+             capCol.direction == 1 ? 1 : 0,
+             capCol.direction == 2 ? 1 : 0);
+
+        //カプセル一端の組み合わせ
+        Vector3 pos_1 =
+            transform.position + transform.rotation * (capCol.center + norm * capCol.height / 2f);
+        Vector3 pos_2 =
+            transform.position + transform.rotation * (capCol.center - norm * capCol.height / 2f);
+
+        //カプセルレイ.
+        bool isCapsuleHit =
+            Physics.CapsuleCast
+            (pos_1, pos_2,
+            capCol.radius - Physics.defaultContactOffset, Vector3.down,
+            out hitInfo,Mathf.Max(0.005f, -rigid.velocity.y), LayerMask.GetMask("Terrain"));
+
+            Debug.DrawLine(pos_1,pos_2);
+
+        isOnGround = (hitInfo.collider != null);
+    }
+
+    //ステータスの変更作業など
     void setStatusAlign()
     {
         if (status.currentHP < 0)
@@ -472,3 +544,4 @@ public class Entity : MonoBehaviour
         }
     */
 }
+

@@ -563,10 +563,22 @@ public class scChangeState : StateController
     internal override void OnExecute(Entity entity)
     {
         //this ChangeState Needs to change-Queues.
-        entity.CListQueue.Add(new Entity.ChangeStateQueue(){ stateDefID = changeTo , priority = priority });
+        entity.CListQueue.Add(new Entity.ChangeStateQueue() { stateDefID = changeTo, priority = priority });
         // Debug.Log("stateTime set to 0");
         entity.isStateChanged = true;
         // Debug.Log("stchanged END");
+    }
+
+    public scChangeState()
+    {
+        priority = 0;
+        changeTo = 0;
+    }
+
+    public scChangeState(int changeToID, int priority)
+    {
+        this.priority = priority;
+        this.changeTo = changeToID;
     }
 }
 
@@ -603,6 +615,29 @@ public class scEmitEffect : StateController
     stParams<GameObject> EmitObject;
     internal override void OnExecute(Entity entity)
     {
-        entity.makeInstantiate(EmitObject.valueGet(loadParams,entity));
+        entity.makeInstantiate(EmitObject.valueGet(loadParams, entity));
     }
 }
+
+
+//自己のステートの返還作業.
+[System.Serializable]
+[SerializeField]
+public class scSelfState : StateController
+{
+    [SerializeField]
+    int changeTo = 0;
+
+    [SerializeField]
+    int priority = 0;
+    internal override void OnExecute(Entity entity)
+    {
+        //親を戻し、StateChangeを行う.
+        entity.parentEntity = null;
+        scChangeState cState = new scChangeState(changeTo, priority);
+        cState.OnExecute(entity);
+    }
+}
+
+//MoveTypeの変更など
+
