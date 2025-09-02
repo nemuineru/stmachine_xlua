@@ -267,116 +267,117 @@ public class StateDef
         _sParamT.Dispose();
     }
 
-    //Execute時のLuaのStateIDをそれぞれのStateDefに保存させたい.
-    //速度は変えたくないが、LuaTableに保存するべきだろうか..
+    //Execute時のLuaのStateIDをそれぞれのStateDefに保存 - これ、掴みの時のEntity参照時の設定時に重複発生しそー..    
+    //
+
     public void Execute(Entity entity)
     {
         if (_stateLoadTables == null)
             OnInitDef();
-            //メインのLUA仮想マシンに読み出すテキストを以下に記述.
-            if (LuaAsset != null)
+        //メインのLUA仮想マシンに読み出すテキストを以下に記述.
+        if (LuaAsset != null)
+        {
+            //env.DoString(LuaAsset.text);
+
+            //QueueStateIDの呼び出し. _stateLoadTableに登録値を呼び出す.
+            env.DoString(LuaAsset.text, preStateVerdictName, _stateLoadTables);
+
+            //読み出しのQueueStateIDを記述するためのメソッドを作成
+            lua_Read.CalcValues.QueuedStateID stateVerd =
+            _stateLoadTables.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
+            //env.Global.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
+
+            //ParamTablesの呼び出し. _stateParamTablesにパラメータ値を呼び出す.
+            env.DoString(LuaAsset.text, ParamLoadName, _stateParamTables);
+
+            //ステート宣言パラメータのメソッド作成
+            lua_Read.CalcValues.luaOutParams stateDefParams =
+            _stateParamTables.Get<lua_Read.CalcValues.luaOutParams>(ParamLoadName);
+            //env.Global.Get<lua_Read.CalcValues.luaOutParams>(ParamLoadName);
+
+            //executeStateIDsにはQueuedStateIDの値を入力
+
+
+            int[] ExecuteStateIDs;
+
+            //読み出し時のEntityで、登録重複が見られる場合の誤作動をなんとかしなければ
+            //LuaTableの別々の読み出しにしたいが、なんかおかしい..
+            //StateDef自体をSingleTonにするべきか..
+            if (stateVerd != null)
             {
-                //env.DoString(LuaAsset.text);
-
-                //QueueStateIDの呼び出し. _stateLoadTableに登録値を呼び出す.
-                env.DoString(LuaAsset.text, preStateVerdictName, _stateLoadTables);
-
-                //読み出しのQueueStateIDを記述するためのメソッドを作成
-                lua_Read.CalcValues.QueuedStateID stateVerd =
-                _stateLoadTables.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
-                //env.Global.Get<lua_Read.CalcValues.QueuedStateID>(preStateVerdictName);
-
-                //ParamTablesの呼び出し. _stateParamTablesにパラメータ値を呼び出す.
-                env.DoString(LuaAsset.text, ParamLoadName, _stateParamTables);
-                
-                //ステート宣言パラメータのメソッド作成
-                lua_Read.CalcValues.luaOutParams stateDefParams =
-                _stateParamTables.Get<lua_Read.CalcValues.luaOutParams>(ParamLoadName);
-                //env.Global.Get<lua_Read.CalcValues.luaOutParams>(ParamLoadName);
-
-                //executeStateIDsにはQueuedStateIDの値を入力
-
-
-                int[] ExecuteStateIDs;
-
-                //読み出し時のEntityで、登録重複が見られる場合の誤作動をなんとかしなければ
-                //LuaTableの別々の読み出しにしたいが、なんかおかしい..
-                //StateDef自体をSingleTonにするべきか..
-                if (stateVerd != null)
-                {
                 //xLUAの読み出しでなーぜーかー別のstateIDのスクリプト読み出し結果が呼び出されて追加項目になってる.
                 //クソぉ！！
                 //...しょーがないのでLight11氏のhttps://light11.hatenadiary.com/entry/2021/08/17/195914
                 // を参考にリベイクしてみるか..
-                    
-                    ExecuteStateIDs = stateVerd.Invoke(entity);
-                    if (stateDefParams != null)
-                    {
-                        luaOutputParams = stateDefParams.Invoke(entity).ToList();
-                    }
 
-
-
-
-                    string executingStr = "";
-                    if (ExecuteStateIDs != null)
-                    {
-                        for (int i = 0; i < ExecuteStateIDs.Count(); i++)
-                        {
-                            executingStr += ExecuteStateIDs[i] + " , ";
-                        }
-                    }
-                    //Debug.Log("State Def - " + StateDefID + " State List #s - " + StateList.Count);
-                    //def中にあるstateを全部リストアップ
-                    foreach (StateController state in StateList)
-                    {
-                        //idがステート読み出しリスト内・もしくはステート自体が読み出し処理を行う場合
-                        //Debug.LogWarning(entity.gameObject.name + " loads " + state.ID.value.ToString());
-                        if (state.isIDValid(ExecuteStateIDs, entity))
-                        {
-                            //stateにluaOutputParamsを予め登録.
-                            state.loadParams = luaOutputParams;
-
-                            //実際に実行.
-                            //state.Entityに直接登録すると、別キャラクターが参照するため変更..
-                            state.OnExecute(entity);
-                        }
-                    }
-                    //Debug.Log(entity.gameObject.name + " executes stateID " + executingStr + " at the stateDef of " + StateDefID);
-                }
-                else
+                ExecuteStateIDs = stateVerd.Invoke(entity);
+                if (stateDefParams != null)
                 {
-                    //Debug.LogError("Execute ID/stateVerd is NULL!");
+                    luaOutputParams = stateDefParams.Invoke(entity).ToList();
                 }
 
 
 
 
-                //stateID内にLuaの設定値をセットアップ.
-
-                /*
-                if (ExecuteStateIDs.Count() > 0)
+                string executingStr = "";
+                if (ExecuteStateIDs != null)
                 {
-                    //def中にあるstateを全部リストアップ
-                    foreach (StateController state in StateList)
+                    for (int i = 0; i < ExecuteStateIDs.Count(); i++)
                     {
-                        state.entity = entity;
-                        // Debug.Log("Finding stateID " + state.stateID + "," + state.ToString());
-
-                        //Lua設定値の中から..という
-                        if (ExecuteStateIDs.Any(i => state.isIDValid(i)))
-                        {
-                            state.loadParams = luaOutputParams;
-                            Debug.Log("Executed " + state.ToString());
-                            state.OnExecute();
-                        }
+                        executingStr += ExecuteStateIDs[i] + " , ";
                     }
                 }
-                */
+                //Debug.Log("State Def - " + StateDefID + " State List #s - " + StateList.Count);
+                //def中にあるstateを全部リストアップ
+                foreach (StateController state in StateList)
+                {
+                    //idがステート読み出しリスト内・もしくはステート自体が読み出し処理を行う場合
+                    //Debug.LogWarning(entity.gameObject.name + " loads " + state.ID.value.ToString());
+                    if (state.isIDValid(ExecuteStateIDs, entity))
+                    {
+                        //stateにluaOutputParamsを予め登録.
+                        state.loadParams = luaOutputParams;
 
-                env.Tick();
+                        //実際に実行.
+                        //state.Entityに直接登録すると、別キャラクターが参照するため変更..
+                        state.OnExecute(entity);
+                    }
+                }
+                //Debug.Log(entity.gameObject.name + " executes stateID " + executingStr + " at the stateDef of " + StateDefID);
             }
+            else
+            {
+                //Debug.LogError("Execute ID/stateVerd is NULL!");
+            }
+
+
+
+
+            //stateID内にLuaの設定値をセットアップ.
+
+            /*
+            if (ExecuteStateIDs.Count() > 0)
+            {
+                //def中にあるstateを全部リストアップ
+                foreach (StateController state in StateList)
+                {
+                    state.entity = entity;
+                    // Debug.Log("Finding stateID " + state.stateID + "," + state.ToString());
+
+                    //Lua設定値の中から..という
+                    if (ExecuteStateIDs.Any(i => state.isIDValid(i)))
+                    {
+                        state.loadParams = luaOutputParams;
+                        Debug.Log("Executed " + state.ToString());
+                        state.OnExecute();
+                    }
+                }
+            }
+            */
+
+            env.Tick();
         }
+    }
     }
 
 
@@ -571,8 +572,8 @@ public class scChangeState : StateController
 
     public scChangeState()
     {
-        priority = 0;
-        changeTo = 0;
+        this.priority = 0;
+        this.changeTo = 0;
     }
 
     public scChangeState(int changeToID, int priority)

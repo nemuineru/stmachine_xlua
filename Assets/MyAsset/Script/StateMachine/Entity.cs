@@ -11,6 +11,14 @@ using DG.Tweening;
 using System;
 using BehaviorDesigner.Runtime;
 
+//キャラクターの特殊フラッグ指定管理..
+public class EntityFlag
+{
+    public string flagName;
+    public bool isEternal;
+    public int flagDefaultTime;
+    internal int flagElapsedTime;
+}
 
 public class Entity : MonoBehaviour
 {
@@ -75,6 +83,10 @@ public class Entity : MonoBehaviour
     //親のEntity. Parent化されているならこのEntityの内容を読み出しておく.
     [SerializeField]
     internal Entity parentEntity;
+
+    //コントロール影響下のEntitiy. Selfstateが発生しない限りこの内容を読み出す.
+    [SerializeField]
+    internal Entity controlledEntity;
 
 
     //アニメーション管理用.
@@ -261,9 +273,11 @@ public class Entity : MonoBehaviour
             out hitInfo,Mathf.Max(0.005f, -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
 
         Debug.Log(isCapsuleHit + " - capsuleSet?");
-        clssDef.DrawCapsuleGizmo_Tool(pos_1,pos_2,capCol.radius,Color.cyan);
+        
+        //キャラと地形の当たり判定表示
+        //clssDef.DrawCapsuleGizmo_Tool(pos_1,pos_2,capCol.radius,Color.cyan);
 
-    
+
         isOnGround = (hitInfo.collider != null);
     }
 
