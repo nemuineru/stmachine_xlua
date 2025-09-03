@@ -47,6 +47,11 @@ function Queue_Cmd(in_entity)
     if( selfOnGrd == false and AttackCmd_x == true and stateID == 50 ) then
         table.insert( verd, 25 ) 
     end
+
+    --chargeUp Checker
+    if( selfOnGrd == false and AttackCmd_x == true and stateID < 5000 ) then
+        table.insert( verd, 30 ) 
+    end
     return verd
 end
 

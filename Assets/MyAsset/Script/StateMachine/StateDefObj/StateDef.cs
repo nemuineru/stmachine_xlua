@@ -640,5 +640,55 @@ public class scSelfState : StateController
     }
 }
 
+//status変更. (HP)
+public class scAddHealth : StateController
+{ 
+    
+    [SerializeField]
+    int value = 0;
+
+    [SerializeField]
+    int priority = 0;
+    internal override void OnExecute(Entity entity)
+    {
+        entity.status.currentHP += value;
+    }
+}
+
+//status変更. (Energy)
+public class scAddEnergy : StateController
+{
+
+    [SerializeField]
+    int value = 0;
+
+    [SerializeField]
+    int priority = 0;
+    internal override void OnExecute(Entity entity)
+    {
+        entity.status.currentEnergy += value;
+    }
+}
+
+
+//status変更. (Charge)
+public class scAddCharge : StateController
+{ 
+    
+    [SerializeField]
+    int value = 0;
+
+    [SerializeField]
+    int priority = 0;
+
+    //これだけfixedDeltaTimeが乗算.
+    internal override void OnExecute(Entity entity)
+    {
+        entity.status.ChargeTime += value * Time.fixedDeltaTime;
+    }
+}
+
+
+
 //MoveTypeの変更など
 
