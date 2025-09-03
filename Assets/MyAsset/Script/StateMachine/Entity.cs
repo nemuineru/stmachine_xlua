@@ -52,7 +52,7 @@ public class Entity : MonoBehaviour
         public string name;
         public int ID;
     }
-    
+
 
     public Rigidbody rigid;
 
@@ -143,6 +143,7 @@ public class Entity : MonoBehaviour
 
     //OnHit確認用. 後で整理したい.
     public bool isStateHit = false;
+
 
     //カメラ登録時、格納.
     CinemachineOrbitalTransposer transposer;
@@ -261,19 +262,19 @@ public class Entity : MonoBehaviour
 
         //カプセル一端の組み合わせ
         Vector3 pos_1 =
-            transform.position + Vector3.up * 0.001f + transform.rotation * (capCol.center + norm * (capCol.height / 2f  - capCol.radius));
+            transform.position + Vector3.up * 0.001f + transform.rotation * (capCol.center + norm * (capCol.height / 2f - capCol.radius));
         Vector3 pos_2 =
-            transform.position + Vector3.up * 0.001f  + transform.rotation * (capCol.center - norm * (capCol.height / 2f  - capCol.radius));
+            transform.position + Vector3.up * 0.001f + transform.rotation * (capCol.center - norm * (capCol.height / 2f - capCol.radius));
 
         //カプセルレイ.
         bool isCapsuleHit =
             Physics.CapsuleCast
             (pos_1, pos_2,
             capCol.radius, Vector3.down,
-            out hitInfo,Mathf.Max(0.005f, -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
+            out hitInfo, Mathf.Max(0.005f, -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
 
         Debug.Log(isCapsuleHit + " - capsuleSet?");
-        
+
         //キャラと地形の当たり判定表示
         //clssDef.DrawCapsuleGizmo_Tool(pos_1,pos_2,capCol.radius,Color.cyan);
 
@@ -285,7 +286,7 @@ public class Entity : MonoBehaviour
     void setStatusAlign()
     {
         if (status.currentHP < 0)
-        { 
+        {
             //stateChange
             isStateChanged = true;
 
@@ -297,7 +298,7 @@ public class Entity : MonoBehaviour
 
     void executeStates()
     {
-        
+
         if (CListQueue.Count > 0)
         {
             //Most Primal Queue is Most Biggest Number.
@@ -370,10 +371,10 @@ public class Entity : MonoBehaviour
             wishingVect = Vector3.forward * wish.y + Vector3.right * wish.x;
         }
     }
-    
+
     //アニメーション設定
     void setanimPlay()
-    { 
+    {
         if (LoadedBehavior != null)
         {
             BTree.Start();
@@ -451,7 +452,7 @@ public class Entity : MonoBehaviour
 
     internal void makeInstantiate(GameObject gObj)
     {
-        Instantiate(gObj,transform.position,Quaternion.identity);
+        Instantiate(gObj, transform.position, Quaternion.identity);
     }
 
     //前プロジェクトのように、スクリプト内でステートをとりあえず記述.

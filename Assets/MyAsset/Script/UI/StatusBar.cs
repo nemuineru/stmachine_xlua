@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Shapes;
 using UnityEngine;
+using TMPro;
+
 public class StatusBar : MonoBehaviour
 {
     [SerializeField]
     Shapes.Polyline lifeBar, lifeBar_Fill, lifeBar_Outer,
     energyBar, energyBar_Fill, energyBar_Outer;
+
+    [SerializeField]
+    Shapes.Disc chargerBar, chargerBar_Fill;
+
+    [SerializeField]
+    TMP_Text chargeUI_txt;
 
 
     [SerializeField]
@@ -17,6 +25,10 @@ public class StatusBar : MonoBehaviour
     [Range(0f, 1.0f)]
     float energy = 0;
 
+    [SerializeField]    
+    [Range(0f, 1.0f)]
+    float charge = 0;
+
     float LowHealth = 0.3f;
     float HighEnergy = 0.99f;
 
@@ -24,7 +36,10 @@ public class StatusBar : MonoBehaviour
 
     bool isColorChanged = false;
     float UpdateTime = 0.12f;
-    float cUpdateTime = 0;
+    float hitPtUpdateTime = 0, enePtUpdateTime = 0, chargePtUpdateTime = 0;
+
+    [SerializeField]
+    Entity refEntity;
 
 
     // Start is called before the first frame update
@@ -38,13 +53,30 @@ public class StatusBar : MonoBehaviour
     void Update()
     {
         //ライフとエナジーの描写管理.
-        ChangeFill(lifeBar, ref lifeBar_Fill, health);
-        ChangeFill(energyBar, ref energyBar_Fill, energy);
+        BarFill(lifeBar, ref lifeBar_Fill, health);
+        BarFill(energyBar, ref energyBar_Fill, energy);
+        ChargerFill(chargerBar,ref chargerBar_Fill, charge);
+        
+        //ライフ点滅.
+        for (int pt_health_Index = 0; pt_health_Index < lifeBar_Outer.Count; pt_health_Index++)
+        {
+            lifeBar_Outer.SetPointColor(pt_health_Index, health < LowHealth && isColorChanged ? Color.red : DefC_Health[pt_health_Index]);
+        }
+        //エナジー点滅
+        for (int pt_energy_Index = 0; pt_energy_Index < energyBar_Outer.Count; pt_energy_Index++)
+        {
+            energyBar_Outer.SetPointColor(pt_energy_Index, energy > HighEnergy && isColorChanged ? Color.white : DefC_Energy[pt_energy_Index]);
+        }
+        if (hitPtUpdateTime > UpdateTime)
+        {
+            isColorChanged = !isColorChanged;
+            hitPtUpdateTime = 0f;
+        }
     }
 
-    void ChangeFill(Polyline BaseBar, ref Polyline FillBar, float ref_values)
+    void BarFill(Polyline BaseBar, ref Polyline FillBar, float ref_values)
     {
-        cUpdateTime += Time.deltaTime;
+        hitPtUpdateTime += Time.deltaTime;
         float Length = 0f;
         float calcHealth = ref_values;
         //セグメントの計算.
@@ -75,23 +107,22 @@ public class StatusBar : MonoBehaviour
         FillBar.meshOutOfDate = true;
         //Debug.Log(index + " " + pos);
 
-        //ライフ点滅.
-        for (int pt_health_Index = 0; pt_health_Index < lifeBar_Outer.Count; pt_health_Index++)
-        {
-            lifeBar_Outer.SetPointColor(pt_health_Index, health < LowHealth && isColorChanged ? Color.red : DefC_Health[pt_health_Index]);
-        }
-        //エナジー点滅
-        for (int pt_energy_Index = 0; pt_energy_Index < energyBar_Outer.Count; pt_energy_Index++)
-        {
-            energyBar_Outer.SetPointColor(pt_energy_Index, energy > HighEnergy && isColorChanged ? Color.white : DefC_Energy[pt_energy_Index]);
-        }
-        if (cUpdateTime > UpdateTime)
-        {
-            isColorChanged = !isColorChanged;
-            cUpdateTime = 0f;
-        }
+    }
+
+    //vals must be in the range of (0-1).
+    // if not, Clamp01 it.
+    void ChargerFill(Disc d_Base, ref Disc d_Fill, float vals)
+    {
+        float f = Mathf.Clamp01(vals);
+        float degCalc = 0;
+        
+        degCalc = d_Base.AngRadiansStart + (d_Base.AngRadiansEnd - d_Base.AngRadiansStart) * f;
+        d_Fill.AngRadiansEnd = degCalc;
+
+        chargeUI_txt.text = "";
+        d_Fill.meshOutOfDate = true;
+        //Debug.Log("disc changed - " +  degCalc);
     }
     
 }
-
 
