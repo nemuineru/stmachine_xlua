@@ -49,9 +49,21 @@ public class StatusBar : MonoBehaviour
         DefC_Energy = energyBar_Outer.points.Select(f => f.color).ToList();
     }
 
+    void getRefEntityVals()
+    {
+        EntityStatus Status = refEntity.status;
+        if (Status != null)
+        {
+            health = Status.currentHP / Status.maxHP;
+            energy = Status.currentEnergy / Status.maxEnergy;
+            charge = Status.ChargeTime / Status.setChargeTime_Lv2;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+        getRefEntityVals();
         //ライフとエナジーの描写管理.
         BarFill(lifeBar, ref lifeBar_Fill, health);
         BarFill(energyBar, ref energyBar_Fill, energy);
