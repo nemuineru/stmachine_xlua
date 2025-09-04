@@ -523,7 +523,7 @@ public class scHitDef : StateController
     internal override void OnExecute(Entity entity)
     {
         //HitCheckを行う.
-        entity.isStateHit = gameState.self.ProvokeHitDef
+        entity.attrs.isStateHit = gameState.self.ProvokeHitDef
         (entity, hitParams.valueGet(loadParams, entity));
     }
 
@@ -721,7 +721,7 @@ public class scSetCtrl : StateController
     //これだけfixedDeltaTimeが乗算.
     internal override void OnExecute(Entity entity)
     {
-        entity.ctrl = value.valueGet(loadParams,entity);
+        entity.attrs.ctrl = value.valueGet(loadParams,entity);
     }
 }
 

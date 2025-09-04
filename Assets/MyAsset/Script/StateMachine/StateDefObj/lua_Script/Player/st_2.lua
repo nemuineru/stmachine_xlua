@@ -12,7 +12,7 @@ local Debug = CS.UnityEngine.Debug;
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-        if( math.abs(CurrentTime - 4) < 2  and not in_entity.isStateHit) then
+        if( math.abs(CurrentTime - 4) < 2  and not in_entity.attrs.isStateHit) then
             table.insert( verd, 10 ) 
         end
     return verd
@@ -30,7 +30,7 @@ end
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-        if( math.abs(CurrentTime - 5) < 2  and not in_entity.isStateHit) then
+        if( math.abs(CurrentTime - 5) < 2  and not in_entity.attrs.isStateHit) then
             table.insert( verd, 10 ) 
         end
     return verd

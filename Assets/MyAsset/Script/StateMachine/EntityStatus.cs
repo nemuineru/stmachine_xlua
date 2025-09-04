@@ -6,12 +6,27 @@ using UnityEngine;
 [System.Serializable]
 public class EntityAttr
 {
-    public bool ctrl;
-    public bool alive;
-    public bool isPaused;
+    //操作可能状態かチェック.
+    public bool ctrl = true;
+    //生きてるか？
+    public bool alive = true;
+    //止まってるか？
+    public bool isPaused = false;
+    public bool isStateChanged = false;
+    public bool isStateHit = false;
 
-    public bool isFall;
+    public bool isFall = false;
 }
+
+//キャラクターの特殊フラッグ指定管理..
+public class EntityFlag
+{
+    public string flagName;
+    public bool isEternal;
+    public int flagDefaultTime;
+    internal int flagElapsedTime;
+}
+
 
 [System.Serializable]
 public class EntityStatus

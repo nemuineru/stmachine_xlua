@@ -11,15 +11,6 @@ using DG.Tweening;
 using System;
 using BehaviorDesigner.Runtime;
 
-//キャラクターの特殊フラッグ指定管理..
-public class EntityFlag
-{
-    public string flagName;
-    public bool isEternal;
-    public int flagDefaultTime;
-    internal int flagElapsedTime;
-}
-
 public class Entity : MonoBehaviour
 {
     //statetype : 体勢の設定. 
@@ -78,6 +69,11 @@ public class Entity : MonoBehaviour
 
     [SerializeField]
     public EntityStatus status;
+
+    //Attr for GameSystems and more
+
+    [SerializeField]
+    public EntityAttr attrs;
 
 
     //親のEntity. Parent化されているならこのEntityの内容を読み出しておく.
@@ -140,13 +136,6 @@ public class Entity : MonoBehaviour
 
     //CapsuleColliderの格納. キャラクターの地形との判定.
     CapsuleCollider capCol;
-
-    //OnHit確認用. 後で整理したい.
-    public bool isStateHit = false;
-
-    //操作可能状態かチェック.
-    public bool ctrl = true;
-
 
     //カメラ登録時、格納.
     CinemachineOrbitalTransposer transposer;
@@ -307,7 +296,7 @@ public class Entity : MonoBehaviour
             //Most Primal Queue is Most Biggest Number.
             CListQueue.Sort((CQ_L, CQ_M) => CQ_M.priority - CQ_L.priority);
             CurrentStateID = CListQueue[0].stateDefID;
-            isStateHit = false;
+            attrs.isStateHit = false;
             CListQueue.Clear();
         }
 
