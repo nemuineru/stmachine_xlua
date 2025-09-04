@@ -125,6 +125,33 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DebugCMD_Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""7074b6be-25b4-433d-a88c-274c3bf2b612"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DebugCMD_Death"",
+                    ""type"": ""Button"",
+                    ""id"": ""4262a017-6b50-4e50-8f06-64e385205bc7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DebugCMD_ClearAll"",
+                    ""type"": ""Button"",
+                    ""id"": ""88e878bd-6338-418b-b368-af4cff1ec3a1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -325,6 +352,39 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
                     ""action"": ""Controller_LookAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d3dba8e-cbcc-4e61-9005-dc6a857c77e0"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DebugCMD_Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8da2d3bb-2952-41a8-a892-e90e2200efe6"",
+                    ""path"": ""<Keyboard>/f2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DebugCMD_Death"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""495a7b66-d1c6-41d4-8bae-13db2c1e3b37"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DebugCMD_ClearAll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -344,6 +404,9 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
         m_Base_Extra_2_Button = m_Base.FindAction("Extra_2_Button", throwIfNotFound: true);
         m_Base_Menu_Button = m_Base.FindAction("Menu_Button", throwIfNotFound: true);
         m_Base_SubMenu_Button = m_Base.FindAction("SubMenu_Button", throwIfNotFound: true);
+        m_Base_DebugCMD_Reload = m_Base.FindAction("DebugCMD_Reload", throwIfNotFound: true);
+        m_Base_DebugCMD_Death = m_Base.FindAction("DebugCMD_Death", throwIfNotFound: true);
+        m_Base_DebugCMD_ClearAll = m_Base.FindAction("DebugCMD_ClearAll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -416,6 +479,9 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
     private readonly InputAction m_Base_Extra_2_Button;
     private readonly InputAction m_Base_Menu_Button;
     private readonly InputAction m_Base_SubMenu_Button;
+    private readonly InputAction m_Base_DebugCMD_Reload;
+    private readonly InputAction m_Base_DebugCMD_Death;
+    private readonly InputAction m_Base_DebugCMD_ClearAll;
     public struct BaseActions
     {
         private @Input_Basic m_Wrapper;
@@ -431,6 +497,9 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
         public InputAction @Extra_2_Button => m_Wrapper.m_Base_Extra_2_Button;
         public InputAction @Menu_Button => m_Wrapper.m_Base_Menu_Button;
         public InputAction @SubMenu_Button => m_Wrapper.m_Base_SubMenu_Button;
+        public InputAction @DebugCMD_Reload => m_Wrapper.m_Base_DebugCMD_Reload;
+        public InputAction @DebugCMD_Death => m_Wrapper.m_Base_DebugCMD_Death;
+        public InputAction @DebugCMD_ClearAll => m_Wrapper.m_Base_DebugCMD_ClearAll;
         public InputActionMap Get() { return m_Wrapper.m_Base; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -473,6 +542,15 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
             @SubMenu_Button.started += instance.OnSubMenu_Button;
             @SubMenu_Button.performed += instance.OnSubMenu_Button;
             @SubMenu_Button.canceled += instance.OnSubMenu_Button;
+            @DebugCMD_Reload.started += instance.OnDebugCMD_Reload;
+            @DebugCMD_Reload.performed += instance.OnDebugCMD_Reload;
+            @DebugCMD_Reload.canceled += instance.OnDebugCMD_Reload;
+            @DebugCMD_Death.started += instance.OnDebugCMD_Death;
+            @DebugCMD_Death.performed += instance.OnDebugCMD_Death;
+            @DebugCMD_Death.canceled += instance.OnDebugCMD_Death;
+            @DebugCMD_ClearAll.started += instance.OnDebugCMD_ClearAll;
+            @DebugCMD_ClearAll.performed += instance.OnDebugCMD_ClearAll;
+            @DebugCMD_ClearAll.canceled += instance.OnDebugCMD_ClearAll;
         }
 
         private void UnregisterCallbacks(IBaseActions instance)
@@ -510,6 +588,15 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
             @SubMenu_Button.started -= instance.OnSubMenu_Button;
             @SubMenu_Button.performed -= instance.OnSubMenu_Button;
             @SubMenu_Button.canceled -= instance.OnSubMenu_Button;
+            @DebugCMD_Reload.started -= instance.OnDebugCMD_Reload;
+            @DebugCMD_Reload.performed -= instance.OnDebugCMD_Reload;
+            @DebugCMD_Reload.canceled -= instance.OnDebugCMD_Reload;
+            @DebugCMD_Death.started -= instance.OnDebugCMD_Death;
+            @DebugCMD_Death.performed -= instance.OnDebugCMD_Death;
+            @DebugCMD_Death.canceled -= instance.OnDebugCMD_Death;
+            @DebugCMD_ClearAll.started -= instance.OnDebugCMD_ClearAll;
+            @DebugCMD_ClearAll.performed -= instance.OnDebugCMD_ClearAll;
+            @DebugCMD_ClearAll.canceled -= instance.OnDebugCMD_ClearAll;
         }
 
         public void RemoveCallbacks(IBaseActions instance)
@@ -540,5 +627,8 @@ public partial class @Input_Basic: IInputActionCollection2, IDisposable
         void OnExtra_2_Button(InputAction.CallbackContext context);
         void OnMenu_Button(InputAction.CallbackContext context);
         void OnSubMenu_Button(InputAction.CallbackContext context);
+        void OnDebugCMD_Reload(InputAction.CallbackContext context);
+        void OnDebugCMD_Death(InputAction.CallbackContext context);
+        void OnDebugCMD_ClearAll(InputAction.CallbackContext context);
     }
 }

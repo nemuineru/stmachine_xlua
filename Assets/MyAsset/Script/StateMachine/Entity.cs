@@ -77,7 +77,7 @@ public class Entity : MonoBehaviour
     //status for UIs and more
 
     [SerializeField]
-    internal EntityStatus status;
+    public EntityStatus status;
 
 
     //親のEntity. Parent化されているならこのEntityの内容を読み出しておく.
@@ -143,6 +143,9 @@ public class Entity : MonoBehaviour
 
     //OnHit確認用. 後で整理したい.
     public bool isStateHit = false;
+
+    //操作可能状態かチェック.
+    public bool ctrl = true;
 
 
     //カメラ登録時、格納.

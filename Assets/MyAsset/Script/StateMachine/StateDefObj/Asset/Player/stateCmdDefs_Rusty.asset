@@ -15,9 +15,6 @@ MonoBehaviour:
   stateDefs:
   - StateDefName: Default
     StateDefID: -1
-    PriorCondition:
-      LuaScript: 
-      entity: {fileID: 0}
     LuaAsset: {fileID: -8122155829129254986, guid: 8e994d9382ba03445bddab6509ecadc4, type: 3}
     preStateVerdictName: Queue_Cmd
     ParamLoadName: LuaOutput
@@ -28,6 +25,7 @@ MonoBehaviour:
     - rid: 4404388709018370078
     - rid: 4404388664824299529
     - rid: 4404388709018370091
+    - rid: 7982027888260546560
   references:
     version: 2
     RefIds:
@@ -91,3 +89,13 @@ MonoBehaviour:
         stateControllerSubName: Combo2 Jab_2 Cmd
         changeTo: 2
         priority: 1
+    - rid: 7982027888260546560
+      type: {class: scAddCharge, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 30
+          stLuaLoads: 
+        stateControllerSubName: Auto_Def_Charge
+        value: 1
+        priority: 0

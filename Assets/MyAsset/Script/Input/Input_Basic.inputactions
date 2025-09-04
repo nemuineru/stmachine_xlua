@@ -103,6 +103,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DebugCMD_Reload",
+                    "type": "Button",
+                    "id": "7074b6be-25b4-433d-a88c-274c3bf2b612",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DebugCMD_Death",
+                    "type": "Button",
+                    "id": "4262a017-6b50-4e50-8f06-64e385205bc7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DebugCMD_ClearAll",
+                    "type": "Button",
+                    "id": "88e878bd-6338-418b-b368-af4cff1ec3a1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -301,6 +328,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Controller_LookAxis",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d3dba8e-cbcc-4e61-9005-dc6a857c77e0",
+                    "path": "<Keyboard>/f5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DebugCMD_Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8da2d3bb-2952-41a8-a892-e90e2200efe6",
+                    "path": "<Keyboard>/f2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DebugCMD_Death",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "495a7b66-d1c6-41d4-8bae-13db2c1e3b37",
+                    "path": "<Keyboard>/f1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DebugCMD_ClearAll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

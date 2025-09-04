@@ -1,5 +1,6 @@
 
 local Entity = CS.Entity;
+local EntityStatus = CS.Entity.EntityStatus;
 local Vector2 = CS.UnityEngine.Vector2;
 local Vector3 = CS.UnityEngine.Vector3;
 local Transform = CS.UnityEngine.Transform;
@@ -10,9 +11,16 @@ function Queue_Cmd(in_entity)
     selfOnGrd = LC:isEntityOnGround(in_entity)
     JumpCommand = LC:CheckButtonPressed(in_entity, "a_")
     AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
+
+    -- xの離し判定
     AttackCmd_x = LC:CheckButtonPressed(in_entity, "x_")
+    -- xの押し判定
+    AttackCmd_x_Pressed = LC:CheckButtonPressed(in_entity, "x")
+    AttackCmd_x_Released = LC:CheckButtonPressed(in_entity, "x^")
+
     selfStTime = LC:CheckStateTime(in_entity) 
     stateID = in_entity.CurrentStateID
+    chargeVal = in_entity.status.ChargeTime
 
     verd = {}
     -- combo_1 cmd
@@ -46,12 +54,18 @@ function Queue_Cmd(in_entity)
 
     if( selfOnGrd == false and AttackCmd_x == true and stateID == 50 ) then
         table.insert( verd, 25 ) 
+    end    
+
+    -- chargeUp Checker
+    if( AttackCmd_x_Pressed == true and stateID < 5000 ) then
+        table.insert( verd, 30 ) 
+    end    
+
+    --chargeUp Releasement Checks
+    if( AttackCmd_x_Released == true or stateID > 5000 ) then
+    table.insert( verd, 31 ) 
     end
 
-    --chargeUp Checker
-    if( selfOnGrd == false and AttackCmd_x == true and stateID < 5000 ) then
-        table.insert( verd, 30 ) 
-    end
     return verd
 end
 

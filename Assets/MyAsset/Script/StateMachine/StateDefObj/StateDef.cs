@@ -227,10 +227,13 @@ public class StateDef
     //...Objectで良いのか？
     List<object> luaOutputParams = new List<object>();
 
+    //ctrlフラグの設定.
+    public bool setCtrl = false;
+
     //これも結局Cloneが必須かぁ..
     public StateDef Clone()
     {
-        var retDef =  new StateDef();
+        var retDef = new StateDef();
         retDef.StateDefName = StateDefName;
         retDef.StateDefID = StateDefID;
         retDef.stateTime = stateTime;
@@ -688,6 +691,39 @@ public class scAddCharge : StateController
     }
 }
 
+
+//status変更. (Charge)
+public class scSetCharge : StateController
+{ 
+    
+    [SerializeField]
+    int value = 0;
+
+    [SerializeField]
+    int priority = 0;
+
+    //これだけfixedDeltaTimeが乗算.
+    internal override void OnExecute(Entity entity)
+    {
+        entity.status.ChargeTime = value;
+    }
+}
+
+//ctrlフラグのセット.
+public class scSetCtrl : StateController
+{     
+    [SerializeField]
+    stParams<bool> value;
+
+    [SerializeField]
+    int priority = 0;
+
+    //これだけfixedDeltaTimeが乗算.
+    internal override void OnExecute(Entity entity)
+    {
+        entity.ctrl = value.valueGet(loadParams,entity);
+    }
+}
 
 
 //MoveTypeの変更など

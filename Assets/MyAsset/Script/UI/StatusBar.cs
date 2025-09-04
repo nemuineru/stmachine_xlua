@@ -129,7 +129,7 @@ public class StatusBar : MonoBehaviour
         float degCalc = 0;
         
         degCalc = d_Base.AngRadiansStart + (d_Base.AngRadiansEnd - d_Base.AngRadiansStart) * f;
-        d_Fill.AngRadiansEnd = degCalc;
+        d_Fill.AngRadiansEnd = Mathf.Lerp(d_Fill.AngRadiansEnd,degCalc,0.3f);
 
         chargeUI_txt.text = "";
         d_Fill.meshOutOfDate = true;
