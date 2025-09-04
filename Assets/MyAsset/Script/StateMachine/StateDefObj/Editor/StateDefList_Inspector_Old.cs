@@ -214,12 +214,14 @@ public class StateDefList_Inspector_Old : Editor
             SerializedProperty stDefIDProperty = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.StateDefID));
             //LuaConditionの文章習得.
             SerializedProperty LuScript = SelectedDefProperty.FindPropertyRelative(nameof(selectedStDef.LuaAsset));
+            SerializedProperty stDefinitCtrlProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.setCtrl));
 
             EditorGUILayout.PropertyField(stDefNameProperty, label: new GUIContent("StateDef Name"));
             EditorGUILayout.PropertyField(stDefIDProperty, label: new GUIContent("StateDef ID"));
 
 
             EditorGUILayout.PropertyField(LuScript, label: new GUIContent("Lua Calcration Info"));
+            EditorGUILayout.PropertyField(stDefinitCtrlProperty);
 
             //SerializedProperty LSC = LuScript.FindPropertyRelative("text");
             //EditorGUILayout.PropertyField(LuScript,label : new GUIContent("Lua Calcration Info"));

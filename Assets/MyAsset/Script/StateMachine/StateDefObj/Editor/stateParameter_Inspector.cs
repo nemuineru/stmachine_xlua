@@ -54,13 +54,11 @@ public class stateDefShow : Editor
             SerializedProperty stDefIDProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.StateDefID));
             //LuaConditionの文章習得.
             SerializedProperty LuScript = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.LuaAsset));
-            SerializedProperty stDefinitCtrlProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.setCtrl));
 
             //基本情報の表示
             EditorGUILayout.PropertyField(stDefNameProperty);
             EditorGUILayout.PropertyField(stDefIDProperty);
             EditorGUILayout.PropertyField(LuScript);
-            EditorGUILayout.PropertyField(stDefinitCtrlProperty);
 
             //stateControllerListを描写
             _stateList.DoLayoutList();
