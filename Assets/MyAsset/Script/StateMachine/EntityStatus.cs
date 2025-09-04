@@ -2,6 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//よく使う属性を登録・管理.
+[System.Serializable]
+public class EntityAttr
+{
+    public bool ctrl;
+    public bool alive;
+    public bool isPaused;
+
+    public bool isFall;
+}
+
 [System.Serializable]
 public class EntityStatus
 {

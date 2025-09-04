@@ -105,7 +105,45 @@ MonoBehaviour:
     ID: 5050
     Name: BlowOut
     animClip:
-    - Clip: {fileID: 7400000, guid: a128e15080a0e7c40b82d8ead4a87dc2, type: 2}
+    - Clip: {fileID: 7400000, guid: 6abb78ce4a9f70e42957498b0dd09dd6, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0
+    blendOutTime: 0.4
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs: []
+      disableClssList:
+      - head
+      root: {fileID: 0}
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
+    ID: 5100
+    Name: Down
+    animClip:
+    - Clip: {fileID: 7400000, guid: 7f6a3d3729dbabb4dba10c2f966afbe9, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0
+    blendOutTime: 0.4
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs: []
+      disableClssList:
+      - head
+      root: {fileID: 0}
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
+    ID: 5100
+    Name: Recovery
+    animClip:
+    - Clip: {fileID: 7400000, guid: dd34b6c288e39b040a21dfdb477c0624, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
