@@ -725,6 +725,20 @@ public class scSetCtrl : StateController
     }
 }
 
+//処理中・直後フレームの特殊操作など. string形式で操作される 
+public class scSetAssertSpecial : StateController
+{
+    [SerializeField]
+    stParams<string> value;
+
+    [SerializeField]
+    int priority = 0;
+
+    internal override void OnExecute(Entity entity)
+    {
+        //entity.attrs.ctrl = value.valueGet(loadParams, entity);
+    }
+}
 
 //MoveTypeの変更など
 

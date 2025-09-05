@@ -310,8 +310,20 @@ public class Entity : MonoBehaviour
             AutoState_1.Execute(this);
         }
 
+
+        if (status.currentHP <= 0)
+        {
+            attrs.alive = false;
+        }
+
+        //On death, Change to 5000 first, end at 5300(death state).
+        if (attrs.alive == false && CurrentStateID < 5000 && CurrentStateID > 5300)
+        {
+            CurrentStateID = 5000;
+        }
+
         //state実行.. これは一つだけに実行されるはず.
-        StateDef currentState =
+            StateDef currentState =
         loadedDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
         if (currentState != null)
         {
