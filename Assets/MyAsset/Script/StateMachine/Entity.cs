@@ -50,7 +50,7 @@ public class Entity : MonoBehaviour
     public int stateTime;
 
     //アニメのフレーム時間.
-    public int animationFrameTime;
+    public int animationFrameTime, animationEndTime;
 
     //移動用の設定など. fwに設定した値・90度回転方向を考慮 - 
     public Vector3 targetTo_fw = Vector3.forward;
@@ -408,6 +408,7 @@ public class Entity : MonoBehaviour
         }
         MainAnimMixer.PrimalGraph.Play();
         animationFrameTime = MainAnimMixer.CurrentAnimTime();
+        animationEndTime = MainAnimMixer.EndAnimTime();
 
     }
 

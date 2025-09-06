@@ -26,6 +26,8 @@ MonoBehaviour:
     - rid: 4404388664824299529
     - rid: 4404388709018370091
     - rid: 7982027888260546560
+    - rid: 7982027949219512324
+    setCtrl: 0
   references:
     version: 2
     RefIds:
@@ -98,4 +100,14 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: Auto_Def_Charge
         value: 1
+        priority: 0
+    - rid: 7982027949219512324
+      type: {class: scSetCharge, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 31
+          stLuaLoads: 
+        stateControllerSubName: Auto_Def_Reset
+        value: 0
         priority: 0

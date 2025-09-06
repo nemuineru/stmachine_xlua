@@ -31,7 +31,7 @@ end
     return verd
 end 
 
--- ステート変更のファンクション (5050)
+-- ステート変更のファンクション,BlowOut (5050)
     function QueuedStateID_Hit_Air(in_entity)
         verd = {}
         selfOnGrd = LC:isEntityOnGround(in_entity)
@@ -41,7 +41,7 @@ end
             -- Debug.Log("damage Amim")
             table.insert( verd, 0 ) 
         end
-        if ( CurrentR > 12 and selfOnGrd) then 
+        if ( CurrentR > 6 and selfOnGrd) then 
             table.insert( verd, 1 )
         end
     return verd

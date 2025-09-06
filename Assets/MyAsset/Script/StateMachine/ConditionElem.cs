@@ -115,6 +115,13 @@ public class LC
         //Debug.Log(et.stateTime);
         return et.animationFrameTime;
     }
+    
+    public float CheckAnimEndTime(Entity et)
+    {
+        //Debug.Log(et.stateTime);
+        return et.animationEndTime;
+    }
+
 
     public bool CheckButtonPressed(Entity et, string command)
     {

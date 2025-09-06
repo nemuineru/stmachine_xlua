@@ -298,6 +298,18 @@ public class MainNodeConfigurator
         }
         return val;
     }
+    
+    public int EndAnimTime()
+    {
+        int val = 0;
+        if (MainMixer != null)
+        {
+            val = Mathf.CeilToInt
+            ((MainAnimDef.animClip.Average(x => x.Clip.length) / (1f / MainAnimDef.animClip.Average(x => x.Clip.frameRate))));
+            //Debug.Log(val);
+        }
+        return val;
+    }
 
     public void Tick()
     {

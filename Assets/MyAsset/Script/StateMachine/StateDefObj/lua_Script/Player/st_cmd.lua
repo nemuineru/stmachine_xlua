@@ -30,18 +30,18 @@ function Queue_Cmd(in_entity)
 
     -- combo_2 cmd
     if(selfOnGrd == true and AttackCmd_b == true and stateID == 1 and 
-    selfStTime > 4 and in_entity.isStateHit == true) then
+    selfStTime > 4 and in_entity.attrs.isStateHit == true) then
         table.insert( verd, 2) 
     end
 
     -- combo_finisher cmd
     if(selfOnGrd == true and AttackCmd_b == true and stateID == 2 
-    and selfStTime > 4 and in_entity.isStateHit == true) then
+    and selfStTime > 4 and in_entity.attrs.isStateHit == true) then
         table.insert( verd, 3) 
     end
 
     -- Hard_1 cmd
-    if (selfOnGrd == true and AttackCmd_x == true and stateID == 0) then 
+    if (selfOnGrd == true and AttackCmd_x_Released == true and stateID == 0) then 
         table.insert( verd, 5 )
     end
 
@@ -52,7 +52,7 @@ function Queue_Cmd(in_entity)
 
     -- air_Hard cmd
 
-    if( selfOnGrd == false and AttackCmd_x == true and stateID == 50 ) then
+    if( selfOnGrd == false and AttackCmd_x_Released == true and stateID == 50 ) then
         table.insert( verd, 25 ) 
     end    
 

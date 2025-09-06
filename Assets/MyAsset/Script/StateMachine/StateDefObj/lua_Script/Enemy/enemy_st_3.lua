@@ -9,7 +9,7 @@ local Debug = CS.UnityEngine.Debug;
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-        if( CurrentTime > 2 and math.abs(CurrentTime - 3) < 2 and not in_entity.isStateHit ) then
+        if( CurrentTime > 2 and math.abs(CurrentTime - 3) < 2 and not in_entity.attrs.isStateHit ) then
             table.insert( verd, 3 ) 
         end
         if ( CurrentTime > 1000 and CurrentTime <= 12 and AttackCmd_b ) then 
@@ -29,7 +29,7 @@ end
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-        if( CurrentTime > 2 and math.abs(CurrentTime - 4) < 3 and not in_entity.isStateHit ) then
+        if( CurrentTime > 2 and math.abs(CurrentTime - 4) < 3 and not in_entity.attrs.isStateHit ) then
             table.insert( verd, 3 ) 
         end
         if ( CurrentTime > 14 ) then 

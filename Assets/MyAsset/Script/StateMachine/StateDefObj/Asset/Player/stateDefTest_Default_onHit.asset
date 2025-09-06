@@ -33,26 +33,39 @@ MonoBehaviour:
     - rid: 4404388575372902408
     - rid: 4404388549547524096
     setCtrl: 0
+  - StateDefName: OnHit_BlowRecov
+    StateDefID: 5055
+    LuaAsset: {fileID: 0}
+    preStateVerdictName: 
+    ParamLoadName: 
+    StateList: []
+    setCtrl: 0
   - StateDefName: Blow_Down
     StateDefID: 5100
     LuaAsset: {fileID: 0}
-    preStateVerdictName: Blow_Down
+    preStateVerdictName: stID_FallDown
     ParamLoadName: 
-    StateList: []
+    StateList:
+    - rid: 7982027949219512321
+    - rid: 7982027949219512328
     setCtrl: 0
   - StateDefName: Blow_Recovery
     StateDefID: 5101
     LuaAsset: {fileID: 0}
-    preStateVerdictName: Blow_Recov
+    preStateVerdictName: stID_FallRecov
     ParamLoadName: 
-    StateList: []
+    StateList:
+    - rid: 7982027949219512322
+    - rid: 7982027949219512326
     setCtrl: 0
   - StateDefName: Dead
     StateDefID: 5300
     LuaAsset: {fileID: 0}
     preStateVerdictName: Dead
     ParamLoadName: 
-    StateList: []
+    StateList:
+    - rid: 7982027949219512329
+    - rid: 7982027949219512330
     setCtrl: 0
   - StateDefName: Default
     StateDefID: 1000000
@@ -154,3 +167,93 @@ MonoBehaviour:
           stParamValue: {x: 0, y: 0}
           useID: -1
           stLuaLoads: 
+    - rid: 7982027949219512321
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: DamageAnim_BlowDown
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 5100
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7982027949219512322
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: DamageAnim_Recover
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 5101
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7982027949219512326
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Transit to Idle
+        changeTo: 0
+        priority: 0
+    - rid: 7982027949219512328
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Transit to Recover
+        changeTo: 5101
+        priority: 0
+    - rid: 7982027949219512329
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: 
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7982027949219512330
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: 
+        changeTo: 0
+        priority: 0
