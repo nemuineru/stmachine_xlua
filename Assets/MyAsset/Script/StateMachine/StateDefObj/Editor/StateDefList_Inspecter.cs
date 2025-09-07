@@ -282,9 +282,13 @@ public class StateDefList_Inspector : Editor
                 //LuaScript, ベースIDなどを記述.
                 SerializedProperty stDefNameProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.StateDefName));
                 SerializedProperty stDefIDProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.StateDefID));
-                SerializedProperty stDefinitCtrlProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.setCtrl));
                 //LuaConditionの文章習得.
                 SerializedProperty LuScript = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.LuaAsset));
+                
+                SerializedProperty stDefinitCtrlProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.setCtrl));
+                SerializedProperty ststateTypeProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.stateType));
+                SerializedProperty stphysTypeProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.physType));
+                SerializedProperty stmoveTypeProperty = SelectedDefProperty.FindPropertyRelative(nameof(StateDef.moveType));
 
                 SerializedProperty preStateVerdict = SelectedDefProperty.FindPropertyRelative("preStateVerdictName");
                 SerializedProperty preParamLoad = SelectedDefProperty.FindPropertyRelative("ParamLoadName");
@@ -295,6 +299,9 @@ public class StateDefList_Inspector : Editor
                 EditorGUILayout.PropertyField(LuScript);
                 EditorGUILayout.Space();
                 EditorGUILayout.PropertyField(stDefinitCtrlProperty);
+                EditorGUILayout.PropertyField(ststateTypeProperty);
+                EditorGUILayout.PropertyField(stphysTypeProperty);
+                EditorGUILayout.PropertyField(stmoveTypeProperty);
                 EditorGUILayout.Space();
                 EditorGUILayout.PropertyField(preStateVerdict);
                 EditorGUILayout.PropertyField(preParamLoad);

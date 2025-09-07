@@ -18,6 +18,9 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
     preStateVerdictName: QueuedStateID_0
     ParamLoadName: LuaOutput
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList:
     - rid: 3579423253479817227
     - rid: 4404388598234480643
@@ -27,6 +30,9 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
     preStateVerdictName: QueuedStateID_Hit_Def
     ParamLoadName: LuaOutput
+    stateType: 83
+    moveType: 72
+    physType: 83
     StateList:
     - rid: 4404388575372902408
     - rid: 4404388569968803840
@@ -37,6 +43,9 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
     preStateVerdictName: QueuedStateID_Hit_Air
     ParamLoadName: LuaOutput
+    stateType: 83
+    moveType: 72
+    physType: 83
     StateList:
     - rid: 4404388637674569735
     - rid: 4404388575372902408
@@ -47,6 +56,9 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: b20a38daf98a7ed479ac6f191b1fe118, type: 3}
     preStateVerdictName: stID_FallDown
     ParamLoadName: 
+    stateType: 76
+    moveType: 72
+    physType: 83
     StateList:
     - rid: 7982027949219512332
     - rid: 7982027949219512331
@@ -56,6 +68,9 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: b20a38daf98a7ed479ac6f191b1fe118, type: 3}
     preStateVerdictName: stID_FallRecov
     ParamLoadName: 
+    stateType: 76
+    moveType: 73
+    physType: 83
     StateList:
     - rid: 7982027949219512334
     - rid: 7982027949219512333

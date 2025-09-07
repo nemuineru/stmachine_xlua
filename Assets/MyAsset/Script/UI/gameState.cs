@@ -6,6 +6,7 @@ using System;
 using UnityEditor.SearchService;
 using System.Linq;
 using UnityEngine.Serialization;
+using Unity.VisualScripting;
 
 public class gameState : MonoBehaviour
 {
@@ -105,8 +106,8 @@ public class gameState : MonoBehaviour
     }
 
     static public void EraseEntity(Entity sel)
-    { 
-
+    {
+        Destroy(sel.gameObject);
     }
     
 }

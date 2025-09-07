@@ -14,7 +14,7 @@ using BehaviorDesigner.Runtime;
 public class Entity : MonoBehaviour
 {
     //statetype : 体勢の設定. 
-    public enum _stateType
+    public enum _StateType
     {
         S, //Standing, 立ち状態
         A, //Air, 空中
@@ -34,7 +34,7 @@ public class Entity : MonoBehaviour
         A, //Attack, 攻撃中
         H  //Hit, やられ
     }
-    public _stateType stateType;
+    public _StateType stateType;
     public _PhysicsType physicsType;
     public _MoveType moveType;
 

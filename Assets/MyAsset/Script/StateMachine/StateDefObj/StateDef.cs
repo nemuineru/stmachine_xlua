@@ -220,6 +220,11 @@ public class StateDef
     private LuaTable _stateLoadTables;
     private LuaTable _stateParamTables;
 
+    //それぞれMoveType
+    public char stateType;
+    public char moveType;
+    public char physType;
+
     [SerializeReference, SerializeField]
     public List<StateController> StateList = new List<StateController>();
 
@@ -273,8 +278,81 @@ public class StateDef
     //Execute時のLuaのStateIDをそれぞれのStateDefに保存 - これ、掴みの時のEntity参照時の設定時に重複発生しそー..    
     //
 
+    void entityTypeSet(Entity entity)
+    {
+        switch (stateType)
+        {
+            case 's':
+            case 'S':
+                {
+                    entity.stateType = Entity._StateType.S;
+                    break;
+                }
+            case 'a':
+            case 'A':
+                {
+                    entity.stateType = Entity._StateType.A;
+                    break;
+                }
+            case 'l':
+            case 'L':
+                {
+                    entity.stateType = Entity._StateType.L;
+                    break;
+                }
+        }
+        switch (physType)
+        {             
+            case 's':
+            case 'S':
+                {
+                    entity.physicsType = Entity._PhysicsType.S;
+                    break;
+                }
+            case 'a':
+            case 'A':
+                {
+                    entity.physicsType = Entity._PhysicsType.A;
+                    break;
+                }
+            case 'n':
+            case 'N':
+                {
+                    entity.physicsType = Entity._PhysicsType.N;
+                    break;
+                }
+        }
+        switch (moveType)
+        {             
+            case 'i':
+            case 'I':
+                {
+                    entity.moveType = Entity._MoveType.I;
+                    break;
+                }
+            case 'a':
+            case 'A':
+                {
+                    entity.moveType = Entity._MoveType.A;
+                    break;
+                }
+            case 'h':
+            case 'H':
+                {
+                    entity.moveType = Entity._MoveType.H;
+                    break;
+                }
+        }
+    }
+
     public void Execute(Entity entity)
     {
+        //stateTimeが0の時, 恒常設定されたステートパラメータを確認
+        if (entity.stateTime == 0)
+        {
+            entityTypeSet(entity);
+        }
+
         if (_stateLoadTables == null)
             OnInitDef();
         //メインのLUA仮想マシンに読み出すテキストを以下に記述.
@@ -380,8 +458,9 @@ public class StateDef
 
             env.Tick();
         }
+
     }
-    }
+}
 
 
 //ステートベースクラス. ここから派生する. なお、実行判別式はLuaを用いることとする.
@@ -740,5 +819,16 @@ public class scSetAssertSpecial : StateController
     }
 }
 
-//MoveTypeの変更など
+//ゲームシステムに死を組み込む.
+public class scSendDeathMeesage : StateController
+{    
+    [SerializeField]
+    int priority = 0;
 
+    internal override void OnExecute(Entity entity)
+    {
+        //entity.attrs.ctrl = value.valueGet(loadParams, entity);
+    }
+}
+
+//MoveTypeの変更など
