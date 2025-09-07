@@ -15,7 +15,7 @@ public class gameState : MonoBehaviour
 
     //敵のHP管理バー.
     public GameObject HPUI;
-    
+
     [FormerlySerializedAs("hitEff")]
     public GameObject defaultEff;
     void Awake()
@@ -102,6 +102,11 @@ public class gameState : MonoBehaviour
             }
         }
         return ret;
+    }
+
+    static public void EraseEntity(Entity sel)
+    { 
+
     }
     
 }
