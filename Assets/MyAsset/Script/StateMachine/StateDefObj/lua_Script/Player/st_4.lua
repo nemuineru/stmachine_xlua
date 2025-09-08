@@ -28,6 +28,10 @@ end
         if ( CurrentR > 12 and selfOnGrd) then 
             table.insert( verd, 1 )
         end
+            -- on death, don't revive.
+        if ( CurrentR > 6 and in_entity.attrs.alive == false) then 
+            table.insert( verd, 2 )
+        end
     return verd
 end 
 

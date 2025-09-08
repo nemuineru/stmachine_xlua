@@ -6,7 +6,6 @@ using System;
 using UnityEditor.SearchService;
 using System.Linq;
 using UnityEngine.Serialization;
-using Unity.VisualScripting;
 
 public class gameState : MonoBehaviour
 {
@@ -105,12 +104,18 @@ public class gameState : MonoBehaviour
         return ret;
     }
 
-    static public void EraseEntity(Entity sel)
+
+    bool checkHit(string checkState, Entity checkEntity)
     {
-        Destroy(sel.gameObject);
+        bool ret = false;
+        if (checkState.Contains((char)checkEntity.checkHitStates()))
+        {
+            ret = true;
+        }
+        return ret;
     }
-    
 }
+
 
 //後々にこのhitDefParamsの項目を表示・非表示設定可能にしたい
 //非表示にした項目は値未設定ならデフォルト値を使用

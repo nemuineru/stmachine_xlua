@@ -114,7 +114,7 @@ public class Entity : MonoBehaviour
 
     //メインマテリアルとメッシュ.
     Material mat;
-    public SkinnedMeshRenderer mesh;
+    public List<Renderer> renderers;
 
     //stateDefListObjの本元.
 
@@ -143,7 +143,8 @@ public class Entity : MonoBehaviour
     void Awake()
     {
         allChildTransforms = GetComponentsInChildren<Transform>(true);
-        mat = mesh.material;
+        renderers = GetComponentsInChildren<Renderer>(true).ToList();
+        mat = renderers[0].material;
         animator = GetComponent<Animator>();
 
         rigid = GetComponent<Rigidbody>();
@@ -265,13 +266,14 @@ public class Entity : MonoBehaviour
             capCol.radius, Vector3.down,
             out hitInfo, Mathf.Max(0.005f, -rigid.velocity.y * Time.fixedDeltaTime), LayerMask.GetMask("Terrain"));
 
-        Debug.Log(isCapsuleHit + " - capsuleSet?");
+        //Debug.Log(isCapsuleHit + " - capsuleSet?");
 
         //キャラと地形の当たり判定表示
         //clssDef.DrawCapsuleGizmo_Tool(pos_1,pos_2,capCol.radius,Color.cyan);
 
 
         isOnGround = (hitInfo.collider != null);
+        setDestroy();
     }
 
     //ステータスの変更作業など
@@ -323,7 +325,7 @@ public class Entity : MonoBehaviour
         }
 
         //state実行.. これは一つだけに実行されるはず.
-            StateDef currentState =
+        StateDef currentState =
         loadedDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
         if (currentState != null)
         {
@@ -458,6 +460,44 @@ public class Entity : MonoBehaviour
     internal void makeInstantiate(GameObject gObj)
     {
         Instantiate(gObj, transform.position, Quaternion.identity);
+    }
+
+    internal char checkHitStates()
+    {
+        //Fall中ならFという特殊フラグを当てる.
+        if (attrs.isFall == true)
+        {
+            return 'F';
+        }
+        else
+        {
+            return (char)stateType;
+        }
+    }
+
+    const float destroTime_Max = 1.0f;
+    const float destroTime_meshRev = 0.033f;
+    float destroTime_Current = 0f;
+
+    //点滅後に消滅したい.
+    internal void setDestroy()
+    {
+        if (attrs.isEraseReady)
+        {
+            destroTime_Current += Time.fixedDeltaTime;
+            float rep = Mathf.Repeat(destroTime_Current, destroTime_meshRev);
+            bool isDisabled = (destroTime_meshRev * (1f / 2f) > rep);
+            Debug.Log("entity renderer : " + isDisabled + " " + rep);
+            foreach (Renderer r in renderers)
+            {
+                r.enabled = isDisabled;
+            }
+            //アニメーションとかを切断して、消し飛ばす.
+            if (destroTime_Current >= destroTime_Max)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
     //前プロジェクトのように、スクリプト内でステートをとりあえず記述.

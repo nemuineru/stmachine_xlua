@@ -23,6 +23,10 @@ function stID_FallDown(in_entity)
     if( CurrentAnimID == 5100 and 
     AnimEndTime - CurrentAnimTime < 2 and in_entity.attrs.alive) then
         table.insert(verd , 1)
+    end    
+
+    if( in_entity.attrs.alive == false) then
+        table.insert(verd , 2)
     end
     return verd
 end
@@ -33,6 +37,7 @@ function stID_FallRecov(in_entity)
     selfOnGrd = LC:isEntityOnGround(in_entity)
     CurrentTime = LC:CheckStateTime(in_entity)
     CurrentAnimTime = LC:CheckAnimTime(in_entity);
+    CurrentAnimID =  LC:CheckAnimID(in_entity);
     AnimEndTime = LC:CheckAnimEndTime(in_entity);
     -- load the first anims
     if( CurrentTime == 0) then

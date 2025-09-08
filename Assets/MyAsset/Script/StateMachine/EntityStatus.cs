@@ -16,6 +16,8 @@ public class EntityAttr
     public bool isStateHit = false;
 
     public bool isFall = false;
+
+    public bool isEraseReady = false;
 }
 
 //キャラクターの特殊フラッグ指定管理..
@@ -62,3 +64,4 @@ public class EntityStatus
         return Mathf.CeilToInt(Mathf.Max(0, currentHP));
     }
 }
+

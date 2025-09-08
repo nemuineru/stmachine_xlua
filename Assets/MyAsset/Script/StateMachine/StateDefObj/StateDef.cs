@@ -821,9 +821,25 @@ public class scSetAssertSpecial : StateController
 
 //ゲームシステムに死を組み込む.
 public class scSendDeathMeesage : StateController
-{    
+{
     [SerializeField]
     int priority = 0;
+
+    internal override void OnExecute(Entity entity)
+    {
+        //entity.attrs.ctrl = value.valueGet(loadParams, entity);
+        entity.attrs.isEraseReady = true;
+    }
+}
+
+//NotHitBy : 特定攻撃に対しての無敵効果.
+public class scNotHitBy : StateController
+{
+    [SerializeField]
+    stParams<string> States;
+
+    [SerializeField]
+    stParams<int> time;
 
     internal override void OnExecute(Entity entity)
     {
@@ -831,4 +847,62 @@ public class scSendDeathMeesage : StateController
     }
 }
 
+
+
+//StateTypeの変更など
+public class scSetStatetype : StateController
+{
+    [SerializeField]
+    stParams<char> value;
+
+    [SerializeField]
+    stParams<int> priority;
+
+    internal override void OnExecute(Entity entity)
+    {
+        char val = value.valueGet(loadParams, entity);
+        if (Enum.IsDefined(typeof(Entity._StateType), val))
+        {
+            entity.stateType = (Entity._StateType)val;
+        }
+    }
+}
+
+//PhysTypeの変更など
+public class scSetStatePhystype : StateController
+{
+    [SerializeField]
+    stParams<char> value;
+
+    [SerializeField]
+    stParams<int> priority;
+    
+    internal override void OnExecute(Entity entity)
+    {
+        char val = value.valueGet(loadParams, entity);
+        if (Enum.IsDefined(typeof(Entity._PhysicsType), val))
+        {
+            entity.physicsType = (Entity._PhysicsType)val;
+        }
+    }
+}
+
 //MoveTypeの変更など
+public class scSetStateMovetype : StateController
+{
+    [SerializeField]
+    stParams<char> value;
+
+    [SerializeField]
+    stParams<int> priority;
+    
+    internal override void OnExecute(Entity entity)
+    {
+        char val = value.valueGet(loadParams, entity);
+        if (Enum.IsDefined(typeof(Entity._MoveType), val))
+        {
+            entity.moveType = (Entity._MoveType)val;
+        }
+    }
+}
+
