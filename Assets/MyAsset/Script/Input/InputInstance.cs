@@ -78,8 +78,8 @@ public class InputInstance : MonoBehaviour
             get {
                     Vector2 vect = self.inputBasic.Base.Controller_MoveAxis.ReadValue<Vector2>();
                     MovingAxisRead = 
-                    new Vector2(Mathf.Sign(vect.x) * Clamp_set_01(mAx_Min.x,mAx_Max.x,vect.Abs().x), 
-                    Mathf.Sign(vect.y) * Clamp_set_01(mAx_Min.y,mAx_Max.y,vect.Abs().y));
+                    new Vector2(Mathf.Sign(vect.x) * Clamp_set_01(mAx_Min.x,mAx_Max.x, Mathf.Abs(vect.x)), 
+                    Mathf.Sign(vect.y) * Clamp_set_01(mAx_Min.y,mAx_Max.y, Mathf.Abs(vect.y)));
                     return vect;
                 }
         }
@@ -88,8 +88,8 @@ public class InputInstance : MonoBehaviour
             get {
                     Vector2 vect = self.inputBasic.Base.Controller_LookAxis.ReadValue<Vector2>();
                     LookingAxisRead = 
-                    new Vector2(Mathf.Sign(vect.x) * Clamp_set_01(mAx_Min.x,mAx_Max.x,vect.Abs().x), 
-                    Mathf.Sign(vect.y) * Clamp_set_01(mAx_Min.y,mAx_Max.y,vect.Abs().y));
+                    new Vector2(Mathf.Sign(vect.x) * Clamp_set_01(mAx_Min.x, mAx_Max.x, Mathf.Abs(vect.x)), 
+                    Mathf.Sign(vect.y) * Clamp_set_01(mAx_Min.y, mAx_Max.y, Mathf.Abs(vect.y)));
                     return vect;
                 }
         }

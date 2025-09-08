@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
+
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
+//using UnityEditor.Experimental.GraphView;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 using Unity.VisualScripting;
@@ -721,7 +721,7 @@ public class AnimDef
     public string MixParamName;
     public Vector2 CurrentParamPos;
 
-    public AnimatorControllerLayer playLayer;
+    //public AnimatorControllerLayer playLayer;
     public int ID;
     public string Name;
 
