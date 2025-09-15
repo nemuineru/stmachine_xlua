@@ -47,7 +47,7 @@ public class EntityStatus
     //チャージ. 特殊ボタンの押しっぱなしを判別.
     //ダメージを受けたりすると0に戻る.
     //こういう変数はあんまり設定したくないんだよね
-    internal float ChargeTime = 0f;    
+    public float ChargeTime = 0f;    
     internal float setChargeTime_Lv1 = 0.5f;
     internal float setChargeTime_Lv2 = 1f;
     internal float setChargeTime_End = 2f;

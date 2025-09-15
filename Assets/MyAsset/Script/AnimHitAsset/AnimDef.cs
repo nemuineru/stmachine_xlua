@@ -10,6 +10,7 @@ using System.Linq;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityDebug;
 
 //再生ノード組み立て.
 public class MixAnimNode
@@ -752,6 +753,7 @@ public class AnimDef
         ca.AddRange(clssSetting.findclss(clssDef.ClssType.Attack, 0f));
         foreach (clssDef c in ca)
         {
+            Debug.Log("clssCapsule name : " + c.attachTo);
             //Debug.Log(c.attachTo);
             c.getGlobalPos();
             c.DrawCapsule();
@@ -822,7 +824,7 @@ public class clssSetting
         List<clssDef> findDefs = new List<clssDef>();
         foreach (clssDef cls in clssDefs)
         {
-            if (cls.StartTime < frame || cls.EndTime > frame && cls.clssType == useType)
+            if (cls.StartTime <= frame || cls.EndTime > frame && cls.clssType == useType)
             {
                 findDefs.Add(cls);
             }
@@ -1051,9 +1053,10 @@ public class clssDef
     {
         Vector3 pos_1, pos_2;
         (pos_1, pos_2) = getGlobalPos();
-            //Debug.Log("Drawin Capsules at" + pos_1.ToString() + pos_2.ToString());
+        //Debug.Log(attachTo + " Drawin Capsules at" + pos_1.ToString() + pos_2.ToString());
         DrawCapsuleGizmo_Tool(pos_1, pos_2, width,
         clssType == ClssType.Hit ? Color.blue : Color.red);
+        Debug.DrawLine(pos_1,pos_2);
     }
 
 //Gizmoの描写
@@ -1062,13 +1065,17 @@ public class clssDef
         int size = (int)((end - start).magnitude / radius);
         DrawWireSphere_OnDebug(start, radius, col);
         DrawWireSphere_OnDebug(end, radius, col);
-        for (int i = 1; i < size + 2 ; i++)
+        if (radius > 0)
         {
-            //Debug.Log("Drawin Capsules");
-            Vector3 DrawAt = start + (end - start) * ((float)i / Mathf.Max(1, size + 2));
-            //Debug.Log("Drawin Sphere at" + DrawAt);
-            DrawWireSphere_OnDebug(DrawAt, radius, col);
+            Debug.Log("Width : " + radius);
         }
+        for (int i = 1; i < size + 2; i++)
+            {
+                //Debug.Log("Drawin Capsules");
+                Vector3 DrawAt = start + (end - start) * ((float)i / Mathf.Max(1, size + 2));
+                //Debug.Log("Drawin Sphere at" + DrawAt);
+                DrawWireSphere_OnDebug(DrawAt, radius, col);
+            }
     }
 
     static public void DrawWireSphere_OnDebug(Vector3 pos, float radius, Color col)

@@ -41,8 +41,19 @@ function Queue_Cmd(in_entity)
     end
 
     -- Hard_1 cmd
-    if (selfOnGrd == true and AttackCmd_x_Released == true and stateID == 0) then 
+    if (selfOnGrd == true and AttackCmd_x_Released == true 
+    and stateID == 0 and chargeVal < 0.5) then 
         table.insert( verd, 5 )
+    end
+
+    -- Hard_1 cmd
+    if (selfOnGrd == true and AttackCmd_x_Released == true and stateID == 0 and chargeVal >= 0.5 and chargeVal < 1.0) then 
+        table.insert( verd, 6 )
+    end
+
+    -- Hard_1 cmd
+    if (selfOnGrd == true and AttackCmd_x_Released == true and stateID == 0 and chargeVal >= 1.0 and chargeVal < 2.0) then 
+        table.insert( verd, 7 )
     end
 
     -- air_combo cmd

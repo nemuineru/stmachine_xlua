@@ -18,11 +18,16 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: 8e994d9382ba03445bddab6509ecadc4, type: 3}
     preStateVerdictName: Queue_Cmd
     ParamLoadName: LuaOutput
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList:
     - rid: 4404388664824299527
     - rid: 4404388799971590145
     - rid: 4404388664824299528
     - rid: 4404388709018370078
+    - rid: 7982028148908752896
+    - rid: 7982028148908752897
     - rid: 4404388664824299529
     - rid: 4404388709018370091
     - rid: 7982027888260546560
@@ -110,4 +115,24 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: Auto_Def_Reset
         value: 0
+        priority: 0
+    - rid: 7982028148908752896
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 6
+          stLuaLoads: 
+        stateControllerSubName: Hard2 Axes_Cmd
+        changeTo: 6
+        priority: 0
+    - rid: 7982028148908752897
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 7
+          stLuaLoads: 
+        stateControllerSubName: Hard3 Hammer_Cmd
+        changeTo: 7
         priority: 0

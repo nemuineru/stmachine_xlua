@@ -132,6 +132,62 @@ MonoBehaviour:
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
+    ID: 6
+    Name: Hard_LV1_Axes
+    animClip:
+    - Clip: {fileID: 7400000, guid: 7353eb9b9f1d31f4c937a070d3d6cd6e, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0
+    blendOutTime: 0.1
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs:
+      - clssType: 1
+        attachTo: ax01
+        showGizmo: 1
+        _entity: {fileID: 0}
+        attachTransform: {fileID: 0}
+        startPos: {x: 0, y: 0, z: 0.8}
+        endPos: {x: 0, y: 0, z: 0}
+        width: 0.17
+        _lastcalcStartPos: {x: -1.87272, y: 0.31435484, z: 3.832837}
+        _lastcalcEndPos: {x: -2.375192, y: 0.73898786, z: 3.377635}
+      disableClssList: []
+      root: {fileID: 0}
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
+    ID: 7
+    Name: Hard_LV2_Hammer
+    animClip:
+    - Clip: {fileID: 7400000, guid: 49522fb913cff5e40a2a5e3e4114c782, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0
+    blendOutTime: 0.1
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs:
+      - clssType: 1
+        attachTo: ha01
+        showGizmo: 1
+        _entity: {fileID: 0}
+        attachTransform: {fileID: 0}
+        startPos: {x: 0, y: 0, z: 0.8}
+        endPos: {x: 0, y: 0, z: 0.15}
+        width: 0.2
+        _lastcalcStartPos: {x: -1.87272, y: 0.31435484, z: 3.832837}
+        _lastcalcEndPos: {x: -2.375192, y: 0.73898786, z: 3.377635}
+      disableClssList: []
+      root: {fileID: 0}
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
     ID: 20
     Name: Air_Kick
     animClip:
