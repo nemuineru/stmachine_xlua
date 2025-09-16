@@ -22,6 +22,8 @@ function Queue_Cmd(in_entity)
     stateID = in_entity.CurrentStateID
     chargeVal = in_entity.status.ChargeTime
 
+    isStateIDCombo = (stateID >= 0 and stateID <= 3)
+
     verd = {}
     -- combo_1 cmd
     if(selfOnGrd == true and AttackCmd_b == true and stateID == 0) then
@@ -42,17 +44,17 @@ function Queue_Cmd(in_entity)
 
     -- Hard_1 cmd
     if (selfOnGrd == true and AttackCmd_x_Released == true 
-    and stateID == 0 and chargeVal < 0.5) then 
+    and isStateIDCombo and chargeVal < 0.5) then 
         table.insert( verd, 5 )
     end
 
     -- Hard_1 cmd
-    if (selfOnGrd == true and AttackCmd_x_Released == true and stateID == 0 and chargeVal >= 0.5 and chargeVal < 1.0) then 
+    if (selfOnGrd == true and AttackCmd_x_Released == true and isStateIDCombo and chargeVal >= 0.5 and chargeVal < 1.0) then 
         table.insert( verd, 6 )
     end
 
     -- Hard_1 cmd
-    if (selfOnGrd == true and AttackCmd_x_Released == true and stateID == 0 and chargeVal >= 1.0 and chargeVal < 2.0) then 
+    if (selfOnGrd == true and AttackCmd_x_Released == true and isStateIDCombo and chargeVal >= 1.0 and chargeVal < 2.0) then 
         table.insert( verd, 7 )
     end
 

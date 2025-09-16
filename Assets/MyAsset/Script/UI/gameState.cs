@@ -5,7 +5,6 @@ using DG.Tweening;
 using System;
 //using UnityEditor.SearchService;
 using System.Linq;
-using UnityEngine.Serialization;
 
 public class gameState : MonoBehaviour
 {
@@ -16,7 +15,6 @@ public class gameState : MonoBehaviour
     //敵のHP管理バー.
     public GameObject HPUI;
 
-    [FormerlySerializedAs("hitEff")]
     public GameObject defaultEff;
     void Awake()
     {

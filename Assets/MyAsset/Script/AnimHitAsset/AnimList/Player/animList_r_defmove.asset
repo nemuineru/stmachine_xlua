@@ -50,7 +50,7 @@ MonoBehaviour:
     clssSetting:
       clssDefs:
       - clssType: 0
-        attachTo: upperleg.l
+        attachTo: hand.l
         showGizmo: 1
         _entity: {fileID: 0}
         attachTransform: {fileID: 0}
@@ -95,9 +95,18 @@ MonoBehaviour:
     blendOutTime: 0.2
     useDefaultClss: 0
     clssSetting:
-      clssDefs: []
-      disableClssList:
-      - head
+      clssDefs:
+      - clssType: 0
+        attachTo: hand.l
+        showGizmo: 0
+        _entity: {fileID: 0}
+        attachTransform: {fileID: 0}
+        startPos: {x: 0, y: 0, z: 0}
+        endPos: {x: 0, y: 0, z: 0}
+        width: 0
+        _lastcalcStartPos: {x: 0, y: 0, z: 0}
+        _lastcalcEndPos: {x: 0, y: 0, z: 0}
+      disableClssList: []
       root: {fileID: 0}
   - mixType: 0
     MixParamName: 

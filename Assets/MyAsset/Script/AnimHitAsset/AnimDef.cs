@@ -956,6 +956,7 @@ public class clssDef
         showGizmo = this.showGizmo,
         startPos = this.startPos,
         endPos = this.endPos,
+        width = this.width,
         StartTime = this.StartTime,
         EndTime = this.EndTime        
     };
@@ -1071,7 +1072,7 @@ public class clssDef
         }
         for (int i = 1; i < size + 2; i++)
             {
-                //Debug.Log("Drawin Capsules");
+                Debug.Log("Drawin Capsules");
                 Vector3 DrawAt = start + (end - start) * ((float)i / Mathf.Max(1, size + 2));
                 //Debug.Log("Drawin Sphere at" + DrawAt);
                 DrawWireSphere_OnDebug(DrawAt, radius, col);
