@@ -10,13 +10,13 @@ local Debug = CS.UnityEngine.Debug;
 function Queue_Cmd(in_entity)
     selfOnGrd = LC:isEntityOnGround(in_entity)
     JumpCommand = LC:CheckButtonPressed(in_entity, "a_")
-    AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
-
-    -- xの離し判定
     AttackCmd_x = LC:CheckButtonPressed(in_entity, "x_")
-    -- xの押し判定
-    AttackCmd_x_Pressed = LC:CheckButtonPressed(in_entity, "x")
-    AttackCmd_x_Released = LC:CheckButtonPressed(in_entity, "x^")
+
+    -- bの離し判定
+    AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
+    -- bの押し判定
+    AttackCmd_b_Pressed = LC:CheckButtonPressed(in_entity, "b")
+    AttackCmd_b_Released = LC:CheckButtonPressed(in_entity, "b^")
 
     selfStTime = LC:CheckStateTime(in_entity) 
     stateID = in_entity.CurrentStateID
@@ -26,56 +26,56 @@ function Queue_Cmd(in_entity)
 
     verd = {}
     -- combo_1 cmd
-    if(selfOnGrd == true and AttackCmd_b == true and stateID == 0) then
+    if(selfOnGrd == true and AttackCmd_x == true and stateID == 0) then
         table.insert( verd, 1) 
     end
 
     -- combo_2 cmd
-    if(selfOnGrd == true and AttackCmd_b == true and stateID == 1 and 
+    if(selfOnGrd == true and AttackCmd_x == true and stateID == 1 and 
     selfStTime > 4 and in_entity.attrs.isStateHit == true) then
         table.insert( verd, 2) 
     end
 
     -- combo_finisher cmd
-    if(selfOnGrd == true and AttackCmd_b == true and stateID == 2 
+    if(selfOnGrd == true and AttackCmd_x == true and stateID == 2 
     and selfStTime > 4 and in_entity.attrs.isStateHit == true) then
         table.insert( verd, 3) 
     end
 
     -- Hard_1 cmd
-    if (selfOnGrd == true and AttackCmd_x_Released == true 
+    if (selfOnGrd == true and AttackCmd_b_Released == true 
     and isStateIDCombo and chargeVal < 0.5) then 
         table.insert( verd, 5 )
     end
 
     -- Hard_1 cmd
-    if (selfOnGrd == true and AttackCmd_x_Released == true and isStateIDCombo and chargeVal >= 0.5 and chargeVal < 1.0) then 
+    if (selfOnGrd == true and AttackCmd_b_Released == true and isStateIDCombo and chargeVal >= 0.5 and chargeVal < 1.0) then 
         table.insert( verd, 6 )
     end
 
     -- Hard_1 cmd
-    if (selfOnGrd == true and AttackCmd_x_Released == true and isStateIDCombo and chargeVal >= 1.0 and chargeVal < 2.0) then 
+    if (selfOnGrd == true and AttackCmd_b_Released == true and isStateIDCombo and chargeVal >= 1.0 and chargeVal < 2.0) then 
         table.insert( verd, 7 )
     end
 
     -- air_combo cmd
-    if( selfOnGrd == false and AttackCmd_b == true and stateID == 50 ) then
+    if( selfOnGrd == false and AttackCmd_x == true and stateID == 50 ) then
         table.insert( verd, 20 ) 
     end
 
     -- air_Hard cmd
 
-    if( selfOnGrd == false and AttackCmd_x_Released == true and stateID == 50 ) then
+    if( selfOnGrd == false and AttackCmd_b_Released == true and stateID == 50 ) then
         table.insert( verd, 25 ) 
     end    
 
     -- chargeUp Checker
-    if( AttackCmd_x_Pressed == true and stateID < 5000 ) then
+    if( AttackCmd_b_Pressed == true and stateID < 5000 ) then
         table.insert( verd, 30 ) 
     end    
 
     --chargeUp Releasement Checks
-    if( AttackCmd_x_Released == true or stateID > 5000 ) then
+    if( AttackCmd_b_Released == true or stateID > 5000 ) then
     table.insert( verd, 31 ) 
     end
 

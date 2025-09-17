@@ -41,8 +41,8 @@ public class entityInputManager
 
     //コマンド記録用.
     public commandRecord[] commandBuffer = new commandRecord[1];
-    //60個まで登録.
-    int commandBuffer_max = 60;
+    //20個まで登録.
+    int commandBuffer_max = 20;
 
     //手動キャラクター操作用の呼び出しクラス.
     //これ、接続したコントローラー別に読み出したいけど時間かかりそうなのでやめる.
@@ -64,8 +64,8 @@ public class entityInputManager
             //以下、MainButtonなどは10の倍数値が最初から足されているため、ボタンインプット値の読み出しの際は
             // inputsを10で割って計算する.
             inputs += (InputInstance.self.inputValues.MainButton_Read) * 0B_00000001; //a
-            inputs += (InputInstance.self.inputValues.ActionButton_Read) * 0B_00000010; //b
-            inputs += (InputInstance.self.inputValues.SubButton_Read) * 0B_00000100; //x
+            inputs += (InputInstance.self.inputValues.ActionButton_Read) * 0B_00000010; //x
+            inputs += (InputInstance.self.inputValues.SubButton_Read) * 0B_00000100; //b
             inputs += (InputInstance.self.inputValues.UtilityButton_Read) * 0B_00001000; //y
             inputs += (InputInstance.self.inputValues.Extra1Button_Read) * 0B_00010000; //c
             inputs += (InputInstance.self.inputValues.Extra2Button_Read) * 0B_00100000; //z
@@ -347,10 +347,10 @@ public class entityInputManager
     //2進数のボタン比較用.  
     static structInputs[] anlInputs = {
         new structInputs(0B_00000001, "a"),
-        new structInputs(0B_00000010, "b"),
-        new structInputs(0B_00000100, "c"),
-        new structInputs(0B_00010000, "x"),
+        new structInputs(0B_00000100, "b"),
+        new structInputs(0B_00000010, "x"),
         new structInputs(0B_00001000, "y"),
+        new structInputs(0B_00010000, "c"),
         new structInputs(0B_00100000, "z"),
         new structInputs(0B_01000000, "s"),
         new structInputs(0B_10000000, "o")

@@ -144,12 +144,12 @@ public class InputCommandBuffer : MonoBehaviour
         string ret = "";
         strctInputs[] anlInputs = new strctInputs[8];
         //2進数のボタン比較用.
-        anlInputs[0] = new strctInputs(0B_00000001,"M");
-        anlInputs[1] = new strctInputs(0B_00000010,"A");
-        anlInputs[2] = new strctInputs(0B_00000100,"S");
-        anlInputs[3] = new strctInputs(0B_00001000,"U");
-        anlInputs[4] = new strctInputs(0B_00010000,"E1");
-        anlInputs[5] = new strctInputs(0B_00100000,"E2");
+        anlInputs[0] = new strctInputs(0B_00000001,"a");
+        anlInputs[1] = new strctInputs(0B_00000010,"b");
+        anlInputs[2] = new strctInputs(0B_00000100,"x");
+        anlInputs[3] = new strctInputs(0B_00001000,"y");
+        anlInputs[4] = new strctInputs(0B_00010000,"c");
+        anlInputs[5] = new strctInputs(0B_00100000,"z");
         anlInputs[6] = new strctInputs(0B_01000000,"st");
         anlInputs[7] = new strctInputs(0B_10000000,"sl");
 

@@ -151,6 +151,26 @@ MonoBehaviour:
     - rid: 4404389163807801374
     - rid: 4404389163807801373
     setCtrl: 0
+  - StateDefName: Grd Special Attack
+    StateDefID: 100
+    LuaAsset: {fileID: 0}
+    preStateVerdictName: 
+    ParamLoadName: 
+    stateType: 0
+    moveType: 0
+    physType: 0
+    StateList: []
+    setCtrl: 0
+  - StateDefName: Air Special Attack
+    StateDefID: 105
+    LuaAsset: {fileID: 0}
+    preStateVerdictName: 
+    ParamLoadName: 
+    stateType: 0
+    moveType: 0
+    physType: 0
+    StateList: []
+    setCtrl: 0
   references:
     version: 2
     RefIds:
