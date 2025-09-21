@@ -200,6 +200,15 @@ public class stateID
     }
 }
 
+//StateDef追加時のメニュー階層Attr用.
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+public class SCHiearchyAttribute : Attribute
+{
+    private string _hiearchyName = "";
+    public SCHiearchyAttribute(string name) { this._hiearchyName = name; }
+    public string Name { get { return this._hiearchyName; } }
+}
+
 //StateDefのクローンが必須.
 //なんかEntityの指定が重複していそう.
 [System.Serializable]
@@ -470,6 +479,7 @@ public class StateDef
 //ステコンのloadParamsにはLuaで"計算済み"の値を考える.
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("null")]
 public class StateController
 {   
     [ReadOnly]
@@ -505,6 +515,7 @@ public class StateController
 //ジェネリックメソッドの導入実験も兼ねて、やってみる.
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("Animation/AnimSet")]
 public class scAnimSet : StateController
 {
     [SerializeField]
@@ -531,6 +542,7 @@ public class scAnimSet : StateController
 //アニメーションパラメータの変更.
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("Animation/AnimParamchange")]
 public class scAnimParamChange : StateController
 {
     [SerializeField]
@@ -574,6 +586,7 @@ public class scAnimParamChange : StateController
 
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("Physics/Move")]
 public class scMove : StateController
 {   
     internal override void OnExecute(Entity entity)
@@ -592,6 +605,7 @@ public class scMove : StateController
 //ぶっちゃけめんどくせー。
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("Physics/HitDef")]
 public class scHitDef : StateController
 {
 
@@ -612,6 +626,7 @@ public class scHitDef : StateController
 //y方向へのimpulse型加速。
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("Physics/Jump")]
 public class scJump : StateController
 {
     internal override void OnExecute(Entity entity)
@@ -624,6 +639,7 @@ public class scJump : StateController
 
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("Misc/ColorChange")]
 public class scColorChange : StateController
 {        
     public Color color = Color.black;
@@ -639,6 +655,7 @@ public class scColorChange : StateController
 
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("System/ChangeState")]
 public class scChangeState : StateController
 {
     public int changeTo = 0;
@@ -669,6 +686,7 @@ public class scChangeState : StateController
 //現在はカメラ方向に向けるとしている
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("Physics/RotateToSpeed")]
 public class scRotateTowards : StateController
 {
     public float RotateWeight = 0;
@@ -692,6 +710,7 @@ public class scRotateTowards : StateController
 //設定位置にエフェクトを放出する.
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("Effect/EmitEffect")]
 public class scEmitEffect : StateController
 {
     [SerializeField]
@@ -706,6 +725,7 @@ public class scEmitEffect : StateController
 //自己のステートの返還作業.
 [System.Serializable]
 [SerializeField]
+[SCHiearchy("System/return SelfState")]
 public class scSelfState : StateController
 {
     [SerializeField]
@@ -723,6 +743,9 @@ public class scSelfState : StateController
 }
 
 //status変更. (HP)
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/set Health")]
 public class scAddHealth : StateController
 { 
     
@@ -738,6 +761,9 @@ public class scAddHealth : StateController
 }
 
 //status変更. (Energy)
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/add Energy")]
 public class scAddEnergy : StateController
 {
 
@@ -754,6 +780,9 @@ public class scAddEnergy : StateController
 
 
 //status変更. (Charge)
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/add Energy")]
 public class scAddCharge : StateController
 { 
     
@@ -772,6 +801,9 @@ public class scAddCharge : StateController
 
 
 //status変更. (Charge)
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/set Charge")]
 public class scSetCharge : StateController
 { 
     
@@ -789,6 +821,9 @@ public class scSetCharge : StateController
 }
 
 //ctrlフラグのセット.
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/set Ctrl")]
 public class scSetCtrl : StateController
 {     
     [SerializeField]
@@ -805,6 +840,9 @@ public class scSetCtrl : StateController
 }
 
 //処理中・直後フレームの特殊操作など. string形式で操作される 
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/set Special Flags")]
 public class scSetAssertSpecial : StateController
 {
     [SerializeField]
@@ -820,6 +858,9 @@ public class scSetAssertSpecial : StateController
 }
 
 //ゲームシステムに死を組み込む.
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/send system to death")]
 public class scSendDeathMeesage : StateController
 {
     [SerializeField]
@@ -833,6 +874,9 @@ public class scSendDeathMeesage : StateController
 }
 
 //NotHitBy : 特定攻撃に対しての無敵効果.
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/set Entity non-hit")]
 public class scNotHitBy : StateController
 {
     [SerializeField]
@@ -850,6 +894,9 @@ public class scNotHitBy : StateController
 
 
 //StateTypeの変更など
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/set stateType")]
 public class scSetStatetype : StateController
 {
     [SerializeField]
@@ -869,6 +916,9 @@ public class scSetStatetype : StateController
 }
 
 //PhysTypeの変更など
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/set PhysType")]
 public class scSetStatePhystype : StateController
 {
     [SerializeField]
@@ -888,6 +938,9 @@ public class scSetStatePhystype : StateController
 }
 
 //MoveTypeの変更など
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("System/set state Movetype")]
 public class scSetStateMovetype : StateController
 {
     [SerializeField]
@@ -906,3 +959,58 @@ public class scSetStateMovetype : StateController
     }
 }
 
+//set position for absolute value.
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("Physics/set Absolute position")]
+public class scSetPos : StateController
+{
+
+    [SerializeField]
+    stParams<Vector3> position;
+
+    [SerializeField]
+    stParams<int> priority;
+
+    internal override void OnExecute(Entity entity)
+    {
+        entity.rigid.position = position.valueGet(loadParams, entity);
+    }
+}
+
+
+//add position via value.
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("Physics/add Absolute position")]
+public class scAddPos : StateController
+{
+
+    [SerializeField]
+    stParams<Vector3> position;
+
+    [SerializeField]
+    stParams<int> priority;
+
+    internal override void OnExecute(Entity entity)
+    {
+        entity.rigid.position += position.valueGet(loadParams, entity);
+    }
+}
+
+
+//set position for absolute value.
+public class scSetRotate : StateController
+{
+
+    [SerializeField]
+    stParams<Quaternion> rotation;
+
+    [SerializeField]
+    stParams<int> priority;
+
+    internal override void OnExecute(Entity entity)
+    {
+        entity.rigid.rotation = rotation.valueGet(loadParams,entity);
+    }
+}

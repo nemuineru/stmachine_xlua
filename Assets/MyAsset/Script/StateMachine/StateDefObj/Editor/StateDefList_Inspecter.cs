@@ -321,7 +321,11 @@ public class StateDefList_Inspector : Editor
 
         foreach (Type executeState in executableStateControllerType)
         {
-            menu.AddItem(new GUIContent(executeState.FullName), on: false, func: () =>
+            //属性設定がうまくいかない.
+            SCHiearchyAttribute scName =
+            Attribute.GetCustomAttribute(executeState,typeof(SCHiearchyAttribute)) as SCHiearchyAttribute;
+            menu.AddItem(new GUIContent(scName.Name), on: false, func: () =>
+            //menu.AddItem(new GUIContent("Nemuineru/" + executeState.FullName), on: false, func: () =>
             {
                 StateController Instance = Activator.CreateInstance(executeState) as StateController;
                 targetedStates.StateList.Add(Instance);
