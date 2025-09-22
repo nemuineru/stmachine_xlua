@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85bef611c4806534aab65ba4d51677e3, type: 3}
+  m_Name: stateDefTest_Rusty_Throwing
+  m_EditorClassIdentifier: 
+  stateDefs:
+  - StateDefName: Throw_Start
+    StateDefID: 10
+    LuaAsset: {fileID: 0}
+    preStateVerdictName: 
+    ParamLoadName: 
+    stateType: 0
+    moveType: 0
+    physType: 0
+    StateList:
+    - rid: 7982028315445428225
+    - rid: 7982028315445428224
+    - rid: 7982028315445428226
+    setCtrl: 0
+  - StateDefName: Throw_Player State
+    StateDefID: 11
+    LuaAsset: {fileID: 0}
+    preStateVerdictName: 
+    ParamLoadName: 
+    stateType: 0
+    moveType: 0
+    physType: 0
+    StateList: []
+    setCtrl: 0
+  - StateDefName: Throw_Enemy State
+    StateDefID: 12
+    LuaAsset: {fileID: 0}
+    preStateVerdictName: 
+    ParamLoadName: 
+    stateType: 0
+    moveType: 0
+    physType: 0
+    StateList:
+    - rid: 7982028315445428227
+    - rid: 7982028315445428228
+    - rid: 7982028315445428229
+    setCtrl: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 7982028315445428224
+      type: {class: scHitDef, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: HitDef for init Attack
+        hitParams:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue:
+            Damage: 0
+            velset: {x: 0, y: 0, z: 0}
+            hitStopTime: {x: 0, y: 0}
+            HitEff: {fileID: 0}
+            ChangeState_Enemy: 5000
+            maxEntityHits: 1
+            enemyRefsPlayerNum: 0
+            ChangeState_Player: -1
+            HitFlag: SA
+          useID: -1
+          stLuaLoads: 
+    - rid: 7982028315445428225
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Init Animation
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7982028315445428226
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Change to 0 init state for non-connected hit
+        changeTo: 0
+        priority: 0
+    - rid: 7982028315445428227
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Get Player Choke Animation
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7982028315445428228
+      type: {class: scAddHealth, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Damage Once
+        value: -100
+        priority: 0
+    - rid: 7982028315445428229
+      type: {class: scSelfState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Return SelfState_Down
+        changeTo: 5100
+        priority: 0
