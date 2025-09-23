@@ -32,6 +32,7 @@ MonoBehaviour:
     - rid: 4404388709018370091
     - rid: 7982028180311244820
     - rid: 7982028180311244821
+    - rid: 7982028315445428230
     - rid: 7982027888260546560
     - rid: 7982027949219512324
     setCtrl: 0
@@ -157,4 +158,14 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: Air_Special
         changeTo: 105
+        priority: 0
+    - rid: 7982028315445428230
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 10
+          stLuaLoads: 
+        stateControllerSubName: throw
+        changeTo: 10
         priority: 0

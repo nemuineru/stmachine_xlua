@@ -17,6 +17,7 @@ function Queue_Cmd(in_entity)
     -- bの押し判定
     AttackCmd_b_Pressed = LC:CheckButtonPressed(in_entity, "b")
     AttackCmd_b_Released = LC:CheckButtonPressed(in_entity, "b^")
+    AttackCmd_b_x_doublePress = LC:CheckButtonPressed(in_entity, "z_")
 
     selfStTime = LC:CheckStateTime(in_entity) 
     stateID = in_entity.CurrentStateID
@@ -48,14 +49,19 @@ function Queue_Cmd(in_entity)
         table.insert( verd, 5 )
     end
 
-    -- Hard_1 cmd
+    -- Hard_2 cmd
     if (selfOnGrd == true and AttackCmd_b_Released == true and isStateIDCombo and chargeVal >= 0.5 and chargeVal < 1.0) then 
         table.insert( verd, 6 )
     end
 
-    -- Hard_1 cmd
+    -- Hard_3 cmd
     if (selfOnGrd == true and AttackCmd_b_Released == true and isStateIDCombo and chargeVal >= 1.0 and chargeVal < 2.0) then 
         table.insert( verd, 7 )
+    end
+
+    -- throwing command
+    if( selfOnGrd == false and AttackCmd_b_x_doublePress == true) then
+        table.insert( verd, 10)
     end
 
     -- air_combo cmd
@@ -64,7 +70,6 @@ function Queue_Cmd(in_entity)
     end
 
     -- air_Hard cmd
-
     if( selfOnGrd == false and AttackCmd_b_Released == true and stateID == 50 ) then
         table.insert( verd, 25 ) 
     end    
