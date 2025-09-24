@@ -754,19 +754,22 @@ public class AnimDef
         clssSetting.clssPosUpdate();
         List<clssDef> ca = clssSetting.findclss(clssDef.ClssType.Hit, 0f);
         ca.AddRange(clssSetting.findclss(clssDef.ClssType.Attack, 0f));
-        foreach (clssDef c in ca)
+        if (eraseAllClss == false)
         {
-            Debug.Log("clssCapsule name : " + c.attachTo);
-            //Debug.Log(c.attachTo);
-            c.getGlobalPos();
-            c.DrawCapsule();
-            if (c.showGizmo == true)
+            foreach (clssDef c in ca)
             {
-                if (c.clssType == clssDef.ClssType.Attack)
-                { 
-                    //Debug.Log("attackCapsule");
+                Debug.Log("clssCapsule name : " + c.attachTo);
+                //Debug.Log(c.attachTo);
+                c.getGlobalPos();
+                c.DrawCapsule();
+                if (c.showGizmo == true)
+                {
+                    if (c.clssType == clssDef.ClssType.Attack)
+                    {
+                        //Debug.Log("attackCapsule");
+                    }
+                    //c.DrawCapsule();
                 }
-                //c.DrawCapsule();
             }
         }
     }
@@ -783,6 +786,7 @@ public class AnimDef
         blendInTime = this.blendInTime,
         blendOutTime = this.blendOutTime,
         useDefaultClss = this.useDefaultClss,
+        eraseAllClss = this.eraseAllClss,
         clssSetting = this.clssSetting.Clone()
     };
 }
