@@ -34,7 +34,9 @@ MonoBehaviour:
     stateType: 0
     moveType: 0
     physType: 0
-    StateList: []
+    StateList:
+    - rid: 7982028360077541376
+    - rid: 7982028360077541377
     setCtrl: 0
   - StateDefName: Throw_Enemy State
     StateDefID: 12
@@ -57,7 +59,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 1
           stLuaLoads: 
         stateControllerSubName: HitDef for init Attack
         hitParams:
@@ -82,11 +84,11 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: Init Animation
+        stateControllerSubName: Init Anims(10)
         changeAnimID:
           _setEssential: 0
           loadTypes: 0
-          stParamValue: 0
+          stParamValue: 10
           useID: -1
           stLuaLoads: 
         animParameter:
@@ -100,7 +102,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 2
           stLuaLoads: 
         stateControllerSubName: Change to 0 init state for non-connected hit
         changeTo: 0
@@ -116,7 +118,7 @@ MonoBehaviour:
         changeAnimID:
           _setEssential: 0
           loadTypes: 0
-          stParamValue: 0
+          stParamValue: 12
           useID: -1
           stLuaLoads: 
         animParameter:
@@ -144,4 +146,34 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: Return SelfState_Down
         changeTo: 5100
+        priority: 0
+    - rid: 7982028360077541376
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Init Anims(11)
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 11
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7982028360077541377
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Change To Init
+        changeTo: 0
         priority: 0

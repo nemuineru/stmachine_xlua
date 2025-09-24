@@ -732,6 +732,9 @@ public class AnimDef
     float DefWeight = 1f;
 
     public bool useDefaultClss;
+    
+    //投げとかステート奪取時の挙動用. 一時的に当たり判定を除去する.
+    public bool eraseAllClss;
 
     //アニメーションごとにオーバーライド・設定可能な判定をここで設定する.
     //null値が挿入されているならデフォルトを使用..と考える.
