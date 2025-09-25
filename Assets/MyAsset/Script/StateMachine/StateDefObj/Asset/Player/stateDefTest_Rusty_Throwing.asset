@@ -15,7 +15,7 @@ MonoBehaviour:
   stateDefs:
   - StateDefName: Throw_Start
     StateDefID: 10
-    LuaAsset: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 4b74a811aca4b6d4c84d448bf2277d22, type: 3}
     preStateVerdictName: 
     ParamLoadName: 
     stateType: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
     setCtrl: 0
   - StateDefName: Throw_Player State
     StateDefID: 11
-    LuaAsset: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 4b74a811aca4b6d4c84d448bf2277d22, type: 3}
     preStateVerdictName: 
     ParamLoadName: 
     stateType: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
     setCtrl: 0
   - StateDefName: Throw_Enemy State
     StateDefID: 12
-    LuaAsset: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 4b74a811aca4b6d4c84d448bf2277d22, type: 3}
     preStateVerdictName: 
     ParamLoadName: 
     stateType: 0

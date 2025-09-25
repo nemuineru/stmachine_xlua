@@ -1,8 +1,8 @@
 
 local Debug = CS.UnityEngine.Debug;
 
--- ステート変更のファンクション (50)
-function QueuedStateID_0(in_entity)
+-- ステート変更のファンクション (10)
+function QueuedStateID_Throw(in_entity)
     verd = {}
     selfOnGrd = LC:isEntityOnGround(in_entity)
     CurrentTime = LC:CheckStateTime(in_entity)
@@ -15,8 +15,8 @@ function QueuedStateID_0(in_entity)
     return verd
 end
 
--- ステート変更のファンクション (5000)
-    function QueuedStateID_Hit_Def(in_entity)
+-- ステート変更のファンクション (11)
+    function QueuedStateID_ThrowHit_Player(in_entity)
         verd = {}
         selfOnGrd = LC:isEntityOnGround(in_entity)
         CurrentR = LC:CheckStateTime(in_entity)
@@ -35,8 +35,8 @@ end
     return verd
 end 
 
--- ステート変更のファンクション (5050)
-    function QueuedStateID_Hit_Air(in_entity)
+-- ステート変更のファンクション (12)
+    function QueuedStateID_ThrowHit_Enemy(in_entity)
         verd = {}
         selfOnGrd = LC:isEntityOnGround(in_entity)
         CurrentR = LC:CheckStateTime(in_entity)

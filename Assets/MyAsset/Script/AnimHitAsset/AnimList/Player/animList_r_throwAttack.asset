@@ -27,6 +27,7 @@ MonoBehaviour:
     blendInTime: 0.02
     blendOutTime: 0.05
     useDefaultClss: 0
+    eraseAllClss: 0
     clssSetting:
       clssDefs:
       - clssType: 0
@@ -56,6 +57,7 @@ MonoBehaviour:
     blendInTime: 0.02
     blendOutTime: 0
     useDefaultClss: 0
+    eraseAllClss: 1
     clssSetting:
       clssDefs:
       - clssType: 1
@@ -85,6 +87,7 @@ MonoBehaviour:
     blendInTime: 0.1
     blendOutTime: 0.08
     useDefaultClss: 0
+    eraseAllClss: 1
     clssSetting:
       clssDefs:
       - clssType: 1
