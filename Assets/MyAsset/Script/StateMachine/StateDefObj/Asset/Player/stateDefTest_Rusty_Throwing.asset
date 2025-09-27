@@ -16,7 +16,7 @@ MonoBehaviour:
   - StateDefName: Throw_Start
     StateDefID: 10
     LuaAsset: {fileID: -8122155829129254986, guid: 4b74a811aca4b6d4c84d448bf2277d22, type: 3}
-    preStateVerdictName: 
+    preStateVerdictName: QueuedStateID_Throw
     ParamLoadName: 
     stateType: 0
     moveType: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   - StateDefName: Throw_Player State
     StateDefID: 11
     LuaAsset: {fileID: -8122155829129254986, guid: 4b74a811aca4b6d4c84d448bf2277d22, type: 3}
-    preStateVerdictName: 
+    preStateVerdictName: QueuedStateID_ThrowHit_Player
     ParamLoadName: 
     stateType: 0
     moveType: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
   - StateDefName: Throw_Enemy State
     StateDefID: 12
     LuaAsset: {fileID: -8122155829129254986, guid: 4b74a811aca4b6d4c84d448bf2277d22, type: 3}
-    preStateVerdictName: 
+    preStateVerdictName: QueuedStateID_ThrowHit_Enemy
     ParamLoadName: 
     stateType: 0
     moveType: 0
