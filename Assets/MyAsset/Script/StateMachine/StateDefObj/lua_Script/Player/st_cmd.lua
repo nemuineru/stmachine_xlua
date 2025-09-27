@@ -60,7 +60,7 @@ function Queue_Cmd(in_entity)
     end
 
     -- throwing command
-    if( selfOnGrd == false and AttackCmd_b_x_doublePress == true) then
+    if( selfOnGrd == true and AttackCmd_b_x_doublePress == true) then
         table.insert( verd, 10)
     end
 
