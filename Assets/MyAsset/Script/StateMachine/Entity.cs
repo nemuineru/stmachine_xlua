@@ -190,7 +190,7 @@ public class Entity : MonoBehaviour
         }
     }
 
-    List<StateDef> loadedDefs = new List<StateDef>();
+    internal List<StateDef> loadedDefs = new List<StateDef>();
 
     string verd_1;
     [SerializeField]
@@ -325,8 +325,17 @@ public class Entity : MonoBehaviour
         }
 
         //state実行.. これは一つだけに実行されるはず.
-        StateDef currentState =
-        loadedDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
+        //ステート奪取したときの値を実行..
+        StateDef currentState = null;
+        if (parentEntity == null)
+        {
+            currentState =
+            loadedDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
+        }
+        else
+        {
+            StateDef findDef = parentEntity.loadedDefs.Find(st => st.StateDefID == CurrentStateID).Clone();
+        }
         if (currentState != null)
         {
             //Debug.Log("Executing stateDef - " + CurrentStateID + " at state time of - " + Time.frameCount + stateTime);

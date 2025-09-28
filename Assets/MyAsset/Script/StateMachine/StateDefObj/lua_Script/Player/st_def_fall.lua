@@ -11,8 +11,8 @@ function stID_FallDown(in_entity)
     verd = {}
     selfOnGrd = LC:isEntityOnGround(in_entity)
     CurrentTime = LC:CheckStateTime(in_entity)
-    CurrentAnimTime = LC:CurrentAnimTime(in_entity);
-    AnimEndTime = LC:CheckAnimEndTime(in_entity);
+    CurrentAnimTime = LC:CurrentAnimTime(in_entity)
+    AnimEndTime = LC:CheckAnimEndTime(in_entity)
     -- load the anims
     if( CurrentTime == 0) then
         table.insert( verd, 0 ) 

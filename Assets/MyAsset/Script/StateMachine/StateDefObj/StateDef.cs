@@ -1011,6 +1011,29 @@ public class scSetRotate : StateController
 
     internal override void OnExecute(Entity entity)
     {
-        entity.rigid.rotation = rotation.valueGet(loadParams,entity);
+        entity.rigid.rotation = rotation.valueGet(loadParams, entity);
+    }
+}
+
+//ステート奪取された"親"のアニメを再生する.
+public class scAnimParentSet : StateController
+{
+    [SerializeField]
+    stParams<int> changeAnimID;
+
+    [SerializeField]
+    stParams<Vector2> animParameter;
+
+    internal override void OnExecute(Entity entity)
+    {
+        entity.animID = changeAnimID.valueGet(loadParams, entity);
+        AnimDef animFindByID = entity.animDefs.ToList().Find
+        (x => x.ID == changeAnimID.valueGet(loadParams, entity));
+        //設定されたIDが見つかれば、そのParameterと同様に設定..
+        if (animFindByID != null)
+        {
+            entity.MainAnimMixer.ChangeAnim(animFindByID);
+            entity.MainAnimMixer.ChangeAnimParams(entity.animID, animParameter.valueGet(loadParams, entity));
+        }
     }
 }

@@ -4,15 +4,21 @@ local Debug = CS.UnityEngine.Debug;
 -- ステート変更のファンクション (10)
 function QueuedStateID_Throw(in_entity)
     verd = {}
-    CurrentR = LC:CheckStateTime(in_entity)
-    CurrentAnimID = LC:CheckAnimID(in_entity)
-    CurrentAnimTime = LC:CurrentAnimTime(in_entity);
     CurrentTime = LC:CheckStateTime(in_entity)
+    C_animTime = LC:CheckAnimTime(in_entity)
+    AnimEndTime = LC:CheckAnimEndTime(in_entity)
+    CurrentAnimID = LC:CheckAnimID(in_entity)
     if( CurrentTime == 0) then
         table.insert( verd, 0 ) 
     end
-    if(selfOnGrd == true) then
+    
+    -- check hitdef
+    if(C_animTime == 6) then
         table.insert( verd, 1 )
+    end
+    -- animation end
+    if( AnimEndTime - C_animTime < 1 and CurrentAnimID == 10) then
+        table.insert( verd, 2 )
     end
     return verd
 end

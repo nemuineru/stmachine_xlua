@@ -70,10 +70,10 @@ MonoBehaviour:
             velset: {x: 0, y: 0, z: 0}
             hitStopTime: {x: 0, y: 0}
             HitEff: {fileID: 0}
-            ChangeState_Enemy: 5000
+            ChangeState_Enemy: 12
             maxEntityHits: 1
-            enemyRefsPlayerNum: 0
-            ChangeState_Player: -1
+            enemyRefsPlayerNum: 1
+            ChangeState_Player: 11
             HitFlag: SA
           useID: -1
           stLuaLoads: 
