@@ -735,8 +735,8 @@ public class scSelfState : StateController
     int priority = 0;
     internal override void OnExecute(Entity entity)
     {
-        //親を戻し、StateChangeを行う.
-        entity.parentEntity = null;
+        //コントロール対象を戻し、StateChangeを行う.
+        entity.controlledEntity = null;
         scChangeState cState = new scChangeState(changeTo, priority);
         cState.OnExecute(entity);
     }
@@ -1015,6 +1015,7 @@ public class scSetRotate : StateController
     }
 }
 
+[SCHiearchy("Animation/AnimChange from Parent")]
 //ステート奪取された"親"のアニメを再生する.
 public class scAnimParentSet : StateController
 {
@@ -1027,7 +1028,7 @@ public class scAnimParentSet : StateController
     internal override void OnExecute(Entity entity)
     {
         entity.animID = changeAnimID.valueGet(loadParams, entity);
-        AnimDef animFindByID = entity.animDefs.ToList().Find
+        AnimDef animFindByID = entity.controlledEntity.animDefs.Find
         (x => x.ID == changeAnimID.valueGet(loadParams, entity));
         //設定されたIDが見つかれば、そのParameterと同様に設定..
         if (animFindByID != null)

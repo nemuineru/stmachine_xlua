@@ -78,11 +78,11 @@ public class Entity : MonoBehaviour
 
     //親のEntity. Parent化されているならこのEntityの内容を読み出しておく.
     [SerializeField]
-    internal Entity parentEntity;
+    public Entity parentEntity;
 
     //コントロール影響下のEntitiy. Selfstateが発生しない限りこの内容を読み出す.
     [SerializeField]
-    internal Entity controlledEntity;
+    public Entity controlledEntity;
 
 
     //アニメーション管理用.
@@ -327,14 +327,16 @@ public class Entity : MonoBehaviour
         //state実行.. これは一つだけに実行されるはず.
         //ステート奪取したときの値を実行..
         StateDef currentState = null;
-        if (parentEntity == null)
+        if (controlledEntity == null)
         {
             currentState =
             loadedDefs.Find(stDef => stDef.StateDefID == CurrentStateID);
         }
         else
         {
-            StateDef findDef = parentEntity.loadedDefs.Find(st => st.StateDefID == CurrentStateID).Clone();
+            Debug.LogWarning("Parent Entity Loaded");
+            StateDef findDef = controlledEntity.loadedDefs.Find(st => st.StateDefID == CurrentStateID).Clone();
+            currentState = findDef;
         }
         if (currentState != null)
         {
@@ -431,7 +433,17 @@ public class Entity : MonoBehaviour
         AnimDef animFindByID = animDefs.Find(x => x.ID == animID);
         if (animFindByID != null)
         {
+            MainAnimMixer.ChangeAnim(animFindByID, default, timeoffset);
+        }
+        MainAnimMixer.SetAnim(false);
+    }
 
+    //アニメーション変更 : ステート奪取側..
+    public void ChangeAnim_Parent(float timeoffset = 0.0f)
+    {
+        AnimDef animFindByID = controlledEntity.animDefs.Find(x => x.ID == animID);
+        if (animFindByID != null)
+        {
             MainAnimMixer.ChangeAnim(animFindByID, default, timeoffset);
         }
         MainAnimMixer.SetAnim(false);

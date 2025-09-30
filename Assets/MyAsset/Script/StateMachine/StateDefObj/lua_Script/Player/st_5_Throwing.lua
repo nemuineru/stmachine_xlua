@@ -1,4 +1,4 @@
-
+local Entity = CS.Entity;
 local Debug = CS.UnityEngine.Debug;
 
 -- ステート変更のファンクション (10)
@@ -45,16 +45,19 @@ end
 -- this state is edited for enemy
     function QueuedStateID_ThrowHit_Enemy(in_entity)
         verd = {}
+        
+        ControlledEntity = in_entity.controlledEntity
         CurrentR = LC:CheckStateTime(in_entity)
-        CurrentAnimTime = LC:CurrentAnimTime(in_entity);
         CurrentAnimID = LC:CheckAnimID(in_entity)
+        Enemy_C_animTime = LC:CheckAnimTime(ControlledEntity)
+        Enemy_AnimEndTime = LC:CheckAnimEndTime(ControlledEntity)
+        Debug.Log(f)
         if( CurrentR == 0  and not (CurrentAnimID == 5050) ) then
             -- Debug.Log("damage Amim")
             table.insert( verd, 0 ) 
         end
-        if ( CurrentR > 12 and selfOnGrd) then 
+        if( Enemy_AnimEndTime - Enemy_C_animTime < 15) then
             table.insert( verd, 1 )
         end
-        Debug.Log("Loaded PlayerStates")
     return verd
 end 
