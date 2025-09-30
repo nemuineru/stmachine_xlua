@@ -94,6 +94,13 @@ public class gameState : MonoBehaviour
                     Debug.Log("Hit : " + e.gameObject.name);
                     Instantiate
                     ((useParam.HitEff != null ? useParam.HitEff : defaultEff), HitPt, Quaternion.identity);
+
+                    //playerのchangestateが0以上なら変更.
+                    if (useParam.ChangeState_Player > -1)
+                    {
+                        calledEntity.isStateChanged = true;
+                        calledEntity.CurrentStateID = useParam.ChangeState_Player;
+                    }
                 }
                 //当てた分キャラ指定の値が減少..
                 refNumRemaining--;

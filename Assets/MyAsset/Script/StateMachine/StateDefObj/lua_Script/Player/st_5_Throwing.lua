@@ -26,17 +26,16 @@ end
 -- ステート変更のファンクション (11)
     function QueuedStateID_ThrowHit_Player(in_entity)
         verd = {}
-        selfOnGrd = LC:isEntityOnGround(in_entity)
-        CurrentR = LC:CheckStateTime(in_entity)
-        CurrentAnimTime = LC:CurrentAnimTime(in_entity);
+        CurrentTime = LC:CheckStateTime(in_entity)
+        C_animTime = LC:CheckAnimTime(in_entity)
+        AnimEndTime = LC:CheckAnimEndTime(in_entity)
         CurrentAnimID = LC:CheckAnimID(in_entity)
-        AnimEndTime = LC:CheckAnimEndTime(in_entity);
-        if( CurrentR == 0 ) then
+        if( CurrentTime == 0 ) then
             -- Debug.Log("damage Amim")
             table.insert( verd, 0 ) 
         end
         -- change to idle. also damage them and check the rest frametime
-        if( AnimEndTime - CurrentAnimTime < 2) then
+        if( AnimEndTime - C_animTime < 2) then
             table.insert(verd , 1)
         end
     return verd
