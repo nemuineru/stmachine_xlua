@@ -49,7 +49,7 @@ MonoBehaviour:
     ID: 11
     Name: Throw_End
     animClip:
-    - Clip: {fileID: 7400000, guid: a7e95567c435a79429d9a14d9f9c3494, type: 2}
+    - Clip: {fileID: 7400000, guid: 17eabd6e0b015a34c97e3796d7198cc2, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
     ID: 12
     Name: Throwed
     animClip:
-    - Clip: {fileID: 7400000, guid: 17eabd6e0b015a34c97e3796d7198cc2, type: 2}
+    - Clip: {fileID: 7400000, guid: 01d0e1845f98a2346b3efe7db37dcbb5, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0

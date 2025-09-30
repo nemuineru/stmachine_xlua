@@ -55,5 +55,6 @@ end
         if ( CurrentR > 12 and selfOnGrd) then 
             table.insert( verd, 1 )
         end
+        Debug.Log("Loaded PlayerStates")
     return verd
 end 
