@@ -61,6 +61,8 @@ end
         end
         if( Enemy_AnimEndTime - Enemy_C_animTime < 15) then
             table.insert( verd, 1 )
+        else 
+            table.insert( verd, 2 )
         end
     return verd
 end 
@@ -70,10 +72,10 @@ function ChockAnim_Track(in_entity)
     outs = {}
     ControlledEntity = in_entity.controlledEntity
 
-    tr_Choked = in_entity.getBoneTransform("neck")
-    tr_Choker = ControlledEntity.getBoneTransform("hand.L")
+    tr_Choked = LC:getEntityBoneTransform(in_entity,"neck")
+    tr_Choker = LC:getEntityBoneTransform(ControlledEntity,"hand.L")
 
-    diffPos = tr_Choked.position - tr_Choker.position    
+    diffPos = tr_Choker.position - tr_Choked.position
 
     table.insert(outs, diffPos)
     return outs

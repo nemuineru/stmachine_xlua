@@ -115,7 +115,7 @@ public class LC
         //Debug.Log(et.stateTime);
         return et.animationFrameTime;
     }
-    
+
     public float CheckAnimEndTime(Entity et)
     {
         //Debug.Log(et.stateTime);
@@ -132,7 +132,7 @@ public class LC
     {
         return et.CurrentStateID;
     }
-    
+
     public int CheckAnimID(Entity et)
     {
         return et.animID;
@@ -143,5 +143,10 @@ public class LC
     public int CheckAnimationsListNum(Entity et)
     {
         return et.MainAnimMixer.Mixers.Length;
+    }
+
+    public Transform getEntityBoneTransform(Entity et, string BoneName)
+    {
+        return et.getBoneTransform(BoneName);
     }
 }

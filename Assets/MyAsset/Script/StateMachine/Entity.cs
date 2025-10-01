@@ -221,6 +221,9 @@ public class Entity : MonoBehaviour
         //これはBehaviorDesignerに登録させる予定.
         //entityInput.RecordInput_Player(0);
         //play BehaviorDesigner.
+        //isStateChangedはここで変更される. currentStateでstateChangeが発生した際,　リセットをかけるため.
+        isStateChanged = false;
+        entityPhisics();
         setanimPlay();
         setViewCams();
         mat.SetColor("_Color", CurColor);
@@ -365,8 +368,6 @@ public class Entity : MonoBehaviour
             // + " at time of " + stateTime            
             //the StateDef needs as deepcopy?
 
-            //isStateChangedはここで変更される. currentStateでstateChangeが発生した際,　リセットをかけるため.
-            isStateChanged = false;
             currentState.Execute(this);
             //Debug.Log("Executed stateDef - " + CurrentStateID + " at state time of - "  + Time.frameCount + "/"+ stateTime +
             //" " + this.gameObject.name);
@@ -423,27 +424,34 @@ public class Entity : MonoBehaviour
 
 
         //SetAnimはHitPauseが0で無い限り毎フレーム更新する.
-        {
-            bool isPaused = (HitPauseTime > 0);
-            if (isPaused)
-            {
-                pausedVel = pausedVel == Vector3.zero ? rigid.velocity : pausedVel;
-                rigid.isKinematic = isPaused;
-            }
-            else if (pausedVel != Vector3.zero)
-            {
-                rigid.isKinematic = isPaused;
-                //Debug.Log("unpaused");
-                rigid.velocity = pausedVel;
-                pausedVel = Vector3.zero;
-            }
-            rigid.isKinematic = isPaused;
-            MainAnimMixer.SetAnim((HitPauseTime <= 0));
-        }
+        MainAnimMixer.SetAnim((HitPauseTime <= 0));
         MainAnimMixer.PrimalGraph.Play();
         animationFrameTime = MainAnimMixer.CurrentAnimTime();
         animationEndTime = MainAnimMixer.EndAnimTime();
 
+    }
+
+    public void entityPhisics()
+    {
+        capCol.enabled = true;
+        if (physicsType != _PhysicsType.N)
+        { 
+            //set gravity.
+            rigid.velocity += Physics.gravity * Time.fixedDeltaTime;
+        }
+        bool isPaused = (HitPauseTime > 0);
+        if (isPaused)
+        {
+            pausedVel = pausedVel == Vector3.zero ? rigid.velocity : pausedVel;
+            rigid.isKinematic = isPaused;
+        }
+        else if (pausedVel != Vector3.zero)
+        {
+            rigid.isKinematic = isPaused;
+            //Debug.Log("unpaused");
+            rigid.velocity = pausedVel;
+            pausedVel = Vector3.zero;
+        }
     }
 
 
@@ -562,7 +570,7 @@ public class Entity : MonoBehaviour
     //ignoring self collider for what time.
     public void ignoreCollider()
     {
-        
+        capCol.enabled = false;
     }
 }
 
