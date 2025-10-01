@@ -231,8 +231,17 @@ public class Entity : MonoBehaviour
 
         HitPauseTime -= 1.0f;
 
-        //これかぁ.. HitPauseTimeが設定されているなら特殊処理しないと.
+        //これかぁ.. HitPauseTimeが設定されていてもそのまま続行 - HitPause分も引き継ぐ.
         stateTime = isStateChanged ? 0 : HitPauseTime >= 0 ? stateTime : stateTime + 1;
+        //ステートが変更されなければそのまま.
+        if (isStateChanged)
+        {
+            attrs.resetCombatStateTime();
+        }
+        else
+        {
+            attrs.addCombatStateTime();
+        }
     }
 
     //地面判定.
@@ -298,19 +307,31 @@ public class Entity : MonoBehaviour
             //Most Primal Queue is Most Biggest Number.
             CListQueue.Sort((CQ_L, CQ_M) => CQ_M.priority - CQ_L.priority);
             CurrentStateID = CListQueue[0].stateDefID;
-            attrs.isStateHit = false;
+            attrs.resetCombatStateTime();
             CListQueue.Clear();
         }
 
 
         //常時実行StateDef(-1, -2, -3)
+
+        //-2はステート奪取されていても実行.
+        StateDef AutoState_2 =
+        loadedDefs.Find(stDef => stDef.StateDefID == -2);
+        if (AutoState_2 != null)
+        {
+            //Debug.Log("auto checking -1 state");
+            AutoState_2.Execute(this);
+        }
+
+        //-1はステート奪取されているなら実行しない.
         StateDef AutoState_1 =
         loadedDefs.Find(stDef => stDef.StateDefID == -1);
-        if (AutoState_1 != null)
+        if (AutoState_1 != null && controlledEntity == null)
         {
             //Debug.Log("auto checking -1 state");
             AutoState_1.Execute(this);
         }
+
 
 
         if (status.currentHP <= 0)
@@ -344,7 +365,8 @@ public class Entity : MonoBehaviour
             // + " at time of " + stateTime            
             //the StateDef needs as deepcopy?
 
-            //isStateChangedはここで変更される..
+            //isStateChangedはここで変更される. currentStateでstateChangeが発生した際,　リセットをかけるため.
+            isStateChanged = false;
             currentState.Execute(this);
             //Debug.Log("Executed stateDef - " + CurrentStateID + " at state time of - "  + Time.frameCount + "/"+ stateTime +
             //" " + this.gameObject.name);
@@ -399,7 +421,6 @@ public class Entity : MonoBehaviour
 
 
 
-        isStateChanged = false;
 
         //SetAnimはHitPauseが0で無い限り毎フレーム更新する.
         {
@@ -521,110 +542,33 @@ public class Entity : MonoBehaviour
         }
     }
 
-    //前プロジェクトのように、スクリプト内でステートをとりあえず記述.
-    //今回は最初のstatedefのLua内で読み出すステートを指定.
-
-    /*
-        void DefSet()
+    //LuaScript上で呼び出し可能にする.
+    // 例えば、//掴み側(ステート奪取側Entity)の右手のボーンの位置から
+    // 掴まれ側(ステート非奪取側Entity)の首のボーンの位置 を 除算することで
+    // 掴みモーションに合わせて締められモーションを追随することができる.
+    public Transform getBoneTransform(string F_str = "root")
+    {
+        //entity中のすべての階層のtransformを取得.
+        List<Transform> tList = allChildTransforms.ToList();
+        Transform findTransform = tList.Find(trs => trs.name == F_str);
+        if (findTransform != null)
         {
-
-            //StateDef_1
-
-            //ステートタイムが0以上でカラーなどを変更.
-            //また、ジャンプボタンが押されているならステート変更.
-            string Lua_StateDef_0 = @"
-                local Entity = CS.Entity;
-                -- ステート変更のファンクション
-                    function QueuedStateID(in_entity)
-
-                        selfOnGrd = LC:isEntityOnGround(in_entity)
-                        selfJump = LC:CheckButtonPressed()
-                        selfStTime = LC:CheckStateTime(in_entity) 
-
-                        verd = {}
-                        if (selfOnGrd == true and selfJump == true) then 
-                            table.insert( verd, 1 )
-                        end
-
-                        if(selfOnGrd == true) then
-                            table.insert( verd, 2 )
-                        end
-
-                        if( LC:CheckStateTime(in_entity) > 0 ) then
-                            table.insert( verd, 0 ) 
-                        end
-                    return verd
-                end
-            ";
-
-            StateDef def_1 = new StateDef();
-            def_1.StateDefName = "OnInitLoad";
-            def_1.entity = this;
-            def_1.StateDefID = 0;
-            def_1.PriorCondition = new lua_Read(Lua_StateDef_0);
-
-
-    //stateDef, StateList
-
-            scJump _stJump= new scJump();
-            _stJump.stateID = 1;
-
-            scChangeState _CgState = new scChangeState();
-            _CgState.stateID = 1;
-            _CgState.changeTo = 1;
-
-            scColorChange _stColorChange_1 = new scColorChange();
-            _stColorChange_1.stateID = 0;
-            _stColorChange_1.color = Color.white;
-
-            scMove mov = new scMove();
-            mov.stateID = 2;
-
-            def_1.StateList = new List<StateController>{ _stJump, _stColorChange_1, _CgState, mov};
-
-
-    //StateDef_2
-
-            //ステートタイムが0以上でカラーなどを変更.
-            //また、地面上ならステート変更.
-            string Lua_StateDef_1 = @"
-                -- ステート変更のファンクション
-                    function QueuedStateID(in_entity)
-
-                        verd = {}
-                        if ( LC:isEntityOnGround(in_entity) == true ) then 
-                            table.insert( verd, 1 )
-                        end
-                        if( LC:CheckStateTime(in_entity) > 0 ) then
-                            table.insert( verd, 0 ) 
-                        end
-                    return verd
-                end
-            ";
-
-
-            StateDef def_2 = new StateDef();
-            def_2.StateDefName = "Jumping";
-            def_2.StateDefID = 1;
-            def_2.entity = this;
-            def_2.PriorCondition = new lua_Read(Lua_StateDef_1);
-
-
-    //stateDef_2, StateList
-
-            scColorChange _stColorChange_2 = new scColorChange();
-            _stColorChange_2.stateID = 0;
-            _stColorChange_2.color = Color.red;
-
-            scChangeState _CgState_2 = new scChangeState();
-            _CgState_2.stateID = 1;
-            _CgState_2.changeTo = 0;
-
-            def_2.StateList = new List<StateController>{ _stColorChange_2, _CgState_2};
-
-
-            DefList.stateDefs = new List<StateDef>{ def_1, def_2 };
+            return findTransform;
         }
-    */
+        //if not found, return root transform.
+        return transform;
+    }
+
+    //ignoring self collider for what time.
+    public void ignoreCollider()
+    {
+        
+    }
+}
+
+//
+public class hitTarget
+{
+
 }
 

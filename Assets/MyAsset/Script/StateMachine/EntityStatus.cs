@@ -13,11 +13,37 @@ public class EntityAttr
     //止まってるか？
     public bool isPaused = false;
     public bool isStateChanged = false;
-    public bool isStateHit = false;
 
     public bool isFall = false;
 
     public bool isEraseReady = false;
+
+    //これらはそれぞれState内でHitDefの衝突判定が行われた場合の処理において反応される.
+    //StateDefが変わればReset -> 0.
+    //isPausedが設定されているなら増加しない.
+    public int isStateHit = 0;
+    public int isStateContact = 0;
+    public int isStateGuarded = 0;
+    public int isStateReversed = 0;
+
+    public void addCombatStateTime()
+    {
+        if (!isPaused)
+        {
+            isStateHit += isStateHit > 0 ? 1 : 0;
+            isStateContact += isStateContact != 0 ? 1 : 0;
+            isStateGuarded += isStateGuarded != 0 ? 1 : 0;
+            isStateReversed += isStateReversed != 0 ? 1 : 0;
+        }
+    }
+
+    public void resetCombatStateTime()
+    { 
+        isStateHit = 0;
+        isStateContact = 0;
+        isStateGuarded = 0;
+        isStateReversed = 0;       
+    }
 }
 
 //キャラクターの特殊フラッグ指定管理..

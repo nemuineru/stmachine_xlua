@@ -615,9 +615,11 @@ public class scHitDef : StateController
 
     internal override void OnExecute(Entity entity)
     {
-        //HitCheckを行う.
-        entity.attrs.isStateHit = gameState.self.ProvokeHitDef
-        (entity, hitParams.valueGet(loadParams, entity));
+        if(gameState.self.ProvokeHitDef(entity, hitParams.valueGet(loadParams, entity)))
+        {
+            //HitCheckを行う.
+            entity.attrs.isStateHit = entity.attrs.isStateHit > 0 ? entity.attrs.isStateHit : 1;
+        }
     }
 
 }

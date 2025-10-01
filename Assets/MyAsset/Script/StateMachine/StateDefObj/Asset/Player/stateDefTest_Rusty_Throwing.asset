@@ -42,18 +42,39 @@ MonoBehaviour:
     StateDefID: 12
     LuaAsset: {fileID: -8122155829129254986, guid: 4b74a811aca4b6d4c84d448bf2277d22, type: 3}
     preStateVerdictName: QueuedStateID_ThrowHit_Enemy
-    ParamLoadName: 
+    ParamLoadName: ChockAnim_Track
     stateType: 0
     moveType: 0
     physType: 0
     StateList:
-    - rid: 7982028315445428227
+    - rid: 7982028498543837196
     - rid: 7982028315445428228
     - rid: 7982028315445428229
+    - rid: 1982100641728167936
     setCtrl: 0
   references:
     version: 2
     RefIds:
+    - rid: 1982100641728167936
+      type: {class: scAddPos, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Track Grabber's Hand positions
+        position:
+          _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: 0
+          stLuaLoads: 
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
     - rid: 7982028315445428224
       type: {class: scHitDef, ns: , asm: Assembly-CSharp}
       data:
@@ -107,32 +128,12 @@ MonoBehaviour:
         stateControllerSubName: Change to 0 init state for non-connected hit
         changeTo: 0
         priority: 0
-    - rid: 7982028315445428227
-      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 0
-          stLuaLoads: 
-        stateControllerSubName: Get Player Choke Animation
-        changeAnimID:
-          _setEssential: 0
-          loadTypes: 0
-          stParamValue: 12
-          useID: -1
-          stLuaLoads: 
-        animParameter:
-          _setEssential: 0
-          loadTypes: 0
-          stParamValue: {x: 0, y: 0}
-          useID: -1
-          stLuaLoads: 
     - rid: 7982028315445428228
       type: {class: scAddHealth, ns: , asm: Assembly-CSharp}
       data:
         ID:
           useLua: 0
-          value: 2
+          value: 1
           stLuaLoads: 
         stateControllerSubName: Damage Once
         value: -100
@@ -142,7 +143,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 2
+          value: 1
           stLuaLoads: 
         stateControllerSubName: Return SelfState_Down
         changeTo: 5100
@@ -177,3 +178,23 @@ MonoBehaviour:
         stateControllerSubName: Change To Init
         changeTo: 0
         priority: 0
+    - rid: 7982028498543837196
+      type: {class: scAnimParentSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: QueuedStateID_ThrowHit_Enemy
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 12
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 

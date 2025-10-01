@@ -1,5 +1,8 @@
 local Entity = CS.Entity;
 local Debug = CS.UnityEngine.Debug;
+local Vector2 = CS.UnityEngine.Vector2;
+local Vector3 = CS.UnityEngine.Vector3;
+local Transform = CS.UnityEngine.Transform;
 
 -- ステート変更のファンクション (10)
 function QueuedStateID_Throw(in_entity)
@@ -61,3 +64,17 @@ end
         end
     return verd
 end 
+
+--Get Choke hand positions.
+function ChockAnim_Track(in_entity)    
+    outs = {}
+    ControlledEntity = in_entity.controlledEntity
+
+    tr_Choked = in_entity.getBoneTransform("neck")
+    tr_Choker = ControlledEntity.getBoneTransform("hand.L")
+
+    diffPos = tr_Choked.position - tr_Choker.position    
+
+    table.insert(outs, diffPos)
+    return outs
+end
