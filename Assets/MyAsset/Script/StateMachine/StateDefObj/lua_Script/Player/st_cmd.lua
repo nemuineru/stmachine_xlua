@@ -33,13 +33,13 @@ function Queue_Cmd(in_entity)
 
     -- combo_2 cmd
     if(selfOnGrd == true and AttackCmd_x == true and stateID == 1 and 
-    selfStTime > 4 and in_entity.attrs.isStateHit == true) then
+    selfStTime > 4 and in_entity.attrs.isStateHit > 0) then
         table.insert( verd, 2) 
     end
 
     -- combo_finisher cmd
     if(selfOnGrd == true and AttackCmd_x == true and stateID == 2 
-    and selfStTime > 4 and in_entity.attrs.isStateHit == true) then
+    and selfStTime > 4 and in_entity.attrs.isStateHit > 0) then
         table.insert( verd, 3) 
     end
 

@@ -45,7 +45,7 @@ MonoBehaviour:
     ParamLoadName: ChockAnim_Track
     stateType: 0
     moveType: 0
-    physType: 0
+    physType: 78
     StateList:
     - rid: 7982028498543837196
     - rid: 7982028315445428228

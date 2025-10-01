@@ -12,7 +12,7 @@ local Debug = CS.UnityEngine.Debug;
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-        if( math.abs(CurrentTime - 4) < 2  and not in_entity.attrs.isStateHit) then
+        if( math.abs(CurrentTime - 4) < 2  and in_entity.attrs.isStateHit == 0) then
             table.insert( verd, 10 ) 
         end
     return verd
@@ -32,7 +32,7 @@ end
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-        if( math.abs(CurrentAnimTime - 5) < 2  and not in_entity.attrs.isStateHit) then
+        if( math.abs(CurrentAnimTime - 5) < 2  and in_entity.attrs.isStateHit == 0) then
             table.insert( verd, 10 ) 
         end
     return verd
@@ -48,7 +48,7 @@ end
 
         CurrentTime = LC:CheckStateTime(in_entity)
         -- hitdef
-        if ( CurrentAnimTime == 14 and not in_entity.attrs.isStateHit ) then 
+        if ( CurrentAnimTime == 14 and in_entity.attrs.isStateHit == 0 ) then 
             table.insert( verd, 1 )
         end
         if( CurrentTime == 0 ) then
@@ -71,7 +71,7 @@ end
 
         CurrentTime = LC:CheckStateTime(in_entity)
         -- hitdef
-        if ( math.abs(CurrentAnimTime - 17) <  3 and not in_entity.attrs.isStateHit ) then 
+        if ( math.abs(CurrentAnimTime - 17) <  3 and in_entity.attrs.isStateHit == 0 ) then 
             table.insert( verd, 1 )
         end
         if( CurrentTime == 0 ) then

@@ -1040,3 +1040,9 @@ public class scAnimParentSet : StateController
         }
     }
 }
+
+[SCHiearchy("Physics/Entity Collision Reset")]
+public class scIgnoreEntityCollisions : StateController
+{
+
+}
