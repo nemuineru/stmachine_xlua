@@ -314,7 +314,6 @@ public class Entity : MonoBehaviour
             CListQueue.Clear();
         }
 
-
         //常時実行StateDef(-1, -2, -3)
 
         //-2はステート奪取されていても実行.

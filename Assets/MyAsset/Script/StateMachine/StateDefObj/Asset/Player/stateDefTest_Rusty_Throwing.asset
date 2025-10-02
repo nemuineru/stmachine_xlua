@@ -30,13 +30,14 @@ MonoBehaviour:
     StateDefID: 11
     LuaAsset: {fileID: -8122155829129254986, guid: 4b74a811aca4b6d4c84d448bf2277d22, type: 3}
     preStateVerdictName: QueuedStateID_ThrowHit_Player
-    ParamLoadName: 
+    ParamLoadName: ChokerSped
     stateType: 0
     moveType: 0
     physType: 0
     StateList:
     - rid: 7982028360077541376
     - rid: 7982028360077541377
+    - rid: 1982100662934306928
     setCtrl: 0
   - StateDefName: Throw_Enemy State
     StateDefID: 12
@@ -48,9 +49,12 @@ MonoBehaviour:
     physType: 78
     StateList:
     - rid: 7982028498543837196
+    - rid: 1982100662934306822
+    - rid: 1982100662934306829
     - rid: 7982028315445428228
     - rid: 7982028315445428229
     - rid: 1982100641728167936
+    - rid: 1982100662934306816
     setCtrl: 0
   references:
     version: 2
@@ -75,6 +79,65 @@ MonoBehaviour:
           stParamValue: 0
           useID: -1
           stLuaLoads: 
+    - rid: 1982100662934306816
+      type: {class: scIgnoreEntityCollisions, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Entity Colider  Ignorement
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982100662934306822
+      type: {class: scSetVelocity, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: set 0 velocity at first
+        vels:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: -1
+          stLuaLoads: 
+        priority: 0
+    - rid: 1982100662934306829
+      type: {class: scSetVelocity, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: set Vect from playerpos
+        vels:
+          _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 200, z: 0}
+          useID: 1
+          stLuaLoads: 
+        priority: 0
+    - rid: 1982100662934306928
+      type: {class: scAddVelocity, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Physics_Movement
+        vels:
+          _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: 0
+          stLuaLoads: 
+        priority: 0
     - rid: 7982028315445428224
       type: {class: scHitDef, ns: , asm: Assembly-CSharp}
       data:
@@ -146,7 +209,7 @@ MonoBehaviour:
           value: 1
           stLuaLoads: 
         stateControllerSubName: Return SelfState_Down
-        changeTo: 5100
+        changeTo: 5050
         priority: 0
     - rid: 7982028360077541376
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}

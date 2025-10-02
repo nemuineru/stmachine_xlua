@@ -131,6 +131,7 @@ public class stParams<Type>
             //としたい. 
             case loadType.Condition:
                 {
+                    if(loadParams.Count > useID && useID >= 0)
                     retValue = (Type)loadParams[useID];
                     break;
                 }
@@ -256,6 +257,9 @@ public class StateDef
         retDef.ParamLoadName = ParamLoadName;
         retDef.StateList = StateList;
         retDef.luaOutputParams = luaOutputParams;
+        retDef.stateType = stateType;
+        retDef.moveType = moveType;
+        retDef.physType = physType;
         return retDef;
     }
 
@@ -289,6 +293,8 @@ public class StateDef
 
     void entityTypeSet(Entity entity)
     {
+        Debug.Log("EntityTypeSet Executed - " +
+        stateType.ToString() + " , " + physType.ToString() + " , " + moveType.ToString());
         switch (stateType)
         {
             case 's':
@@ -401,7 +407,7 @@ public class StateDef
                 // を参考にリベイクしてみるか..
 
                 ExecuteStateIDs = stateVerd.Invoke(entity);
-                if (stateDefParams != null)
+                if (stateDefParams != null && entity != null)
                 {
                     luaOutputParams = stateDefParams.Invoke(entity).ToList();
                 }
@@ -586,9 +592,9 @@ public class scAnimParamChange : StateController
 
 [System.Serializable]
 [SerializeField]
-[SCHiearchy("Physics/Move")]
+[SCHiearchy("Physics/Move_Simple")]
 public class scMove : StateController
-{   
+{
     internal override void OnExecute(Entity entity)
     {
         entity.rigid.velocity = entity.wishingVect * 100.0f * Time.fixedDeltaTime;
@@ -597,6 +603,48 @@ public class scMove : StateController
     public override string typeGet()
     {
         return "scMove";
+    }
+}
+
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("Physics/Add velocity")]
+public class scAddVelocity : StateController
+{
+    [SerializeField]
+    stParams<Vector3> vels;
+
+    [SerializeField]
+    int priority = 0;
+    internal override void OnExecute(Entity entity)
+    {
+        entity.rigid.velocity += vels.valueGet(loadParams,entity) * Time.fixedDeltaTime;
+    }
+
+    public override string typeGet()
+    {
+        return "scAddVels";
+    }
+}
+
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("Physics/Set velocity")]
+public class scSetVelocity : StateController
+{
+    [SerializeField]
+    stParams<Vector3> vels;
+
+    [SerializeField]
+    int priority = 0;
+    internal override void OnExecute(Entity entity)
+    {
+        entity.rigid.velocity = vels.valueGet(loadParams,entity) * Time.fixedDeltaTime; 
+    }
+
+    public override string typeGet()
+    {
+        return "scAddVels";
     }
 }
 
@@ -1041,8 +1089,16 @@ public class scAnimParentSet : StateController
     }
 }
 
-[SCHiearchy("Physics/Entity Collision Reset")]
+//set the entity collision. it resets after 1 frames.
+[SCHiearchy("Physics/Entity Collision Ignore for 1 frame")]
 public class scIgnoreEntityCollisions : StateController
 {
+    [SerializeField]
+    stParams<int> priority;
 
+    internal override void OnExecute(Entity entity)
+    {
+        entity.ignoreCollider();
+    }
 }
+
