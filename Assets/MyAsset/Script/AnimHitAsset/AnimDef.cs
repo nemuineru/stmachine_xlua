@@ -1029,7 +1029,7 @@ public class clssDef
     }
 
     //当たり判定指定
-    //
+    //Entityが無いやつに関して..
     public void setTransform(Transform tfm)
     {
         attachTransform = tfm;
