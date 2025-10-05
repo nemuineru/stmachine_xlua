@@ -5,6 +5,7 @@ using DG.Tweening;
 using System;
 //using UnityEditor.SearchService;
 using System.Linq;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
 
 public class gameState : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class gameState : MonoBehaviour
     public List<Entity> entityList;
 
     //HitDefを発火する際のイベント
-    public bool ProvokeHitDef(Entity calledEntity, hitDefParams hitDefParams)
+    public bool ProvokeHitDef_Entity(Entity calledEntity, hitDefParams hitDefParams)
     {
         bool ret = false;
         int refNumRemaining;
@@ -53,60 +54,132 @@ public class gameState : MonoBehaviour
                 //それぞれのentityの現在再生中のAnimatorが持つClssに対して衝突判定.
                 //また、entityの無敵判定に関しても考える.
                 bool f = calledEntity.hitCheck(e, out Vector3 HitPt);
-
-
                 //hitしたなら一先ずAnim番号を5000に飛ばしたい. ChangeState(5000)の最優先Queueとして組み込む.
                 if (f == true)
                 {
                     ret = true;
-                    //stateChangeを設定..
-                    e.isStateChanged = true;
-
-                    //一先ず、プレースホルダーとして入れる
-                    e.CurrentStateID = useParam.ChangeState_Enemy;
-                    e.stateTime = 0;
-                    //攻撃を当てた対象にコントロールされる場合は相手のステートマップの読み出しを設定
-                    //設定されたEntityはselfStateが読み出されない限り読み出す.
-                    if (useParam.enemyRefsPlayerNum == true)
-                    {
-                        e.controlledEntity = calledEntity;
-                    }
-                    //placeholder for velocity
-                    Vector3 HitVect =
-                    Vector3.ProjectOnPlane(e.transform.position - calledEntity.transform.position, Vector3.up);
-                    e.rigid.velocity = HitVect.normalized * useParam.velset.x + Vector3.up * useParam.velset.y;
-
-                    //hitpause
-                    (calledEntity.HitPauseTime, e.HitPauseTime) = (useParam.hitStopTime.x, useParam.hitStopTime.y);
-
-                    //shapepositions
-                    e.transform.DOShakePosition(e.HitPauseTime * Time.fixedDeltaTime, 0.25f, 40, 45);
-                    e.ChangeAnim(.1f);
-
-                    e.status.currentHP -= useParam.Damage;
-
-
-
-
-                    //placeholder for rotation
-                    e.transform.rotation =
-                    Quaternion.Lerp(e.transform.rotation, Quaternion.LookRotation(-HitVect, Vector3.up), 0.6f);
-                    Debug.Log("Hit : " + e.gameObject.name);
-                    Instantiate
-                    ((useParam.HitEff != null ? useParam.HitEff : defaultEff), HitPt, Quaternion.identity);
-
-                    //playerのchangestateが0以上なら変更.
-                    if (useParam.ChangeState_Player > -1)
-                    {
-                        calledEntity.isStateChanged = true;
-                        calledEntity.CurrentStateID = useParam.ChangeState_Player;
-                    }
+                    hitDefApply(e, calledEntity, useParam, HitPt);
                 }
                 //当てた分キャラ指定の値が減少..
                 refNumRemaining--;
             }
         }
         return ret;
+    }
+
+    public bool ProvokeHitDef_Projs(Entity calledEntity, clssSetting sets , Transform trfs, hitDefParams H_params)
+    {
+        bool ret = false; int refNumRemaining;
+        hitDefParams useParam = new hitDefParams();
+        if (H_params != null)
+        {
+            useParam = H_params;
+        }
+        refNumRemaining = useParam.maxEntityHits;
+        foreach (Entity e in entityList)
+        {
+            //selfには反応しない. また当たる数が設定されているなら0にならない限り設定される.
+            if (e != calledEntity && refNumRemaining > 0)
+            {
+                //それぞれのentityの現在再生中のAnimatorが持つClssに対して衝突判定.
+                //また、entityの無敵判定に関しても考える.
+                bool f = calledEntity.hitCheck(e, out Vector3 HitPt);
+                //hitしたなら一先ずAnim番号を5000に飛ばしたい. ChangeState(5000)の最優先Queueとして組み込む.
+                if (f == true)
+                {
+                    ret = true;
+                    hitDefApply(e, trfs, useParam, HitPt);
+                }
+                //当てた分キャラ指定の値が減少..
+                refNumRemaining--;
+            }
+        }
+        return ret;
+    }
+
+    void hitDefApply(Entity beatenEntity, Entity calledEntity,
+    hitDefParams calledEParam , Vector3 hitContactPoint)
+    { 
+        //stateChangeを設定..
+        beatenEntity.isStateChanged = true;
+
+        //一先ず、プレースホルダーとして入れる
+        //stateTimeをリセット.
+        beatenEntity.CurrentStateID = calledEParam.ChangeState_Enemy;
+        beatenEntity.stateTime = 0;
+        //攻撃を当てた対象にコントロールされる場合は相手のステートマップの読み出しを設定
+        //設定されたEntityはselfStateが読み出されない限り読み出す.
+        if (calledEParam.enemyRefsPlayerNum == true)
+        {
+            beatenEntity.controlledEntity = calledEntity;
+        }
+        //placeholder for velocity
+        //currently its barebone
+        Vector3 HitVect = Vector3.ProjectOnPlane
+        (beatenEntity.transform.position - calledEntity.transform.position, Vector3.up);
+
+        DamageApply(beatenEntity, HitVect, calledEParam);
+        //hitpause
+        (calledEntity.HitPauseTime, beatenEntity.HitPauseTime) = (calledEParam.hitStopTime.x, calledEParam.hitStopTime.y);
+        Instantiate
+        ((calledEParam.HitEff != null ? calledEParam.HitEff : defaultEff), hitContactPoint, Quaternion.identity);
+
+        //playerのchangestateが0以上なら変更.
+        if (calledEParam.ChangeState_Player > -1)
+        {
+            calledEntity.isStateChanged = true;
+            calledEntity.CurrentStateID = calledEParam.ChangeState_Player;
+        }
+    }
+
+    void hitDefApply(Entity beatenEntity, Transform calledPoint,
+    hitDefParams calledEParam , Vector3 hitContactPoint)
+    { 
+        //stateChangeを設定..
+        beatenEntity.isStateChanged = true;
+
+        //一先ず、プレースホルダーとして入れる
+        //stateTimeをリセット.
+        beatenEntity.CurrentStateID = calledEParam.ChangeState_Enemy;
+        beatenEntity.stateTime = 0;
+
+        //現状、Projectileに関してはステート奪取を考えないことにする.
+        // if (calledEParam.enemyRefsPlayerNum == true)
+        // {
+        //     beatenEntity.controlledEntity = calledEntity;
+        // }
+
+        //placeholder for velocity
+        //currently its barebone
+        Vector3 HitVect = Vector3.ProjectOnPlane
+        (beatenEntity.transform.position - calledPoint.position, Vector3.up);
+
+        DamageApply(beatenEntity, HitVect, calledEParam);
+        //hitpause
+        (beatenEntity.HitPauseTime) = (calledEParam.hitStopTime.y);
+        Instantiate
+        ((calledEParam.HitEff != null ? calledEParam.HitEff : defaultEff), hitContactPoint, Quaternion.identity);
+    }
+
+
+
+    void DamageApply(Entity beatenEntity, Vector3 HitVect, hitDefParams calledEParam)
+    {
+        //SetSpeed
+        beatenEntity.rigid.velocity = HitVect.normalized * calledEParam.velset.x + Vector3.up * calledEParam.velset.y;
+
+
+        //shapepositions
+        beatenEntity.transform.DOShakePosition(beatenEntity.HitPauseTime * Time.fixedDeltaTime, 0.25f, 40, 45);
+        beatenEntity.ChangeAnim(.1f);
+
+        //hitpoint damage
+        beatenEntity.status.currentHP -= calledEParam.Damage;
+
+        //placeholder for rotation
+        beatenEntity.transform.rotation =
+        Quaternion.Lerp(beatenEntity.transform.rotation, Quaternion.LookRotation(-HitVect, Vector3.up), 0.6f);
+        Debug.Log("Hit : " + beatenEntity.gameObject.name);
     }
 
 

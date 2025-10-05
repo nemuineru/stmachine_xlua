@@ -11,19 +11,43 @@ public class Projectile : MonoBehaviour
 
     public GameObject EffectObject;
 
+    internal int Damage = 20;
+
+    //
+    public Entity proj_Controller;
+
+    
     //当たり判定 - 
-    clssDef def = new clssDef();
+    clssSetting cSet = new clssSetting();
     // Start is called before the first frame update
     void Start()
     {
+        clssDef def = new clssDef();
         def.setTransform(this.transform);
         def.startPos = pos_1;
         def.endPos = pos_2;
+        def.clssType = clssDef.ClssType.Hit;
+
+        cSet.clssDefs.Add(def);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        cSet.clssPosUpdate();
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.GetMask("Terrain"))
+        {
+            destroyEmit();
+            Destroy(gameObject);
+        }
+    }
+
+    void destroyEmit()
+    {
+        Instantiate(EffectObject,transform.position,Quaternion.identity);
     }
 }
