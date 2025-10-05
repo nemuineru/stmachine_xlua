@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3bd391a9e706014f88c1ba738a67323, type: 3}
+  m_Name: animList_thrower_attack
+  m_EditorClassIdentifier: 
+  animDef:
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
+    ID: 1
+    Name: Throwing Bottle
+    animClip:
+    - Clip: {fileID: 7400000, guid: 91267dd5e816db141a935f74bcc2e39c, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0.02
+    blendOutTime: 0.05
+    useDefaultClss: 0
+    eraseAllClss: 0
+    clssSetting:
+      clssDefs:
+      - clssType: 0
+        attachTo: hand.l
+        showGizmo: 1
+        _entity: {fileID: 0}
+        attachTransform: {fileID: 0}
+        startPos: {x: 0, y: -0.49, z: 0}
+        endPos: {x: 0, y: 0.33, z: 0}
+        width: 0.13
+        _lastcalcStartPos: {x: -2.005118, y: 0.67928535, z: 1.9083921}
+        _lastcalcEndPos: {x: -1.7067127, y: 0.8188073, z: 1.8886932}
+      disableClssList:
+      - head
+      root: {fileID: 0}
