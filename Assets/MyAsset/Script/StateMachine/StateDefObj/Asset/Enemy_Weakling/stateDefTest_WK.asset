@@ -30,7 +30,7 @@ MonoBehaviour:
     setCtrl: 0
   - StateDefName: Throw Bottles
     StateDefID: 1
-    LuaAsset: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 5560abd9d309e4644a56cc96dee9a743, type: 3}
     preStateVerdictName: 
     ParamLoadName: 
     stateType: 0

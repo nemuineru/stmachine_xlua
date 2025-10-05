@@ -42525,12 +42525,17 @@ MonoBehaviour:
   parentEntity: {fileID: 0}
   controlledEntity: {fileID: 0}
   animID: 0
-  animListObject: []
+  animListObject:
+  - {fileID: 11400000, guid: b51c9017a01584c4182996c71f2b52c6, type: 2}
+  - {fileID: 11400000, guid: cfbf7cbfe7eb3644f87e8aa5275d0821, type: 2}
   CurColor: {r: 0, g: 0, b: 0, a: 0}
   isOnGround: 0
   isStateChanged: 0
   renderers: []
-  DefLists: []
+  DefLists:
+  - {fileID: 11400000, guid: 088495829a6b34a49b6f04a45ae61ed6, type: 2}
+  - {fileID: 11400000, guid: d623e5452ad9bc04785b32c13bdf9400, type: 2}
+  - {fileID: 11400000, guid: d9627480b18d7514ba5178d0f74e8931, type: 2}
   wishingVect: {x: 0, y: 0, z: 0}
   LoadedBehavior: {fileID: 0}
   raycenter: {x: 0, y: -0.5, z: 0}
