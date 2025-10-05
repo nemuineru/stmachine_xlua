@@ -59,9 +59,9 @@ public class gameState : MonoBehaviour
                 {
                     ret = true;
                     hitDefApply(e, calledEntity, useParam, HitPt);
+                    //当てた分キャラ指定の値が減少..
+                    refNumRemaining--;
                 }
-                //当てた分キャラ指定の値が減少..
-                refNumRemaining--;
             }
         }
         return ret;
@@ -79,19 +79,23 @@ public class gameState : MonoBehaviour
         foreach (Entity e in entityList)
         {
             //selfには反応しない. また当たる数が設定されているなら0にならない限り設定される.
-            if (e != calledEntity && refNumRemaining > 0)
+            if ((calledEntity == null || e != calledEntity) && refNumRemaining > 0)
             {
+                bool f = false;
+                Vector3 HitPt = Vector3.zero;
                 //それぞれのentityの現在再生中のAnimatorが持つClssに対して衝突判定.
                 //また、entityの無敵判定に関しても考える.
-                bool f = calledEntity.hitCheck(e, out Vector3 HitPt);
+                clssSetting cEnemy = e.MainAnimMixer.MainAnimDef.clssSetting;
+                f = sets.clssCollided(out var v1, out var v2, out var dist, clssDef.ClssType.Hit, cEnemy, .1f);
                 //hitしたなら一先ずAnim番号を5000に飛ばしたい. ChangeState(5000)の最優先Queueとして組み込む.
                 if (f == true)
                 {
+                    HitPt = (v1 + v2) / 2f;
                     ret = true;
                     hitDefApply(e, trfs, useParam, HitPt);
+                    //当てた分キャラ指定の値が減少..
+                    refNumRemaining--;
                 }
-                //当てた分キャラ指定の値が減少..
-                refNumRemaining--;
             }
         }
         return ret;

@@ -1,0 +1,259 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85bef611c4806534aab65ba4d51677e3, type: 3}
+  m_Name: stateDefTest_WK_HIT
+  m_EditorClassIdentifier: 
+  stateDefs:
+  - StateDefName: Default
+    StateDefID: 1000000
+    LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
+    preStateVerdictName: QueuedStateID_0
+    ParamLoadName: LuaOutput
+    stateType: 0
+    moveType: 0
+    physType: 0
+    StateList:
+    - rid: 3579423253479817227
+    - rid: 4404388598234480643
+    setCtrl: 0
+  - StateDefName: OnHit
+    StateDefID: 5000
+    LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
+    preStateVerdictName: QueuedStateID_Hit_Def
+    ParamLoadName: LuaOutput
+    stateType: 83
+    moveType: 72
+    physType: 83
+    StateList:
+    - rid: 4404388575372902408
+    - rid: 4404388569968803840
+    - rid: 4404388549547524096
+    - rid: 7982028000538132481
+    setCtrl: 0
+  - StateDefName: OnHit_Blow
+    StateDefID: 5050
+    LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
+    preStateVerdictName: QueuedStateID_Hit_Air
+    ParamLoadName: LuaOutput
+    stateType: 83
+    moveType: 72
+    physType: 83
+    StateList:
+    - rid: 4404388637674569735
+    - rid: 4404388575372902408
+    - rid: 7982027949219512346
+    setCtrl: 0
+  - StateDefName: OnHit_Fall
+    StateDefID: 5100
+    LuaAsset: {fileID: -8122155829129254986, guid: b20a38daf98a7ed479ac6f191b1fe118, type: 3}
+    preStateVerdictName: stID_FallDown
+    ParamLoadName: 
+    stateType: 76
+    moveType: 72
+    physType: 83
+    StateList:
+    - rid: 7982027949219512332
+    - rid: 7982027949219512331
+    - rid: 7982028000538132486
+    setCtrl: 0
+  - StateDefName: OnHit_Recover
+    StateDefID: 5101
+    LuaAsset: {fileID: -8122155829129254986, guid: b20a38daf98a7ed479ac6f191b1fe118, type: 3}
+    preStateVerdictName: stID_FallRecov
+    ParamLoadName: 
+    stateType: 76
+    moveType: 73
+    physType: 83
+    StateList:
+    - rid: 7982027949219512334
+    - rid: 7982027949219512333
+    setCtrl: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 3579423253479817227
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: default
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 4404388549547524096
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Set To Recover
+        changeTo: 0
+        priority: 0
+    - rid: 4404388569968803840
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: DamageAnim_Def
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 5000
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 4404388575372902408
+      type: {class: scColorChange, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Orange Enough
+        color: {r: 1, g: 0.6214301, b: 0.2216981, a: 1}
+    - rid: 4404388598234480643
+      type: {class: scColorChange, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: 
+        color: {r: 0.5577163, g: 0.77340966, b: 0.7830189, a: 1}
+    - rid: 4404388637674569735
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: DamageAnim_Blow
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 5050
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7982027949219512331
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: fall to recover state
+        changeTo: 5101
+        priority: 0
+    - rid: 7982027949219512332
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: change to Fall anim
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 5100
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7982027949219512333
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: change to def
+        changeTo: 0
+        priority: 0
+    - rid: 7982027949219512334
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: change to recover
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 5101
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7982027949219512346
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Set To BlowOff
+        changeTo: 5100
+        priority: 0
+    - rid: 7982028000538132481
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Set to Death if not alive
+        changeTo: 5050
+        priority: 0
+    - rid: 7982028000538132486
+      type: {class: scSendDeathMeesage, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Set Death and Destroy it
+        priority: 0

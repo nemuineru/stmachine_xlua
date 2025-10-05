@@ -117,7 +117,7 @@ public class CheckTrisIntersect : MonoBehaviour
 
             Gizmos.color = Color.cyan;
             Gizmos.DrawLine(Near_1, Near_2);
-            Debug.LogWarning("Position Found at: " + Near_1 + " and " + Near_2 + ", Distance: " + findNearest);
+            //Debug.LogWarning("Position Found at: " + Near_1 + " and " + Near_2 + ", Distance: " + findNearest);
         }
         else
         {

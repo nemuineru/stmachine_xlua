@@ -10,11 +10,11 @@ public class Projectile : MonoBehaviour
     public float RemainTime = 1.0f;
 
     public GameObject EffectObject;
-
-    internal int Damage = 20;
-
     //
     public Entity proj_Controller;
+
+    [SerializeField]
+    public hitDefParams hitDefParams;
 
     
     //当たり判定 - 
@@ -26,7 +26,8 @@ public class Projectile : MonoBehaviour
         def.setTransform(this.transform);
         def.startPos = pos_1;
         def.endPos = pos_2;
-        def.clssType = clssDef.ClssType.Hit;
+        def.clssType = clssDef.ClssType.Attack;
+        def.width = radius;
 
         cSet.clssDefs.Add(def);
     }
@@ -35,19 +36,34 @@ public class Projectile : MonoBehaviour
     void Update()
     {
         cSet.clssPosUpdate();
+        foreach (clssDef c in cSet.clssDefs)
+        {
+            Debug.Log("drawing clssDefs");
+            c.getGlobalPos();
+            c.DrawCapsule();
+        }
+        if (gameState.self.ProvokeHitDef_Projs(proj_Controller, cSet, transform, hitDefParams))
+        {
+            Debug.Log("HIT!");
+            destroyEmit();
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.GetMask("Terrain"))
+        //Debug.Log("Collided! + " + collision.gameObject.layer);
+        if (other.gameObject.layer == LayerMask.NameToLayer("Terrain"))
         {
             destroyEmit();
-            Destroy(gameObject);
         }
     }
 
     void destroyEmit()
     {
-        Instantiate(EffectObject,transform.position,Quaternion.identity);
+        if (EffectObject != null)
+        { 
+            Instantiate(EffectObject,transform.position,Quaternion.identity);
+        }
+        Destroy(gameObject);
     }
 }

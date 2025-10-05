@@ -580,7 +580,7 @@ public class AnimDef
                     //また、角度で比較
                     if (isReached)
                     {
-                        Debug.Log("IsReached : On");
+                        //Debug.Log("IsReached : On");
                         float angle_0 = Vector2.Angle(pos_1.pos, CurrentParamPos);
                         float angle_1 = Vector2.Angle(pos_2.pos, CurrentParamPos);
                         //Debug.Log( animClip[animPos[0].index].Clip.name + " : " + angle_0);
@@ -594,7 +594,7 @@ public class AnimDef
                     //UPDATE : 原点を指定した時、[0] (1 , 0), [1](-1, 0)の時バグる. 多分直線だから..
                     else if (hasCenter)
                     {
-                        Debug.Log("IsReached : Off");
+                        //Debug.Log("IsReached : Off");
                         float angle_0 = Vector2.Angle(pos_1.pos, CurrentParamPos);
                         float angle_1 = Vector2.Angle(pos_2.pos, CurrentParamPos);
 
@@ -611,7 +611,7 @@ public class AnimDef
                         float Dist_PT = Vector2.Distance(animPos1_2PerpPos, CurrentParamPos);
                         float Dist_Cer = Vector2.Distance(animPosBasePerpPos, Vector2.zero);
 
-                        Debug.Log(Dist_PT + ":" + "a" + Dist_Cer);
+                        //Debug.Log(Dist_PT + ":" + "a" + Dist_Cer);
 
                         float pAllWeight = Dist_PT / Dist_Cer;
                         //Debug.Log("Weight - " + pWeight + animPos[0].pos + animPos[1].pos);
@@ -628,7 +628,7 @@ public class AnimDef
                         //現在パラメータ位置の距離で比較    
                         float distSelect = (animPos[i].pos - CurrentParamPos).magnitude;
                         float curRest = (1f - distSelect / x_distAll);
-                        Debug.Log(animClip[animPos[i].index].Clip.name + " : " + curRest);
+                        //Debug.Log(animClip[animPos[i].index].Clip.name + " : " + curRest);
                         animClip[animPos[i].index].MixWeightSet = BaseWeight * curRest * WeightRest;
                         WeightRest = Mathf.Clamp01(WeightRest - curRest);
                     }
@@ -758,7 +758,7 @@ public class AnimDef
         {
             foreach (clssDef c in ca)
             {
-                Debug.Log("clssCapsule name : " + c.attachTo);
+                //Debug.Log("clssCapsule name : " + c.attachTo);
                 //Debug.Log(c.attachTo);
                 c.getGlobalPos();
                 c.DrawCapsule();
@@ -1075,11 +1075,11 @@ public class clssDef
         DrawWireSphere_OnDebug(end, radius, col);
         if (radius > 0)
         {
-            Debug.Log("Width : " + radius);
+            //Debug.Log("Width : " + radius);
         }
         for (int i = 1; i < size + 2; i++)
             {
-                Debug.Log("Drawin Capsules");
+                //Debug.Log("Drawin Capsules");
                 Vector3 DrawAt = start + (end - start) * ((float)i / Mathf.Max(1, size + 2));
                 //Debug.Log("Drawin Sphere at" + DrawAt);
                 DrawWireSphere_OnDebug(DrawAt, radius, col);

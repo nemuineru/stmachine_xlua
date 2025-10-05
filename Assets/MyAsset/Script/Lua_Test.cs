@@ -47,7 +47,7 @@ public class Lua_Test : MonoBehaviour
         int[] result = exampleMethod.Invoke();
         foreach (int result2 in result)
         {
-            Debug.Log(result2);
+            //Debug.Log(result2);
         }
     }
 }

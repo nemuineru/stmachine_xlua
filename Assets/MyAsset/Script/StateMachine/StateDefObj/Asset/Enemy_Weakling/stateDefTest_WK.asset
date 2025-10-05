@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85bef611c4806534aab65ba4d51677e3, type: 3}
-  m_Name: stateDefTest_Grunt_Base
+  m_Name: stateDefTest_WK
   m_EditorClassIdentifier: 
   stateDefs:
   - StateDefName: OnInitLoad
@@ -28,31 +28,18 @@ MonoBehaviour:
     - rid: 3002629528666767591
     - rid: 3579422750824726546
     setCtrl: 0
-  - StateDefName: Combo1 Jab_First
+  - StateDefName: Throw Bottles
     StateDefID: 1
-    LuaAsset: {fileID: -8122155829129254986, guid: 98010520cf004724ab8d15d12269212c, type: 3}
-    preStateVerdictName: QueuedStateID
-    ParamLoadName: LuaOutput
+    LuaAsset: {fileID: 0}
+    preStateVerdictName: 
+    ParamLoadName: 
     stateType: 0
     moveType: 0
     physType: 0
     StateList:
-    - rid: 3579423065411158016
-    - rid: 3579423095655497736
-    - rid: 4404388529659445248
-    setCtrl: 0
-  - StateDefName: KnifeStab
-    StateDefID: 5
-    LuaAsset: {fileID: -8122155829129254986, guid: 6837c7e0416f567428421391c0919233, type: 3}
-    preStateVerdictName: QueuedStateID_Knife
-    ParamLoadName: null
-    stateType: 0
-    moveType: 0
-    physType: 0
-    StateList:
-    - rid: 4404388709018370071
-    - rid: 4404388709018370072
-    - rid: 4404388709018370073
+    - rid: 1982100731693105157
+    - rid: 1982100731693105158
+    - rid: 1982100731693105159
     setCtrl: 0
   - StateDefName: Jump
     StateDefID: 50
@@ -70,6 +57,57 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 1982100731693105157
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Set Throwing
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982100731693105158
+      type: {class: scProjectile, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Proj Shot
+        projs: {fileID: 5354473868157599039, guid: 38285fd282f99c1438237f117fc493ea, type: 3}
+        InstDirection:
+          _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: 0
+          stLuaLoads: 
+        InstPosition:
+          _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: 1
+          stLuaLoads: 
+    - rid: 1982100731693105159
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Throwing End
+        changeTo: 0
+        priority: 0
     - rid: 3002629213760520200
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
@@ -137,112 +175,6 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: rotate
         RotateWeight: 0.5
-    - rid: 3579423065411158016
-      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 0
-          stLuaLoads: 
-        stateControllerSubName: AnimSet_Jab
-        changeAnimID:
-          _setEssential: 0
-          loadTypes: 0
-          stParamValue: 1
-          useID: -1
-          stLuaLoads: 
-        animParameter:
-          _setEssential: 0
-          loadTypes: 0
-          stParamValue: {x: 0, y: 0}
-          useID: -1
-          stLuaLoads: 
-    - rid: 3579423095655497736
-      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 3
-          stLuaLoads: 
-        stateControllerSubName: Change To Init
-        changeTo: 0
-        priority: 0
-    - rid: 4404388529659445248
-      type: {class: scHitDef, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 10
-          stLuaLoads: 
-        stateControllerSubName: JabHit
-        hitParams:
-          _setEssential: 0
-          loadTypes: 0
-          stParamValue:
-            Damage: 18
-            velset: {x: 1.5, y: 0, z: 0}
-            hitStopTime: {x: 4, y: 4}
-            HitEff: {fileID: 0}
-            ChangeState_Enemy: 5000
-            maxEntityHits: 1
-            enemyRefsPlayerNum: 0
-            ChangeState_Player: -1
-            HitFlag: SA
-          useID: -1
-          stLuaLoads: 
-    - rid: 4404388709018370071
-      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 0
-          stLuaLoads: 
-        stateControllerSubName: Knifes Anim
-        changeAnimID:
-          _setEssential: 0
-          loadTypes: 0
-          stParamValue: 5
-          useID: -1
-          stLuaLoads: 
-        animParameter:
-          _setEssential: 0
-          loadTypes: 0
-          stParamValue: {x: 0, y: 0}
-          useID: -1
-          stLuaLoads: 
-    - rid: 4404388709018370072
-      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 1
-          stLuaLoads: 
-        stateControllerSubName: ChangeInit
-        changeTo: 0
-        priority: 10
-    - rid: 4404388709018370073
-      type: {class: scHitDef, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 10
-          stLuaLoads: 
-        stateControllerSubName: Damages
-        hitParams:
-          _setEssential: 0
-          loadTypes: 0
-          stParamValue:
-            Damage: 0
-            velset: {x: 1, y: 2, z: 0}
-            hitStopTime: {x: 3, y: 10}
-            HitEff: {fileID: 130626, guid: 763c35982e678ac4bbc44144c42c505f, type: 3}
-            ChangeState_Enemy: 5000
-            maxEntityHits: 1
-            enemyRefsPlayerNum: 0
-            ChangeState_Player: -1
-            HitFlag: SA
-          useID: -1
-          stLuaLoads: 
     - rid: 4404389163807801372
       type: {class: scJump, ns: , asm: Assembly-CSharp}
       data:

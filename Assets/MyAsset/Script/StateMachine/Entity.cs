@@ -188,6 +188,7 @@ public class Entity : MonoBehaviour
         {
             transposer = vCam.GetCinemachineComponent<CinemachineOrbitalTransposer>();
         }
+        rigid.useGravity = false;
     }
 
     internal List<StateDef> loadedDefs = new List<StateDef>();
@@ -434,7 +435,7 @@ public class Entity : MonoBehaviour
     {
         capCol.enabled = true;
         if (physicsType != _PhysicsType.N)
-        { 
+        {
             //set gravity.
             rigid.velocity += Physics.gravity * Time.fixedDeltaTime;
         }
@@ -506,9 +507,9 @@ public class Entity : MonoBehaviour
         public int priority;
     }
 
-    internal void makeInstantiate(GameObject gObj)
+    internal GameObject makeInstantiate(GameObject gObj)
     {
-        Instantiate(gObj, transform.position, Quaternion.identity);
+        return Instantiate(gObj, transform.position, Quaternion.identity);
     }
 
     internal char checkHitStates()

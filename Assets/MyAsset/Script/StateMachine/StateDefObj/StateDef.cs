@@ -653,7 +653,7 @@ public class scSetVelocity : StateController
 //ぶっちゃけめんどくせー。
 [System.Serializable]
 [SerializeField]
-[SCHiearchy("Physics/HitDef")]
+[SCHiearchy("Attack/HitDef")]
 public class scHitDef : StateController
 {
 
@@ -667,6 +667,38 @@ public class scHitDef : StateController
         {
             //HitCheckを行う.
             entity.attrs.isStateHit = entity.attrs.isStateHit > 0 ? entity.attrs.isStateHit : 1;
+        }
+    }
+
+}
+
+//攻撃判定設定 - 指定の攻撃をシステムに予約する
+//攻撃があたった対象を予約されたステート番号5000..
+//ぶっちゃけめんどくせー。
+[System.Serializable]
+[SerializeField]
+[SCHiearchy("Attack/Projectile")]
+public class scProjectile : StateController
+{
+    [SerializeField]
+    Projectile projs;
+
+    [SerializeField]
+    stParams<Vector3> InstDirection;
+
+    [SerializeField]
+    stParams<Vector3> InstPosition;
+
+
+    internal override void OnExecute(Entity entity)
+    {
+        //set projs. if its null do nothing
+        if (projs != null)
+        {
+            GameObject inst = entity.makeInstantiate(projs.gameObject);
+            inst.transform.position = InstPosition.valueGet(loadParams, entity);
+            inst.GetComponent<Rigidbody>().velocity = InstDirection.valueGet(loadParams, entity);
+            inst.GetComponent<Projectile>().proj_Controller = entity;
         }
     }
 
