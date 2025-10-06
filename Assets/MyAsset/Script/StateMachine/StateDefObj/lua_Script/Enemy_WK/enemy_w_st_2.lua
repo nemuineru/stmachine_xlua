@@ -8,15 +8,16 @@ local Vector3 = CS.UnityEngine.Vector3;
         verd = {}
         --スキを見せるように.
         AnimTime = LC:CheckAnimTime(in_entity)
+        AnimEndTime = LC:CheckAnimEndTime(in_entity)
         CurrentTime = LC:CheckStateTime(in_entity)
-        if ( CurrentTime > 24 ) then 
+        if (  AnimEndTime - AnimTime < 8 ) then 
             table.insert( verd, 2 )
         end
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
         --Throwing判定
-        if( CurrentTime == 16) then
+        if( CurrentTime == 48) then
             table.insert( verd, 1 ) 
         end
     return verd
@@ -24,10 +25,10 @@ end
 
 
 function ThrowPos(in_entity)
-    table = {}
+    outs = {}
     thrower_fw = in_entity.transform.forward
-    table.insert(table ,thrower_fw + Vector3.up)
+    table.insert(outs ,thrower_fw * 4 + Vector3.up * 4)
     thrower_hand = LC:getEntityBoneTransform(in_entity,"hand.r")
-    table.insert(table ,thrower_hand.position)
-    return table
+    table.insert(outs ,thrower_hand.position)
+    return outs
 end

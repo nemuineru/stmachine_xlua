@@ -179,9 +179,9 @@ MonoBehaviour:
           _setEssential: 0
           loadTypes: 0
           stParamValue:
-            Damage: 18
+            Damage: 10
             velset: {x: 1.5, y: 0, z: 0}
-            hitStopTime: {x: 4, y: 4}
+            hitStopTime: {x: 8, y: 2}
             HitEff: {fileID: 0}
             ChangeState_Enemy: 5000
             maxEntityHits: 1

@@ -864,7 +864,7 @@ public class scAddEnergy : StateController
 //status変更. (Charge)
 [System.Serializable]
 [SerializeField]
-[SCHiearchy("System/add Energy")]
+[SCHiearchy("System/add Charge")]
 public class scAddCharge : StateController
 { 
     

@@ -20,11 +20,6 @@ function Queue_Cmd(in_entity)
             table.insert( verd, 1) 
         end
 
-        -- Hard_1 cmd
-        if (selfOnGrd == true and AttackCmd_x == true and stateID == 0) then 
-            table.insert( verd, 5 )
-        end
-
         -- air_combo cmd
         -- if( selfOnGrd == false and AttackCmd_b == true and stateID == 50 ) then
         --    table.insert( verd, 20 ) 

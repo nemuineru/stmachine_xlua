@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5402e0d55e5d1f84e894fff806d9708b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -111,9 +111,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e0eefda369607a428c72446ca722e38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pos_1: {x: 0, y: -0.1, z: 0}
-  pos_2: {x: 0, y: 0.1, z: 0}
-  radius: 0.1
+  pos_1: {x: 0, y: -0.2, z: 0}
+  pos_2: {x: 0, y: 0.15, z: 0}
+  radius: 0.24
   RemainTime: 5
   EffectObject: {fileID: 0}
   proj_Controller: {fileID: 0}
@@ -122,7 +122,7 @@ MonoBehaviour:
     velset: {x: 0, y: 0, z: 1}
     hitStopTime: {x: 0, y: 10}
     HitEff: {fileID: 0}
-    ChangeState_Enemy: 5000
+    ChangeState_Enemy: 5050
     maxEntityHits: 1
     enemyRefsPlayerNum: 0
     ChangeState_Player: -1

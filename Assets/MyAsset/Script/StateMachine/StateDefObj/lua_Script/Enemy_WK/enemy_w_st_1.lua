@@ -9,7 +9,6 @@ local Debug = CS.UnityEngine.Debug;
 function QueuedStateID(in_entity)
     selfOnGrd = LC:isEntityOnGround(in_entity)
     AttackCmd_jp = LC:CheckButtonPressed(in_entity, "a")
-    AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
     ShiftCMD = LC:CheckButtonPressed(in_entity, "y")
     selfStTime = LC:CheckStateTime(in_entity) 
 

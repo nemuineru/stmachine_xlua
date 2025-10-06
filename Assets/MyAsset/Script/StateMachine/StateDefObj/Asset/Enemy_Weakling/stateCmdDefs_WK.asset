@@ -15,13 +15,15 @@ MonoBehaviour:
   stateDefs:
   - StateDefName: Default
     StateDefID: -1
-    LuaAsset: {fileID: -8122155829129254986, guid: 65fd7b4815d6a3444b417f80c6adccb9, type: 3}
+    LuaAsset: {fileID: -8122155829129254986, guid: c9ae672b67192e244ba28d274768b05c, type: 3}
     preStateVerdictName: Queue_Cmd
     ParamLoadName: LuaOutput
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList:
     - rid: 4404388664824299527
-    - rid: 4404388709018370078
-    - rid: 4404388664824299529
+    setCtrl: 0
   references:
     version: 2
     RefIds:
@@ -32,26 +34,6 @@ MonoBehaviour:
           useLua: 0
           value: 1
           stLuaLoads: 
-        stateControllerSubName: Combo1 Jab_Cmd
+        stateControllerSubName: bottle Thrower
         changeTo: 1
         priority: 0
-    - rid: 4404388664824299529
-      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 20
-          stLuaLoads: 
-        stateControllerSubName: JumpCombo Kick_Cmd
-        changeTo: 20
-        priority: 0
-    - rid: 4404388709018370078
-      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          useLua: 0
-          value: 5
-          stLuaLoads: 
-        stateControllerSubName: Hard1 GKnife_Cmd
-        changeTo: 5
-        priority: 1

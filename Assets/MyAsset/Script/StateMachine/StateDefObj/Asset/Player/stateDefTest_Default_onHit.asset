@@ -37,7 +37,7 @@ MonoBehaviour:
     StateList:
     - rid: 4404388637674569735
     - rid: 4404388575372902408
-    - rid: 4404388549547524096
+    - rid: 1982100752660430871
     setCtrl: 0
   - StateDefName: OnHit_BlowRecov
     StateDefID: 5055
@@ -111,6 +111,16 @@ MonoBehaviour:
         stateControllerSubName: On Death
         changeTo: 5300
         priority: 0
+    - rid: 1982100752660430871
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Set To Blowout
+        changeTo: 5100
+        priority: 0
     - rid: 3579423253479817227
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:
@@ -138,8 +148,8 @@ MonoBehaviour:
           useLua: 0
           value: 1
           stLuaLoads: 
-        stateControllerSubName: Set To BlowDown
-        changeTo: 5100
+        stateControllerSubName: Recov
+        changeTo: 0
         priority: 0
     - rid: 4404388569968803840
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}

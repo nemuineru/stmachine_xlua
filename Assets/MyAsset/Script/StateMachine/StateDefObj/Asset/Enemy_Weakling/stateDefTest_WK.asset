@@ -15,7 +15,7 @@ MonoBehaviour:
   stateDefs:
   - StateDefName: OnInitLoad
     StateDefID: 0
-    LuaAsset: {fileID: -8122155829129254986, guid: 5560abd9d309e4644a56cc96dee9a743, type: 3}
+    LuaAsset: {fileID: -8122155829129254986, guid: ff709de9f1b554644a3462e045adc0ab, type: 3}
     preStateVerdictName: QueuedStateID
     ParamLoadName: LuaOutput
     stateType: 0
@@ -30,9 +30,9 @@ MonoBehaviour:
     setCtrl: 0
   - StateDefName: Throw Bottles
     StateDefID: 1
-    LuaAsset: {fileID: -8122155829129254986, guid: 5560abd9d309e4644a56cc96dee9a743, type: 3}
-    preStateVerdictName: 
-    ParamLoadName: 
+    LuaAsset: {fileID: -8122155829129254986, guid: 3991d08a4d22acf44b502b22d45ad625, type: 3}
+    preStateVerdictName: QueuedStateID
+    ParamLoadName: ThrowPos
     stateType: 0
     moveType: 0
     physType: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
         changeAnimID:
           _setEssential: 0
           loadTypes: 0
-          stParamValue: 0
+          stParamValue: 1
           useID: -1
           stLuaLoads: 
         animParameter:

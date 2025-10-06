@@ -62,6 +62,10 @@ public class enemyInput_Test : Action
                 //xzrefに従い、コマンドを出力する. ..要はどの目線を前向き方向にするか。
                 //ここで定義されるのはちょっとまずいので後でFIXしたい
                 str.forwardRef = Vector2.up;
+                if (virtualStickInput.Length > 0)
+                {
+                    str.forwardRef = virtualStickInput[0].Value;
+                }
                 str.currentElapsedFrame = 0;
                 entityInputManager.CMDParette CP = new entityInputManager.CMDParette();
                 //全体所要時間. これに届くまで指定のコマンドが実行される.
@@ -83,7 +87,7 @@ public class enemyInput_Test : Action
 
                 if (Random.value < rand_Prov)
                 {
-                    CP.commandInput = ",,,,,a,a,a,a";
+                    CP.commandInput = Command.Value;
                 }
 
                 AIEntity.entityInput.cmdParettes.Add(str);

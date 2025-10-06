@@ -49,7 +49,7 @@ public class gameState : MonoBehaviour
         foreach (Entity e in entityList)
         {
             //selfには反応しない. また当たる数が設定されているなら0にならない限り設定される.
-            if (e != calledEntity && refNumRemaining > 0)
+            if (e != calledEntity && e.tag != calledEntity.tag && refNumRemaining > 0)
             {
                 //それぞれのentityの現在再生中のAnimatorが持つClssに対して衝突判定.
                 //また、entityの無敵判定に関しても考える.
@@ -79,7 +79,7 @@ public class gameState : MonoBehaviour
         foreach (Entity e in entityList)
         {
             //selfには反応しない. また当たる数が設定されているなら0にならない限り設定される.
-            if ((calledEntity == null || e != calledEntity) && refNumRemaining > 0)
+            if ((calledEntity == null || (e != calledEntity && e.tag != calledEntity.tag)) && refNumRemaining > 0)
             {
                 bool f = false;
                 Vector3 HitPt = Vector3.zero;
