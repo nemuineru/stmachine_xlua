@@ -18,6 +18,9 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
     preStateVerdictName: QueuedStateID_Hit_Def
     ParamLoadName: LuaOutput
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList:
     - rid: 4404388575372902408
     - rid: 4404388549547524096
@@ -28,6 +31,9 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
     preStateVerdictName: QueuedStateID_Hit_Air
     ParamLoadName: LuaOutput
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList:
     - rid: 4404388637674569735
     - rid: 4404388575372902408
@@ -38,22 +44,32 @@ MonoBehaviour:
     LuaAsset: {fileID: 0}
     preStateVerdictName: 
     ParamLoadName: 
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList: []
     setCtrl: 0
   - StateDefName: Blow_Down
     StateDefID: 5100
-    LuaAsset: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 7e97089536c28c441bef14a366389640, type: 3}
     preStateVerdictName: stID_FallDown
     ParamLoadName: 
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList:
     - rid: 7982027949219512321
     - rid: 7982027949219512328
+    - rid: 1982100752660430849
     setCtrl: 0
   - StateDefName: Blow_Recovery
     StateDefID: 5101
-    LuaAsset: {fileID: 0}
+    LuaAsset: {fileID: -8122155829129254986, guid: 7e97089536c28c441bef14a366389640, type: 3}
     preStateVerdictName: stID_FallRecov
     ParamLoadName: 
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList:
     - rid: 7982027949219512322
     - rid: 7982027949219512326
@@ -63,6 +79,9 @@ MonoBehaviour:
     LuaAsset: {fileID: 0}
     preStateVerdictName: Dead
     ParamLoadName: 
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList:
     - rid: 7982027949219512329
     - rid: 7982027949219512330
@@ -72,6 +91,9 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: ba55e3e82ed4fba4db7d0e1450ce1287, type: 3}
     preStateVerdictName: QueuedStateID_0
     ParamLoadName: LuaOutput
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList:
     - rid: 3579423253479817227
     - rid: 4404388598234480643
@@ -79,6 +101,16 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 1982100752660430849
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: On Death
+        changeTo: 5300
+        priority: 0
     - rid: 3579423253479817227
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:
@@ -106,8 +138,8 @@ MonoBehaviour:
           useLua: 0
           value: 1
           stLuaLoads: 
-        stateControllerSubName: Set To base
-        changeTo: 0
+        stateControllerSubName: Set To BlowDown
+        changeTo: 5100
         priority: 0
     - rid: 4404388569968803840
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}

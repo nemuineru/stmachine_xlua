@@ -11,16 +11,22 @@ function stID_FallDown(in_entity)
     verd = {}
     selfOnGrd = LC:isEntityOnGround(in_entity)
     CurrentTime = LC:CheckStateTime(in_entity)
-    CurrentAnimTime = LC:CurrentAnimTime(in_entity)
-    AnimEndTime = LC:CheckAnimEndTime(in_entity)
+    CurrentAnimTime = LC:CheckAnimTime(in_entity);
+    CurrentAnimID =  LC:CheckAnimID(in_entity);
+    AnimEndTime = LC:CheckAnimEndTime(in_entity);
     -- load the anims
-    if( CurrentTime == 0) then
+    if( CurrentTime == 0 ) then
         table.insert( verd, 0 ) 
     end
     -- change to recovery. the check the rest frametime
     -- also check not dead
-    if( AnimEndTime - CurrentAnimTime < 2 and in_entity.attrs.alive) then
+    if( CurrentAnimID == 5100 and 
+    AnimEndTime - CurrentAnimTime < 8 and in_entity.attrs.alive) then
         table.insert(verd , 1)
+    end    
+
+    if( in_entity.attrs.alive == false) then
+        table.insert(verd , 2)
     end
     return verd
 end
@@ -30,14 +36,15 @@ function stID_FallRecov(in_entity)
     verd = {}
     selfOnGrd = LC:isEntityOnGround(in_entity)
     CurrentTime = LC:CheckStateTime(in_entity)
-    CurrentAnimTime = LC:CurrentAnimTime(in_entity);
+    CurrentAnimTime = LC:CheckAnimTime(in_entity);
+    CurrentAnimID =  LC:CheckAnimID(in_entity);
     AnimEndTime = LC:CheckAnimEndTime(in_entity);
     -- load the first anims
     if( CurrentTime == 0) then
         table.insert( verd, 0 ) 
     end
     -- change to recovery. the check the rest frametime
-    if( AnimEndTime - CurrentAnimTime < 2) then
+    if( CurrentAnimID == 5101 and  AnimEndTime - CurrentAnimTime < 12) then
         table.insert(verd , 1)
     end
     return verd

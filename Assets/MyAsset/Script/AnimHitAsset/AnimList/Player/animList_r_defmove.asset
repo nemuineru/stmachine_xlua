@@ -47,6 +47,7 @@ MonoBehaviour:
     blendInTime: 0.05
     blendOutTime: 0.05
     useDefaultClss: 1
+    eraseAllClss: 0
     clssSetting:
       clssDefs:
       - clssType: 0
@@ -75,6 +76,7 @@ MonoBehaviour:
     blendInTime: 0.1
     blendOutTime: 0
     useDefaultClss: 0
+    eraseAllClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
@@ -94,6 +96,7 @@ MonoBehaviour:
     blendInTime: 0
     blendOutTime: 0.2
     useDefaultClss: 0
+    eraseAllClss: 0
     clssSetting:
       clssDefs:
       - clssType: 0
@@ -120,8 +123,9 @@ MonoBehaviour:
       cycleOffset: 0
       mixPosition: {x: 0, y: 0}
     blendInTime: 0
-    blendOutTime: 0.4
+    blendOutTime: 0.1
     useDefaultClss: 0
+    eraseAllClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
@@ -141,6 +145,7 @@ MonoBehaviour:
     blendInTime: 0
     blendOutTime: 0.4
     useDefaultClss: 0
+    eraseAllClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
@@ -160,6 +165,7 @@ MonoBehaviour:
     blendInTime: 0
     blendOutTime: 0.4
     useDefaultClss: 0
+    eraseAllClss: 1
     clssSetting:
       clssDefs: []
       disableClssList:
