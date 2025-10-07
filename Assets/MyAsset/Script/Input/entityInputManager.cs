@@ -29,8 +29,8 @@ public class commandPallette
     public bool isMoveExclusive = false;
     public bool isLookExclusive = false;
 
-    public List<virtualSticks> MovAxisVecs;
-    public List<virtualSticks> LookAxisVecs;
+    public List<virtualSticks> MovAxisVecs = new List<virtualSticks>();
+    public List<virtualSticks> LookAxisVecs = new List<virtualSticks>();
     public string buttonCommands;
 
     //entityInputManagerのMovAxisの入力値について : 
@@ -60,7 +60,10 @@ public class commandPallette
             changed.axis =
             new Vector2(vir.axis.x * Mathf.Cos(AngleDiff) + vir.axis.y * Mathf.Sin(AngleDiff),
             vir.axis.y * Mathf.Cos(AngleDiff) + vir.axis.x * Mathf.Sin(AngleDiff));
+            retVt.Add(changed);
+            Debug.Log("changed to " + changed.axis);
         }
+        MovAxisVecs = retVt;
     }
 
     //時間を元に、入力のスムージング化.
@@ -80,7 +83,8 @@ public class commandPallette
                 //グラデーションは累乗で.
                 if (CurrentElapsedTime < mixTime)
                 {
-                    outs = Vector2.Lerp(vt_1.axis, vt_2.axis, Mathf.Pow(vt_1.grads, 1 - (CurrentElapsedTime - mixTime) / vt_1.timeLength));
+                    outs = Vector2.Lerp(vt_1.axis, vt_2.axis,
+                    Mathf.Pow(vt_1.grads, 1 - (CurrentElapsedTime - mixTime) / vt_1.timeLength));
                     break;
                 }
             }
@@ -95,26 +99,29 @@ public class commandPallette
     public int getbuttonInputAnalysis()
     {
         int inputs = 0;
-        // ','で区切って、その中の値を取得.
-        string[] commands = buttonCommands.Split(',');
-        //最低値のindexを取る
-        int mIndex = Mathf.Min(CurrentElapsedTime, commands.Length - 1);
-        string cmd_strs = commands[mIndex];
-
-        if (cmd_strs != null)
+        if (buttonCommands != null)
         {
-            cmd_strs.Trim();
-            //analysys the structInputs
-            foreach (entityInputManager.structInputs stInput in entityInputManager.anlInputs)
+            // ','で区切って、その中の値を取得.
+            string[] commands = buttonCommands.Split(',');
+            //最低値のindexを取る
+            int mIndex = Mathf.Min(CurrentElapsedTime, commands.Length - 1);
+            string cmd_strs = commands[mIndex];
+
+            if (cmd_strs != null)
             {
-                if (cmd_strs.Contains(stInput.drawStr))
+                cmd_strs.Trim();
+                //analysys the structInputs
+                foreach (entityInputManager.structInputs stInput in entityInputManager.anlInputs)
                 {
-                    //押したときはstInputの10の倍数を与える
-                    inputs += stInput.bitNum * 10;
+                    if (cmd_strs.Contains(stInput.drawStr))
+                    {
+                        //押したときはstInputの10の倍数を与える
+                        inputs += stInput.bitNum * 10;
+                    }
                 }
             }
         }
-        return 0;
+        return inputs;
     }
 
     //経過時間でのいろんな値をcommandRecordとして出力.
@@ -138,6 +145,12 @@ public struct virtualSticks
     public Vector2 axis;
     public int timeLength;
     public float grads;
+    public virtualSticks(Vector2 v, int tLength, float grad)
+    {
+        axis = v;
+        timeLength = tLength;
+        grads = grad;
+    }
 }
 
 public class entityInputManager
@@ -167,7 +180,7 @@ public class entityInputManager
         public Vector2 LookAxis;
     }
 
-    public List<commandPallette> cmdPallette;
+    public List<commandPallette> cmdPallettes = new List<commandPallette>();
 
     //コマンド記録用.
     public commandRecord[] commandBuffer = new commandRecord[1];
@@ -222,37 +235,37 @@ public class entityInputManager
         if (!isPaused)
         {
             ReListPallette();
-            for (int idx = 0; idx < cmdPallette.Count; idx++)
+            for (int idx = 0; idx < cmdPallettes.Count; idx++)
             {
-                commandRecord virtrec = cmdPallette[idx].cmdOut();
+                commandRecord virtrec = cmdPallettes[idx].cmdOut();
                 if (overridesMovStick == false)
                 {
-                    overridesMovStick = cmdPallette[idx].isMoveExclusive;
+                    overridesMovStick = cmdPallettes[idx].isMoveExclusive;
                     rec.MoveAxis = virtrec.MoveAxis;
                 }
                 if (overridesLookStick == false)
                 {
-                    overridesLookStick = cmdPallette[idx].isLookExclusive;
+                    overridesLookStick = cmdPallettes[idx].isLookExclusive;
                     rec.LookAxis = virtrec.LookAxis;
                 }
                 if (overridesButton == false)
                 {
-                    overridesButton = cmdPallette[idx].isButtonCommandExclusive;
+                    overridesButton = cmdPallettes[idx].isButtonCommandExclusive;
                     rec.inputs = virtrec.inputs;
                 }
-                cmdPallette[idx].CurrentElapsedTime++;
+                cmdPallettes[idx].CurrentElapsedTime++;
             }
             //ElapsedTimeが0未満なら消し飛ばそう
-            cmdPallette.RemoveAll(x => x.CurrentElapsedTime - x.CommandLength < 0);
+            cmdPallettes.RemoveAll(x =>  x.CommandLength - x.CurrentElapsedTime < 0);
             RecordInput_Core(rec);
         }
     }
 
     public void ReListPallette()
     {
-        if (cmdPallette != null && cmdPallette.Count != 0)
+        if (cmdPallettes != null && cmdPallettes.Count != 0)
         {
-            cmdPallette.Sort((x , y) => y.CommandPriority - x.CommandPriority);
+            cmdPallettes.Sort((x , y) => y.CommandPriority - x.CommandPriority);
         }
     }
 

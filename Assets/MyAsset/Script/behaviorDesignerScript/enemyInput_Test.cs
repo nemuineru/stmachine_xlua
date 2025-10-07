@@ -49,7 +49,20 @@ public class enemyInput_Test : Action
     //とりあえず指定された位置に近づくだけのスクリプトを組む
     public override void OnStart()
     {
+        commandPallette cmdRegisterOneFrame = new commandPallette();
+        //スティックを前に(y = 0)
+        virtualSticks stc = new virtualSticks(Vector2.up * 0.1f, 0, 0f);
+        cmdRegisterOneFrame.MovAxisVecs.Add(stc);
+        Vector3 forwardPos = AIEntity.transform.position - v3_WalkTo.Value;
+        //現在視点を基準に...
+        cmdRegisterOneFrame.movAxisRemap(AIEntity, forwardPos);
+        cmdRegisterOneFrame.CommandLength = 0;
+
+        AIEntity.entityInput.cmdPallettes.Add(cmdRegisterOneFrame);
+
+        //Debug.Log("Current Input pall Count" + AIEntity.entityInput.cmdPallettes.Count);
         
+
         /*
         Vector3 fwRef = Vector3.zero;
         if (v3_WalkTo != null && AIEntity != null)
@@ -131,9 +144,21 @@ public class enemyInput_LookTest : Action
             AIEntity = gameObject.GetComponent<Entity>();
     }
 
-    //とりあえず指定された位置に近づくだけのスクリプトを組む
+    //とりあえず指定された位置の視線を変更するスクリプトを組む
     public override void OnStart()
     {
+        /*
+        commandPallette cmdRegisterOneFrame = new commandPallette();
+        //スティックを前に(y = 0)
+        virtualSticks stc = new virtualSticks(Vector2.down, 0, 0.5f);
+        cmdRegisterOneFrame.MovAxisVecs.Add(stc);
+        Vector3 forwardPos = v3_Target - AIEntity.transform.position;
+        //現在視点を基準に...
+        cmdRegisterOneFrame.movAxisRemap(AIEntity, forwardPos);
+
+        AIEntity.entityInput.cmdPallettes.Add(cmdRegisterOneFrame);
+        */
+
         /*
         Vector3 fwRef = Vector3.zero;
         float RotRef = 0f;
@@ -183,7 +208,7 @@ public class ExecuteNPCCommands : Action
     public override void OnStart()
     {
         //Debug.Log("Execution Inputs");
-        //AIEntity.entityInput.Execute_Entity_NPC(AIEntity.HitPauseTime <= 0);
+        AIEntity.entityInput.Execute_Entity_NPC(false);
     }
 }
 
