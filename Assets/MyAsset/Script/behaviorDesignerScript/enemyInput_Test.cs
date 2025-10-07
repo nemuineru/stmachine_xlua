@@ -49,6 +49,8 @@ public class enemyInput_Test : Action
     //とりあえず指定された位置に近づくだけのスクリプトを組む
     public override void OnStart()
     {
+        
+        /*
         Vector3 fwRef = Vector3.zero;
         if (v3_WalkTo != null && AIEntity != null)
         {
@@ -99,6 +101,7 @@ public class enemyInput_Test : Action
                 currentTick++;
             }
         }
+        */
     }
 }
 
@@ -131,6 +134,7 @@ public class enemyInput_LookTest : Action
     //とりあえず指定された位置に近づくだけのスクリプトを組む
     public override void OnStart()
     {
+        /*
         Vector3 fwRef = Vector3.zero;
         float RotRef = 0f;
         if (v3_WalkTo != null && AIEntity != null)
@@ -159,6 +163,7 @@ public class enemyInput_LookTest : Action
                 AIEntity.entityInput.cmdParettes.Add(lookCMD);
             }
         }
+        */
     }
 }
 
@@ -178,7 +183,7 @@ public class ExecuteNPCCommands : Action
     public override void OnStart()
     {
         //Debug.Log("Execution Inputs");
-        AIEntity.entityInput.Execute_Entity_NPC(AIEntity.HitPauseTime <= 0);
+        //AIEntity.entityInput.Execute_Entity_NPC(AIEntity.HitPauseTime <= 0);
     }
 }
 

@@ -8,7 +8,137 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 //entityの持つInput管理用クラス.
-//
+//プレイヤーのInputと敵側のInputを考える際に、コントローラーの有無で考える必要がある.
+//例えば、プレイヤーの視点方向の入力、といったものとか.
+//敵側がその手法を取る際、基準視点を合わせる..といったものを考えなければならない.
+//現状でも動くけどリファクタリングが必須かと考えられる.
+
+//コマンドパレット管理クラス - 
+//前もって用意されたコマンドクラスを使用
+//移動・排他的コマンドとか考えよ..
+public class commandPallette
+{
+    //コマンドの長さ。　基本的にこの値が経過時間を超えているなら実行を続ける..みたいな感じ
+    public int CommandLength = 0;
+    public int CurrentElapsedTime = 0;
+
+    //コマンドの優先度. この入力が大きければ優先されて実行される.
+    public int CommandPriority = 0;
+
+    public bool isButtonCommandExclusive = false;
+    public bool isMoveExclusive = false;
+    public bool isLookExclusive = false;
+
+    public List<virtualSticks> MovAxisVecs;
+    public List<virtualSticks> LookAxisVecs;
+    public string buttonCommands;
+
+    //entityInputManagerのMovAxisの入力値について : 
+    //targetTo_fwの前方・右向き方向のベクトルにそれぞれy,xの値がwishingVectに代入される.
+    //wishingVectがキャラ移動入力を伝達させるため視点移動入力とは別々.
+    //"あるポイントへの移動"に関しては現在の視点情報を元に入力しなければならない - 
+    //移動のリマッピングを行う - 
+
+    //前方方向基準と視点方向を元にリマッピング.
+    public void movAxisRemap(Entity et, Vector3? MoveDirection = null)
+    {
+        if (MoveDirection == null)
+        {
+            MoveDirection = et.targetTo_fw;
+        }
+        Vector3 solution = Vector3.ProjectOnPlane(MoveDirection.Value, Vector3.up).normalized;
+        //y軸周りの角度を取得. 視線方向を考える
+        float AngleDiff = Vector3.SignedAngle(et.targetTo_fw, solution, Vector3.up);
+        List<virtualSticks> retVt = new List<virtualSticks>();
+        foreach (virtualSticks vir in MovAxisVecs)
+        {
+            virtualSticks changed = new virtualSticks();
+            changed.grads = vir.grads;
+            changed.timeLength = vir.timeLength;
+
+            //回転した分の値を三角関数で代入
+            changed.axis =
+            new Vector2(vir.axis.x * Mathf.Cos(AngleDiff) + vir.axis.y * Mathf.Sin(AngleDiff),
+            vir.axis.y * Mathf.Cos(AngleDiff) + vir.axis.x * Mathf.Sin(AngleDiff));
+        }
+    }
+
+    //時間を元に、入力のスムージング化.
+    public Vector2 currentAxis(List<virtualSticks> Axiss)
+    {
+        int mixTime = 0;
+        Vector2 outs = Vector2.zero;
+        for (int ind = 0; ind < Axiss.Count; ind++)
+        {
+            if (ind < Axiss.Count - 1)
+            {
+                virtualSticks vt_1 = Axiss[ind];
+                virtualSticks vt_2 = Axiss[ind + 1];
+                float beforeTime = mixTime;
+                mixTime += vt_1.timeLength;
+                //経過した時間がmixTimeを超えなければその時のaxisを取得.
+                //グラデーションは累乗で.
+                if (CurrentElapsedTime < mixTime)
+                {
+                    outs = Vector2.Lerp(vt_1.axis, vt_2.axis, Mathf.Pow(vt_1.grads, 1 - (CurrentElapsedTime - mixTime) / vt_1.timeLength));
+                    break;
+                }
+            }
+            else
+            {
+                outs = Axiss[ind].axis;
+            }
+        }
+        return outs;
+    }
+
+    public int getbuttonInputAnalysis()
+    {
+        int inputs = 0;
+        // ','で区切って、その中の値を取得.
+        string[] commands = buttonCommands.Split(',');
+        //最低値のindexを取る
+        int mIndex = Mathf.Min(CurrentElapsedTime, commands.Length - 1);
+        string cmd_strs = commands[mIndex];
+
+        if (cmd_strs != null)
+        {
+            cmd_strs.Trim();
+            //analysys the structInputs
+            foreach (entityInputManager.structInputs stInput in entityInputManager.anlInputs)
+            {
+                if (cmd_strs.Contains(stInput.drawStr))
+                {
+                    //押したときはstInputの10の倍数を与える
+                    inputs += stInput.bitNum * 10;
+                }
+            }
+        }
+        return 0;
+    }
+
+    //経過時間でのいろんな値をcommandRecordとして出力.
+    public entityInputManager.commandRecord cmdOut()
+    {
+        entityInputManager.commandRecord rets = new entityInputManager.commandRecord();
+        rets.inputs = getbuttonInputAnalysis();
+        rets.MoveAxis = currentAxis(MovAxisVecs);
+        rets.LookAxis = currentAxis(LookAxisVecs);
+        return rets;
+    }
+    
+}
+
+public struct virtualSticks
+{
+    // unity平面上でEntityがVector3.forward方向を向いている際、
+    // 通常 axis.x => Vector3.right  axis.y => Vector3.forward
+    // ...として処理を行う.
+
+    public Vector2 axis;
+    public int timeLength;
+    public float grads;
+}
 
 public class entityInputManager
 {
@@ -32,12 +162,12 @@ public class entityInputManager
             なお、移動スティックの方向は毎フレームごとに別で記録される.;
         */
 
-
-
         public int inputs;
         public Vector2 MoveAxis;
         public Vector2 LookAxis;
     }
+
+    public List<commandPallette> cmdPallette;
 
     //コマンド記録用.
     public commandRecord[] commandBuffer = new commandRecord[1];
@@ -77,6 +207,60 @@ public class entityInputManager
         return inputs;
     }
 
+    //移動と攻撃時の優先性を考える.
+    //基本の移動は左スティック入力を考える.
+    //movePosは基本的に(-1,1)で与えられる.
+    public void Execute_Entity_NPC(bool isPaused)
+    {
+        //ニュートラル入力を初期値として登録
+        //また、RecordInputには基本的に移動入力が適用される.
+        commandRecord rec = new commandRecord();
+        rec.inputs = 0;
+        bool overridesMovStick = false;
+        bool overridesLookStick = false;
+        bool overridesButton = false;
+        if (!isPaused)
+        {
+            ReListPallette();
+            for (int idx = 0; idx < cmdPallette.Count; idx++)
+            {
+                commandRecord virtrec = cmdPallette[idx].cmdOut();
+                if (overridesMovStick == false)
+                {
+                    overridesMovStick = cmdPallette[idx].isMoveExclusive;
+                    rec.MoveAxis = virtrec.MoveAxis;
+                }
+                if (overridesLookStick == false)
+                {
+                    overridesLookStick = cmdPallette[idx].isLookExclusive;
+                    rec.LookAxis = virtrec.LookAxis;
+                }
+                if (overridesButton == false)
+                {
+                    overridesButton = cmdPallette[idx].isButtonCommandExclusive;
+                    rec.inputs = virtrec.inputs;
+                }
+                cmdPallette[idx].CurrentElapsedTime++;
+            }
+            //ElapsedTimeが0未満なら消し飛ばそう
+            cmdPallette.RemoveAll(x => x.CurrentElapsedTime - x.CommandLength < 0);
+            RecordInput_Core(rec);
+        }
+    }
+
+    public void ReListPallette()
+    {
+        if (cmdPallette != null && cmdPallette.Count != 0)
+        {
+            cmdPallette.Sort((x , y) => y.CommandPriority - x.CommandPriority);
+        }
+    }
+
+    public 
+
+
+    //--!!旧版　使うな!!--//
+    /*
     //敵AI版. さて、どうやって判別させようか..
     //Buttonsの一番最後の文を読み込ませ, そのドベから
     //二番目以降のボタンに応じて入力するボタンを返す..みたいな感じ..
@@ -85,7 +269,7 @@ public class entityInputManager
     //CommandParetteから読み出す.
     //forwardに設定した値を元に, stickの傾きを設定 - 
     //stick y軸が前方・後方方向とし、x軸は横軸方向とする.
-    public void Execute_Entity_NPC(bool isPaused)
+    public void _Execute_Entity_NPC(bool isPaused)
     {
         int inputs = 0;
         Vector2 lStick = Vector2.zero;
@@ -163,8 +347,8 @@ public class entityInputManager
         //CMDparetteから指定したコマンドを取得.
         //今はボタンインプットと左スティックの移動のみ.
         internal (int, Vector2, Vector2) GetCommands(Vector2 B_Input, ref bool isBCommandOveridable,
-        ref bool isMoveSCommandOveridable, ref bool isLookSCommandOveridable,   
-            Vector2 lStick_f ,Vector2 rStick_f , int inputs_f)
+        ref bool isMoveSCommandOveridable, ref bool isLookSCommandOveridable,
+            Vector2 lStick_f, Vector2 rStick_f, int inputs_f)
         {
             //Debug.Log(parette.commandInput);
             Vector2 lStick = lStick_f;
@@ -183,8 +367,8 @@ public class entityInputManager
             if (isLookSCommandOveridable)
             {
                 //前のコマンドとの比較. Lerp値はparette内で決定される.
-                if(parette.sCmds_R.Count > 0)
-                rStick += parette.findStickVel(Vector2.right, B_Input, 'r', 0);
+                if (parette.sCmds_R.Count > 0)
+                    rStick += parette.findStickVel(Vector2.right, B_Input, 'r', 0);
                 //Debug.Log(rStick.ToString() + " eFrame at " + currentElapsedFrame);
                 isLookSCommandOveridable = parette.isLookSCommandOveridable;
             }
@@ -236,7 +420,8 @@ public class entityInputManager
             internal float lerpValue;
             //持続フレーム
             internal int frame;
-            public stickCMD(Vector2 sPos, float lVal, int fr) {
+            public stickCMD(Vector2 sPos, float lVal, int fr)
+            {
                 stickPos = sPos;
                 lerpValue = lVal;
                 frame = fr;
@@ -282,7 +467,7 @@ public class entityInputManager
                     }
                     Vector2 stPos = c_a.stickPos;
                     //90方向の横 + 前方方向
-                    stPos = fw * stPos.y +  -Vector2.Perpendicular(fw) * stPos.x;
+                    stPos = fw * stPos.y + -Vector2.Perpendicular(fw) * stPos.x;
                     v = Vector2.Lerp(B_stickCMD, stPos, c_a.lerpValue);
 
                     //Debug.Log(v + "Outputted");
@@ -304,13 +489,8 @@ public class entityInputManager
         internal int BasePriority;
     }
 
+    */
 
-
-    //behaviorDesignerに読み込ませるためのインプット
-    public void RecordInput_AI()
-    {
-
-    }
 
     void RecordInput_Core(commandRecord b)
     {
@@ -345,7 +525,7 @@ public class entityInputManager
 
 
     //2進数のボタン比較用.  
-    static structInputs[] anlInputs = {
+    public static structInputs[] anlInputs = {
         new structInputs(0B_00000001, "a"),
         new structInputs(0B_00000100, "b"),
         new structInputs(0B_00000010, "x"),
@@ -500,13 +680,13 @@ public class entityInputManager
         return '.';
     }
 
-    struct structInputs
+    public struct structInputs
     {
         public structInputs(int bitSet, string strSet) { bitNum = bitSet; drawStr = strSet; }
 
         public int bitNum { get; set; }
         public string drawStr { get; set; }
     }
-    
+
 }
 

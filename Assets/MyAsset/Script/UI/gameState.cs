@@ -122,9 +122,9 @@ public class gameState : MonoBehaviour
         Vector3 HitVect = Vector3.ProjectOnPlane
         (beatenEntity.transform.position - calledEntity.transform.position, Vector3.up);
 
-        DamageApply(beatenEntity, HitVect, calledEParam);
         //hitpause
         (calledEntity.HitPauseTime, beatenEntity.HitPauseTime) = (calledEParam.hitStopTime.x, calledEParam.hitStopTime.y);
+        DamageApply(beatenEntity, HitVect, calledEParam);
         Instantiate
         ((calledEParam.HitEff != null ? calledEParam.HitEff : defaultEff), hitContactPoint, Quaternion.identity);
 
@@ -158,9 +158,9 @@ public class gameState : MonoBehaviour
         Vector3 HitVect = Vector3.ProjectOnPlane
         (beatenEntity.transform.position - calledPoint.position, Vector3.up);
 
-        DamageApply(beatenEntity, HitVect, calledEParam);
         //hitpause
         (beatenEntity.HitPauseTime) = (calledEParam.hitStopTime.y);
+        DamageApply(beatenEntity, HitVect, calledEParam);
         Instantiate
         ((calledEParam.HitEff != null ? calledEParam.HitEff : defaultEff), hitContactPoint, Quaternion.identity);
     }
@@ -175,6 +175,7 @@ public class gameState : MonoBehaviour
 
         //shapepositions
         beatenEntity.transform.DOShakePosition(beatenEntity.HitPauseTime * Time.fixedDeltaTime, 0.25f, 40, 45);
+        //beatenEntity.transform.DOShakeScale(1f, 3f, 30, 90f, true);
         beatenEntity.ChangeAnim(.1f);
 
         //hitpoint damage

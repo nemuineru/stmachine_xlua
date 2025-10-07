@@ -49,10 +49,11 @@ namespace enemyInput_Aggro
         //指定したコマンドを押すだけのスクリプト.
         public override void OnStart()
         {
+            /*
             //ターゲット先/エンティティが存在するなら
             if (v3_WalkTo != null && AIEntity != null)
             {
-                if(currentTick >= mapRouteFindTickRate)
+                if (currentTick >= mapRouteFindTickRate)
                 {
                     var fwRef = Vector3.ProjectOnPlane((v3_WalkTo.Value - AIEntity.transform.position), Vector3.up);
                     Vector2 curPos = new Vector2(transform.position.x, transform.position.z);
@@ -85,6 +86,7 @@ namespace enemyInput_Aggro
                     currentTick++;
                 }
             }
+            */
         }
     }
 }
