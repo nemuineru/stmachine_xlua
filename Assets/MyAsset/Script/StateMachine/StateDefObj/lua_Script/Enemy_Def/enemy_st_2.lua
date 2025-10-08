@@ -15,7 +15,7 @@ local Debug = CS.UnityEngine.Debug;
             table.insert( verd, 0 ) 
         end
         -- HitDef発生判定
-        if( math.abs(AnimTime - 8) < 2  and in_entity.attrs.isStateHit == 0) then
+        if( math.abs(AnimTime - 12) < 3  and in_entity.attrs.isStateHit == 0) then
             table.insert( verd, 10 ) 
         end
     return verd

@@ -397,7 +397,7 @@ MonoBehaviour:
           _setEssential: 0
           loadTypes: 0
           stParamValue:
-            Damage: 0
+            Damage: 30
             velset: {x: 3, y: 1, z: 0}
             hitStopTime: {x: 2, y: 8}
             HitEff: {fileID: 0}

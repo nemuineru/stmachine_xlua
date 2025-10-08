@@ -10,7 +10,7 @@ local Vector3 = CS.UnityEngine.Vector3;
         AnimTime = LC:CheckAnimTime(in_entity)
         AnimEndTime = LC:CheckAnimEndTime(in_entity)
         CurrentTime = LC:CheckStateTime(in_entity)
-        if (  AnimEndTime - AnimTime < 8 ) then 
+        if ( AnimEndTime - AnimTime < 8 and CurrentTime > 10) then 
             table.insert( verd, 2 )
         end
         if( CurrentTime == 0 ) then

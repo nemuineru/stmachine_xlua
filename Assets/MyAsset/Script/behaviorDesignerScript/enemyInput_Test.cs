@@ -22,7 +22,10 @@ public class enemyInput_Test : Action
 
     //これ、仮想で1fと設定する.
     [SerializeField]
-    SharedVector2[] virtualStickInput;
+    SharedVector2 virtualStickInput;
+
+    [SerializeField]
+    SharedFloat DistClamp = 1.0f;
 
 
 
@@ -51,12 +54,18 @@ public class enemyInput_Test : Action
     {
         commandPallette cmdRegisterOneFrame = new commandPallette();
         //スティックを前に(y = 0)
-        virtualSticks stc = new virtualSticks(Vector2.up * 0.1f, 0, 0f);
+        virtualSticks stc =
+        new virtualSticks(virtualStickInput.Value *
+        Mathf.Clamp01(DistClamp.Value), 0, 1f);
+
         cmdRegisterOneFrame.MovAxisVecs.Add(stc);
-        Vector3 forwardPos = AIEntity.transform.position - v3_WalkTo.Value;
+        Vector3 forwardPos = v3_WalkTo.Value - AIEntity.transform.position;
         //現在視点を基準に...
-        cmdRegisterOneFrame.movAxisRemap(AIEntity, forwardPos);
+        cmdRegisterOneFrame.movAxisRemap(AIEntity, forwardPos.normalized);
+        cmdRegisterOneFrame.buttonCommands = "y";
         cmdRegisterOneFrame.CommandLength = 0;
+        cmdRegisterOneFrame.CommandPriority = 0;
+        cmdRegisterOneFrame.isMoveExclusive = true;
 
         AIEntity.entityInput.cmdPallettes.Add(cmdRegisterOneFrame);
 
@@ -147,6 +156,23 @@ public class enemyInput_LookTest : Action
     //とりあえず指定された位置の視線を変更するスクリプトを組む
     public override void OnStart()
     {
+        
+        //y軸周りの角度を取得. 視線方向を考える
+        Vector3 forwardPos = v3_WalkTo.Value - AIEntity.transform.position;
+        Vector3 solution = Vector3.ProjectOnPlane(forwardPos, Vector3.up).normalized;
+        float AngleDiff = Vector3.SignedAngle(AIEntity.targetTo_fw, solution, Vector3.up);
+
+        commandPallette cmdRegisterOneFrame = new commandPallette();
+        //スティックを前に(y = 0)
+        virtualSticks rstc =
+        new virtualSticks(Vector2.right * AngleDiff,0,1);
+
+        cmdRegisterOneFrame.LookAxisVecs.Add(rstc);
+        cmdRegisterOneFrame.CommandLength = 0;
+        cmdRegisterOneFrame.CommandPriority = -1;
+        cmdRegisterOneFrame.isLookExclusive = true;
+
+        AIEntity.entityInput.cmdPallettes.Add(cmdRegisterOneFrame);
         /*
         commandPallette cmdRegisterOneFrame = new commandPallette();
         //スティックを前に(y = 0)

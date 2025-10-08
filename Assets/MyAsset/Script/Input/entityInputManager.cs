@@ -49,6 +49,7 @@ public class commandPallette
         Vector3 solution = Vector3.ProjectOnPlane(MoveDirection.Value, Vector3.up).normalized;
         //y軸周りの角度を取得. 視線方向を考える
         float AngleDiff = Vector3.SignedAngle(et.targetTo_fw, solution, Vector3.up);
+        Debug.Log(AngleDiff + " Deg.");
         List<virtualSticks> retVt = new List<virtualSticks>();
         foreach (virtualSticks vir in MovAxisVecs)
         {
@@ -58,10 +59,17 @@ public class commandPallette
 
             //回転した分の値を三角関数で代入
             changed.axis =
-            new Vector2(vir.axis.x * Mathf.Cos(AngleDiff) + vir.axis.y * Mathf.Sin(AngleDiff),
-            vir.axis.y * Mathf.Cos(AngleDiff) + vir.axis.x * Mathf.Sin(AngleDiff));
+            new Vector2(vir.axis.x * Mathf.Cos(AngleDiff * Mathf.Deg2Rad) + vir.axis.y * Mathf.Sin(AngleDiff * Mathf.Deg2Rad),
+            vir.axis.y * Mathf.Cos(AngleDiff * Mathf.Deg2Rad) + vir.axis.x * Mathf.Sin(AngleDiff * Mathf.Deg2Rad));
+            
+            Debug.DrawLine
+            (et.transform.position, et.transform.position + new Vector3(changed.axis.x, 0f, changed.axis.y) * 10f,
+            Color.red);
+            Debug.DrawLine
+            (et.transform.position, et.transform.position + new Vector3(vir.axis.x, 0f, vir.axis.y) * 10f,
+            Color.cyan);
             retVt.Add(changed);
-            Debug.Log("changed to " + changed.axis);
+            //Debug.Log("changed to " + changed.axis);
         }
         MovAxisVecs = retVt;
     }
@@ -83,8 +91,21 @@ public class commandPallette
                 //グラデーションは累乗で.
                 if (CurrentElapsedTime < mixTime)
                 {
-                    outs = Vector2.Lerp(vt_1.axis, vt_2.axis,
-                    Mathf.Pow(vt_1.grads, 1 - (CurrentElapsedTime - mixTime) / vt_1.timeLength));
+                    float tm = (CurrentElapsedTime - mixTime) / vt_1.timeLength;
+                    //0または1ならそのまま
+                    if (vt_1.grads == 0 || vt_1.grads == 1)
+                    {
+                        outs = Vector2.Lerp(vt_1.axis, vt_2.axis, vt_1.grads);
+                    }
+                    //指数関数的に.
+                    else
+                    {
+                        float vals = vt_1.grads > 0.5 ?
+                        1 / ((1 - vt_1.grads) * 2) :
+                        1 / (vt_1.grads * 2); 
+                        outs = Vector2.Lerp(vt_1.axis, vt_2.axis,
+                        Mathf.Pow(tm, vals));
+                    }
                     break;
                 }
             }
