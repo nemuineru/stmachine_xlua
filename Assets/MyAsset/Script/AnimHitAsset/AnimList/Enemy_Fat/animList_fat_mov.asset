@@ -19,27 +19,27 @@ MonoBehaviour:
     ID: 0
     Name: Movement
     animClip:
-    - Clip: {fileID: 7400000, guid: 8ccd8d276dc56c1488d84a56292d2c6b, type: 2}
+    - Clip: {fileID: 7400000, guid: bc53a67c4ca72144ba8ac2f389546be4, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
       mixPosition: {x: 0, y: 0}
-    - Clip: {fileID: 7400000, guid: 9a191339cd1901b4ab0bcf9b725ec44e, type: 2}
+    - Clip: {fileID: 7400000, guid: 4ce95ab4770c5a04fa02ea67f363f13a, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
       mixPosition: {x: -1, y: 0}
-    - Clip: {fileID: 7400000, guid: 7443f9112c567254eb7c324efb27134f, type: 2}
+    - Clip: {fileID: 7400000, guid: 565fa4a8d0e62ee4cab1ebcccc92440c, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
       mixPosition: {x: 0, y: 1}
-    - Clip: {fileID: 7400000, guid: 83ec618451ca6de4487d5784d247a2e7, type: 2}
+    - Clip: {fileID: 7400000, guid: 94758f29af2047a41abbd29dcc935cc3, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
       mixPosition: {x: 0, y: -1}
-    - Clip: {fileID: 7400000, guid: f55222405eb971247ae12ff2036268b4, type: 2}
+    - Clip: {fileID: 7400000, guid: c8aa3f23fd0c09743bfa591178887427, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
@@ -47,6 +47,7 @@ MonoBehaviour:
     blendInTime: 0.1
     blendOutTime: 0.001
     useDefaultClss: 1
+    eraseAllClss: 0
     clssSetting:
       clssDefs:
       - clssType: 0
@@ -64,35 +65,6 @@ MonoBehaviour:
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
-    ID: 2
-    Name: Jab
-    animClip:
-    - Clip: {fileID: 7400000, guid: cc6d90ac22aa9f146b6a23f470c4344a, type: 2}
-      speed: 0
-      startFrame: 0
-      cycleOffset: 0
-      mixPosition: {x: 0, y: 0}
-    blendInTime: 0.02
-    blendOutTime: 0.05
-    useDefaultClss: 0
-    clssSetting:
-      clssDefs:
-      - clssType: 1
-        attachTo: hand.L
-        showGizmo: 1
-        _entity: {fileID: 0}
-        attachTransform: {fileID: 0}
-        startPos: {x: 0, y: 0, z: 0}
-        endPos: {x: 0, y: 0.33, z: 0}
-        width: 0.18
-        _lastcalcStartPos: {x: 0, y: 0, z: 0}
-        _lastcalcEndPos: {x: 0, y: 0, z: 0}
-      disableClssList:
-      - Face
-      root: {fileID: 0}
-  - mixType: 0
-    MixParamName: 
-    CurrentParamPos: {x: 0, y: 0}
     ID: 50
     Name: Jump
     animClip:
@@ -104,37 +76,9 @@ MonoBehaviour:
     blendInTime: 0.1
     blendOutTime: 0.02
     useDefaultClss: 0
+    eraseAllClss: 0
     clssSetting:
       clssDefs: []
-      disableClssList:
-      - Face
-      root: {fileID: 0}
-  - mixType: 0
-    MixParamName: 
-    CurrentParamPos: {x: 0, y: 0}
-    ID: 3
-    Name: Kick
-    animClip:
-    - Clip: {fileID: 7400000, guid: 418d04f5b5a9f8e429e08773447a79ad, type: 2}
-      speed: 0
-      startFrame: 0
-      cycleOffset: 0
-      mixPosition: {x: 0, y: 0}
-    blendInTime: 0
-    blendOutTime: 0.2
-    useDefaultClss: 0
-    clssSetting:
-      clssDefs:
-      - clssType: 1
-        attachTo: LowerLeg.R
-        showGizmo: 1
-        _entity: {fileID: 0}
-        attachTransform: {fileID: 0}
-        startPos: {x: 0, y: 0.39, z: 0}
-        endPos: {x: 0, y: 0, z: 0}
-        width: 0.12
-        _lastcalcStartPos: {x: 0, y: 0, z: 0}
-        _lastcalcEndPos: {x: 0, y: 0, z: 0}
       disableClssList:
       - Face
       root: {fileID: 0}
@@ -152,6 +96,7 @@ MonoBehaviour:
     blendInTime: 0
     blendOutTime: 0.4
     useDefaultClss: 0
+    eraseAllClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
@@ -171,6 +116,7 @@ MonoBehaviour:
     blendInTime: 0
     blendOutTime: 0.08
     useDefaultClss: 0
+    eraseAllClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
@@ -190,6 +136,7 @@ MonoBehaviour:
     blendInTime: 0
     blendOutTime: 0.04
     useDefaultClss: 0
+    eraseAllClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
@@ -209,6 +156,7 @@ MonoBehaviour:
     blendInTime: 0.06
     blendOutTime: 0.02
     useDefaultClss: 0
+    eraseAllClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
