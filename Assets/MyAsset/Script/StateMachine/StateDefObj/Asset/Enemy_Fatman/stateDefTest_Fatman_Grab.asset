@@ -30,20 +30,21 @@ MonoBehaviour:
   - StateDefName: Throw_Player State Start
     StateDefID: 6
     LuaAsset: {fileID: -8122155829129254986, guid: f14ff619c01490245aa75a98093e22b8, type: 3}
-    preStateVerdictName: QueuedStateID_ThrowHit_Player
+    preStateVerdictName: QueuedStateID_ThrowHit_Player_OnProcess
     ParamLoadName: ChokerSped
     stateType: 0
     moveType: 0
     physType: 0
     StateList:
     - rid: 7982028360077541376
-    - rid: 7982028360077541377
+    - rid: 1982100910739292239
     - rid: 1982100662934306928
+    - rid: 7982028360077541377
     setCtrl: 0
   - StateDefName: Throw_Player State End
     StateDefID: 7
     LuaAsset: {fileID: -8122155829129254986, guid: f14ff619c01490245aa75a98093e22b8, type: 3}
-    preStateVerdictName: 
+    preStateVerdictName: QueuedStateID_ThrowHit_Player_EndProcess
     ParamLoadName: 
     stateType: 0
     moveType: 0
@@ -55,13 +56,14 @@ MonoBehaviour:
   - StateDefName: Throw_Enemy State Start
     StateDefID: 8
     LuaAsset: {fileID: -8122155829129254986, guid: f14ff619c01490245aa75a98093e22b8, type: 3}
-    preStateVerdictName: QueuedStateID_ThrowHit_Enemy
+    preStateVerdictName: QueuedStateID_ThrowHit_Enemy_OnProcess
     ParamLoadName: ChockAnim_Track
     stateType: 0
     moveType: 0
     physType: 78
     StateList:
     - rid: 7982028498543837196
+    - rid: 1982100910739292250
     - rid: 1982100662934306822
     - rid: 1982100662934306816
     - rid: 1982100910739292163
@@ -69,13 +71,14 @@ MonoBehaviour:
   - StateDefName: Throw_Enemy State End
     StateDefID: 9
     LuaAsset: {fileID: -8122155829129254986, guid: f14ff619c01490245aa75a98093e22b8, type: 3}
-    preStateVerdictName: 
+    preStateVerdictName: QueuedStateID_ThrowHit_Enemy_EndProcess
     ParamLoadName: 
     stateType: 0
     moveType: 0
     physType: 78
     StateList:
     - rid: 1982100910739292166
+    - rid: 1982100910739292230
     - rid: 1982100910739292165
     setCtrl: 0
   references:
@@ -115,7 +118,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 2
+          value: 1
           stLuaLoads: 
         stateControllerSubName: Physics_Movement
         vels:
@@ -132,7 +135,7 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: Init Anims(3)
+        stateControllerSubName: Init Anims(4)
         changeAnimID:
           _setEssential: 0
           loadTypes: 0
@@ -160,7 +163,7 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 3
+          value: 1
           stLuaLoads: 
         stateControllerSubName: Change To Next state
         changeTo: 9
@@ -170,10 +173,10 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 0
+          value: 1
           stLuaLoads: 
         stateControllerSubName: Return to self
-        changeTo: 0
+        changeTo: 5100
         priority: 0
     - rid: 1982100910739292166
       type: {class: scAnimParentSet, ns: , asm: Assembly-CSharp}
@@ -182,11 +185,11 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: Init(5)
+        stateControllerSubName: Init(6)
         changeAnimID:
           _setEssential: 0
           loadTypes: 0
-          stParamValue: 5
+          stParamValue: 6
           useID: -1
           stLuaLoads: 
         animParameter:
@@ -205,11 +208,56 @@ MonoBehaviour:
         stateControllerSubName: Start on Accel
         vels:
           _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: 0
+          stLuaLoads: 
+        priority: 0
+    - rid: 1982100910739292230
+      type: {class: scAddHealth, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Damage
+        value: 25
+        priority: 0
+    - rid: 1982100910739292239
+      type: {class: scSetVelocity, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Stop!
+        vels:
+          _setEssential: 0
           loadTypes: 0
           stParamValue: {x: 0, y: 0, z: 0}
           useID: -1
           stLuaLoads: 
         priority: 0
+    - rid: 1982100910739292250
+      type: {class: scAddPos, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: 
+        position:
+          _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: 0
+          stLuaLoads: 
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
     - rid: 7982028315445428224
       type: {class: scHitDef, ns: , asm: Assembly-CSharp}
       data:
@@ -226,10 +274,10 @@ MonoBehaviour:
             velset: {x: 0, y: 0, z: 0}
             hitStopTime: {x: 0, y: 0}
             HitEff: {fileID: 0}
-            ChangeState_Enemy: 7
+            ChangeState_Enemy: 8
             maxEntityHits: 1
             enemyRefsPlayerNum: 1
-            ChangeState_Player: 11
+            ChangeState_Player: 6
             HitFlag: SA
           useID: -1
           stLuaLoads: 
@@ -270,11 +318,11 @@ MonoBehaviour:
           useLua: 0
           value: 0
           stLuaLoads: 
-        stateControllerSubName: Init Anims(2)
+        stateControllerSubName: Init Anims(3)
         changeAnimID:
           _setEssential: 0
           loadTypes: 0
-          stParamValue: 2
+          stParamValue: 3
           useID: -1
           stLuaLoads: 
         animParameter:
@@ -288,9 +336,9 @@ MonoBehaviour:
       data:
         ID:
           useLua: 0
-          value: 1
+          value: 2
           stLuaLoads: 
-        stateControllerSubName: Change To Init
+        stateControllerSubName: Change To Ground
         changeTo: 0
         priority: 0
     - rid: 7982028498543837196
@@ -304,7 +352,7 @@ MonoBehaviour:
         changeAnimID:
           _setEssential: 0
           loadTypes: 0
-          stParamValue: 4
+          stParamValue: 5
           useID: -1
           stLuaLoads: 
         animParameter:

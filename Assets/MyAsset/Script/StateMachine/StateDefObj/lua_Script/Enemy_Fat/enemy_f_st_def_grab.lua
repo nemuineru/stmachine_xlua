@@ -31,8 +31,9 @@ function QueuedStateID_Throw_Start(in_entity)
 end
 
 -- ステート変更のファンクション (11)
-    function QueuedStateID_ThrowHit_Player(in_entity)
+    function QueuedStateID_ThrowHit_Player_OnProcess(in_entity)
         verd = {}
+        selfOnGrd = LC:isEntityOnGround(in_entity)
         CurrentTime = LC:CheckStateTime(in_entity)
         C_animTime = LC:CheckAnimTime(in_entity)
         AnimEndTime = LC:CheckAnimEndTime(in_entity)
@@ -42,18 +43,56 @@ end
             table.insert( verd, 0 ) 
         end
         -- change to idle. also damage them and check the rest frametime
-        if( AnimEndTime - C_animTime < 2) then
+        if(  C_animTime == 4) then
             table.insert(verd , 1)
         end
-        if(AnimEndTime - C_animTime > 1) then
+        if(AnimEndTime - C_animTime < 1 and selfOnGrd == true and CurrentAnimID == 3) then
             table.insert(verd, 2)
         end
     return verd
 end 
 
--- ステート変更のファンクション (12)
+-- ステート変更のファンクション (11)
+    function QueuedStateID_ThrowHit_Player_EndProcess(in_entity)
+        verd = {}
+        CurrentTime = LC:CheckStateTime(in_entity)
+        C_animTime = LC:CheckAnimTime(in_entity)
+        AnimEndTime = LC:CheckAnimEndTime(in_entity)
+        CurrentAnimID = LC:CheckAnimID(in_entity)
+        if( CurrentTime == 0 ) then
+            -- Debug.Log("damage Amim")
+            table.insert( verd, 0 ) 
+        end
+        if(AnimEndTime - C_animTime < 7 and CurrentAnimID == 4) then
+            table.insert(verd, 1)
+        end
+    return verd
+end 
+
+-- ステート変更のファンクション (8)
 -- this state is edited for enemy
-    function QueuedStateID_ThrowHit_Enemy(in_entity)
+    function QueuedStateID_ThrowHit_Enemy_OnProcess(in_entity)
+        verd = {}
+        
+        ControlledEntity = in_entity.controlledEntity
+        CurrentR = LC:CheckStateTime(in_entity)
+        CurrentAnimID = LC:CheckAnimID(in_entity)
+        Enemy_C_EntityStateID = LC:CheckStateDefID(ControlledEntity)
+        if( CurrentR == 0  and not (CurrentAnimID == 5) ) then
+            -- Debug.Log("damage Amim")
+            table.insert( verd, 0 ) 
+        end
+        if( Enemy_C_EntityStateID == 11) then
+            table.insert( verd, 1 )
+        else 
+            table.insert( verd, 2 )
+        end
+    return verd
+end 
+
+-- ステート変更のファンクション (8)
+-- this state is edited for enemy
+    function QueuedStateID_ThrowHit_Enemy_EndProcess(in_entity)
         verd = {}
         
         ControlledEntity = in_entity.controlledEntity
@@ -72,7 +111,6 @@ end
         end
     return verd
 end 
-
 
 function Accel_Start(in_entity)    
     outs = {}
@@ -97,12 +135,7 @@ function ChokerSped(in_entity)
     trf = Vector3.ProjectOnPlane(in_entity.transform.forward, Vector3.up).normalized
     
     retVec = Vector3(0,0,0)
-    if( AnimEndTime - C_animTime < 20 and AnimEndTime - C_animTime > 14) then
-        retVec = trf * 20  
-    end
-    if( CurrentTime == 0) then
-        retVec = -trf * 100
-    end
+    retVec = (trf) * 10 + Vector3.up * 300
     table.insert(outs,retVec)
     return outs
 end
@@ -113,11 +146,13 @@ function ChockAnim_Track(in_entity)
     ControlledEntity = in_entity.controlledEntity
 
     --tracks hand position.
-    tr_Choked = LC:getEntityBoneTransform(in_entity,"neck")
-    tr_Choker = LC:getEntityBoneTransform(ControlledEntity,"hand.l")
+    tr_Choked = LC:getEntityBoneTransform(in_entity,"spine")
+    tr_Choker_L = LC:getEntityBoneTransform(ControlledEntity,"hand.l").position
+    tr_Choker_R = LC:getEntityBoneTransform(ControlledEntity,"hand.r").position
     Enemy_C_animTime = LC:CheckAnimTime(ControlledEntity)
     Enemy_AnimEndTime = LC:CheckAnimEndTime(ControlledEntity)
-    diffPos = tr_Choker.position - tr_Choked.position
+    tr_Choker_All = ((tr_Choker_L + tr_Choker_R) / 2)
+    diffPos = tr_Choker_All.position - tr_Choked.position
 
     --tracks throwing vect.
     ThrowingVect = 

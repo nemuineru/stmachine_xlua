@@ -79,7 +79,7 @@ MonoBehaviour:
     ID: 3
     Name: PowerBomb_Grabbed_AtAir
     animClip:
-    - Clip: {fileID: 7400000, guid: 0bfd5d9ccf216024ca6ac7315a138cf0, type: 2}
+    - Clip: {fileID: 7400000, guid: a3780c22f6f233840be7c206dddda9e1, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
     ID: 4
     Name: PowerBomb_Grabbed_OnGround
     animClip:
-    - Clip: {fileID: 7400000, guid: 418d04f5b5a9f8e429e08773447a79ad, type: 2}
+    - Clip: {fileID: 7400000, guid: 894435e5cec2e0540b8479011fc77bfd, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
@@ -137,9 +137,39 @@ MonoBehaviour:
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
     ID: 5
-    Name: PowerBomb_Grabbed_Damage
+    Name: PowerBomb_enemy_TookEd
     animClip:
-    - Clip: {fileID: 7400000, guid: 418d04f5b5a9f8e429e08773447a79ad, type: 2}
+    - Clip: {fileID: 7400000, guid: 0bfd5d9ccf216024ca6ac7315a138cf0, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0.1
+    blendOutTime: 0.08
+    useDefaultClss: 0
+    eraseAllClss: 1
+    clssSetting:
+      clssDefs:
+      - clssType: 1
+        attachTo: lowerleg.r
+        showGizmo: 1
+        _entity: {fileID: 0}
+        attachTransform: {fileID: 0}
+        startPos: {x: 0, y: 0.39, z: 0}
+        endPos: {x: 0, y: 0, z: 0}
+        width: 0.12
+        _lastcalcStartPos: {x: 0, y: 0, z: 0}
+        _lastcalcEndPos: {x: 0, y: 0, z: 0}
+      disableClssList:
+      - head
+      root: {fileID: 0}
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
+    ID: 6
+    Name: PowerBomb_enemy_TookDown
+    animClip:
+    - Clip: {fileID: 7400000, guid: 083575eb379aaa74ea24712e904cf26d, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
