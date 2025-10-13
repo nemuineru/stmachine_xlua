@@ -17,9 +17,9 @@ MonoBehaviour:
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
     ID: 1
-    Name: GutPunch
+    Name: AxeKick
     animClip:
-    - Clip: {fileID: 7400000, guid: f2572cbb681bfc24d8838d66770f5010, type: 2}
+    - Clip: {fileID: 7400000, guid: 30318ad03f85b0a489a5a2fa6896fcb5, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
@@ -49,13 +49,13 @@ MonoBehaviour:
     ID: 2
     Name: Powerbomb_DashStart
     animClip:
-    - Clip: {fileID: 7400000, guid: a7e95567c435a79429d9a14d9f9c3494, type: 2}
+    - Clip: {fileID: 7400000, guid: 5e712220552c19f45ad47f4aa028c89f, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0
       mixPosition: {x: 0, y: 0}
     blendInTime: 0.02
-    blendOutTime: 0
+    blendOutTime: 0.12
     useDefaultClss: 0
     eraseAllClss: 0
     clssSetting:
@@ -79,7 +79,7 @@ MonoBehaviour:
     ID: 3
     Name: PowerBomb_Grabbed_AtAir
     animClip:
-    - Clip: {fileID: 7400000, guid: 418d04f5b5a9f8e429e08773447a79ad, type: 2}
+    - Clip: {fileID: 7400000, guid: 0bfd5d9ccf216024ca6ac7315a138cf0, type: 2}
       speed: 0
       startFrame: 0
       cycleOffset: 0

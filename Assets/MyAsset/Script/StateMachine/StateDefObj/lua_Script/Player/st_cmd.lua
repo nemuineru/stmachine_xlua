@@ -91,17 +91,17 @@ end
 function LuaOutput(in_entity)    
     outs = {}
 
-    vel2 = Vector2(0,0)
+    vel3 = Vector2(0,0)
 
     --オブジェクトのRigidBodyを取得する.
     vel3 = in_entity.rigid.velocity    
     --オブジェクトの正面方向・右方向を考え、Dotで計算.
     vel_relate_f = in_entity.transform.forward
     vel_relate_r = in_entity.transform.right
-    vel2.x = Vector3.Dot(vel3,vel_relate_r)
-    vel2.y = Vector3.Dot(vel3,vel_relate_f)
+    vel3.x = Vector3.Dot(vel3,vel_relate_r)
+    vel3.y = Vector3.Dot(vel3,vel_relate_f)
 
 
-    table.insert(outs, vel2)
+    table.insert(outs, vel3)
     return outs
 end

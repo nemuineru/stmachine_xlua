@@ -65,26 +65,6 @@ MonoBehaviour:
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
-    ID: 50
-    Name: Jump
-    animClip:
-    - Clip: {fileID: 7400000, guid: 7dd67cce11e9cc64d9d817b21324c527, type: 2}
-      speed: 0
-      startFrame: 0
-      cycleOffset: 0
-      mixPosition: {x: 0, y: 0}
-    blendInTime: 0.1
-    blendOutTime: 0.02
-    useDefaultClss: 0
-    eraseAllClss: 0
-    clssSetting:
-      clssDefs: []
-      disableClssList:
-      - Face
-      root: {fileID: 0}
-  - mixType: 0
-    MixParamName: 
-    CurrentParamPos: {x: 0, y: 0}
     ID: 5000
     Name: Damaged
     animClip:
