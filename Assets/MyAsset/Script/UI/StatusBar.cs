@@ -4,6 +4,7 @@ using System.Linq;
 using Shapes;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class StatusBar : MonoBehaviour
 {
@@ -130,8 +131,26 @@ public class StatusBar : MonoBehaviour
         
         degCalc = d_Base.AngRadiansStart + (d_Base.AngRadiansEnd - d_Base.AngRadiansStart) * f;
         d_Fill.AngRadiansEnd = Mathf.Lerp(d_Fill.AngRadiansEnd,degCalc,0.3f);
-
+    
         chargeUI_txt.text = "";
+        if (f > 0.01f && f < 1.0f)
+        {
+            if (f > 0.5f)
+            {
+                chargeUI_txt.color = chargeUI_txt.color == Color.red ? new Color(0.7f, 0.5f, 0.5f, 1) : Color.red;
+                chargeUI_txt.text = "lv1";
+            }
+            else
+            {
+                chargeUI_txt.color = Color.gray;
+                chargeUI_txt.text = "lv0";
+            }
+        }
+        else if (f == 1.0f)
+        {
+            chargeUI_txt.color = chargeUI_txt.color == Color.yellow ? Color.red : Color.yellow;
+            chargeUI_txt.text = "max!";
+        }
         d_Fill.meshOutOfDate = true;
         //Debug.Log("disc changed - " +  degCalc);
     }
