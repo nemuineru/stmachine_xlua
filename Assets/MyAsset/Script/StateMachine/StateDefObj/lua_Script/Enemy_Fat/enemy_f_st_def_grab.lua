@@ -20,7 +20,7 @@ function QueuedStateID_Throw_Start(in_entity)
     end
     
     -- check hitdef at duration
-    if(C_animTime > 7 and C_animTime < 18) then
+    if(C_animTime > 7 and C_animTime < 18 and CurrentAnimID == 2) then
         table.insert( verd, 1 )
     end
     -- animation end
@@ -82,7 +82,7 @@ end
             -- Debug.Log("damage Amim")
             table.insert( verd, 0 ) 
         end
-        if( Enemy_C_EntityStateID == 11) then
+        if( Enemy_C_EntityStateID == 7) then
             table.insert( verd, 1 )
         else 
             table.insert( verd, 2 )
@@ -104,7 +104,7 @@ end
             -- Debug.Log("damage Amim")
             table.insert( verd, 0 ) 
         end
-        if( Enemy_AnimEndTime - Enemy_C_animTime < 15) then
+        if( CurrentR > 15) then
             table.insert( verd, 1 )
         else 
             table.insert( verd, 2 )
@@ -135,7 +135,7 @@ function ChokerSped(in_entity)
     trf = Vector3.ProjectOnPlane(in_entity.transform.forward, Vector3.up).normalized
     
     retVec = Vector3(0,0,0)
-    retVec = (trf) * 10 + Vector3.up * 300
+    retVec = (trf) * 10 + Vector3.up * 200
     table.insert(outs,retVec)
     return outs
 end
@@ -152,7 +152,7 @@ function ChockAnim_Track(in_entity)
     Enemy_C_animTime = LC:CheckAnimTime(ControlledEntity)
     Enemy_AnimEndTime = LC:CheckAnimEndTime(ControlledEntity)
     tr_Choker_All = ((tr_Choker_L + tr_Choker_R) / 2)
-    diffPos = tr_Choker_All.position - tr_Choked.position
+    diffPos =  tr_Choker_All - tr_Choked.position
 
     --tracks throwing vect.
     ThrowingVect = 
@@ -160,11 +160,7 @@ function ChockAnim_Track(in_entity)
     -- Debug.Log(ThrowingVect)
     Debug.Log(Enemy_AnimEndTime - Enemy_C_animTime)
 
-    if( Enemy_AnimEndTime - Enemy_C_animTime < 16) then
-        diffPos = ThrowingVect * 0.2 + Vector3.up * 0.1
-    end
-
-    ThrowingVect = (ThrowingVect * 1 + Vector3.up * .2) * 220
+    ThrowingVect = (ThrowingVect * 1 + Vector3.up * .2) * 10
 
 
     table.insert(outs, diffPos)

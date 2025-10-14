@@ -158,11 +158,11 @@ MonoBehaviour:
           _setEssential: 0
           loadTypes: 0
           stParamValue:
-            Damage: 12
+            Damage: 18
             velset: {x: 1.5, y: 0, z: 0}
             hitStopTime: {x: 8, y: 2}
             HitEff: {fileID: 0}
-            ChangeState_Enemy: 5000
+            ChangeState_Enemy: 5100
             maxEntityHits: 1
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1

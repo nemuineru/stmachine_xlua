@@ -24,8 +24,8 @@ MonoBehaviour:
     StateList:
     - rid: 7982028315445428225
     - rid: 7982028315445428226
-    - rid: 7982028315445428224
     - rid: 1982100910739292167
+    - rid: 7982028315445428224
     setCtrl: 0
   - StateDefName: Throw_Player State Start
     StateDefID: 6
@@ -48,7 +48,7 @@ MonoBehaviour:
     ParamLoadName: 
     stateType: 0
     moveType: 0
-    physType: 0
+    physType: 83
     StateList:
     - rid: 1982100910739292161
     - rid: 1982100910739292162
@@ -72,14 +72,17 @@ MonoBehaviour:
     StateDefID: 9
     LuaAsset: {fileID: -8122155829129254986, guid: f14ff619c01490245aa75a98093e22b8, type: 3}
     preStateVerdictName: QueuedStateID_ThrowHit_Enemy_EndProcess
-    ParamLoadName: 
+    ParamLoadName: ChockAnim_Track
     stateType: 0
     moveType: 0
-    physType: 78
+    physType: 83
     StateList:
-    - rid: 1982100910739292166
     - rid: 1982100910739292230
+    - rid: 1982100910739292166
+    - rid: 1982100935841939495
     - rid: 1982100910739292165
+    - rid: 1982100935841939508
+    - rid: 1982100935841939514
     setCtrl: 0
   references:
     version: 2
@@ -139,7 +142,7 @@ MonoBehaviour:
         changeAnimID:
           _setEssential: 0
           loadTypes: 0
-          stParamValue: 3
+          stParamValue: 4
           useID: -1
           stLuaLoads: 
         animParameter:
@@ -221,7 +224,7 @@ MonoBehaviour:
           value: 0
           stLuaLoads: 
         stateControllerSubName: Damage
-        value: 25
+        value: -25
         priority: 0
     - rid: 1982100910739292239
       type: {class: scSetVelocity, ns: , asm: Assembly-CSharp}
@@ -245,7 +248,7 @@ MonoBehaviour:
           useLua: 0
           value: 2
           stLuaLoads: 
-        stateControllerSubName: 
+        stateControllerSubName: TrackPos_GrabberHand
         position:
           _setEssential: 0
           loadTypes: 1
@@ -258,6 +261,55 @@ MonoBehaviour:
           stParamValue: 0
           useID: -1
           stLuaLoads: 
+    - rid: 1982100935841939495
+      type: {class: scAddPos, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: SlamToGround
+        position:
+          _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: 0
+          stLuaLoads: 
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982100935841939508
+      type: {class: scIgnoreEntityCollisions, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Ignore-rance Phys
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982100935841939514
+      type: {class: scSetVelocity, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: PushToEnemyForward
+        vels:
+          _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: 1
+          stLuaLoads: 
+        priority: 0
     - rid: 7982028315445428224
       type: {class: scHitDef, ns: , asm: Assembly-CSharp}
       data:
@@ -339,7 +391,7 @@ MonoBehaviour:
           value: 2
           stLuaLoads: 
         stateControllerSubName: Change To Ground
-        changeTo: 0
+        changeTo: 7
         priority: 0
     - rid: 7982028498543837196
       type: {class: scAnimParentSet, ns: , asm: Assembly-CSharp}

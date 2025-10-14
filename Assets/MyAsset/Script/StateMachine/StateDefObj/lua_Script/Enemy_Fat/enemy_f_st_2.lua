@@ -10,13 +10,14 @@ local Vector3 = CS.UnityEngine.Vector3;
         AnimTime = LC:CheckAnimTime(in_entity)
         AnimEndTime = LC:CheckAnimEndTime(in_entity)
         CurrentTime = LC:CheckStateTime(in_entity)
+        CurrentAnimID = LC:CheckAnimID(in_entity)
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
         if ( math.abs(AnimTime - 14) < 1) then 
             table.insert( verd, 1 )
         end
-        if ( math.abs(AnimTime - 16) < 3 and in_entity.attrs.isStateHit == 0) then 
+        if ( math.abs(AnimTime - 16) < 3 and in_entity.attrs.isStateHit == 0 and CurrentAnimID == 1) then 
             table.insert( verd, 2 )
         end
         --Init判定
