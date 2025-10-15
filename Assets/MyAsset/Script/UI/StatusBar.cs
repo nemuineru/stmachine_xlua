@@ -16,6 +16,11 @@ public class StatusBar : MonoBehaviour
     Shapes.Disc chargerBar, chargerBar_Fill;
 
     [SerializeField]
+    TMP_Text healthUI_txt;
+    [SerializeField]
+    TMP_Text energyUI_txt;
+    
+    [SerializeField]
     TMP_Text chargeUI_txt;
 
 
@@ -66,24 +71,41 @@ public class StatusBar : MonoBehaviour
     {
         getRefEntityVals();
         //ライフとエナジーの描写管理.
-        BarFill(lifeBar, ref lifeBar_Fill, health);
-        BarFill(energyBar, ref energyBar_Fill, energy);
+        HPUIUpdate();
+        EPUIUpdate();
         ChargerFill(chargerBar,ref chargerBar_Fill, charge);
-        
+        if (hitPtUpdateTime > UpdateTime)
+        {
+            isColorChanged = !isColorChanged;
+            hitPtUpdateTime = 0f;
+        }
+    }
+
+    void HPUIUpdate()
+    {
+        BarFill(lifeBar, ref lifeBar_Fill, health);
         //ライフ点滅.
         for (int pt_health_Index = 0; pt_health_Index < lifeBar_Outer.Count; pt_health_Index++)
         {
             lifeBar_Outer.SetPointColor(pt_health_Index, health < LowHealth && isColorChanged ? Color.red : DefC_Health[pt_health_Index]);
         }
+        if (healthUI_txt != null)
+        {
+            healthUI_txt.text = Mathf.CeilToInt((refEntity.status.currentHP / refEntity.status.maxHP) * 100f) + "%";
+        }
+    }
+
+    void EPUIUpdate()
+    { 
+        BarFill(energyBar, ref energyBar_Fill, energy);
         //エナジー点滅
         for (int pt_energy_Index = 0; pt_energy_Index < energyBar_Outer.Count; pt_energy_Index++)
         {
             energyBar_Outer.SetPointColor(pt_energy_Index, energy > HighEnergy && isColorChanged ? Color.white : DefC_Energy[pt_energy_Index]);
         }
-        if (hitPtUpdateTime > UpdateTime)
+        if (healthUI_txt != null)
         {
-            isColorChanged = !isColorChanged;
-            hitPtUpdateTime = 0f;
+            energyUI_txt.text = Mathf.CeilToInt(refEntity.status.currentEnergy).ToString();
         }
     }
 
