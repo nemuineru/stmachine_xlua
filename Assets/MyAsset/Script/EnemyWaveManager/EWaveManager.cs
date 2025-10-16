@@ -15,7 +15,7 @@ public class EWaveManager : MonoBehaviour
 
     public List<waveDesc> waveLists;
     public bool isWaveChanged = false;
-    int currentLevel = 0;
+    public int currentLevel = 0;
 
     waveDesc currentDesc;
     List<Entity> spawnedEntity = new List<Entity>();
@@ -43,6 +43,7 @@ public class EWaveManager : MonoBehaviour
         int countSpawned = spawnedEntity.FindAll(et => et != null).Count;
         if (currentDesc != null)
         {
+            Debug.Log("Decriptor found - LV." + currentDesc.level);
             //一度に生成するエンティティ量が指定の量を超えないまでは..
             if (countSpawned < currentDesc.maxEntityNum && currentSpawnIndex < currentDesc.spawnEntity.Count)
             {
@@ -56,6 +57,10 @@ public class EWaveManager : MonoBehaviour
                 currentLevel++;
                 isWaveChanged = false;
             }
+        }
+        else
+        {
+            Debug.Log("Decriptor not found.");
         }
     }
 }
