@@ -22,6 +22,7 @@ public class StatusBar : MonoBehaviour
     
     [SerializeField]
     TMP_Text chargeUI_txt;
+    
 
 
     [SerializeField]

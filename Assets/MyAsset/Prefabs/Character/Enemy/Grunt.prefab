@@ -140,8 +140,8 @@ MonoBehaviour:
     disableClssList: []
     root: {fileID: 0}
   status:
-    maxHP: 300
-    currentHP: 300
+    maxHP: 115
+    currentHP: 115
     maxEnergy: 50
     currentEnergy: 50
     BaseAttackPerc: 100

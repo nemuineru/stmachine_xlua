@@ -545,6 +545,7 @@ public class Entity : MonoBehaviour
             //アニメーションとかを切断して、消し飛ばす.
             if (destroTime_Current >= destroTime_Max)
             {
+                gameState.self.AddKillValue();
                 Destroy(gameObject);
             }
         }

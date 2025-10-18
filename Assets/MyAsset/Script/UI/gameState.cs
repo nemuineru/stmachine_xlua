@@ -6,6 +6,7 @@ using System;
 //using UnityEditor.SearchService;
 using System.Linq;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
+using TMPro;
 
 public class gameState : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class gameState : MonoBehaviour
     public GameObject HPUI;
 
     public GameObject defaultEff;
+
+    [SerializeField]
+    TMP_Text KillValue_Text;
+    int KillValue = 0;
+
     void Awake()
     {
         if (self == null)
@@ -187,6 +193,11 @@ public class gameState : MonoBehaviour
         Debug.Log("Hit : " + beatenEntity.gameObject.name);
     }
 
+    internal void AddKillValue()
+    {
+        KillValue++;
+        KillValue_Text.text = KillValue.ToString();
+    }
 
     bool checkHit(string checkState, Entity checkEntity)
     {
