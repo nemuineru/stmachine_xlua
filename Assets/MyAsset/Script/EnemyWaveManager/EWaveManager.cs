@@ -44,6 +44,11 @@ public class EWaveManager : MonoBehaviour
         if (isWaveChanged == false)
         {
             //レベル設定.
+            Debug.Log("finding Level");
+
+            //設定したCurrentDescをリセット
+            currentDesc = null;
+
             List<waveDesc> comfirmableDesc =
             waveLists.FindAll(wLs => wLs.minlevel <= currentLevel && wLs.maxlevel >= currentLevel);
             if (comfirmableDesc.Count != 0)
@@ -59,7 +64,7 @@ public class EWaveManager : MonoBehaviour
         int countSpawned = spawnedEntity.FindAll(et => et != null).Count;
         if (currentDesc != null)
         {
-            //Debug.Log("Decriptor found - LV." + currentDesc.level);
+            Debug.Log("Decriptor found - LV." + currentDesc.minlevel + " - " + currentDesc.maxlevel );
             //一度に生成するエンティティ量が指定の量を超えないまでは..
             if (countSpawned < currentDesc.maxEntityNum && currentSpawnIndex < currentDesc.spawnEntity.Count)
             {

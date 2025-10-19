@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: af31e80c5c9aada47bc15a07d62d6211, type: 3}
       propertyPath: m_Name
-      value: FT_05
+      value: FatMan
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: af31e80c5c9aada47bc15a07d62d6211, type: 3}
       propertyPath: m_IsActive
@@ -187,7 +187,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: df8ff393dbc596f499d60b5dcb163bdb, type: 2}
   - {fileID: 11400000, guid: 2ffa158c97f6d314e8a757128ad9aa8e, type: 2}
   wishingVect: {x: 0, y: 0, z: 0}
-  LoadedBehavior: {fileID: 0}
+  LoadedBehavior: {fileID: 11400000, guid: 13d0a8e99653251479e2569ec5924640, type: 2}
   raycenter: {x: 0, y: -0.5, z: 0}
 --- !u!54 &2337383671416232423
 Rigidbody:
