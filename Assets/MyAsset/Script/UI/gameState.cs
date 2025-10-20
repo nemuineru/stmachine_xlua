@@ -10,6 +10,12 @@ using TMPro;
 
 public class gameState : MonoBehaviour
 {
+    //操作対象のEntity.
+    Entity Player;
+
+    [SerializeField]
+    TMP_Text WaveBigName;
+
     //全部のスクリプトからアクセスするように.
     //
     static public gameState self;
@@ -73,7 +79,7 @@ public class gameState : MonoBehaviour
         return ret;
     }
 
-    public bool ProvokeHitDef_Projs(Entity calledEntity, clssSetting sets , Transform trfs, hitDefParams H_params)
+    public bool ProvokeHitDef_Projs(Entity calledEntity, clssSetting sets, Transform trfs, hitDefParams H_params)
     {
         bool ret = false; int refNumRemaining;
         hitDefParams useParam = new hitDefParams();
@@ -108,8 +114,8 @@ public class gameState : MonoBehaviour
     }
 
     void hitDefApply(Entity beatenEntity, Entity calledEntity,
-    hitDefParams calledEParam , Vector3 hitContactPoint)
-    { 
+    hitDefParams calledEParam, Vector3 hitContactPoint)
+    {
         //stateChangeを設定..
         beatenEntity.isStateChanged = true;
 
@@ -143,8 +149,8 @@ public class gameState : MonoBehaviour
     }
 
     void hitDefApply(Entity beatenEntity, Transform calledPoint,
-    hitDefParams calledEParam , Vector3 hitContactPoint)
-    { 
+    hitDefParams calledEParam, Vector3 hitContactPoint)
+    {
         //stateChangeを設定..
         beatenEntity.isStateChanged = true;
 
@@ -207,6 +213,29 @@ public class gameState : MonoBehaviour
             ret = true;
         }
         return ret;
+    }
+
+    public IEnumerator ShowWaveNames(string Names)
+    {
+        if (WaveBigName != null)
+        {
+            WaveBigName.enabled = true;
+            float remTimeMax = 3f;
+            float remTime = 3f;
+            while (remTime > 0)
+            {
+                int WaveNameIndexes = Mathf.Max(0,Mathf.CeilToInt((Names.Length) * ((remTimeMax - remTime) / (remTimeMax * 0.5f))));
+                WaveNameIndexes = Mathf.Min(WaveNameIndexes, Names.Length);
+                WaveBigName.text = Names.Substring(0, WaveNameIndexes);
+                remTime -= Time.fixedDeltaTime;
+                yield return 0;
+                if (remTime <= 0.8f)
+                {
+                    WaveBigName.enabled = !WaveBigName.enabled;
+                }
+            }
+            WaveBigName.enabled = false;
+        }
     }
 }
 

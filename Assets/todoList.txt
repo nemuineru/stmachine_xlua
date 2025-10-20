@@ -1,12 +1,11 @@
 todo : stateDef -> stateController -> stateParamsの表示・非表示トグルなど. 
 
-todo : StateDef新規リスト作成時に、クローンされる項目がリンク項目になるのを修正する (1/2 済)
-todo : HitDefParamsの修正など. また、stParamsをShow/Hide可能にする. (0/4 未) 
+todo : StateDef新規リスト作成時に、クローンされる項目がリンク項目になるのを修正する (2/2 済)
+todo : HitDefParamsの修正など. また、stParamsをShow/Hide可能にする. (4/4 済) 
 	(右クリックコンテキストにチェックボックスとして表示させられるように..)
 todo : ライフ・パワーバーデザイン (2/2 済 モックアップ段階)
-todo : 主人公や敵キャラモデリングなど (0/4 未) 
-todo : アニメーション追加 (0/? 未)
-todo : Entityが他Entityの情報(AnimDefとか)を読み取れるように改変 (0/? 未)
+todo : 主人公や敵キャラモデリングなど (3/4 未) 
+todo : Entityが他Entityの情報(AnimDefとか)を読み取れるように改変 (済)
 
 タイトルがまだ stmachine_xluaのままだし、正式名称とか考えないとなー.
 そのためにも新規プロジェクトに作るか..
@@ -22,3 +21,6 @@ todo later : 画面振動.
 todo later : アクション関連の細かい動作.
 
 todo : stateDefAsset/AnimdefAssetの複数読み込み機能の標準化とか (済)
+
+アリーナの装飾増加. なんかナイトクラブっぽくしたい.
+最初のスタート画面とゲームオーバー画面が欲しい.

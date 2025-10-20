@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Runtime.CompilerServices;
 
 public class EWaveManager : MonoBehaviour
 {
@@ -87,6 +88,7 @@ public class EWaveManager : MonoBehaviour
             else if (currentSpawnIndex >= currentDesc.spawnEntity.Count && countSpawned == 0)
             {
                 currentLevel++;
+                StartCoroutine(gameState.self.ShowWaveNames("Wave " + currentLevel.ToString()));
                 isWaveChanged = false;
             }
         }
@@ -94,7 +96,7 @@ public class EWaveManager : MonoBehaviour
         {
             Debug.Log("Decriptor not found.");
         }
-        LevelUI.text = "Wave " + (currentLevel + 1).ToString();
+        LevelUI.text = currentLevel != 0 ? "Wave " + (currentLevel).ToString() : "Practice";
     }
 }
 
