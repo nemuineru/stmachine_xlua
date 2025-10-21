@@ -39,7 +39,7 @@ end
 end 
 
 
--- ステート変更のファンクション ナイフ版
+-- ステート変更のファンクション ハチェット
     function QueuedStateID_Axe(in_entity)
 
         verd = {}
@@ -48,7 +48,7 @@ end
 
         CurrentTime = LC:CheckStateTime(in_entity)
         -- hitdef
-        if ( CurrentAnimTime == 14 and in_entity.attrs.isStateHit == 0 ) then 
+        if ( math.abs(CurrentAnimTime - 14) < 1 and in_entity.attrs.isStateHit == 0 ) then 
             table.insert( verd, 1 )
         end
         if( CurrentTime == 0 ) then
@@ -62,7 +62,7 @@ end
 end 
 
 
--- ステート変更のファンクション ナイフ版
+-- ステート変更のファンクション ハンマー
     function QueuedStateID_Hammer(in_entity)
 
         verd = {}

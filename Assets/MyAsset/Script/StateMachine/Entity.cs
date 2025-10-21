@@ -50,7 +50,7 @@ public class Entity : MonoBehaviour
     public int stateTime;
 
     //アニメのフレーム時間.
-    public int animationFrameTime, animationEndTime;
+    public float animationFrameTime, animationEndTime;
 
     //移動用の設定など. fwに設定した値・90度回転方向を考慮 - 
     public Vector3 targetTo_fw = Vector3.forward;
@@ -339,6 +339,12 @@ public class Entity : MonoBehaviour
 
         if (status.currentHP <= 0)
         {
+            if (attrs.alive == true)
+            {
+                //倒したときの一瞬スローモー.
+                StartCoroutine(gameState.self.OneShotSlo_mo(0.45f));
+                Instantiate(gameState.self.defaultDeathEff,transform.position,Quaternion.identity);
+            }
             attrs.alive = false;
         }
 
@@ -415,6 +421,7 @@ public class Entity : MonoBehaviour
     //アニメーション設定
     void setanimPlay()
     {
+        MainAnimMixer.PrimalGraph.Play();
         if (LoadedBehavior != null)
         {
             BTree.Start();
@@ -425,10 +432,9 @@ public class Entity : MonoBehaviour
 
         //SetAnimはHitPauseが0で無い限り毎フレーム更新する.
         MainAnimMixer.SetAnim((HitPauseTime <= 0));
-        MainAnimMixer.PrimalGraph.Play();
+        
         animationFrameTime = MainAnimMixer.CurrentAnimTime();
         animationEndTime = MainAnimMixer.EndAnimTime();
-
     }
 
     public void entityPhisics()

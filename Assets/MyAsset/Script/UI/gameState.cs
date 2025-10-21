@@ -11,7 +11,7 @@ using TMPro;
 public class gameState : MonoBehaviour
 {
     //操作対象のEntity.
-    Entity Player;
+    internal Entity Player;
 
     [SerializeField]
     TMP_Text WaveBigName;
@@ -24,10 +24,20 @@ public class gameState : MonoBehaviour
     public GameObject HPUI;
 
     public GameObject defaultEff;
+    public GameObject defaultDeathEff;
 
     [SerializeField]
     TMP_Text KillValue_Text;
     int KillValue = 0;
+
+//ゲーム前かゲーム中かそうでないか
+    enum GameStateDesc
+    {
+        PreGame,
+        InGame,
+        GameOver
+    }
+    GameStateDesc gDesc = GameStateDesc.InGame;
 
     void Awake()
     {
@@ -39,10 +49,23 @@ public class gameState : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        Player = GameObject.FindWithTag("Player").GetComponent<Entity>();
     }
+
+    //ゲームスタート・ゲームオーバーの時
+    bool isGameStartUIShown = false;
+    bool isGameOverUIShown = false;
     void Update()
     {
         entityList = FindObjectsByType<Entity>(FindObjectsSortMode.InstanceID).ToList();
+        if (gDesc == GameStateDesc.GameOver)
+        {
+            Time.timeScale = Mathf.Lerp(Time.timeScale, 0.1f, 0.01f);
+            if (!isGameOverUIShown)
+            {
+                isGameOverUIShown = true;
+            }
+        }
     }
 
     public List<Entity> entityList;
@@ -215,16 +238,28 @@ public class gameState : MonoBehaviour
         return ret;
     }
 
+    public IEnumerator OneShotSlo_mo(float SlowValue)
+    { 
+            float remTimeMax = SlowValue;
+            float remTime = 0;
+            while (remTime < remTimeMax)
+            {
+                remTime += Time.unscaledDeltaTime;
+                Time.timeScale = Mathf.Lerp(0.0f, 1f, Mathf.Min(1f, MathF.Pow(remTime / remTimeMax,2.0f)));
+                yield return 0;
+            }
+    }
+
     public IEnumerator ShowWaveNames(string Names)
     {
         if (WaveBigName != null)
         {
             WaveBigName.enabled = true;
             float remTimeMax = 3f;
-            float remTime = 3f;
+            float remTime = remTimeMax;
             while (remTime > 0)
             {
-                int WaveNameIndexes = Mathf.Max(0,Mathf.CeilToInt((Names.Length) * ((remTimeMax - remTime) / (remTimeMax * 0.5f))));
+                int WaveNameIndexes = Mathf.Max(0, Mathf.CeilToInt((Names.Length) * ((remTimeMax - remTime) / (remTimeMax * 0.5f))));
                 WaveNameIndexes = Mathf.Min(WaveNameIndexes, Names.Length);
                 WaveBigName.text = Names.Substring(0, WaveNameIndexes);
                 remTime -= Time.fixedDeltaTime;

@@ -45,13 +45,13 @@ public class StatusBar : MonoBehaviour
     float UpdateTime = 0.12f;
     float hitPtUpdateTime = 0, enePtUpdateTime = 0, chargePtUpdateTime = 0;
 
-    [SerializeField]
     Entity refEntity;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        refEntity = gameState.self.Player;
         DefC_Health = lifeBar_Outer.points.Select(f => f.color).ToList();
         DefC_Energy = energyBar_Outer.points.Select(f => f.color).ToList();
     }

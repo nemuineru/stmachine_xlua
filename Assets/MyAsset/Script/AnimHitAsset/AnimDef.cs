@@ -153,13 +153,15 @@ public class MixAnimNode
         //Time.timeだとpauseが聞かないため..
             if(TickDef)
             {
-            SetCurrentTime(currentAnimTime + Time.deltaTime);
+                SetCurrentTime(currentAnimTime + Time.fixedDeltaTime);
             }
             changeMixerWeight();
             for (int i = 0; i < PlayList.Length; i++)
             {
-                //var playClip = def.animClip[i];
-                PlayList[i].SetTime(currentAnimTime - startAnimTime);
+            //var playClip = def.animClip[i];
+                float f = currentAnimTime - startAnimTime;
+            Debug.Log("time - " + f);
+                PlayList[i].SetTime(f);
             }
         }
 
@@ -290,23 +292,22 @@ public class MainNodeConfigurator
         }
     }
 
-    public int CurrentAnimTime()
+    public float CurrentAnimTime()
     {
-        int val = 0;
+        float val = 0;
         if (MainMixer != null)
         {
-            val = Mathf.CeilToInt(MainMixer.currentAnimTime / (1 / MainAnimDef.animClip.Average(x => x.Clip.frameRate)));
+            val = MainMixer.currentAnimTime / (1 / MainAnimDef.animClip.Average(x => x.Clip.frameRate));
         }
         return val;
     }
     
-    public int EndAnimTime()
+    public float EndAnimTime()
     {
-        int val = 0;
+        float val = 0;
         if (MainMixer != null)
         {
-            val = Mathf.CeilToInt
-            ((MainAnimDef.animClip.Average(x => x.Clip.length) / (1f / MainAnimDef.animClip.Average(x => x.Clip.frameRate))));
+            val = MainAnimDef.animClip.Average(x => x.Clip.length) / (1f / MainAnimDef.animClip.Average(x => x.Clip.frameRate));
             //Debug.Log(val);
         }
         return val;
@@ -314,7 +315,10 @@ public class MainNodeConfigurator
 
     public void Tick()
     {
-
+        foreach (MixAnimNode mix in Mixers)
+        {
+            mix.Animations(true);
+        }
     }
 
     //アニメーションの設定・ミキサーのウェイト設定..
@@ -370,6 +374,7 @@ public class MainNodeConfigurator
         {
             if (m != null)
             {
+                m.Mixer.Play();
                 //mixerのアニメーションを先ず更新
                 //EndTimeに到達しているならAllから外す.
                 m.Animations(TickDef);
@@ -388,6 +393,7 @@ public class MainNodeConfigurator
                         Max = Mathf.Max(Max, m.MixWeight);
                     }
                 }
+                m.Mixer.Pause();
             }
             i++;
         }
