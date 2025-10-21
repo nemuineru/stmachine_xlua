@@ -343,7 +343,7 @@ public class Entity : MonoBehaviour
             {
                 //倒したときの一瞬スローモー.
                 StartCoroutine(gameState.self.OneShotSlo_mo(0.45f));
-                Instantiate(gameState.self.defaultDeathEff,transform.position,Quaternion.identity);
+                Instantiate(gameState.self.defaultDeathEff,transform.position + Vector3.up * 0.5f,Quaternion.identity);
             }
             attrs.alive = false;
         }

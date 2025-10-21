@@ -165,7 +165,7 @@ public class enemyInput_LookTest : Action
         commandPallette cmdRegisterOneFrame = new commandPallette();
         //スティックを前に(y = 0)
         virtualSticks rstc =
-        new virtualSticks(Vector2.right * AngleDiff,0,1);
+        new virtualSticks(Vector2.right * AngleDiff * 0.01f,0,1);
 
         cmdRegisterOneFrame.LookAxisVecs.Add(rstc);
         cmdRegisterOneFrame.CommandLength = 0;

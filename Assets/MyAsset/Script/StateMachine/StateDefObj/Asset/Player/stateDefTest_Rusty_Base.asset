@@ -87,7 +87,7 @@ MonoBehaviour:
     StateDefID: 6
     LuaAsset: {fileID: -8122155829129254986, guid: cd00f5aa3ee1af945b2501f30c22bbeb, type: 3}
     preStateVerdictName: QueuedStateID_Axe
-    ParamLoadName: null
+    ParamLoadName: Accel_Start
     stateType: 0
     moveType: 0
     physType: 0
@@ -96,6 +96,7 @@ MonoBehaviour:
     - rid: 7982028148908752901
     - rid: 7982028148908752900
     - rid: 7982028148908752902
+    - rid: 1982101096022933504
     setCtrl: 0
   - StateDefName: Hammer
     StateDefID: 7
@@ -174,6 +175,21 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 1982101096022933504
+      type: {class: scSetVelocity, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 3
+          stLuaLoads: 
+        stateControllerSubName: Accels
+        vels:
+          _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: 3
+          stLuaLoads: 
+        priority: 0
     - rid: 3002629213760520200
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:

@@ -1,4 +1,6 @@
 
+local Vector3 = CS.UnityEngine.Vector3;
+local Transform = CS.UnityEngine.Transform;
 local Debug = CS.UnityEngine.Debug;
 
 -- ステート変更のファンクション
@@ -54,6 +56,10 @@ end
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
+        -- physics
+        if( CurrentTime == 16 ) then
+            table.insert( verd, 3 ) 
+        end
         -- endanimdef
         if(  CurrentTime > 3 and AnimEndTime - CurrentAnimTime < 8) then
             table.insert(verd , 2)
@@ -61,6 +67,19 @@ end
     return verd
 end 
 
+function Accel_Start(in_entity)    
+    outs = {}
+
+    Physvel3 = Vector3(0,0,0)
+
+    --オブジェクトの正面方向・右方向を考え、Dotで計算.
+    vel_relate_f = in_entity.transform.forward
+    Physvel3.x = Vector3.ProjectOnPlane(vel_relate_f,Vector3.up).x  * 220
+    Physvel3.z = Vector3.ProjectOnPlane(vel_relate_f,Vector3.up).z  * 220
+
+    table.insert(outs, Physvel3)
+    return outs
+end
 
 -- ステート変更のファンクション ハンマー
     function QueuedStateID_Hammer(in_entity)
