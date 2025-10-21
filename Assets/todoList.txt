@@ -1,27 +1,25 @@
-todo : stateDef -> stateController -> stateParamsの表示・非表示トグルなど. 
+2.1K - BruteForce TodoList.
 
-todo : StateDef新規リスト作成時に、クローンされる項目がリンク項目になるのを修正する (2/2 済)
-todo : HitDefParamsの修正など. また、stParamsをShow/Hide可能にする. (4/4 済) 
+todo :	敵キャラクターのデザインはひとまずあと一体武器持ちのキャラを作る.
+
+todo later :	コンボ表示. 
+todo later :	画面振動.
+todo later :	アクション関連の細かい動作.
+
+todo : 	アリーナの装飾増加. なんかナイトクラブっぽくしたい.
+				群衆やDJステージとかを装飾したい.
+todo : 	最初のスタート画面とゲームオーバー画面が欲しい. 
+				KO数表示や次ウェーブのスタート表示などは出来たから、なんとかしないと
+todo :	サウンドバンクの実装とか必要かも
+todo :	練習モードと本番モードのパッケージング
+todo :	本番モードの音楽収録
+
+---
+Done :	stateDef -> stateController -> stateParamsの表示・非表示トグルなど. 
+Done :	StateDef新規リスト作成時に、クローンされる項目がリンク項目になるのを修正する (2/2 済)
+Done :	HitDefParamsの修正など. また、stParamsをShow/Hide可能にする. (4/4 済) 
 	(右クリックコンテキストにチェックボックスとして表示させられるように..)
-todo : ライフ・パワーバーデザイン (2/2 済 モックアップ段階)
-todo : 主人公や敵キャラモデリングなど (3/4 未) 
-todo : Entityが他Entityの情報(AnimDefとか)を読み取れるように改変 (済)
-
-タイトルがまだ stmachine_xluaのままだし、正式名称とか考えないとなー.
-そのためにも新規プロジェクトに作るか..
-2.1K - Arenaは学生時代のプロジェクトだし、 "B"から始まるもので考えるか?
-
-2.1K - B3![Bunker Bustin Basterd] Protocols...は長いので
-2.1K - BruteForceがいいかも.
-
-敵キャラクターのデザインとか考えてなかったなぁ..
-
-todo later : コンボ表示. 
-todo later : 画面振動.
-todo later : アクション関連の細かい動作.
-
-todo : stateDefAsset/AnimdefAssetの複数読み込み機能の標準化とか (済)
-
-アリーナの装飾増加. なんかナイトクラブっぽくしたい.
-最初のスタート画面とゲームオーバー画面が欲しい.
-KO数表示や次ウェーブのスタート表示などは出来たから、なんとかしないと
+Done :	ライフ・パワーバーデザイン (2/2 済 モックアップ段階)
+Done :	主人公や敵キャラモデリングなど (3/4 未) 
+Done :	Entityが他Entityの情報(AnimDefとか)を読み取れるように改変 (済)
+Done :	stateDefAsset/AnimdefAssetの複数読み込み機能の標準化とか (済)
