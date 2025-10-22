@@ -187,7 +187,7 @@ MonoBehaviour:
           _setEssential: 0
           loadTypes: 1
           stParamValue: {x: 0, y: 0, z: 0}
-          useID: 3
+          useID: 0
           stLuaLoads: 
         priority: 0
     - rid: 3002629213760520200
