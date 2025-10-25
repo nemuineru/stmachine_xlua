@@ -37,7 +37,8 @@ public class EWaveManager : MonoBehaviour
     {
         
     }
-
+    float spawnSec = 0.14f;
+    float currentSpawnSec = 0;
     // Update is called once per frame
     void Update()
     {
@@ -63,9 +64,9 @@ public class EWaveManager : MonoBehaviour
         }
         //現在生成数を確認.
         int countSpawned = spawnedEntity.FindAll(et => et != null).Count;
-        if (currentDesc != null)
+        if (currentDesc != null && gameState.self.gDesc == gameState.GameStateDesc.InGame && currentSpawnSec > spawnSec)
         {
-            Debug.Log("Decriptor found - LV." + currentDesc.minlevel + " - " + currentDesc.maxlevel );
+            Debug.Log("Decriptor found - LV." + currentDesc.minlevel + " - " + currentDesc.maxlevel);
             //一度に生成するエンティティ量が指定の量を超えないまでは..
             if (countSpawned < currentDesc.maxEntityNum && currentSpawnIndex < currentDesc.spawnEntity.Count)
             {
@@ -91,10 +92,12 @@ public class EWaveManager : MonoBehaviour
                 StartCoroutine(gameState.self.ShowWaveNames("Wave " + currentLevel.ToString()));
                 isWaveChanged = false;
             }
+            currentSpawnSec = 0;
         }
         else
         {
             Debug.Log("Decriptor not found.");
+            currentSpawnSec += Time.fixedDeltaTime;
         }
         LevelUI.text = currentLevel != 0 ? "Wave " + (currentLevel).ToString() : "Practice";
     }

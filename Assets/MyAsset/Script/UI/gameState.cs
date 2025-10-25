@@ -31,13 +31,14 @@ public class gameState : MonoBehaviour
     int KillValue = 0;
 
 //ゲーム前かゲーム中かそうでないか
-    enum GameStateDesc
+    internal enum GameStateDesc
     {
         PreGame,
         InGame,
         GameOver
     }
-    GameStateDesc gDesc = GameStateDesc.InGame;
+    [SerializeField]
+    internal GameStateDesc gDesc = GameStateDesc.InGame;
 
     void Awake()
     {
@@ -55,18 +56,56 @@ public class gameState : MonoBehaviour
     //ゲームスタート・ゲームオーバーの時
     bool isGameStartUIShown = false;
     bool isGameOverUIShown = false;
+
+    float GameStartBy = 3.0f;
     void Update()
     {
         entityList = FindObjectsByType<Entity>(FindObjectsSortMode.InstanceID).ToList();
+        switch (gDesc)
+        {
+            case GameStateDesc.PreGame:
+                {
+                    PreGameUI.SetActive(true);
+                    GameStartBy -= Time.deltaTime;
+                    if (GameStartBy < 0)
+                    {
+                        gDesc = GameStateDesc.InGame;
+                    }
+                    break;
+                }
+            case GameStateDesc.InGame:
+                {
+                    if (!isGameStartUIShown)
+                    {
+                        PreGameUI.SetActive(false);
+                        InGameUI.SetActive(true);
+                        isGameStartUIShown = true;
+                    }
+                    break;
+                }
+            case GameStateDesc.GameOver:
+                {
+                    InGameUI.SetActive(false);
+                    GameOverCams.enabled = true;
+                    Time.timeScale = Mathf.Lerp(Time.timeScale, 0.005f, 0.01f);
+                    if (!isGameOverUIShown)
+                    {
+                        GameOverUI.SetActive(true);
+                        isGameOverUIShown = true;
+                    }
+                    break;
+                }
+        }
         if (gDesc == GameStateDesc.GameOver)
         {
-            Time.timeScale = Mathf.Lerp(Time.timeScale, 0.1f, 0.01f);
-            if (!isGameOverUIShown)
-            {
-                isGameOverUIShown = true;
-            }
         }
     }
+
+    public GameObject PreGameUI;
+    public GameObject InGameUI;
+    public GameObject GameOverUI;
+
+    public Cinemachine.CinemachineVirtualCamera GameOverCams;
 
     public List<Entity> entityList;
 
