@@ -42,6 +42,9 @@ public class SubMenuComponent : MonoBehaviour
     }
 
     [SerializeField]
+    internal bool willSelectable = true;
+
+    [SerializeField]
     internal List<SubMenuSets> subMenus;
 
     [SerializeField]
@@ -107,6 +110,7 @@ public class SubMenuComponent : MonoBehaviour
         else
         {
             //Debug.Log(subMenus[subSelectedIndex].menu);
+            if(subMenus != null && subMenus.Count > 0 && subMenus[subSelectedIndex].menu != null)
             ret = subMenus[subSelectedIndex].menu.menuText_Description;
         }
         return ret;
@@ -148,18 +152,31 @@ public class SubMenuComponent : MonoBehaviour
         }
         else
         {
-            subSelected = subMenus[subSelectedIndex].menu;
-            subSelected.gameObject.SetActive(true);
-            gameObject.SetActive(false);
+            var subComponent = subMenus[subSelectedIndex].menu;
+            if (subComponent != null && subComponent.willSelectable == true)
+            {
+                subSelected = subComponent;
+                if (subSelected != null)
+                {
+                    subSelected.ExecuteOnActive();
+                    subSelected.gameObject.SetActive(true);
+                    gameObject.SetActive(false);
+                }
+            }
         }
+    }
+
+    virtual internal void ExecuteOnActive()
+    {
+        
     }
 
     internal void setSubMenuBack()
     {
         if (subSelected != null)
         {
-            if(subSelected.subSelected != null)
-            subSelected.setSubMenuBack();
+            if (subSelected.subSelected != null)
+                subSelected.setSubMenuBack();
             else
             {
                 subSelected.gameObject.SetActive(false);

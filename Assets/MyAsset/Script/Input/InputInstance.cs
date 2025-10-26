@@ -185,6 +185,9 @@ public class InputInstance : MonoBehaviour
         inputBasic.Enable();
     }
 
+    int StartPressed = 0;
+    int SelectPressed = 0;
+
     // Update is called once per frame
     void Update()
     {
@@ -198,5 +201,15 @@ public class InputInstance : MonoBehaviour
         inputValues.AnalogButtonSet(inputValues.SubMenuButton, ref inputValues.SubMenuButton_Read);
         Vector2 nullV = inputValues.MovingAxis;
         nullV = inputValues.LookingAxis;
+        StartPressed = inputValues.MenuButton_Read > 0 ? StartPressed + 1 : 0;
+        SelectPressed = inputValues.SubMenuButton_Read > 0 ? SelectPressed + 1 : 0;
+        if (gameState.self != null && StartPressed == 1)
+        {
+            gameState.self.TogglePauseMode();
+        }
+        if (gameState.self != null && SelectPressed == 1)
+        {
+            gameState.self.ReturnToMainMenu();
+        }
     }
 }

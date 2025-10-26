@@ -344,6 +344,11 @@ public class Entity : MonoBehaviour
                 //倒したときの一瞬スローモー.
                 StartCoroutine(gameState.self.OneShotSlo_mo(0.45f));
                 Instantiate(gameState.self.defaultDeathEff,transform.position + Vector3.up * 0.5f,Quaternion.identity);
+                //BOLD tagging gamechanger system that I hate to implement.
+                if (gameObject.tag == "Player")
+                {
+                    gameState.self.gDesc = gameState.GameStateDesc.GameOver;
+                }
             }
             attrs.alive = false;
         }

@@ -18,7 +18,7 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: 13b365a8419da704db1d5867ceb26d49, type: 3}
     preStateVerdictName: QueuedStateID
     ParamLoadName: LuaOutput
-    stateType: 0
+    stateType: 83
     moveType: 0
     physType: 0
     StateList:
@@ -27,6 +27,7 @@ MonoBehaviour:
     - rid: 3002629213760520201
     - rid: 3002629528666767591
     - rid: 3579422750824726546
+    - rid: 1982101199356952583
     setCtrl: 0
   - StateDefName: Combo1 Jab_First
     StateDefID: 1
@@ -189,6 +190,16 @@ MonoBehaviour:
           stParamValue: {x: 0, y: 0, z: 0}
           useID: 0
           stLuaLoads: 
+        priority: 0
+    - rid: 1982101199356952583
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 5300
+          stLuaLoads: 
+        stateControllerSubName: set it death if it is dead
+        changeTo: 5300
         priority: 0
     - rid: 3002629213760520200
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}

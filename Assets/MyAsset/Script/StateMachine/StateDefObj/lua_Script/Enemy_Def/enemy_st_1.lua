@@ -37,6 +37,9 @@ function QueuedStateID(in_entity)
         -- Debug.Log("Init Anim Loaded")
         table.insert( verd, 100 ) 
     end
+    if(not in_entity.attrs.alive) then
+        table.insert(verd , 5100)
+    end
     return verd
 end
 

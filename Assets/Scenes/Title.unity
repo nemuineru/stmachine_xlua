@@ -302,8 +302,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145479010}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.051187154, y: 0.898264, z: 0.108777806, w: -0.42269266}
-  m_LocalPosition: {x: 2.7739763, y: -0.40457773, z: 2.2181313}
+  m_LocalRotation: {x: 0.051187176, y: 0.898264, z: 0.108777836, w: -0.42269275}
+  m_LocalPosition: {x: 2.7739768, y: -0.40457785, z: 2.2181318}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -411,6 +411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuText_Indexes: MAINMENU
   menuText_Description: Welcome, Soldier.
+  willSelectable: 1
   subMenus:
   - menu: {fileID: 882849026}
     texts: {fileID: 1444599818}
@@ -1080,6 +1081,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuText_Indexes: GAMEMODE
   menuText_Description: Welcome, Soldier.
+  willSelectable: 1
   subMenus:
   - menu: {fileID: 1035311424}
     texts: {fileID: 1035311422}
@@ -1460,7 +1462,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278234623
-  m_fontColor: {r: 1, g: 0.6784314, b: 0, a: 1}
+  m_fontColor: {r: 0.4716981, g: 0.45094898, b: 0.40717337, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1483,7 +1485,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 24
   m_fontSizeMax: 200
-  m_fontStyle: 0
+  m_fontStyle: 64
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1541,6 +1543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuText_Indexes: QUEST MODE
   menuText_Description: Experience the incident of "2104-49:4"
+  willSelectable: 0
   subMenus: []
   txt: {fileID: 1035311422}
   subSelected: {fileID: 0}
@@ -1840,13 +1843,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 109.85
+  m_fontSize: 73.25
   m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 24
   m_fontSizeMax: 200
-  m_fontStyle: 0
+  m_fontStyle: 64
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1904,6 +1907,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuText_Indexes: SETTINGS
   menuText_Description: Change the game Environment.
+  willSelectable: 0
   subMenus: []
   txt: {fileID: 1283715623}
   subSelected: {fileID: 0}
@@ -2035,6 +2039,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuText_Indexes: GAMEMODE
   menuText_Description: Welcome soldier.
+  willSelectable: 1
   subMenus: []
   txt: {fileID: 1444599818}
   subSelected: {fileID: 0}
@@ -2088,7 +2093,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 113.2
+  m_fontSize: 75.45
   m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2222,7 +2227,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 135
+  m_fontSize: 90
   m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2434,7 +2439,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 109.85
+  m_fontSize: 73.25
   m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2493,11 +2498,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1767366450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 958ece2e3965ce04aaf8e7cf06e808e7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7aa688b16971b3446a32ca36b5009577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   menuText_Indexes: GOODBYE
   menuText_Description: See you later, Soldier.
+  willSelectable: 1
   subMenus: []
   txt: {fileID: 1767366452}
   subSelected: {fileID: 0}
@@ -2726,17 +2732,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1838419329}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 958ece2e3965ce04aaf8e7cf06e808e7, type: 3}
+  m_Script: {fileID: 11500000, guid: bbf763f591ca1624f8c589fdfd4266ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   menuText_Indexes: DOJO
   menuText_Description: Learn how to defend yourselves.
+  willSelectable: 1
   subMenus: []
   txt: {fileID: 1838419331}
   subSelected: {fileID: 0}
   subSelectedIndex: 0
   currentSelected: 0
   currentConfirmed: 0
+  SceneName: Scene_Dojo
 --- !u!1 &1901099153
 GameObject:
   m_ObjectHideFlags: 0
@@ -3139,17 +3147,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1954395336}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 958ece2e3965ce04aaf8e7cf06e808e7, type: 3}
+  m_Script: {fileID: 11500000, guid: bbf763f591ca1624f8c589fdfd4266ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   menuText_Indexes: ARENA MODE
   menuText_Description: Fight with 100 things to scrap.
+  willSelectable: 1
   subMenus: []
   txt: {fileID: 1954395338}
   subSelected: {fileID: 0}
   subSelectedIndex: 0
   currentSelected: 0
   currentConfirmed: 0
+  SceneName: Scene_Arena
 --- !u!1 &1985477321
 GameObject:
   m_ObjectHideFlags: 0
@@ -3234,7 +3244,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36.85
+  m_fontSize: 24.55
   m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 1

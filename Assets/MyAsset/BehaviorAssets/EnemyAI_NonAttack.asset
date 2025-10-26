@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
+  m_Name: EnemyAI_NonAttack
+  m_EditorClassIdentifier: 
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(557.640747,52.6386566)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.ParallelSelector","NodeData":{"Offset":"(-4.702957,116.701111)"},"ID":1,"Name":"Parallel
+        Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject.FindWithTag_OnAwake","NodeData":{"Offset":"(-529.743469,230)","Comment":"Calls
+        on only awake"},"ID":2,"Name":"Find With Tag   On Awake","Instant":true,"SharedStringtag":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"Player"},"SharedBoolrandom":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedGameObjectstoreValue":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Player","IsShared":true}},{"Type":"enemyInput_LookTest","NodeData":{"Offset":"(-419.487,355.3845)"},"ID":3,"Name":"Enemy
+        Input   Look Test","Instant":true,"SharedVector3v3_WalkTo":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"DistPos","IsShared":true,"Vector3mValue":"(0,0,0)"},"SharedGameObjectTarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null},"SharedStringCommand":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null},"SharedVector2[]virtualStickInput":[]},{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.Math.FloatOperator","NodeData":{"Offset":"(-304.923279,226.228226)"},"ID":4,"Name":"Float
+        Operator","Instant":true,"Operationoperation":"Subtract","SharedFloatfloat1":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Distance","IsShared":true,"SinglemValue":0},"SharedFloatfloat2":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatstoreResult":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"DistanceToMin","IsShared":true,"SinglemValue":0}},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-140,350)"},"ID":5,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform.GetPosition","NodeData":{"Offset":"(-199.276962,171.411)"},"ID":6,"Name":"Get
+        Position","Instant":true,"SharedGameObjecttargetGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null},"SharedVector3storeValue":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"EntityPos","IsShared":true,"Vector3mValue":"(0,0,0)"}},{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform.GetPosition","NodeData":{"Offset":"(1.064167,170.8615)"},"ID":7,"Name":"Get
+        Position","Instant":true,"SharedGameObjecttargetGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Player","IsShared":true},"SharedVector3storeValue":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"DistPos","IsShared":true,"Vector3mValue":"(0,0,0)"}},{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.UnityVector3.Distance","NodeData":{"Offset":"(184.799988,175.01297)"},"ID":8,"Name":"Distance","Instant":true,"SharedVector3firstVector3":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"EntityPos","IsShared":true,"Vector3mValue":"(0,0,0)"},"SharedVector3secondVector3":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"DistPos","IsShared":true,"Vector3mValue":"(0,0,0)"},"SharedFloatstoreResult":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Distance","IsShared":true,"SinglemValue":0}},{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.Math.FloatComparison","NodeData":{"Offset":"(354.53067,177.132843)","Comment":"1f
+        for ref","ColorIndex":2},"ID":9,"Name":"Float Comparison","Instant":true,"Operationoperation":"GreaterThan","SharedFloatfloat1":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Distance","IsShared":true,"SinglemValue":0},"SharedFloatfloat2":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}},{"Type":"enemyInput_Test","NodeData":{"Offset":"(542.754761,289.139221)","Comment":"Registers
+        the Command Parettes","ColorIndex":8},"ID":10,"Name":"Enemy Input   Test","Instant":true,"SharedVector3v3_WalkTo":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"DistPos","IsShared":true,"Vector3mValue":"(0,0,0)"},"SharedGameObjectTarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null},"SharedStringCommand":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"a"},"SharedVector2virtualStickInput":{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":null,"Vector2mValue":"(0,1)"},"SharedFloatDistClamp":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"DistanceToMin","IsShared":true,"SinglemValue":0}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(14.375,211.554489)"},"ID":11,"Name":"Attacn
+        Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"enemyInput_Test","NodeData":{"Offset":"(202.051682,157.949066)","Comment":"Walk
+        forward slowly..","ColorIndex":8},"ID":12,"Name":"Enemy Input   Test","Instant":true,"SharedVector3v3_WalkTo":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"DistPos","IsShared":true,"Vector3mValue":"(0,0,0)"},"SharedGameObjectTarget":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null},"SharedStringCommand":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":""},"SharedVector2virtualStickInput":{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":null,"Vector2mValue":"(0,0.1)"},"SharedFloatDistClamp":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}]},{"Type":"ExecuteNPCCommands","NodeData":{"Offset":"(275.609741,182.195129)","Comment":"As
+        result of those Command Registerations.","ColorIndex":1},"ID":13,"Name":"Execute
+        NPC Commands","Instant":true}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Player","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"DistPos","IsShared":true,"Vector3mValue":"(0,0,0)"},{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"EntityPos","IsShared":true,"Vector3mValue":"(0,0,0)"},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"Distance","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedObject","Name":"CommandParelle","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"Self","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"DistanceToMin","IsShared":true,"SinglemValue":0}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.12

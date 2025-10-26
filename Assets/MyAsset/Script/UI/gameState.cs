@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class gameState : MonoBehaviour
 {
@@ -28,14 +29,15 @@ public class gameState : MonoBehaviour
 
     [SerializeField]
     TMP_Text KillValue_Text;
-    int KillValue = 0;
+    internal int KillValue = 0;
 
-//ゲーム前かゲーム中かそうでないか
+    //ゲーム前かゲーム中かそうでないか
     internal enum GameStateDesc
     {
         PreGame,
         InGame,
-        GameOver
+        GameOver,
+        PauseMenu
     }
     [SerializeField]
     internal GameStateDesc gDesc = GameStateDesc.InGame;
@@ -75,24 +77,32 @@ public class gameState : MonoBehaviour
                 }
             case GameStateDesc.InGame:
                 {
-                    if (!isGameStartUIShown)
-                    {
-                        PreGameUI.SetActive(false);
-                        InGameUI.SetActive(true);
-                        isGameStartUIShown = true;
-                    }
+                    Time.timeScale = Mathf.Lerp(Time.timeScale, 1.0f, 0.3f);
+                    GameOverCams.enabled = false;
+                    pauseGameUI.SetActive(false);
+                    PreGameUI.SetActive(false);
+                    InGameUI.SetActive(true);
                     break;
                 }
             case GameStateDesc.GameOver:
                 {
                     InGameUI.SetActive(false);
+                    pauseGameUI.SetActive(false);
                     GameOverCams.enabled = true;
-                    Time.timeScale = Mathf.Lerp(Time.timeScale, 0.005f, 0.01f);
+                    Time.timeScale = Mathf.Lerp(Time.timeScale, 0.005f, 0.2f);
                     if (!isGameOverUIShown)
                     {
                         GameOverUI.SetActive(true);
                         isGameOverUIShown = true;
                     }
+                    break;
+                }
+            case GameStateDesc.PauseMenu:
+                {
+                    InGameUI.SetActive(false);
+                    pauseGameUI.SetActive(true);
+                    GameOverCams.enabled = true;
+                    Time.timeScale = Mathf.Lerp(Time.timeScale, 0.005f, 0.2f);
                     break;
                 }
         }
@@ -104,6 +114,7 @@ public class gameState : MonoBehaviour
     public GameObject PreGameUI;
     public GameObject InGameUI;
     public GameObject GameOverUI;
+    public GameObject pauseGameUI;
 
     public Cinemachine.CinemachineVirtualCamera GameOverCams;
 
@@ -278,15 +289,15 @@ public class gameState : MonoBehaviour
     }
 
     public IEnumerator OneShotSlo_mo(float SlowValue)
-    { 
-            float remTimeMax = SlowValue;
-            float remTime = 0;
-            while (remTime < remTimeMax)
-            {
-                remTime += Time.unscaledDeltaTime;
-                Time.timeScale = Mathf.Lerp(0.0f, 1f, Mathf.Min(1f, MathF.Pow(remTime / remTimeMax,2.0f)));
-                yield return 0;
-            }
+    {
+        float remTimeMax = SlowValue;
+        float remTime = 0;
+        while (remTime < remTimeMax)
+        {
+            remTime += Time.unscaledDeltaTime;
+            Time.timeScale = Mathf.Lerp(0.0f, 1f, Mathf.Min(1f, MathF.Pow(remTime / remTimeMax, 2.0f)));
+            yield return 0;
+        }
     }
 
     public IEnumerator ShowWaveNames(string Names)
@@ -309,6 +320,31 @@ public class gameState : MonoBehaviour
                 }
             }
             WaveBigName.enabled = false;
+        }
+    }
+
+
+    //ゲームダンジョンに間に合わせるためのポーズメニュー設定.
+    //後で消そう..
+    public void TogglePauseMode()
+    {
+        if (gDesc == GameStateDesc.InGame)
+        {
+            gDesc = GameStateDesc.PauseMenu;
+        }
+        else if (gDesc == GameStateDesc.PauseMenu)
+        { 
+            gDesc = GameStateDesc.InGame;
+        }
+    }
+
+    //ゲームダンジョンに間に合わせるためのメニュー呼び出し設定.
+    //後で消そう..
+    public void ReturnToMainMenu()
+    {
+        if (gDesc != GameStateDesc.InGame && gDesc != GameStateDesc.PreGame)
+        {
+            SceneManager.LoadScene("Title");
         }
     }
 }
