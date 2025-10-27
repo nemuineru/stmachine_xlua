@@ -26,6 +26,8 @@ public class EntityAttr
     public int isStateGuarded = 0;
     public int isStateReversed = 0;
 
+    public int isSoundNotPlayed = 0;
+
     public void addCombatStateTime()
     {
         if (!isPaused)
@@ -35,6 +37,7 @@ public class EntityAttr
             isStateGuarded += isStateGuarded != 0 ? 1 : 0;
             isStateReversed += isStateReversed != 0 ? 1 : 0;
         }
+        isSoundNotPlayed += isSoundNotPlayed != 0 ? 1 : 0;
     }
 
     public void resetCombatStateTime()
@@ -43,6 +46,7 @@ public class EntityAttr
         isStateContact = 0;
         isStateGuarded = 0;
         isStateReversed = 0;       
+        isSoundNotPlayed = 0;
     }
 }
 

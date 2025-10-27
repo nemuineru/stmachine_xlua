@@ -6,6 +6,7 @@ local Debug = CS.UnityEngine.Debug;
 -- ステート変更のファンクション
     function QueuedStateID(in_entity)
 
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0
         verd = {}
         CurrentTime = LC:CheckStateTime(in_entity)
         if ( CurrentTime > 12 ) then 
@@ -17,11 +18,15 @@ local Debug = CS.UnityEngine.Debug;
         if( math.abs(CurrentTime - 4) < 2  and in_entity.attrs.isStateHit == 0) then
             table.insert( verd, 10 ) 
         end
+        if(SoundTime) then
+            table.insert( verd, 100)
+        end
     return verd
 end 
 
 -- ステート変更のファンクション ナイフ版
     function QueuedStateID_Knife(in_entity)
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0
 
         verd = {}
         CurrentAnimTime = LC:CheckAnimTime(in_entity);
@@ -36,6 +41,9 @@ end
         end
         if( math.abs(CurrentAnimTime - 5) < 2  and in_entity.attrs.isStateHit == 0) then
             table.insert( verd, 10 ) 
+        end
+        if(SoundTime) then
+            table.insert( verd, 100)
         end
     return verd
 end 

@@ -3,6 +3,7 @@ local Debug = CS.UnityEngine.Debug;
 
 -- ステート変更のファンクション
     function QueuedStateID(in_entity)
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0
         verd = {}
         CurrentTime = LC:CheckStateTime(in_entity)
         AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
@@ -18,11 +19,16 @@ local Debug = CS.UnityEngine.Debug;
         if ( CurrentTime > 12 ) then 
             table.insert( verd, 1 )
         end
+        -- sound sound..
+        if(SoundTime) then
+            table.insert( verd, 100)
+        end
     return verd
 end 
 
 -- 地上ハイキック時（コンボフィニッシャー）のステートコマンド..
     function QueuedStateID_GrdCombo3_Finisher(in_entity)
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0
         verd = {}
         CurrentTime = LC:CheckStateTime(in_entity)
         AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
@@ -34,6 +40,9 @@ end
         end
         if ( CurrentTime > 14 ) then 
             table.insert( verd, 1 )
+        end
+        if(SoundTime) then
+            table.insert( verd, 100)
         end
     return verd
 end 

@@ -16,7 +16,7 @@ function QueuedStateID_Throw(in_entity)
     end
     
     -- check hitdef
-    if(C_animTime == 6) then
+    if(math.abs(C_animTime - 6) < .8) then
         table.insert( verd, 1 )
     end
     -- animation end

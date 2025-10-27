@@ -6,6 +6,7 @@ local Debug = CS.UnityEngine.Debug;
         verd = {}
         CurrentTime = LC:CheckStateTime(in_entity)
         AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
@@ -18,6 +19,9 @@ local Debug = CS.UnityEngine.Debug;
         if ( CurrentTime > 12 ) then 
             table.insert( verd, 1 )
         end
+        if(SoundTime) then
+            table.insert( verd, 100)
+        end
     return verd
 end 
 
@@ -26,6 +30,7 @@ end
         verd = {}
         CurrentTime = LC:CheckStateTime(in_entity)
         AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
@@ -34,6 +39,9 @@ end
         end
         if ( CurrentTime > 14 ) then 
             table.insert( verd, 1 )
+        end
+        if(SoundTime) then
+            table.insert( verd, 100)
         end
     return verd
 end 

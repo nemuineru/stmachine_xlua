@@ -43,6 +43,7 @@ MonoBehaviour:
     - rid: 3002629213760520202
     - rid: 3579423095655497736
     - rid: 4404388529659445248
+    - rid: 1982101230649868288
     setCtrl: 0
   - StateDefName: Combo2 Jab_Second
     StateDefID: 2
@@ -57,6 +58,7 @@ MonoBehaviour:
     - rid: 3002629213760520203
     - rid: 3579423095655497732
     - rid: 4404388637674569761
+    - rid: 1982101230649868296
     setCtrl: 0
   - StateDefName: Combo3 Kick Finisher
     StateDefID: 3
@@ -70,6 +72,7 @@ MonoBehaviour:
     - rid: 4404388799971590146
     - rid: 4404388799971590147
     - rid: 4404388799971590148
+    - rid: 1982101230649868297
     setCtrl: 0
   - StateDefName: KnifeStab
     StateDefID: 5
@@ -83,6 +86,7 @@ MonoBehaviour:
     - rid: 4404388709018370071
     - rid: 4404388709018370072
     - rid: 4404388709018370073
+    - rid: 1982101230649868302
     setCtrl: 0
   - StateDefName: AxeSlash
     StateDefID: 6
@@ -201,6 +205,66 @@ MonoBehaviour:
         stateControllerSubName: set it death if it is dead
         changeTo: 5300
         priority: 0
+    - rid: 1982101230649868288
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 100
+          stLuaLoads: 
+        stateControllerSubName: whoosh1
+        audio: {fileID: 8300000, guid: 1138d641ce050584190279ce15310706, type: 3}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982101230649868296
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 100
+          stLuaLoads: 
+        stateControllerSubName: whoosh2
+        audio: {fileID: 8300000, guid: 1138d641ce050584190279ce15310706, type: 3}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982101230649868297
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 100
+          stLuaLoads: 
+        stateControllerSubName: whooshF
+        audio: {fileID: 8300000, guid: 95768d7a054056c4faf1607e55843824, type: 3}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982101230649868302
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 100
+          stLuaLoads: 
+        stateControllerSubName: knife1
+        audio: {fileID: 8300000, guid: 60b4d2b19538feb4bb472fa4649535fc, type: 3}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
     - rid: 3002629213760520200
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:

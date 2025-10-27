@@ -46,6 +46,7 @@ public class Entity : MonoBehaviour
 
 
     public Rigidbody rigid;
+    public AudioSource selfSource;
 
     public int stateTime;
 
@@ -189,6 +190,7 @@ public class Entity : MonoBehaviour
             transposer = vCam.GetCinemachineComponent<CinemachineOrbitalTransposer>();
         }
         rigid.useGravity = false;
+        selfSource = GetComponent<AudioSource>();
     }
 
     internal List<StateDef> loadedDefs = new List<StateDef>();
@@ -560,6 +562,16 @@ public class Entity : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
+
+    //ワンショットサウンドを鳴らす.
+    internal void SetPlayOneShot(AudioClip audio)
+    {
+        if (selfSource != null && audio != null)
+        {
+            selfSource.PlayOneShot(audio);
+        }
+        attrs.isSoundNotPlayed = 1;
     }
 
     //LuaScript上で呼び出し可能にする.

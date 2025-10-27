@@ -13,10 +13,10 @@ function Queue_Cmd(in_entity)
     AttackCmd_x = LC:CheckButtonPressed(in_entity, "x_")
 
     -- bの離し判定
-    AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
-    -- bの押し判定
-    AttackCmd_b_Pressed = LC:CheckButtonPressed(in_entity, "b")
     AttackCmd_b_Released = LC:CheckButtonPressed(in_entity, "b^")
+    -- bの押し判定
+    AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
+    AttackCmd_b_Pressed = LC:CheckButtonPressed(in_entity, "b")
     AttackCmd_b_x_doublePress = LC:CheckButtonPressed(in_entity, "z_")
 
     selfStTime = LC:CheckStateTime(in_entity) 
