@@ -31,6 +31,8 @@ public class gameState : MonoBehaviour
     TMP_Text KillValue_Text;
     internal int KillValue = 0;
 
+    public AudioSource inGameAuds;
+
     //ゲーム前かゲーム中かそうでないか
     internal enum GameStateDesc
     {
@@ -82,6 +84,8 @@ public class gameState : MonoBehaviour
                     pauseGameUI.SetActive(false);
                     PreGameUI.SetActive(false);
                     InGameUI.SetActive(true);
+                    if(inGameAuds != null)
+                    inGameAuds.pitch = Mathf.Lerp(inGameAuds.pitch, 1f, 0.08f);
                     break;
                 }
             case GameStateDesc.GameOver:
@@ -95,6 +99,8 @@ public class gameState : MonoBehaviour
                         GameOverUI.SetActive(true);
                         isGameOverUIShown = true;
                     }
+                    if(inGameAuds != null)
+                    inGameAuds.pitch = Mathf.Lerp(inGameAuds.pitch, 0.005f, 0.05f);
                     break;
                 }
             case GameStateDesc.PauseMenu:
@@ -103,6 +109,8 @@ public class gameState : MonoBehaviour
                     pauseGameUI.SetActive(true);
                     GameOverCams.enabled = true;
                     Time.timeScale = Mathf.Lerp(Time.timeScale, 0.005f, 0.2f);
+                    if(inGameAuds != null)
+                    inGameAuds.pitch = Mathf.Lerp(inGameAuds.pitch, 0.005f, 0.05f);
                     break;
                 }
         }
