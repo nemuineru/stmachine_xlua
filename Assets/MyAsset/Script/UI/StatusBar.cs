@@ -61,7 +61,7 @@ public class StatusBar : MonoBehaviour
         EntityStatus Status = refEntity.status;
         if (Status != null)
         {
-            health = Status.currentHP / Status.maxHP;
+            health = Mathf.Lerp(health , Status.currentHP / Status.maxHP, 0.3333f);
             energy = Status.currentEnergy / Status.maxEnergy;
             charge = Status.ChargeTime / Status.setChargeTime_Lv2;
         }

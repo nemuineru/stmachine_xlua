@@ -217,7 +217,7 @@ public class gameState : MonoBehaviour
 
         //hitpause
         (calledEntity.HitPauseTime, beatenEntity.HitPauseTime) = (calledEParam.hitStopTime.x, calledEParam.hitStopTime.y);
-        DamageApply(beatenEntity, HitVect, calledEParam);
+        DamageApply(beatenEntity, HitVect, calledEParam, calledEntity.status.BaseAttackPerc);
         Instantiate
         ((calledEParam.HitEff != null ? calledEParam.HitEff : defaultEff), hitContactPoint, Quaternion.identity);
 
@@ -253,14 +253,14 @@ public class gameState : MonoBehaviour
 
         //hitpause
         (beatenEntity.HitPauseTime) = (calledEParam.hitStopTime.y);
-        DamageApply(beatenEntity, HitVect, calledEParam);
+        DamageApply(beatenEntity, HitVect, calledEParam, 100f);
         Instantiate
         ((calledEParam.HitEff != null ? calledEParam.HitEff : defaultEff), hitContactPoint, Quaternion.identity);
     }
 
 
 
-    void DamageApply(Entity beatenEntity, Vector3 HitVect, hitDefParams calledEParam)
+    void DamageApply(Entity beatenEntity, Vector3 HitVect, hitDefParams calledEParam, float atkParams)
     {
         //SetSpeed
         beatenEntity.rigid.velocity = HitVect.normalized * calledEParam.velset.x + Vector3.up * calledEParam.velset.y;
@@ -272,7 +272,7 @@ public class gameState : MonoBehaviour
         beatenEntity.ChangeAnim(.1f);
 
         //hitpoint damage
-        beatenEntity.status.currentHP -= calledEParam.Damage;
+        beatenEntity.status.currentHP -= calledEParam.Damage * (atkParams / Mathf.Max(1.0f,beatenEntity.status.BaseDefencePerc));
 
         //placeholder for rotation
         beatenEntity.transform.rotation =

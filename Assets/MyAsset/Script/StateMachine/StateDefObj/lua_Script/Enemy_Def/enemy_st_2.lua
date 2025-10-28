@@ -8,7 +8,8 @@ local Debug = CS.UnityEngine.Debug;
         --スキを見せるように.
         AnimTime = LC:CheckAnimTime(in_entity)
         CurrentTime = LC:CheckStateTime(in_entity)
-        SoundTime = in_entity.attrs.isSoundNotPlayed == 0
+        CurrentAnimID = LC:CheckAnimID(in_entity)
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0 and  math.abs(AnimTime - 12) < 3 and CurrentAnimID == 1
         if ( CurrentTime > 30 ) then 
             table.insert( verd, 3 )
         end

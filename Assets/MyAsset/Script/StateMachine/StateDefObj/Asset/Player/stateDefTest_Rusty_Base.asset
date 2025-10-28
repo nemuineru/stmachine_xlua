@@ -102,6 +102,7 @@ MonoBehaviour:
     - rid: 7982028148908752900
     - rid: 7982028148908752902
     - rid: 1982101096022933504
+    - rid: 1982101252599447552
     setCtrl: 0
   - StateDefName: Hammer
     StateDefID: 7
@@ -116,6 +117,7 @@ MonoBehaviour:
     - rid: 7982028148908752905
     - rid: 7982028148908752907
     - rid: 7982028148908752906
+    - rid: 1982101252599447559
     setCtrl: 0
   - StateDefName: AirCombo Kicking
     StateDefID: 20
@@ -130,6 +132,7 @@ MonoBehaviour:
     - rid: 4404388637674569820
     - rid: 3002629213760520203
     - rid: 4404388637674569830
+    - rid: 1982101252599447575
     setCtrl: 0
   - StateDefName: AirHard Knife
     StateDefID: 25
@@ -143,6 +146,7 @@ MonoBehaviour:
     - rid: 4404388709018370089
     - rid: 4404388709018370090
     - rid: 4404388709018370088
+    - rid: 1982101252599447576
     setCtrl: 0
   - StateDefName: Jump
     StateDefID: 50
@@ -259,6 +263,66 @@ MonoBehaviour:
           stLuaLoads: 
         stateControllerSubName: knife1
         audio: {fileID: 8300000, guid: 60b4d2b19538feb4bb472fa4649535fc, type: 3}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982101252599447552
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 100
+          stLuaLoads: 
+        stateControllerSubName: swooshsnd
+        audio: {fileID: 8300000, guid: 902bff6a8c7aaf640a805954d4c00fda, type: 3}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982101252599447559
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 100
+          stLuaLoads: 
+        stateControllerSubName: heavSwoosh
+        audio: {fileID: 8300000, guid: 0910dbd1d178e924aa8826fd0c74346a, type: 3}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982101252599447575
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 100
+          stLuaLoads: 
+        stateControllerSubName: shootsound
+        audio: {fileID: 8300000, guid: 1138d641ce050584190279ce15310706, type: 3}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 1982101252599447576
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 100
+          stLuaLoads: 
+        stateControllerSubName: knifefast
+        audio: {fileID: 8300000, guid: eb9e83790a6812d47a66dbb922a7143e, type: 3}
         priority:
           _setEssential: 0
           loadTypes: 0

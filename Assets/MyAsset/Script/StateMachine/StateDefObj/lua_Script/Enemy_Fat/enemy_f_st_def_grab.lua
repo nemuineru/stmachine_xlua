@@ -15,7 +15,7 @@ function QueuedStateID_Throw_Start(in_entity)
         table.insert( verd, 0 ) 
     end
     -- Accels.
-    if( C_animTime == 7) then
+    if( C_animTime > 7 and C_animTime < 8) then
         table.insert( verd, 3 ) 
     end
     
@@ -43,7 +43,7 @@ end
             table.insert( verd, 0 ) 
         end
         -- change to idle. also damage them and check the rest frametime
-        if(  C_animTime == 4) then
+        if(  C_animTime > 4 and C_animTime < 5 and selfOnGrd == true) then
             table.insert(verd , 1)
         end
         if(AnimEndTime - C_animTime < 1 and selfOnGrd == true and CurrentAnimID == 3) then

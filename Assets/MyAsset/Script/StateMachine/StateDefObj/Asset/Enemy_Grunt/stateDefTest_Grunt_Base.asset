@@ -41,6 +41,7 @@ MonoBehaviour:
     - rid: 3579423065411158016
     - rid: 3579423095655497736
     - rid: 4404388529659445248
+    - rid: 1982101252599447582
     setCtrl: 0
   - StateDefName: KnifeStab
     StateDefID: 5
@@ -81,6 +82,21 @@ MonoBehaviour:
         stateControllerSubName: set it death if it is dead
         changeTo: 5300
         priority: 0
+    - rid: 1982101252599447582
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 100
+          stLuaLoads: 
+        stateControllerSubName: enemySwoosh
+        audio: {fileID: 8300000, guid: 0910dbd1d178e924aa8826fd0c74346a, type: 3}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
     - rid: 3002629213760520200
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:

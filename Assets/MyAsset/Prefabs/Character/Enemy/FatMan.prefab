@@ -161,7 +161,7 @@ MonoBehaviour:
     currentHP: 280
     maxEnergy: 50
     currentEnergy: 50
-    BaseAttackPerc: 100
+    BaseAttackPerc: 60
     BaseDefencePerc: 100
     ChargeTime: 0
   attrs:
@@ -175,6 +175,7 @@ MonoBehaviour:
     isStateContact: 0
     isStateGuarded: 0
     isStateReversed: 0
+    isSoundNotPlayed: 0
   parentEntity: {fileID: 0}
   controlledEntity: {fileID: 0}
   animID: 0

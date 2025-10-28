@@ -49,6 +49,7 @@ end
 
 -- ステート変更のファンクション
     function QueuedStateID_J_Knife(in_entity)
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0
         verd = {}
         CurrentTime = LC:CheckStateTime(in_entity)
         selfOnGrd = LC:isEntityOnGround(in_entity)
@@ -61,11 +62,15 @@ end
         if ( selfOnGrd ) then 
             table.insert( verd, 1 )
         end
+        if(SoundTime) then
+            table.insert( verd, 100)
+        end
     return verd
 end 
 
 -- ステート変更のファンクション
     function QueuedStateID_J(in_entity)
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0
         verd = {}
         CurrentTime = LC:CheckStateTime(in_entity)
         selfOnGrd = LC:isEntityOnGround(in_entity)
@@ -77,6 +82,9 @@ end
         end
         if ( selfOnGrd ) then 
             table.insert( verd, 1 )
+        end
+        if(SoundTime) then
+            table.insert( verd, 100)
         end
     return verd
 end 

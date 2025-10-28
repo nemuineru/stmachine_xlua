@@ -35,7 +35,8 @@ public class EWaveManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+                //シード値の完全Random(日時指定.)
+                Random.InitState(System.DateTime.Now.Millisecond);
     }
     float spawnSec = 0.14f;
     float currentSpawnSec = 0;
@@ -53,13 +54,18 @@ public class EWaveManager : MonoBehaviour
 
             List<waveDesc> comfirmableDesc =
             waveLists.FindAll(wLs => wLs.minlevel <= currentLevel && wLs.maxlevel >= currentLevel);
+            //Debug.Log(" descCount : " + comfirmableDesc.Count);
             if (comfirmableDesc.Count != 0)
             {
+                gameState.self.Player.status.currentHP =
+                Mathf.Min((gameState.self.Player.status.currentHP + gameState.self.Player.status.maxHP) / 2f + 10f,
+                gameState.self.Player.status.maxHP);
                 //ランダムセレクト.
-                currentDesc = comfirmableDesc[Random.Range(0,comfirmableDesc.Count - 1)];
+                currentDesc = comfirmableDesc[Random.Range(0, comfirmableDesc.Count)];
                 //生成インデックスのリセット.
                 currentSpawnIndex = 0;
                 isWaveChanged = true;
+                //Debug.Log(" Selected as : " + currentDesc.spawnEntity.Count);
             }
         }
         //現在生成数を確認.
