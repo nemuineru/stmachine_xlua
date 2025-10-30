@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class InputInstance : MonoBehaviour
 {
     
+    
     static public int GetDigitalAxis(Vector2 Axis)
     {
         string deb = "";

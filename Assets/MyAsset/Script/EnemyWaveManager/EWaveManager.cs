@@ -13,6 +13,15 @@ public class EWaveManager : MonoBehaviour
 
     public List<Transform> EnemySpawnPoints;
 
+    public enum GameType
+    {
+        Practice,
+        WaveMode
+    }
+
+    [SerializeField]
+    public GameType gameType; 
+
     [System.Serializable]
     public class waveDesc
     {
@@ -25,6 +34,8 @@ public class EWaveManager : MonoBehaviour
 
     public List<waveDesc> waveLists;
     public bool isWaveChanged = false;
+
+    public int MaxLevel = 12;
     public int currentLevel = 0;
 
     waveDesc currentDesc;
