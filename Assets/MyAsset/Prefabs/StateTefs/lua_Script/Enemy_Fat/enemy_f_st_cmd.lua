@@ -24,6 +24,10 @@ function Queue_Cmd(in_entity)
         if( selfOnGrd == true and AttackCmd_b == true and stateID == 0 ) then
             table.insert( verd, 5 ) 
         end
+        isAlive = in_entity.attrs.alive
+        if(not isAlive and stateID == 0) then 
+            table.insert (verd, 5000)
+        end
     return verd
 end
 

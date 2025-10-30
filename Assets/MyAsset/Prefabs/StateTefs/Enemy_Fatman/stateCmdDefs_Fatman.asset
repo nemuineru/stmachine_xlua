@@ -24,10 +24,21 @@ MonoBehaviour:
     StateList:
     - rid: 4404388664824299527
     - rid: 4404388709018370078
+    - rid: 1982101297765023745
     setCtrl: 0
   references:
     version: 2
     RefIds:
+    - rid: 1982101297765023745
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 5000
+          stLuaLoads: 
+        stateControllerSubName: set Dead
+        changeTo: 5000
+        priority: 0
     - rid: 4404388664824299527
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:

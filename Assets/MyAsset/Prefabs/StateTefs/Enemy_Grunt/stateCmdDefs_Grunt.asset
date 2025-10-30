@@ -18,13 +18,28 @@ MonoBehaviour:
     LuaAsset: {fileID: -8122155829129254986, guid: 65fd7b4815d6a3444b417f80c6adccb9, type: 3}
     preStateVerdictName: Queue_Cmd
     ParamLoadName: LuaOutput
+    stateType: 0
+    moveType: 0
+    physType: 0
     StateList:
     - rid: 4404388664824299527
     - rid: 4404388709018370078
     - rid: 4404388664824299529
+    - rid: 1982101297765023744
+    setCtrl: 0
   references:
     version: 2
     RefIds:
+    - rid: 1982101297765023744
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 5000
+          stLuaLoads: 
+        stateControllerSubName: set Dead
+        changeTo: 5000
+        priority: 0
     - rid: 4404388664824299527
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:

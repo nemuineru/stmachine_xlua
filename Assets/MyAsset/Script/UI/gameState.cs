@@ -280,6 +280,18 @@ public class gameState : MonoBehaviour
         Debug.Log("Hit : " + beatenEntity.gameObject.name);
     }
 
+    internal void ClearChars()
+    {
+        foreach (Entity ent in entityList)
+        {
+            if (ent.tag != "Player")
+            {
+                ent.status.currentHP = 0;
+                ent.attrs.alive = false;
+            }
+        }
+    }
+
     internal void AddKillValue()
     {
         KillValue++;

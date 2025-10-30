@@ -49,6 +49,7 @@ public class InputInstance : MonoBehaviour
         public int Extra2Button_Read = 0;
         public int MenuButton_Read = 0;
         public int SubMenuButton_Read = 0;
+        public int DebugCMD_ClearALL_Read = 0;
 
         public int MovingAxis_Digital
         {
@@ -136,6 +137,10 @@ public class InputInstance : MonoBehaviour
         {
             get {return self.inputBasic.Base.SubMenu_Button.ReadValue<float>(); }
         }
+        public float DebugCMD_Clear
+        {
+            get {return self.inputBasic.Base.DebugCMD_ClearAll.ReadValue<float>(); }
+        }
 
 
         private Vector2 mousepos;
@@ -187,6 +192,7 @@ public class InputInstance : MonoBehaviour
 
     int StartPressed = 0;
     int SelectPressed = 0;
+    int ClearPressed = 0;
 
     // Update is called once per frame
     void Update()
@@ -199,10 +205,13 @@ public class InputInstance : MonoBehaviour
         inputValues.AnalogButtonSet(inputValues.Extra2Button, ref inputValues.Extra2Button_Read);
         inputValues.AnalogButtonSet(inputValues.MenuButton, ref inputValues.MenuButton_Read);
         inputValues.AnalogButtonSet(inputValues.SubMenuButton, ref inputValues.SubMenuButton_Read);
+        inputValues.AnalogButtonSet(inputValues.DebugCMD_Clear, ref inputValues.DebugCMD_ClearALL_Read);
         Vector2 nullV = inputValues.MovingAxis;
         nullV = inputValues.LookingAxis;
         StartPressed = inputValues.MenuButton_Read > 0 ? StartPressed + 1 : 0;
         SelectPressed = inputValues.SubMenuButton_Read > 0 ? SelectPressed + 1 : 0;
+        ClearPressed = inputValues.DebugCMD_ClearALL_Read > 0 ? ClearPressed + 1 : 0;
+
         if (gameState.self != null && StartPressed == 1)
         {
             gameState.self.TogglePauseMode();
@@ -210,6 +219,11 @@ public class InputInstance : MonoBehaviour
         if (gameState.self != null && SelectPressed == 1)
         {
             gameState.self.ReturnToMainMenu();
+        }
+
+        if (ClearPressed == 1)
+        {
+            gameState.self.ClearChars();
         }
     }
 }
