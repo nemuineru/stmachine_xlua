@@ -105,8 +105,11 @@ public class EWaveManager : MonoBehaviour
             //エンティティ全滅なら次のレベルへ.
             else if (currentSpawnIndex >= currentDesc.spawnEntity.Count && countSpawned == 0)
             {
-                currentLevel++;
-                StartCoroutine(gameState.self.ShowWaveNames("Wave " + currentLevel.ToString()));
+                if (gameType == GameType.WaveMode)
+                {
+                    currentLevel++;
+                    StartCoroutine(gameState.self.ShowWaveNames("Wave " + currentLevel.ToString()));
+                }
                 isWaveChanged = false;
             }
             currentSpawnSec = 0;
@@ -116,7 +119,7 @@ public class EWaveManager : MonoBehaviour
             //Debug.Log("Decriptor not found.");
             currentSpawnSec += Time.fixedDeltaTime;
         }
-        LevelUI.text = currentLevel != 0 ? "Wave " + (currentLevel).ToString() : "Practice";
+        LevelUI.text = currentLevel != 0 ? "Wave " + (currentLevel).ToString() + " / " + MaxLevel.ToString() : "Practice";
     }
 }
 
