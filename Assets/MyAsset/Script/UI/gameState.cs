@@ -65,6 +65,11 @@ public class gameState : MonoBehaviour
     void Update()
     {
         entityList = FindObjectsByType<Entity>(FindObjectsSortMode.InstanceID).ToList();
+        GameDescApply();
+    }
+
+    void GameDescApply()
+    {
         switch (gDesc)
         {
             case GameStateDesc.PreGame:
@@ -93,14 +98,14 @@ public class gameState : MonoBehaviour
                     InGameUI.SetActive(false);
                     pauseGameUI.SetActive(false);
                     GameOverCams.enabled = true;
-                    Time.timeScale = Mathf.Lerp(Time.timeScale, 0.005f, 0.2f);
+                    Time.timeScale = Mathf.Lerp(Time.timeScale, 0.001f, 0.025f);
                     if (!isGameOverUIShown)
                     {
                         GameOverUI.SetActive(true);
                         isGameOverUIShown = true;
                     }
                     if(inGameAuds != null)
-                    inGameAuds.pitch = Mathf.Lerp(inGameAuds.pitch, 0.005f, 0.05f);
+                    inGameAuds.pitch = Mathf.Lerp(inGameAuds.pitch, 0.001f, 0.025f);
                     break;
                 }
             case GameStateDesc.PauseMenu:
@@ -108,15 +113,13 @@ public class gameState : MonoBehaviour
                     InGameUI.SetActive(false);
                     pauseGameUI.SetActive(true);
                     GameOverCams.enabled = true;
-                    Time.timeScale = Mathf.Lerp(Time.timeScale, 0.005f, 0.2f);
+                    Time.timeScale = Mathf.Lerp(Time.timeScale, 0.00f, 0.025f);
                     if(inGameAuds != null)
-                    inGameAuds.pitch = Mathf.Lerp(inGameAuds.pitch, 0.005f, 0.05f);
+                    inGameAuds.pitch = Mathf.Lerp(inGameAuds.pitch, 0.00f, 0.025f);
                     break;
                 }
         }
-        if (gDesc == GameStateDesc.GameOver)
-        {
-        }
+
     }
 
     public GameObject PreGameUI;

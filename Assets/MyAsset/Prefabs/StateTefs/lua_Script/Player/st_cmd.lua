@@ -65,12 +65,14 @@ function Queue_Cmd(in_entity)
     end
 
     -- air_combo cmd
-    if( selfOnGrd == false and AttackCmd_x == true and stateID == 50 ) then
+    if( (selfOnGrd == false and AttackCmd_x == true and stateID == 50) or 
+        (stateID == 20 and AttackCmd_x == true and selfStTime > 4 and in_entity.attrs.isStateHit > 3)) then
         table.insert( verd, 20 ) 
     end
 
     -- air_Hard cmd
-    if( selfOnGrd == false and AttackCmd_b_Released == true and stateID == 50 ) then
+    if(( selfOnGrd == false and AttackCmd_b_Released == true and stateID == 50 ) or 
+        (stateID == 20 and AttackCmd_b_Released == true and selfStTime > 4 and in_entity.attrs.isStateHit > 3)) then
         table.insert( verd, 25 ) 
     end    
 
@@ -82,6 +84,12 @@ function Queue_Cmd(in_entity)
     --chargeUp Releasement Checks
     if( AttackCmd_b_Released == true or stateID > 5000 ) then
     table.insert( verd, 31 ) 
+    end
+
+    --jump and Jumpcancel on Cmd
+    JumpCommand = LC:CheckButtonPressed(in_entity, "a_")
+    if( stateID >= 1 and stateID <= 3 and in_entity.attrs.isStateHit > 0 and JumpCommand) then
+    table.insert( verd, 50 ) 
     end
 
     return verd

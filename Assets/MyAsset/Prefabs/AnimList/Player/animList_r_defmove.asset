@@ -47,21 +47,11 @@ MonoBehaviour:
     blendInTime: 0.05
     blendOutTime: 0
     useDefaultClss: 1
-    eraseAllClss: 0
     clssSetting:
-      clssDefs:
-      - clssType: 0
-        attachTo: hand.l
-        showGizmo: 1
-        _entity: {fileID: 0}
-        attachTransform: {fileID: 0}
-        startPos: {x: 0, y: 0, z: 0}
-        endPos: {x: 0, y: 0, z: 0}
-        width: 0.18
-        _lastcalcStartPos: {x: -2.505491, y: 0.4015542, z: 2.8481169}
-        _lastcalcEndPos: {x: -2.505491, y: 0.4015542, z: 2.8481169}
+      clssDefs: []
       disableClssList: []
       root: {fileID: 0}
+      eraseAllClss: 0
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
@@ -76,12 +66,12 @@ MonoBehaviour:
     blendInTime: 0.1
     blendOutTime: 0
     useDefaultClss: 0
-    eraseAllClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
       - head
       root: {fileID: 0}
+      eraseAllClss: 0
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
@@ -96,7 +86,6 @@ MonoBehaviour:
     blendInTime: 0
     blendOutTime: 0.2
     useDefaultClss: 0
-    eraseAllClss: 0
     clssSetting:
       clssDefs:
       - clssType: 0
@@ -111,6 +100,7 @@ MonoBehaviour:
         _lastcalcEndPos: {x: 0, y: 0, z: 0}
       disableClssList: []
       root: {fileID: 0}
+      eraseAllClss: 0
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
@@ -125,12 +115,12 @@ MonoBehaviour:
     blendInTime: 0
     blendOutTime: 0.1
     useDefaultClss: 0
-    eraseAllClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
       - head
       root: {fileID: 0}
+      eraseAllClss: 0
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
@@ -145,12 +135,12 @@ MonoBehaviour:
     blendInTime: 0
     blendOutTime: 0.4
     useDefaultClss: 0
-    eraseAllClss: 0
     clssSetting:
       clssDefs: []
       disableClssList:
       - head
       root: {fileID: 0}
+      eraseAllClss: 0
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}
@@ -165,9 +155,9 @@ MonoBehaviour:
     blendInTime: 0
     blendOutTime: 0.4
     useDefaultClss: 0
-    eraseAllClss: 1
     clssSetting:
       clssDefs: []
       disableClssList:
       - head
       root: {fileID: 0}
+      eraseAllClss: 0

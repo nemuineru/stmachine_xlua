@@ -488,7 +488,7 @@ MonoBehaviour:
           stParamValue:
             Damage: 20
             velset: {x: 1.5, y: 0, z: 0}
-            hitStopTime: {x: 4, y: 8}
+            hitStopTime: {x: 1, y: 8}
             HitEff: {fileID: 0}
             ChangeState_Enemy: 5000
             maxEntityHits: 1
@@ -511,7 +511,7 @@ MonoBehaviour:
           stParamValue:
             Damage: 30
             velset: {x: 1.8, y: 0.7, z: 0}
-            hitStopTime: {x: 6, y: 9}
+            hitStopTime: {x: 3, y: 9}
             HitEff: {fileID: 0}
             ChangeState_Enemy: 5000
             maxEntityHits: 1
@@ -554,7 +554,7 @@ MonoBehaviour:
           stParamValue:
             Damage: 30
             velset: {x: 3, y: 1, z: 0}
-            hitStopTime: {x: 2, y: 8}
+            hitStopTime: {x: 5, y: 8}
             HitEff: {fileID: 0}
             ChangeState_Enemy: 5000
             maxEntityHits: 1
@@ -713,7 +713,7 @@ MonoBehaviour:
           stParamValue:
             Damage: 50
             velset: {x: 3, y: 4, z: 0}
-            hitStopTime: {x: 10, y: 15}
+            hitStopTime: {x: 7, y: 15}
             HitEff: {fileID: 0}
             ChangeState_Enemy: 5050
             maxEntityHits: 1

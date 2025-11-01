@@ -737,10 +737,7 @@ public class AnimDef
 
     float DefWeight = 1f;
 
-    public bool useDefaultClss;
-    
-    //投げとかステート奪取時の挙動用. 一時的に当たり判定を除去する.
-    public bool eraseAllClss;
+    public bool useDefaultClss;    
 
     //アニメーションごとにオーバーライド・設定可能な判定をここで設定する.
     //null値が挿入されているならデフォルトを使用..と考える.
@@ -760,22 +757,20 @@ public class AnimDef
         clssSetting.clssPosUpdate();
         List<clssDef> ca = clssSetting.findclss(clssDef.ClssType.Hit, 0f);
         ca.AddRange(clssSetting.findclss(clssDef.ClssType.Attack, 0f));
-        if (eraseAllClss == false)
+        
+        foreach (clssDef c in ca)
         {
-            foreach (clssDef c in ca)
+            //Debug.Log("clssCapsule name : " + c.attachTo);
+            //Debug.Log(c.attachTo);
+            c.getGlobalPos();
+            c.DrawCapsule();
+            if (c.showGizmo == true)
             {
-                //Debug.Log("clssCapsule name : " + c.attachTo);
-                //Debug.Log(c.attachTo);
-                c.getGlobalPos();
-                c.DrawCapsule();
-                if (c.showGizmo == true)
+                if (c.clssType == clssDef.ClssType.Attack)
                 {
-                    if (c.clssType == clssDef.ClssType.Attack)
-                    {
-                        //Debug.Log("attackCapsule");
-                    }
-                    //c.DrawCapsule();
+                    //Debug.Log("attackCapsule");
                 }
+                //c.DrawCapsule();
             }
         }
     }
@@ -792,7 +787,6 @@ public class AnimDef
         blendInTime = this.blendInTime,
         blendOutTime = this.blendOutTime,
         useDefaultClss = this.useDefaultClss,
-        eraseAllClss = this.eraseAllClss,
         clssSetting = this.clssSetting.Clone()
     };
 }
@@ -810,6 +804,9 @@ public class clssSetting
     //除去指定をデフォルトのClssのオブジェ名称から消す.
     public List<string> disableClssList = new List<string>();
     public Entity root;
+
+    //投げとかステート奪取時の挙動用. 一時的に当たり判定を除去する.
+    public bool eraseAllClss;
 
     //entityで読み出すclssにentityを用意する.
     public void initClss(Entity entity)
@@ -845,8 +842,11 @@ public class clssSetting
         if (root != null)
         {
             //Entity内のclssを用意. 除外対象をdisableClssから検索して削除.
+            //AnimClipのEraseAllClssが設定されているなら消し飛ばす.
             foreach (clssDef defaultcls in root.defaultClss.clssDefs)
-                if (defaultcls.clssType == useType && !disableClssList.Any(dz => dz == defaultcls.attachTo))
+                if (defaultcls.clssType == useType &&
+                !disableClssList.Any(dz => dz == defaultcls.attachTo)
+                && eraseAllClss == false)
                 {
                     findDefs.Add(defaultcls);
                 }
@@ -952,6 +952,7 @@ public class clssSetting
         }
         //string形式なので自動的にdeepcopyされるはず、というか参照でもいいのか？
         retDef.disableClssList.AddRange(this.disableClssList);
+        retDef.eraseAllClss = this.eraseAllClss;
 
         return retDef;
     }

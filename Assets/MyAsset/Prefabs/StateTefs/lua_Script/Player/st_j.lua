@@ -11,7 +11,7 @@ function QueuedStateID(in_entity)
     selfStTime =  LC:CheckStateTime(in_entity)
     selfOnGrd_f = LC:isEntityOnGround(in_entity)
     -- Debug.Log(selfStTime);
-    if(selfOnGrd_f == true) then
+    if(selfStTime > 1 and selfOnGrd_f == true) then
         table.insert( verd, 1 )
     end
     -- idleのanimを指定する

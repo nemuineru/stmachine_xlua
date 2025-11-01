@@ -70,14 +70,14 @@ end
 
 -- ステート変更のファンクション
     function QueuedStateID_J(in_entity)
-        SoundTime = in_entity.attrs.isSoundNotPlayed == 0
         verd = {}
         CurrentTime = LC:CheckStateTime(in_entity)
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0 and CurrentTime > 6
         selfOnGrd = LC:isEntityOnGround(in_entity)
         if( CurrentTime == 0 ) then
             table.insert( verd, 0 ) 
         end
-        if( CurrentTime > 4 and math.abs(CurrentTime - 5) < 3  and in_entity.attrs.isStateHit == 0) then
+        if( CurrentTime > 4 and math.abs(CurrentTime - 8) < 2  and in_entity.attrs.isStateHit == 0) then
             table.insert( verd, 3 ) 
         end
         if ( selfOnGrd ) then 

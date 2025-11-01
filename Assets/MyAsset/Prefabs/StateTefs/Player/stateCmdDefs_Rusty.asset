@@ -22,6 +22,7 @@ MonoBehaviour:
     moveType: 0
     physType: 0
     StateList:
+    - rid: 1982101323848089607
     - rid: 4404388664824299527
     - rid: 4404388799971590145
     - rid: 4404388664824299528
@@ -39,6 +40,16 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 1982101323848089607
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 50
+          stLuaLoads: 
+        stateControllerSubName: Jump/JumpCancel
+        changeTo: 50
+        priority: 0
     - rid: 4404388664824299527
       type: {class: scChangeState, ns: , asm: Assembly-CSharp}
       data:
