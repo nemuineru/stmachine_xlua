@@ -248,6 +248,13 @@ public class Entity : MonoBehaviour
         {
             attrs.addCombatStateTime();
         }
+        statusAlign();
+    }
+
+    void statusAlign()
+    {
+        status.currentHP = Mathf.Clamp(status.currentHP , 0 , status.maxHP);
+        status.currentEnergy = Mathf.Clamp(status.currentEnergy , 0 , status.maxEnergy);
     }
 
     //地面判定.

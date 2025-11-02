@@ -566,7 +566,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 461138, guid: b4211be9733b4bb47adaef270c35ea59, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.482
+      value: 0.627
       objectReference: {fileID: 0}
     - target: {fileID: 461138, guid: b4211be9733b4bb47adaef270c35ea59, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1262,18 +1262,9 @@ MonoBehaviour:
       width: 0.24
       _lastcalcStartPos: {x: 0, y: 0, z: 0}
       _lastcalcEndPos: {x: 0, y: 0, z: 0}
-    - clssType: 0
-      attachTo: hand.r
-      showGizmo: 1
-      _entity: {fileID: 0}
-      attachTransform: {fileID: 0}
-      startPos: {x: 0, y: 0, z: 0}
-      endPos: {x: 0, y: 0.04, z: 0}
-      width: 0.08
-      _lastcalcStartPos: {x: 0, y: 0, z: 0}
-      _lastcalcEndPos: {x: 0, y: 0, z: 0}
     disableClssList: []
     root: {fileID: 0}
+    eraseAllClss: 0
   status:
     maxHP: 100
     currentHP: 100

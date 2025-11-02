@@ -60,7 +60,7 @@ end
         CurrentAnimID = LC:CheckAnimID(in_entity)
         SoundTime = in_entity.attrs.isSoundNotPlayed == 0 and CurrentTime > 16 and CurrentAnimID == 6
         -- hitdef
-        if( math.abs(CurrentAnimTime - 14) < 1 and in_entity.attrs.isStateHit == 0 ) then 
+        if( math.abs(CurrentAnimTime - 15) < 4 and in_entity.attrs.isStateHit == 0 and CurrentAnimID == 6) then 
             table.insert( verd, 1 )
         end
         if( CurrentTime == 0 ) then
@@ -104,9 +104,9 @@ end
 
         CurrentTime = LC:CheckStateTime(in_entity)
         CurrentAnimID = LC:CheckAnimID(in_entity)
-        SoundTime = in_entity.attrs.isSoundNotPlayed == 0 and CurrentAnimTime > 13 and CurrentAnimID == 7
+        SoundTime = in_entity.attrs.isSoundNotPlayed == 0 and CurrentAnimTime > 14 and CurrentAnimID == 7
         -- hitdef
-        if ( math.abs(CurrentAnimTime - 17) <  3 and in_entity.attrs.isStateHit == 0 ) then 
+        if ( math.abs(CurrentAnimTime - 20) <  1 and in_entity.attrs.isStateHit == 0 and CurrentAnimID == 7) then 
             table.insert( verd, 1 )
         end
         if( CurrentTime == 0 ) then

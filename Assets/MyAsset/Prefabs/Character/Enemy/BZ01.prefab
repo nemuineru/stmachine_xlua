@@ -330,6 +330,7 @@ MonoBehaviour:
   physicsType: 0
   moveType: 0
   rigid: {fileID: 0}
+  selfSource: {fileID: 0}
   stateTime: 0
   animationFrameTime: 0
   animationEndTime: 0
@@ -370,9 +371,10 @@ MonoBehaviour:
       _lastcalcEndPos: {x: 0, y: 0, z: 0}
     disableClssList: []
     root: {fileID: 0}
+    eraseAllClss: 0
   status:
-    maxHP: 100
-    currentHP: 100
+    maxHP: 250
+    currentHP: 250
     maxEnergy: 50
     currentEnergy: 50
     BaseAttackPerc: 100
@@ -389,6 +391,7 @@ MonoBehaviour:
     isStateContact: 0
     isStateGuarded: 0
     isStateReversed: 0
+    isSoundNotPlayed: 0
   parentEntity: {fileID: 0}
   controlledEntity: {fileID: 0}
   animID: 0

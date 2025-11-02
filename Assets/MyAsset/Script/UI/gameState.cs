@@ -150,13 +150,17 @@ public class gameState : MonoBehaviour
                 //それぞれのentityの現在再生中のAnimatorが持つClssに対して衝突判定.
                 //また、entityの無敵判定に関しても考える.
                 bool f = calledEntity.hitCheck(e, out Vector3 HitPt);
+                bool isContactable = hitDefParams.HitMoveFlag.Contains(e.moveType.ToString()) &&
+                hitDefParams.HitPhysFlag.Contains(e.physicsType.ToString()) &&
+                !hitDefParams.HitExcludeList.Contains(e.CurrentStateID);
                 //hitしたなら一先ずAnim番号を5000に飛ばしたい. ChangeState(5000)の最優先Queueとして組み込む.
-                if (f == true)
+                if (f == true && isContactable)
                 {
                     ret = true;
                     hitDefApply(e, calledEntity, useParam, HitPt);
                     //当てた分キャラ指定の値が減少..
                     refNumRemaining--;
+                    calledEntity.status.currentEnergy += 3;
                 }
             }
         }
@@ -399,6 +403,11 @@ public class hitDefParams
 
     //どういう姿勢に当たるか？　など. "S"tanding "A"ir, "L"aying の頭文字指定
     //また、"F"は Fall状態のフラッグがあるキャラにHit, "E"veryはフラッグ問わず全部当たる.
-    public string HitFlag = "SA";
+    public string HitPhysFlag = "SA";
+
+    //どういう動きに当たるか？　など やられ判定のときに追撃しないようにしたりとか.
+    public string HitMoveFlag = "IA";
+
+    public List<int> HitExcludeList;
 }
 

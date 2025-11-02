@@ -12,11 +12,16 @@ function Queue_Cmd(in_entity)
     JumpCommand = LC:CheckButtonPressed(in_entity, "a_")
     AttackCmd_x = LC:CheckButtonPressed(in_entity, "x_")
 
-    -- bの離し判定
-    AttackCmd_b_Released = LC:CheckButtonPressed(in_entity, "b^")
-    -- bの押し判定
+    -- yの離し判定
+    AttackCmd_y_Released = LC:CheckButtonPressed(in_entity, "y^")
+    -- yの押し判定
+    AttackCmd_y = LC:CheckButtonPressed(in_entity, "y_")
+    AttackCmd_y_Pressed = LC:CheckButtonPressed(in_entity, "y")
+
+    -- bの押し判定 (ボンバー.)
     AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
-    AttackCmd_b_Pressed = LC:CheckButtonPressed(in_entity, "b")
+
+    -- 投げ技. 今はいらないかも..
     AttackCmd_b_x_doublePress = LC:CheckButtonPressed(in_entity, "z_")
 
     selfStTime = LC:CheckStateTime(in_entity) 
@@ -24,6 +29,8 @@ function Queue_Cmd(in_entity)
     chargeVal = in_entity.status.ChargeTime
 
     isStateIDCombo = (stateID >= 0 and stateID <= 3)
+
+    isBombChargeFull = (in_entity.status.currentEnergy >= 25) and not (stateID == 100)
 
     verd = {}
     -- combo_1 cmd
@@ -44,25 +51,30 @@ function Queue_Cmd(in_entity)
     end
 
     -- Hard_1 cmd
-    if (selfOnGrd == true and AttackCmd_b_Released == true 
+    if (selfOnGrd == true and AttackCmd_y_Released == true 
     and isStateIDCombo and chargeVal < 0.5) then 
         table.insert( verd, 5 )
     end
 
     -- Hard_2 cmd
-    if (selfOnGrd == true and AttackCmd_b_Released == true and isStateIDCombo and chargeVal >= 0.5 and chargeVal < 1.0) then 
+    if (selfOnGrd == true and AttackCmd_y_Released == true and isStateIDCombo and chargeVal >= 0.5 and chargeVal < 1.0) then 
         table.insert( verd, 6 )
     end
 
     -- Hard_3 cmd
-    if (selfOnGrd == true and AttackCmd_b_Released == true and isStateIDCombo and chargeVal >= 1.0 and chargeVal < 2.0) then 
+    if (selfOnGrd == true and AttackCmd_y_Released == true and isStateIDCombo and chargeVal >= 1.0) then 
         table.insert( verd, 7 )
     end
 
-    -- throwing command
-    if( selfOnGrd == true and AttackCmd_b_x_doublePress == true) then
-        table.insert( verd, 10)
+    -- Bomber Command
+    if(isBombChargeFull and AttackCmd_b and in_entity.controlledEntity == nil and in_entity.attrs.alive) then 
+        table.insert( verd, 100 )        
     end
+
+    -- throwing command
+    -- if( selfOnGrd == true and AttackCmd_b_x_doublePress == true) then
+    --    table.insert( verd, 10)
+    -- end
 
     -- air_combo cmd
     if( (selfOnGrd == false and AttackCmd_x == true and stateID == 50) or 
@@ -71,18 +83,18 @@ function Queue_Cmd(in_entity)
     end
 
     -- air_Hard cmd
-    if(( selfOnGrd == false and AttackCmd_b_Released == true and stateID == 50 ) or 
-        (stateID == 20 and AttackCmd_b_Released == true and selfStTime > 4 and in_entity.attrs.isStateHit > 3)) then
+    if(( selfOnGrd == false and AttackCmd_y_Released == true and stateID == 50 ) or 
+        (stateID == 20 and AttackCmd_y_Released == true and selfStTime > 4 and in_entity.attrs.isStateHit > 3)) then
         table.insert( verd, 25 ) 
     end    
 
     -- chargeUp Checker
-    if( AttackCmd_b_Pressed == true and stateID < 5000 ) then
+    if( AttackCmd_y_Pressed == true and stateID < 5000 ) then
         table.insert( verd, 30 ) 
     end    
 
     --chargeUp Releasement Checks
-    if( AttackCmd_b_Released == true or stateID > 5000 ) then
+    if( AttackCmd_y_Released == true or stateID >= 5000 ) then
     table.insert( verd, 31 ) 
     end
 

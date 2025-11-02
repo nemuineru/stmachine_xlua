@@ -166,6 +166,8 @@ MonoBehaviour:
             maxEntityHits: 1
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1
-            HitFlag: SA
+            HitPhysFlag: SA
+            HitMoveFlag: IA
+            HitExcludeList: 
           useID: -1
           stLuaLoads: 

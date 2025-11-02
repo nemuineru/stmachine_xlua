@@ -37,7 +37,7 @@ public class StatusBar : MonoBehaviour
     float charge = 0;
 
     float LowHealth = 0.3f;
-    float HighEnergy = 0.99f;
+    float HighEnergy = 0.5f;
 
     List<Color> DefC_Health, DefC_Energy;
 

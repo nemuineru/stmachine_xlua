@@ -42,8 +42,8 @@ MonoBehaviour:
     - rid: 3002629213760520203
     - rid: 3002629213760520202
     - rid: 3579423095655497736
-    - rid: 4404388529659445248
     - rid: 1982101230649868288
+    - rid: 4404388529659445248
     setCtrl: 0
   - StateDefName: Combo2 Jab_Second
     StateDefID: 2
@@ -57,8 +57,8 @@ MonoBehaviour:
     - rid: 3579423095655497729
     - rid: 3002629213760520203
     - rid: 3579423095655497732
-    - rid: 4404388637674569761
     - rid: 1982101230649868296
+    - rid: 4404388637674569761
     setCtrl: 0
   - StateDefName: Combo3 Kick Finisher
     StateDefID: 3
@@ -71,8 +71,8 @@ MonoBehaviour:
     StateList:
     - rid: 4404388799971590146
     - rid: 4404388799971590147
-    - rid: 4404388799971590148
     - rid: 1982101230649868297
+    - rid: 4404388799971590148
     setCtrl: 0
   - StateDefName: KnifeStab
     StateDefID: 5
@@ -131,8 +131,8 @@ MonoBehaviour:
     - rid: 3579423095655497732
     - rid: 4404388637674569820
     - rid: 3002629213760520203
-    - rid: 4404388637674569830
     - rid: 1982101252599447575
+    - rid: 4404388637674569830
     setCtrl: 0
   - StateDefName: AirHard Knife
     StateDefID: 25
@@ -163,13 +163,19 @@ MonoBehaviour:
     setCtrl: 0
   - StateDefName: Grd Special Attack
     StateDefID: 100
-    LuaAsset: {fileID: 0}
-    preStateVerdictName: 
-    ParamLoadName: 
+    LuaAsset: {fileID: -8122155829129254986, guid: e2196b211f6c3ac429635c532984bd3f, type: 3}
+    preStateVerdictName: QueuedStateID_100
+    ParamLoadName: Accel
     stateType: 0
     moveType: 0
     physType: 0
-    StateList: []
+    StateList:
+    - rid: 7557642759318274048
+    - rid: 7557642759318274052
+    - rid: 7557642759318274051
+    - rid: 7557642759318274049
+    - rid: 7557642759318274113
+    - rid: 7557642759318274050
     setCtrl: 0
   - StateDefName: Air Special Attack
     StateDefID: 105
@@ -494,7 +500,9 @@ MonoBehaviour:
             maxEntityHits: 1
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1
-            HitFlag: SA
+            HitPhysFlag: SA
+            HitMoveFlag: IAH
+            HitExcludeList: 
           useID: -1
           stLuaLoads: 
     - rid: 4404388637674569761
@@ -509,7 +517,7 @@ MonoBehaviour:
           _setEssential: 0
           loadTypes: 0
           stParamValue:
-            Damage: 30
+            Damage: 20
             velset: {x: 1.8, y: 0.7, z: 0}
             hitStopTime: {x: 3, y: 9}
             HitEff: {fileID: 0}
@@ -517,7 +525,9 @@ MonoBehaviour:
             maxEntityHits: 1
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1
-            HitFlag: SA
+            HitPhysFlag: SA
+            HitMoveFlag: IAH
+            HitExcludeList: 
           useID: -1
           stLuaLoads: 
     - rid: 4404388637674569820
@@ -552,15 +562,17 @@ MonoBehaviour:
           _setEssential: 0
           loadTypes: 0
           stParamValue:
-            Damage: 30
-            velset: {x: 3, y: 1, z: 0}
-            hitStopTime: {x: 5, y: 8}
+            Damage: 9
+            velset: {x: 3.1, y: 0.3, z: 0}
+            hitStopTime: {x: 7, y: 4}
             HitEff: {fileID: 0}
             ChangeState_Enemy: 5000
-            maxEntityHits: 1
+            maxEntityHits: 6
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1
-            HitFlag: SA
+            HitPhysFlag: SA
+            HitMoveFlag: IAH
+            HitExcludeList: 
           useID: -1
           stLuaLoads: 
     - rid: 4404388709018370071
@@ -613,7 +625,9 @@ MonoBehaviour:
             maxEntityHits: 1
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1
-            HitFlag: SA
+            HitPhysFlag: SA
+            HitMoveFlag: IAH
+            HitExcludeList: 
           useID: -1
           stLuaLoads: 
     - rid: 4404388709018370088
@@ -636,7 +650,9 @@ MonoBehaviour:
             maxEntityHits: 1
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1
-            HitFlag: SA
+            HitPhysFlag: SAL
+            HitMoveFlag: IAH
+            HitExcludeList: 
           useID: -1
           stLuaLoads: 
     - rid: 4404388709018370089
@@ -711,15 +727,17 @@ MonoBehaviour:
           _setEssential: 0
           loadTypes: 0
           stParamValue:
-            Damage: 50
+            Damage: 30
             velset: {x: 3, y: 4, z: 0}
-            hitStopTime: {x: 7, y: 15}
+            hitStopTime: {x: 10, y: 14}
             HitEff: {fileID: 0}
             ChangeState_Enemy: 5050
-            maxEntityHits: 1
+            maxEntityHits: 8
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1
-            HitFlag: SA
+            HitPhysFlag: SA
+            HitMoveFlag: IAH
+            HitExcludeList: 
           useID: -1
           stLuaLoads: 
     - rid: 4404389163807801372
@@ -760,6 +778,101 @@ MonoBehaviour:
         stateControllerSubName: InitState
         changeTo: 0
         priority: 1
+    - rid: 7557642759318274048
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: init anim
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 100
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7557642759318274049
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 1
+          stLuaLoads: 
+        stateControllerSubName: Burst Anim
+        audio: {fileID: 0}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
+    - rid: 7557642759318274050
+      type: {class: scHitDef, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 2
+          stLuaLoads: 
+        stateControllerSubName: Hits
+        hitParams:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue:
+            Damage: 25
+            velset: {x: 4, y: 1, z: 0}
+            hitStopTime: {x: 7, y: 7}
+            HitEff: {fileID: 0}
+            ChangeState_Enemy: 5050
+            maxEntityHits: 8
+            enemyRefsPlayerNum: 0
+            ChangeState_Player: -1
+            HitPhysFlag: SA
+            HitMoveFlag: IAH
+            HitExcludeList: 88130000ba130000bb130000
+          useID: -1
+          stLuaLoads: 
+    - rid: 7557642759318274051
+      type: {class: scChangeState, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 10
+          stLuaLoads: 
+        stateControllerSubName: Change To Inits
+        changeTo: 0
+        priority: 0
+    - rid: 7557642759318274052
+      type: {class: scAddEnergy, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Set Energy Drain for 25
+        value: -25
+        priority: 0
+    - rid: 7557642759318274113
+      type: {class: scAddVelocity, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: setVel
+        vels:
+          _setEssential: 0
+          loadTypes: 1
+          stParamValue: {x: 0, y: 0, z: 0}
+          useID: 0
+          stLuaLoads: 
+        priority: 0
     - rid: 7982028148908752899
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:
@@ -820,7 +933,9 @@ MonoBehaviour:
             maxEntityHits: 3
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1
-            HitFlag: SA
+            HitPhysFlag: SA
+            HitMoveFlag: IAH
+            HitExcludeList: 
           useID: -1
           stLuaLoads: 
     - rid: 7982028148908752904
@@ -875,7 +990,7 @@ MonoBehaviour:
           _setEssential: 0
           loadTypes: 0
           stParamValue:
-            Damage: 120
+            Damage: 100
             velset: {x: 0, y: 0, z: 0}
             hitStopTime: {x: 0, y: 0}
             HitEff: {fileID: 0}
@@ -883,6 +998,8 @@ MonoBehaviour:
             maxEntityHits: 5
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1
-            HitFlag: SA
+            HitPhysFlag: SA
+            HitMoveFlag: IAH
+            HitExcludeList: 
           useID: -1
           stLuaLoads: 
