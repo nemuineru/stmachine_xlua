@@ -44,6 +44,16 @@ function QueuedStateID(in_entity)
     return verd
 end
 
+function WinningPose(in_entity)
+    selfStTime = LC:CheckStateTime(in_entity)
+    CurrentAnimID = LC:CheckAnimID(in_entity)
+    verd = {}
+    if(not(CurrentAnimID== 180)) then
+        table.insert(verd, 0)         
+    end
+    return verd
+end
+
 function LuaOutput(in_entity)    
     outs = {}
 

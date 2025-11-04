@@ -4841,7 +4841,7 @@ GameObject:
   - component: {fileID: 19940068}
   - component: {fileID: 8270642}
   m_Layer: 0
-  m_Name: BloddySpark_2
+  m_Name: SlashSpark_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

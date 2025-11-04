@@ -4841,7 +4841,7 @@ GameObject:
   - component: {fileID: 19940068}
   - component: {fileID: 8270642}
   m_Layer: 0
-  m_Name: BloddySpark_1
+  m_Name: SlashSpark_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9670,7 +9670,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 6a6e692ad476ae949a459029d00ff363, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 0f0a309eafd8ae8428f17a3ff2ba9d54, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.6
   m_Pitch: 0.8

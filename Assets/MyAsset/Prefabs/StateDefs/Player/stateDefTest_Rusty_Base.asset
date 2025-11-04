@@ -176,6 +176,7 @@ MonoBehaviour:
     - rid: 7557642759318274049
     - rid: 7557642759318274113
     - rid: 7557642759318274050
+    - rid: 7557642784103727104
     setCtrl: 0
   - StateDefName: Air Special Attack
     StateDefID: 105
@@ -186,6 +187,17 @@ MonoBehaviour:
     moveType: 0
     physType: 0
     StateList: []
+    setCtrl: 0
+  - StateDefName: Winning Pose
+    StateDefID: 180
+    LuaAsset: {fileID: -8122155829129254986, guid: 13b365a8419da704db1d5867ceb26d49, type: 3}
+    preStateVerdictName: WinningPose
+    ParamLoadName: 
+    stateType: 83
+    moveType: 0
+    physType: 0
+    StateList:
+    - rid: 7557642767827468288
     setCtrl: 0
   references:
     version: 2
@@ -873,6 +885,41 @@ MonoBehaviour:
           useID: 0
           stLuaLoads: 
         priority: 0
+    - rid: 7557642767827468288
+      type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 0
+          stLuaLoads: 
+        stateControllerSubName: Animset_winningPose
+        changeAnimID:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 180
+          useID: -1
+          stLuaLoads: 
+        animParameter:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: {x: 0, y: 0}
+          useID: -1
+          stLuaLoads: 
+    - rid: 7557642784103727104
+      type: {class: scPlayOneshotSound, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          useLua: 0
+          value: 100
+          stLuaLoads: 
+        stateControllerSubName: playShot
+        audio: {fileID: 8300000, guid: dce5cb2d1a1063c4887673091463b147, type: 3}
+        priority:
+          _setEssential: 0
+          loadTypes: 0
+          stParamValue: 0
+          useID: -1
+          stLuaLoads: 
     - rid: 7982028148908752899
       type: {class: scAnimSet, ns: , asm: Assembly-CSharp}
       data:
@@ -928,7 +975,7 @@ MonoBehaviour:
             Damage: 70
             velset: {x: 0.8, y: 7, z: 0}
             hitStopTime: {x: 0, y: 0}
-            HitEff: {fileID: 0}
+            HitEff: {fileID: 130626, guid: d21f96766665f5b4591b1c012ae59e31, type: 3}
             ChangeState_Enemy: 5050
             maxEntityHits: 3
             enemyRefsPlayerNum: 0

@@ -69,7 +69,7 @@ public class EWaveManager : MonoBehaviour
             if (comfirmableDesc.Count != 0)
             {
                 gameState.self.Player.status.currentHP =
-                Mathf.Min((gameState.self.Player.status.currentHP + gameState.self.Player.status.maxHP) / 2f + 10f,
+                Mathf.Min(Mathf.Lerp(gameState.self.Player.status.currentHP ,gameState.self.Player.status.maxHP, 0.12f) + 2f,
                 gameState.self.Player.status.maxHP);
                 //ランダムセレクト.
                 currentDesc = comfirmableDesc[Random.Range(0, comfirmableDesc.Count)];
@@ -108,7 +108,14 @@ public class EWaveManager : MonoBehaviour
                 if (gameType == GameType.WaveMode)
                 {
                     currentLevel++;
-                    StartCoroutine(gameState.self.ShowWaveNames("Wave " + currentLevel.ToString()));
+                    if (currentLevel > MaxLevel)
+                    {
+                        gameState.self.gDesc = gameState.GameStateDesc.Finished;
+                    }
+                    else
+                    {
+                        StartCoroutine(gameState.self.ShowWaveNames("Wave " + currentLevel.ToString()));
+                    }
                 }
                 isWaveChanged = false;
             }

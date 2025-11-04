@@ -39,6 +39,7 @@ public class gameState : MonoBehaviour
         PreGame,
         InGame,
         GameOver,
+        Finished,
         PauseMenu
     }
     [SerializeField]
@@ -62,6 +63,8 @@ public class gameState : MonoBehaviour
     bool isGameOverUIShown = false;
 
     float GameStartBy = 3.0f;
+
+    public float elapsedTime = 0;
     void Update()
     {
         entityList = FindObjectsByType<Entity>(FindObjectsSortMode.InstanceID).ToList();
@@ -91,6 +94,7 @@ public class gameState : MonoBehaviour
                     InGameUI.SetActive(true);
                     if(inGameAuds != null)
                     inGameAuds.pitch = Mathf.Lerp(inGameAuds.pitch, 1f, 0.08f);
+                    elapsedTime += Time.deltaTime;
                     break;
                 }
             case GameStateDesc.GameOver:
@@ -106,6 +110,18 @@ public class gameState : MonoBehaviour
                     }
                     if(inGameAuds != null)
                     inGameAuds.pitch = Mathf.Lerp(inGameAuds.pitch, 0.001f, 0.025f);
+                    break;
+                }
+            case GameStateDesc.Finished:
+                {
+                    InGameUI.SetActive(false);
+                    pauseGameUI.SetActive(false);
+                    FinishedCams.enabled = true;
+                    if (!isGameOverUIShown)
+                    {
+                        FinishedUI.SetActive(true);
+                        isGameOverUIShown = true;
+                    }
                     break;
                 }
             case GameStateDesc.PauseMenu:
@@ -126,8 +142,10 @@ public class gameState : MonoBehaviour
     public GameObject InGameUI;
     public GameObject GameOverUI;
     public GameObject pauseGameUI;
+    public GameObject FinishedUI;
 
     public Cinemachine.CinemachineVirtualCamera GameOverCams;
+    public Cinemachine.CinemachineVirtualCamera FinishedCams;
 
     public List<Entity> entityList;
 
@@ -186,10 +204,11 @@ public class gameState : MonoBehaviour
                 //それぞれのentityの現在再生中のAnimatorが持つClssに対して衝突判定.
                 //また、entityの無敵判定に関しても考える.
                 clssSetting cEnemy = e.MainAnimMixer.MainAnimDef.clssSetting;
-                f = sets.clssCollided(out var v1, out var v2, out var dist, clssDef.ClssType.Hit, cEnemy, .1f);
+                f = sets.clssCollided(out var v1, out var v2, out var dist, clssDef.ClssType.Attack, cEnemy, .1f);
                 //hitしたなら一先ずAnim番号を5000に飛ばしたい. ChangeState(5000)の最優先Queueとして組み込む.
                 if (f == true)
                 {
+                    Debug.LogWarning("Proj Collided");
                     HitPt = (v1 + v2) / 2f;
                     ret = true;
                     hitDefApply(e, trfs, useParam, HitPt);

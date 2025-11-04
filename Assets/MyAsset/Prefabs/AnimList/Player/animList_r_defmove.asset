@@ -161,3 +161,23 @@ MonoBehaviour:
       - head
       root: {fileID: 0}
       eraseAllClss: 0
+  - mixType: 0
+    MixParamName: 
+    CurrentParamPos: {x: 0, y: 0}
+    ID: 180
+    Name: Win Pose
+    animClip:
+    - Clip: {fileID: 7400000, guid: 6386a353b18bd6841a521ea523b3c841, type: 2}
+      speed: 0
+      startFrame: 0
+      cycleOffset: 0
+      mixPosition: {x: 0, y: 0}
+    blendInTime: 0
+    blendOutTime: 0.4
+    useDefaultClss: 0
+    clssSetting:
+      clssDefs: []
+      disableClssList:
+      - head
+      root: {fileID: 0}
+      eraseAllClss: 1

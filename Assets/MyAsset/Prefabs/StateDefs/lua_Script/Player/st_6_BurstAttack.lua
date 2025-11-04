@@ -16,11 +16,14 @@ function QueuedStateID_100(in_entity)
     if( CurrentTime == 0) then
         table.insert( verd, 0 ) 
     end
-    if( math.abs(CurrentAnimTime - 11) <= 6 and CurrentAnimID == 100) then
+    if( math.abs(CurrentAnimTime - 9) <= 6 and CurrentAnimID == 100) then
         table.insert( verd, 2 ) 
     end
     if( (AnimEndTime - CurrentAnimTime) < 16 and CurrentAnimID == 100) then
         table.insert( verd, 10 ) 
+    end
+    if( math.abs(CurrentAnimTime - 4) < 1 and CurrentAnimID == 100 and SoundTime) then
+        table.insert( verd, 100 ) 
     end
     return verd
 end

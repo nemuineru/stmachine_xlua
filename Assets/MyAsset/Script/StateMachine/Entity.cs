@@ -367,10 +367,12 @@ public class Entity : MonoBehaviour
         {
             CurrentStateID = 5000;
         }
+        
+        onGameFinished();
 
-        //state実行.. これは一つだけに実行されるはず.
-        //ステート奪取したときの値を実行..
-        StateDef currentState = null;
+            //state実行.. これは一つだけに実行されるはず.
+            //ステート奪取したときの値を実行..
+            StateDef currentState = null;
         if (controlledEntity == null)
         {
             currentState =
@@ -396,6 +398,17 @@ public class Entity : MonoBehaviour
         {
             //Debug.LogError("Loaded State is null : " + CurrentStateID);
         }
+    }
+
+    void onGameFinished()
+    {
+        //プレイヤーなら、ゲームクリア時にこのステートに戻す.
+        //180はMUGENでいうと勝利ポーズ.
+        if (gameObject.tag == "Player" && gameState.self.gDesc == gameState.GameStateDesc.Finished)
+        {
+            CurrentStateID = 180;
+        }
+
     }
 
     //カメラ設定.

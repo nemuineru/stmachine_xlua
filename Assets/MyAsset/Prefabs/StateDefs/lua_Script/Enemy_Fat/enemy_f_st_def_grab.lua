@@ -135,7 +135,7 @@ function ChokerSped(in_entity)
     trf = Vector3.ProjectOnPlane(in_entity.transform.forward, Vector3.up).normalized
     
     retVec = Vector3(0,0,0)
-    retVec = (trf) * 10 + Vector3.up * 200
+    retVec = (trf) * 10 + Vector3.up * 90
     table.insert(outs,retVec)
     return outs
 end

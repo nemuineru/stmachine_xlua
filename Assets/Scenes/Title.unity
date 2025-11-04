@@ -302,8 +302,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145479010}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.051187176, y: 0.898264, z: 0.108777836, w: -0.42269275}
-  m_LocalPosition: {x: 2.7739768, y: -0.40457785, z: 2.2181318}
+  m_LocalRotation: {x: 0.0511872, y: 0.898264, z: 0.10877787, w: -0.42269275}
+  m_LocalPosition: {x: 2.7739768, y: -0.40457788, z: 2.2181318}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -561,6 +561,7 @@ MonoBehaviour:
     Extra2Button_Read: 0
     MenuButton_Read: 0
     SubMenuButton_Read: 0
+    DebugCMD_ClearALL_Read: 0
 --- !u!114 &327368233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3151,7 +3152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuText_Indexes: ARENA MODE
-  menuText_Description: Fight with 100 things to scrap.
+  menuText_Description: Fight with 15 Waves of horde.
   willSelectable: 1
   subMenus: []
   txt: {fileID: 1954395338}
@@ -3435,8 +3436,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2127540796}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.14450537, y: 0.24937838, z: -0.037662674, w: 0.95682293}
-  m_LocalPosition: {x: -2.2248921, y: -0.07599242, z: -0.64156294}
+  m_LocalRotation: {x: 0.14450535, y: 0.24937841, z: -0.03766268, w: 0.956823}
+  m_LocalPosition: {x: -2.2248921, y: -0.075992405, z: -0.641563}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
