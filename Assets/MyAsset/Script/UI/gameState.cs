@@ -68,6 +68,7 @@ public class gameState : MonoBehaviour
     void Update()
     {
         entityList = FindObjectsByType<Entity>(FindObjectsSortMode.InstanceID).ToList();
+        entityList.OrderBy(t => (t.attrs.alive == true , Vector3.Magnitude(t.transform.position - Player.transform.position)));
         GameDescApply();
     }
 
