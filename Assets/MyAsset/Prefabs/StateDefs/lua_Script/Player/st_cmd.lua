@@ -31,43 +31,44 @@ function Queue_Cmd(in_entity)
     isStateIDCombo = (stateID >= 0 and stateID <= 3)
 
     isBombChargeFull = (in_entity.status.currentEnergy >= 25) and not (stateID == 100)
+    isAlive = in_entity.attrs.alive
 
     verd = {}
     -- combo_1 cmd
-    if(selfOnGrd == true and AttackCmd_x == true and stateID == 0) then
+    if(selfOnGrd == true and AttackCmd_x == true and stateID == 0 and isAlive) then
         table.insert( verd, 1) 
     end
 
     -- combo_2 cmd
     if(selfOnGrd == true and AttackCmd_x == true and stateID == 1 and 
-    selfStTime > 4 and in_entity.attrs.isStateHit > 0) then
+    selfStTime > 4 and in_entity.attrs.isStateHit > 0 and isAlive) then
         table.insert( verd, 2) 
     end
 
     -- combo_finisher cmd
     if(selfOnGrd == true and AttackCmd_x == true and stateID == 2 
-    and selfStTime > 4 and in_entity.attrs.isStateHit > 0) then
+    and selfStTime > 4 and in_entity.attrs.isStateHit > 0 and isAlive) then
         table.insert( verd, 3) 
     end
 
     -- Hard_1 cmd
     if (selfOnGrd == true and AttackCmd_y_Released == true 
-    and isStateIDCombo and chargeVal < 0.5) then 
+    and isStateIDCombo and chargeVal < 0.5 and isAlive) then 
         table.insert( verd, 5 )
     end
 
     -- Hard_2 cmd
-    if (selfOnGrd == true and AttackCmd_y_Released == true and isStateIDCombo and chargeVal >= 0.5 and chargeVal < 1.0) then 
+    if (selfOnGrd == true and AttackCmd_y_Released == true and isStateIDCombo and chargeVal >= 0.5 and chargeVal < 1.0 and isAlive) then 
         table.insert( verd, 6 )
     end
 
     -- Hard_3 cmd
-    if (selfOnGrd == true and AttackCmd_y_Released == true and isStateIDCombo and chargeVal >= 1.0) then 
+    if (selfOnGrd == true and AttackCmd_y_Released == true and isStateIDCombo and chargeVal >= 1.0 and isAlive) then 
         table.insert( verd, 7 )
     end
 
     -- Bomber Command
-    if(isBombChargeFull and AttackCmd_b and in_entity.controlledEntity == nil and in_entity.attrs.alive) then 
+    if(isBombChargeFull and AttackCmd_b and in_entity.controlledEntity == nil and in_entity.attrs.alive and isAlive) then 
         table.insert( verd, 100 )        
     end
 
@@ -78,13 +79,13 @@ function Queue_Cmd(in_entity)
 
     -- air_combo cmd
     if( (selfOnGrd == false and AttackCmd_x == true and stateID == 50) or 
-        (stateID == 20 and AttackCmd_x == true and selfStTime > 4 and in_entity.attrs.isStateHit > 3)) then
+        (stateID == 20 and AttackCmd_x == true and selfStTime > 4 and in_entity.attrs.isStateHit > 3) and isAlive) then
         table.insert( verd, 20 ) 
     end
 
     -- air_Hard cmd
     if(( selfOnGrd == false and AttackCmd_y_Released == true and stateID == 50 ) or 
-        (stateID == 20 and AttackCmd_y_Released == true and selfStTime > 4 and in_entity.attrs.isStateHit > 3)) then
+        (stateID == 20 and AttackCmd_y_Released == true and selfStTime > 4 and in_entity.attrs.isStateHit > 3) and isAlive) then
         table.insert( verd, 25 ) 
     end    
 
@@ -100,7 +101,7 @@ function Queue_Cmd(in_entity)
 
     --jump and Jumpcancel on Cmd
     JumpCommand = LC:CheckButtonPressed(in_entity, "a_")
-    if( stateID >= 1 and stateID <= 3 and in_entity.attrs.isStateHit > 0 and JumpCommand) then
+    if( stateID >= 1 and stateID <= 3 and in_entity.attrs.isStateHit > 0 and JumpCommand and isAlive) then
     table.insert( verd, 50 ) 
     end
 

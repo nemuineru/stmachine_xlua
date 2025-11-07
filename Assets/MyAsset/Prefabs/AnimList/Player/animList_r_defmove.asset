@@ -134,7 +134,7 @@ MonoBehaviour:
       mixPosition: {x: 0, y: 0}
     blendInTime: 0
     blendOutTime: 0.4
-    useDefaultClss: 0
+    useDefaultClss: 1
     clssSetting:
       clssDefs: []
       disableClssList:
@@ -160,7 +160,7 @@ MonoBehaviour:
       disableClssList:
       - head
       root: {fileID: 0}
-      eraseAllClss: 0
+      eraseAllClss: 1
   - mixType: 0
     MixParamName: 
     CurrentParamPos: {x: 0, y: 0}

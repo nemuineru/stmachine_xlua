@@ -13,13 +13,13 @@ function Queue_Cmd(in_entity)
         AttackCmd_b = LC:CheckButtonPressed(in_entity, "b_")
         selfStTime = LC:CheckStateTime(in_entity) 
         stateID = in_entity.CurrentStateID
+        isAlive = in_entity.attrs.alive
 
         -- combo_1 cmd
-        if(selfOnGrd == true and AttackCmd_b == true and stateID == 0) then
+        if(selfOnGrd == true and AttackCmd_b == true and stateID == 0 and isAlive) then
             table.insert( verd, 1) 
         end
-        isAlive = in_entity.attrs.alive
-        if(not isAlive and stateID == 0) then 
+        if(not isAlive and stateID <= 1) then 
             table.insert (verd, 5000)
         end
 

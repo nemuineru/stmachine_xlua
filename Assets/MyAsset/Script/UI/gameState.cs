@@ -67,8 +67,10 @@ public class gameState : MonoBehaviour
     public float elapsedTime = 0;
     void Update()
     {
-        entityList = FindObjectsByType<Entity>(FindObjectsSortMode.InstanceID).ToList();
-        entityList.OrderBy(t => (t.attrs.alive == true , Vector3.Magnitude(t.transform.position - Player.transform.position)));
+        entityList = FindObjectsByType<Entity>(FindObjectsSortMode.None)
+        .OrderBy(t => !t.attrs.alive)
+        .ThenBy(t => Vector3.Magnitude(t.transform.position - Player.transform.position))
+        .ToList();
         GameDescApply();
     }
 

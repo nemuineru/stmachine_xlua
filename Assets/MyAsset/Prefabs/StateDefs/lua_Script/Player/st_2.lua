@@ -33,7 +33,7 @@ end
         AnimEndTime = LC:CheckAnimEndTime(in_entity);
 
         CurrentTime = LC:CheckStateTime(in_entity)
-        if ( CurrentTime > 14 ) then 
+        if ( CurrentTime > 20 ) then 
             table.insert( verd, 1 )
         end
         if( CurrentTime == 0 ) then
