@@ -634,7 +634,7 @@ MonoBehaviour:
             hitStopTime: {x: 3, y: 10}
             HitEff: {fileID: 130626, guid: 763c35982e678ac4bbc44144c42c505f, type: 3}
             ChangeState_Enemy: 5000
-            maxEntityHits: 1
+            maxEntityHits: 2
             enemyRefsPlayerNum: 0
             ChangeState_Player: -1
             HitPhysFlag: SA
