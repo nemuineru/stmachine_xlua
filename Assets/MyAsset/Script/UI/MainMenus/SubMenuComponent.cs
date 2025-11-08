@@ -48,7 +48,7 @@ public class SubMenuComponent : MonoBehaviour
     internal List<SubMenuSets> subMenus;
 
     [SerializeField]
-    TMP_Text txt;
+    internal TMP_Text txt;
 
     public SubMenuComponent subSelected;
     public int subSelectedIndex;
@@ -146,6 +146,7 @@ public class SubMenuComponent : MonoBehaviour
 
     internal void setSubMenuActive()
     {
+        this.OnSelect();
         if (subSelected != null)
         {
             subSelected.setSubMenuActive();
@@ -163,6 +164,11 @@ public class SubMenuComponent : MonoBehaviour
                     gameObject.SetActive(false);
                 }
             }
+            else if (subComponent != null)
+            {
+                Debug.Log("ExecuteOnly Executed");
+                subComponent.ExecuteOnly();
+            }
         }
     }
 
@@ -170,6 +176,16 @@ public class SubMenuComponent : MonoBehaviour
     {
         
     }
+    
+    virtual internal void ExecuteOnly()
+    {
+
+    } 
+    virtual internal void OnSelect()
+    {
+
+    }
+
 
     internal void setSubMenuBack()
     {
